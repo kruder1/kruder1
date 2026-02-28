@@ -128,7 +128,16 @@
     "error_settings": "خطأ: تعذر فتح الإعدادات",
     "error_print": "خطأ: تعذر الطباعة",
     "error_camera_access": "الكاميرا: تم رفض الوصول",
-    "alert_update_coming": "التحقق من التحديثات قريباً",
+    "title_update": "تحديث البرنامج",
+    "update_btn_check": "التحقق من التحديثات",
+    "update_checking": "جاري التحقق...",
+    "update_up_to_date": "لديك أحدث إصدار",
+    "update_available_label": "متاح",
+    "update_btn_download": "تحميل",
+    "update_downloading": "جاري التحميل...",
+    "update_ready": "اكتمل التحميل",
+    "update_btn_install": "تثبيت وإعادة تشغيل",
+    "update_btn_retry": "إعادة المحاولة",
     "error_no_emails": "لا توجد رسائل بريد إلكتروني للتصدير",
     "success_emails_exported": "تم تصدير رسائل البريد الإلكتروني بنجاح",
     "error_export_failed": "فشل التصدير",
@@ -194,7 +203,8 @@
     "error_select_printer": "حدد طابعة في الإعدادات > الطباعة أولاً.",
     "error_print_failed": "فشلت الطباعة",
     "success_print_sent": "تم إرسال مهمة الطباعة",
-    "error_print": "خطأ في الطباعة"
+    "error_print": "خطأ في الطباعة",
+    "error_no_session": "لا توجد جلسة — يرجى تسجيل الدخول"
   },
   "promptlab": {
     "btn_update": "تحديث التلقينات",

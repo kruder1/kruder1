@@ -97,6 +97,27 @@ async function supabaseUpdate(env, table, idCol, idVal, data) {
   return res;
 }
 
+async function supabaseDeductCredit(env, accountId) {
+  const res = await supabase(env, `/rpc/deduct_credit`, {
+    method: "POST",
+    body: JSON.stringify({ p_account_id: accountId }),
+  });
+  if (!res.ok) {
+    const txt = await res.text();
+    if (txt.includes("Insufficient") || res.status === 400) return { ok: false, error: "Insufficient credits" };
+    throw new Error(txt);
+  }
+  const result = await res.json();
+  return { ok: true, credits: result };
+}
+
+async function supabaseRefundCredit(env, accountId) {
+  await supabase(env, `/rpc/refund_credit`, {
+    method: "POST",
+    body: JSON.stringify({ p_account_id: accountId }),
+  });
+}
+
 async function supabaseInsert(env, table, data) {
   const res = await supabase(env, `/${table}`, {
     method: "POST",
@@ -364,39 +385,38 @@ export default {
         
         if (!account) return err("Account not found", 404);
         if ((account.credits || 0) < 1) return err("Insufficient credits", 402);
-        
+
+        // 1. Deduct credit BEFORE generation (atomic via RPC)
+        const deductResult = await supabaseDeductCredit(env, account.id);
+        if (!deductResult.ok) return err("Insufficient credits", 402);
+        const newCredits = deductResult.credits;
+
         // Generate unique IDs for this generation
         const generationId = generateUniqueId();
         const tempPhotoKey = `temp/${generationId}-input.jpg`;
-        const resultPhotoKey = `results/${generationId}.png`;
-        
+
         let tempPhotoUrl = null;
-        
+
         try {
-          // 1. Upload user photo to R2 (temporary)
+          // 2. Upload user photo to R2 (temporary)
           let photoBuffer;
           if (userPhotoBase64.includes(",")) {
-            // Has data URI prefix
             const base64Data = userPhotoBase64.split(",")[1];
             photoBuffer = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
           } else {
             photoBuffer = Uint8Array.from(atob(userPhotoBase64), c => c.charCodeAt(0));
           }
-          
+
           tempPhotoUrl = await uploadToR2(env, tempPhotoKey, photoBuffer, "image/jpeg");
-          
-          // 2. Call Segmind (returns binary image)
+
+          // 3. Call Segmind (returns binary image)
           const imageBuffer = await callSegmindWithRetry(env, tempPhotoUrl, promptText, "2:3");
           const imageBase64 = arrayBufferToBase64(imageBuffer);
 
-          // 3. Deduct credit
-          const newCredits = (account.credits || 0) - 1;
-          await supabaseUpdate(env, "accounts", "id", account.id, { credits: newCredits });
-          
-          // 5. Delete temporary user photo from R2
+          // 4. Delete temporary user photo from R2
           await deleteFromR2(env, tempPhotoKey);
-          
-          // 6. Send email if valid email provided (CTA uses photoPageUrl)
+
+          // 5. Send email if valid email provided
           const base = (env.AUTH_BASE_URL || "https://kruder1.com").replace(/\/$/, "");
           const photoPageUrl = `${base}/photo/${generationId}`;
           const emailLang = (lang === "es" || lang === "en") ? lang : "en";
@@ -413,7 +433,7 @@ export default {
             }
           }
 
-          // 7. Return success (client decodes imageBase64, applies frame, uploads final JPG to R2)
+          // 6. Return success
           return json({
             ok: true,
             imageBase64,
@@ -421,9 +441,10 @@ export default {
             filename: `${generationId}.jpg`,
             creditsRemaining: newCredits,
           });
-          
+
         } catch (genError) {
-          // Clean up temp photo if it was uploaded
+          // Refund credit on failure
+          await supabaseRefundCredit(env, account.id);
           if (tempPhotoUrl) {
             await deleteFromR2(env, tempPhotoKey);
           }
@@ -458,15 +479,19 @@ export default {
         
         if (!account) return err("Account not found", 404);
         if ((account.credits || 0) < 1) return err("Insufficient credits", 402);
-        
-        // Generate unique ID for temp storage
+
+        // 1. Deduct credit BEFORE generation (atomic via RPC)
+        const deductResult = await supabaseDeductCredit(env, account.id);
+        if (!deductResult.ok) return err("Insufficient credits", 402);
+        const newCredits = deductResult.credits;
+
         const tempId = generateUniqueId();
         const tempPhotoKey = `temp/${tempId}-ref.jpg`;
-        
+
         let tempPhotoUrl = null;
-        
+
         try {
-          // 1. Upload reference image to R2 (temporary)
+          // 2. Upload reference image to R2 (temporary)
           let photoBuffer;
           if (referenceImageBase64.includes(",")) {
             const base64Data = referenceImageBase64.split(",")[1];
@@ -474,29 +499,26 @@ export default {
           } else {
             photoBuffer = Uint8Array.from(atob(referenceImageBase64), c => c.charCodeAt(0));
           }
-          
+
           tempPhotoUrl = await uploadToR2(env, tempPhotoKey, photoBuffer, "image/jpeg");
-          
-          // 2. Call Segmind (returns binary image)
+
+          // 3. Call Segmind (returns binary image)
           const imageBuffer = await callSegmindWithRetry(env, tempPhotoUrl, promptText, "2:3");
           const imageBase64 = arrayBufferToBase64(imageBuffer);
-          
-          // 3. Deduct credit
-          const newCredits = (account.credits || 0) - 1;
-          await supabaseUpdate(env, "accounts", "id", account.id, { credits: newCredits });
-          
-          // 4. Delete temporary reference image from R2 immediately (privacy)
+
+          // 4. Delete temporary reference image from R2
           await deleteFromR2(env, tempPhotoKey);
-          
-          // 5. Return success (client decodes imageBase64)
+
+          // 5. Return success
           return json({
             ok: true,
             imageBase64,
             creditsRemaining: newCredits,
           });
-          
+
         } catch (genError) {
-          // Clean up temp photo if it was uploaded
+          // Refund credit on failure
+          await supabaseRefundCredit(env, account.id);
           if (tempPhotoUrl) {
             await deleteFromR2(env, tempPhotoKey);
           }
@@ -636,6 +658,7 @@ export default {
         const generationId = (formData.get("generationId") || "").toString().trim();
         const file = formData.get("image");
         if (!generationId || !file) return err("generationId and image file are required");
+        if (!/^[a-zA-Z0-9\-]+$/.test(generationId)) return err("Invalid generationId format", 400);
 
         const imageBuffer = new Uint8Array(await file.arrayBuffer());
         const key = `results/${generationId}.jpg`;
@@ -650,6 +673,10 @@ export default {
       // POST /upload-debug-log - Receive debug log and store in R2
       // ─────────────────────────────────────────────────────────────────────
       if (path === "upload-debug-log" && request.method === "POST") {
+        const auth = request.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
+        if (!auth) return err("Unauthorized", 401);
+        const logPayload = await verifyJwt(auth, env.JWT_SECRET);
+        if (!logPayload) return err("Invalid token", 401);
         const hwid = request.headers.get("X-HWID");
         if (!hwid) return err("HWID required", 400);
 
@@ -677,8 +704,8 @@ export default {
 
       return err("Not found", 404);
     } catch (e) {
-      console.error("Error:", e);
-      return err(e?.message || "Internal error", 500);
+      console.error("Gen worker error:", e?.message || e);
+      return err("Internal error", 500);
     }
   },
 };

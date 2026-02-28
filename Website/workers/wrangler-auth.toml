@@ -1,0 +1,3 @@
+name = "kruder1-auth"
+main = "kruder1-auth.js"
+compatibility_date = "2025-01-01"

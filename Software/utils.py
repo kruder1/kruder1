@@ -100,13 +100,15 @@ def send_to_recycle_bin(paths):
 # =============================================================================
 
 class SecurityService:
+    _hwid_cache = None
+
     @staticmethod
     def _wmi_value(wmic_args: str) -> str:
         """Run a wmic command and return the first non-empty value line."""
         try:
+            args = ["wmic"] + wmic_args.split()
             out = subprocess.check_output(
-                f"wmic {wmic_args}",
-                shell=True,
+                args,
                 creationflags=0x08000000,  # CREATE_NO_WINDOW
                 stderr=subprocess.DEVNULL,
                 timeout=5
@@ -122,6 +124,8 @@ class SecurityService:
     @staticmethod
     def get_hwid() -> str:
         """Generate a hardware identifier from CPU, motherboard, and BIOS serials."""
+        if SecurityService._hwid_cache:
+            return SecurityService._hwid_cache
         cpu = SecurityService._wmi_value("cpu get processorid")
         board = SecurityService._wmi_value("baseboard get serialnumber")
         bios = SecurityService._wmi_value("bios get serialnumber")
@@ -146,7 +150,9 @@ class SecurityService:
             if not parts:
                 parts.append("fallback-hwid")
 
-        return hashlib.sha256("|".join(parts).encode()).hexdigest()
+        hwid = hashlib.sha256("|".join(parts).encode()).hexdigest()
+        SecurityService._hwid_cache = hwid
+        return hwid
 
     @staticmethod
     def validate_path(base_dir, requested_path):

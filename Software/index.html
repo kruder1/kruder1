@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="static/css/app.css">
     <link rel="stylesheet" href="static/css/fonts.css">
     <link rel="stylesheet" href="static/css/all.min.css">
-    <link rel="icon" type="image/png" href="static/img/icon.png">
+    <link rel="icon" type="image/x-icon" href="static/img/icon.ico">
 </head>
 <body data-theme="light">
 
@@ -60,6 +60,12 @@
             currentPrompt: null,
             session: null,
             theme: 'light'
+        };
+
+        // Global HTML escape for XSS prevention
+        window._escapeHtml = function(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         };
 
         // ========================================

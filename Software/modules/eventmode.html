@@ -810,13 +810,11 @@ window.EventModeModule = {
         if (this.state.eventGen.timer) clearInterval(this.state.eventGen.timer);
         if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'generation_completed', { eventId: this.state.eventId, genId: this.state.eventGen.genId, creditsRemaining: data.creditsRemaining }).catch(() => {});
 
-        // Update credits in AppState and in DOM (only if #home-credits exists)
+        // Update credits in AppState
         if (data.creditsRemaining !== undefined) {
             if (window.AppState && window.AppState.session && window.AppState.session.account) {
                 window.AppState.session.account.credits = data.creditsRemaining;
             }
-            const h1 = document.getElementById('home-credits');
-            if (h1) h1.textContent = `${data.creditsRemaining} CREDITS`;
         }
 
         // Jump to 100% with smooth transition

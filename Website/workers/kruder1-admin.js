@@ -114,7 +114,11 @@ export default {
       if (path === "login" && request.method === "POST") {
         const { password } = (await request.json()) || {};
         if (!password) return err("Password required");
-        if (password !== env.ADMIN_PASSWORD) return err("Invalid credentials", 401);
+        const enc = new TextEncoder();
+        const expected = enc.encode(env.ADMIN_PASSWORD);
+        const received = enc.encode(password);
+        if (expected.length !== received.length || !expected.every((b, i) => b === received[i]))
+          return err("Invalid credentials", 401);
 
         const token = await signJwt({ role: "admin" }, env.JWT_SECRET, 86400);
         return json({ ok: true, token });

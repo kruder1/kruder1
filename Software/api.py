@@ -500,24 +500,11 @@ class NativeApi:
         if not os.path.isdir(desktop):
             desktop = os.path.expanduser("~")
         try:
-            import tkinter as tk
-            from tkinter import filedialog
-            root = tk.Tk()
-            root.withdraw()
-            root.attributes("-topmost", True)
-            path = filedialog.asksaveasfilename(
-                title="Export Emails",
-                defaultextension=".txt",
-                initialfile=os.path.basename(default_filename),
-                initialdir=desktop,
-                filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
-            )
-            root.destroy()
-            if path:
-                content = "\n".join(str(e).strip() for e in emails if e)
-                with open(path, "w", encoding="utf-8") as f:
-                    f.write(content)
-                return True
+            path = os.path.join(desktop, default_filename)
+            content = "\n".join(str(e).strip() for e in emails if e)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(content)
+            return True
         except Exception as e:
-            print(f"Save emails dialog error: {e}")
+            append_log("ERROR", "save_emails_error", {"error": str(e)[:200]})
         return False

@@ -128,7 +128,16 @@
     "error_settings": "Errore: Impossibile aprire le impostazioni",
     "error_print": "Errore: Impossibile stampare",
     "error_camera_access": "FOTOCAMERA: Accesso negato",
-    "alert_update_coming": "CONTROLLO AGGIORNAMENTI PROSSIMAMENTE",
+    "title_update": "AGGIORNAMENTO SOFTWARE",
+    "update_btn_check": "CONTROLLA AGGIORNAMENTI",
+    "update_checking": "Controllo...",
+    "update_up_to_date": "Sei aggiornato",
+    "update_available_label": "disponibile",
+    "update_btn_download": "SCARICA",
+    "update_downloading": "Download in corso...",
+    "update_ready": "Download completato",
+    "update_btn_install": "INSTALLA E RIAVVIA",
+    "update_btn_retry": "RIPROVA",
     "error_no_emails": "NESSUNA EMAIL DA ESPORTARE",
     "success_emails_exported": "EMAIL ESPORTATE CON SUCCESSO",
     "error_export_failed": "ESPORTAZIONE FALLITA",
@@ -194,7 +203,8 @@
     "error_select_printer": "Seleziona prima una stampante in Impostazioni > Stampa.",
     "error_print_failed": "Stampa fallita",
     "success_print_sent": "Lavoro di stampa inviato",
-    "error_print": "Errore di stampa"
+    "error_print": "Errore di stampa",
+    "error_no_session": "NESSUNA SESSIONE — EFFETTUA L'ACCESSO"
   },
   "promptlab": {
     "btn_update": "AGGIORNA PROMPT",

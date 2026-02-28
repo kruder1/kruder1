@@ -503,6 +503,7 @@ class PromptLabModule:
             # 1. Download the .kruder1 file
             resp = requests.get(f"{GEN_WORKER_BASE}/download-prompts", headers=headers, timeout=60)
             if resp.status_code != 200:
+                append_log("WARNING", "update_prompts_failed", {"status": resp.status_code, "body": resp.text[:300]})
                 return {"error": "COULD NOT DOWNLOAD PROMPTS"}
 
             # 2. Save to temp and import (merge)

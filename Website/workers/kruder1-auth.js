@@ -4,9 +4,9 @@
  */
 
 function getPriceToCredits(env) {
-  const basic = env.STRIPE_PRICE_ID_BASIC || "price_1SlhwWGae0bQUD5hdQ60UHmJ";
-  const plus = env.STRIPE_PRICE_ID_PLUS || "price_1SlhwyGae0bQUD5hsSeTuRhF";
-  const pro = env.STRIPE_PRICE_ID_PRO || "price_1SlhxaGae0bQUD5h12SGTNLw";
+  const basic = env.STRIPE_PRICE_ID_BASIC || "price_1SwcrIC1FI34uKMLaGO8Fxsh";
+  const plus = env.STRIPE_PRICE_ID_PLUS || "price_1SwcqbC1FI34uKMLDWbAblgV";
+  const pro = env.STRIPE_PRICE_ID_PRO || "price_1SwcqCC1FI34uKMLiUN0eOD6";
   return { [basic]: 150, [plus]: 300, [pro]: 600 };
 }
 
@@ -176,6 +176,15 @@ async function supabaseDelete(env, table, query) {
   const res = await supabase(env, `/${table}?${query}`, { method: "DELETE" });
   if (!res.ok) throw new Error(await res.text());
   return res;
+}
+
+async function supabaseAddCredits(env, accountId, credits) {
+  const res = await supabase(env, `/rpc/add_credits`, {
+    method: "POST",
+    body: JSON.stringify({ p_account_id: accountId, p_credits: credits }),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
 }
 
 async function sendBrevoEmail(env, { to, subject, htmlContent }) {
@@ -464,6 +473,7 @@ export default {
       if (path === "reset-password" && request.method === "POST") {
         const { token, newPassword } = (await request.json()) || {};
         if (!token || !newPassword) return err("Token and new password required");
+        if (!isValidPassword(newPassword)) return err("Password must be at least 6 characters with a digit", 400);
         const tokenHash = await sha256Hex(token);
         const rows = await supabaseSelect(
           env,
@@ -529,10 +539,7 @@ export default {
             hwid: hwid.trim(),
           });
         }
-        const newCredits = (acc.credits || 0) + 10;
-        await supabaseUpdate(env, "accounts", "id", acc.id, {
-          credits: newCredits,
-        });
+        const newCredits = await supabaseAddCredits(env, acc.id, 10);
         return json({ ok: true, credits: newCredits });
       }
 
@@ -570,8 +577,10 @@ export default {
         if (!priceId || !(priceId in priceToCredits))
           return err("Invalid price", 400);
         const emailLang = (lang === "es" || lang === "en") ? lang : "en";
-        const successUrl = (typeof reqSuccessUrl === "string" && reqSuccessUrl) ? reqSuccessUrl : (env.STRIPE_SUCCESS_URL || "https://kruder1.com/dashboard.html");
-        const cancelUrl = (typeof reqCancelUrl === "string" && reqCancelUrl) ? reqCancelUrl : (env.STRIPE_CANCEL_URL || "https://kruder1.com/pricing.html");
+        const allowedDomains = ["kruder1.com", "www.kruder1.com", "127.0.0.1", "localhost"];
+        const isAllowedUrl = (u) => { try { return allowedDomains.includes(new URL(u).hostname); } catch { return false; } };
+        const successUrl = (typeof reqSuccessUrl === "string" && reqSuccessUrl && isAllowedUrl(reqSuccessUrl)) ? reqSuccessUrl : (env.STRIPE_SUCCESS_URL || "https://kruder1.com/dashboard.html");
+        const cancelUrl = (typeof reqCancelUrl === "string" && reqCancelUrl && isAllowedUrl(reqCancelUrl)) ? reqCancelUrl : (env.STRIPE_CANCEL_URL || "https://kruder1.com/pricing.html");
         const params = new URLSearchParams({
           "mode": "payment",
           "line_items[0][price]": priceId,
@@ -640,8 +649,7 @@ export default {
         if (existing?.length) return json({ received: true });
         const [acc] = await supabaseSelect(env, "accounts", `id=eq.${encodeURIComponent(accountId)}`);
         if (!acc) return json({ received: true });
-        const newCredits = (acc.credits || 0) + credits;
-        await supabaseUpdate(env, "accounts", "id", accountId, { credits: newCredits });
+        const newCredits = await supabaseAddCredits(env, accountId, credits);
         await supabaseInsert(env, "purchases", {
           account_id: accountId,
           credits_added: credits,
@@ -686,7 +694,8 @@ export default {
 
       return err("Not found", 404);
     } catch (e) {
-      return err(e?.message || "Internal error", 500);
+      console.error("Auth worker error:", e?.message || e);
+      return err("Internal error", 500);
     }
   },
 };

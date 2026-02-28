@@ -69,11 +69,12 @@ class AuthModule:
         """Get locally stored session data."""
         return DataService.load_json(SESSION_FILE)
 
-    def clear_session(self) -> None:
+    def clear_session(self) -> dict:
         """Clear local session (logout)."""
         if os.path.exists(SESSION_FILE):
             os.remove(SESSION_FILE)
         append_log("INFO", "clear_session")
+        return {"ok": True}
 
     def refresh_account(self) -> dict:
         """Sync account data with server."""

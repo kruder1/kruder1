@@ -128,7 +128,16 @@
     "error_settings": "エラー: 設定を開けませんでした",
     "error_print": "エラー: 印刷できませんでした",
     "error_camera_access": "カメラ: アクセスが拒否されました",
-    "alert_update_coming": "アップデート確認は近日公開予定です",
+    "title_update": "ソフトウェアアップデート",
+    "update_btn_check": "アップデートを確認",
+    "update_checking": "確認中...",
+    "update_up_to_date": "最新の状態です",
+    "update_available_label": "利用可能",
+    "update_btn_download": "ダウンロード",
+    "update_downloading": "ダウンロード中...",
+    "update_ready": "ダウンロード完了",
+    "update_btn_install": "インストールして再起動",
+    "update_btn_retry": "再試行",
     "error_no_emails": "エクスポートするメールがありません",
     "success_emails_exported": "メールが正常にエクスポートされました",
     "error_export_failed": "エクスポートに失敗しました",
@@ -194,7 +203,8 @@
     "error_select_printer": "先に「設定 > 印刷」でプリンターを選択してください。",
     "error_print_failed": "印刷に失敗しました",
     "success_print_sent": "印刷ジョブを送信しました",
-    "error_print": "印刷エラー"
+    "error_print": "印刷エラー",
+    "error_no_session": "セッションなし — ログインしてください"
   },
   "promptlab": {
     "btn_update": "プロンプトを更新",

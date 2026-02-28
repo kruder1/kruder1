@@ -203,7 +203,8 @@
     "error_select_printer": "Select a printer in Settings > Printing first.",
     "error_print_failed": "Print failed",
     "success_print_sent": "Print job sent",
-    "error_print": "Print error"
+    "error_print": "Print error",
+    "error_no_session": "NO SESSION — PLEASE LOG IN"
   },
   "promptlab": {
     "btn_update": "UPDATE PROMPTS",

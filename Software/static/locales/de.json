@@ -128,7 +128,16 @@
     "error_settings": "Fehler: Einstellungen konnten nicht geöffnet werden",
     "error_print": "Fehler: Konnte nicht drucken",
     "error_camera_access": "KAMERA: Zugriff verweigert",
-    "alert_update_coming": "UPDATE-PRÜFUNG DEMNÄCHST",
+    "title_update": "SOFTWARE-UPDATE",
+    "update_btn_check": "NACH UPDATES SUCHEN",
+    "update_checking": "Überprüfen...",
+    "update_up_to_date": "Sie sind auf dem neuesten Stand",
+    "update_available_label": "verfügbar",
+    "update_btn_download": "HERUNTERLADEN",
+    "update_downloading": "Wird heruntergeladen...",
+    "update_ready": "Download abgeschlossen",
+    "update_btn_install": "INSTALLIEREN & NEU STARTEN",
+    "update_btn_retry": "ERNEUT VERSUCHEN",
     "error_no_emails": "KEINE E-MAILS ZUM EXPORTIEREN",
     "success_emails_exported": "E-MAILS ERFOLGREICH EXPORTIERT",
     "error_export_failed": "EXPORT FEHLGESCHLAGEN",
@@ -194,7 +203,8 @@
     "error_select_printer": "Bitte zuerst einen Drucker unter Einstellungen > Drucken auswählen.",
     "error_print_failed": "Druck fehlgeschlagen",
     "success_print_sent": "Druckauftrag gesendet",
-    "error_print": "Druckfehler"
+    "error_print": "Druckfehler",
+    "error_no_session": "KEINE SITZUNG — BITTE ANMELDEN"
   },
   "promptlab": {
     "btn_update": "PROMPTS AKTUALISIEREN",

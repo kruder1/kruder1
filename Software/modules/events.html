@@ -705,7 +705,7 @@ window.EventsModule = {
             
             card.innerHTML = `
                 <i class="fa-solid fa-camera"></i>
-                <div class="category-header">${ev.name}</div>
+                <div class="category-header">${window._escapeHtml(ev.name)}</div>
             `;
             grid.appendChild(card);
         });
@@ -756,7 +756,7 @@ window.EventsModule = {
                 card.dataset.imgid = img.id;
                 card.innerHTML = `
                     <img src="${window.location.origin}/event-data/${id}/images/${img.image}" class="prompt-full-img">
-                    <div class="category-header">${img.email || 'NO EMAIL'}</div>
+                    <div class="category-header">${window._escapeHtml(img.email || 'NO EMAIL')}</div>
                 `;
                 grid.appendChild(card);
             });
@@ -946,7 +946,7 @@ window.EventsModule = {
         } catch (e) { console.error('[EVENTS] print settings load error', e); }
         if (!printer || !printer.trim()) {
             this.hideModal('print-modal');
-            alert(window.t ? window.t('eventmode.error_select_printer') : 'Select a printer in Settings > Printing first.');
+            window.showAlert(window.t ? window.t('eventmode.error_select_printer') : 'Select a printer in Settings > Printing first.');
             return;
         }
         this.hideModal('print-modal');
@@ -954,12 +954,12 @@ window.EventsModule = {
         try {
             const res = await window.pywebview.api.print_event_image(eid, filename, printer.trim(), copies);
             if (res && res.ok && window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'print_job_sent', { eid, filename, copies }).catch(() => {});
-            if (res && !res.ok) alert(res.error || (window.t ? window.t('eventmode.error_print_failed') : 'Print failed'));
+            if (res && !res.ok) window.showAlert(res.error || (window.t ? window.t('eventmode.error_print_failed') : 'Print failed'));
         } catch (e) {
             if (window.pywebview && window.pywebview.api && window.pywebview.api.log_event) {
                 window.pywebview.api.log_event('WARN', 'events_print_failed', { error: String(e && (e.message || e)) });
             }
-            alert((window.t ? window.t('eventmode.error_print') : 'Print error') + ': ' + (e.message || e));
+            window.showAlert((window.t ? window.t('eventmode.error_print') : 'Print error') + ': ' + (e.message || e));
         }
     },
 

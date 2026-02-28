@@ -600,7 +600,7 @@ window.PromptLabModule = {
                         </label>
                     </div>
                     <div class="category-preview-grid">${imagesHtml}</div>
-                    <div class="category-header">${cat.name}</div>
+                    <div class="category-header">${window._escapeHtml(cat.name)}</div>
                 `;
                 container.appendChild(card);
             });
@@ -638,7 +638,7 @@ window.PromptLabModule = {
                         </label>
                     </div>
                     <img src="${this.state.imgUrl}/${p.image}" class="prompt-full-img">
-                    <div class="category-header">${p.name}</div>
+                    <div class="category-header">${window._escapeHtml(p.name)}</div>
                 `;
                 container.appendChild(card);
             });
@@ -863,8 +863,6 @@ window.PromptLabModule = {
                     if (window.AppState && window.AppState.session && window.AppState.session.account) {
                         window.AppState.session.account.credits = res.credits;
                     }
-                    const h1 = document.getElementById('home-credits');
-                    if (h1) h1.textContent = `${res.credits} CREDITS`;
                 }
             } else {
                 this.state.generation.active = false;

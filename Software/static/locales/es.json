@@ -203,7 +203,8 @@
     "error_select_printer": "Selecciona una impresora en Ajustes > Impresión primero.",
     "error_print_failed": "Error al imprimir",
     "success_print_sent": "Trabajo enviado a imprimir",
-    "error_print": "Error al imprimir"
+    "error_print": "Error al imprimir",
+    "error_no_session": "SIN SESIÓN — INICIA SESIÓN"
   },
   "promptlab": {
     "btn_update": "ACTUALIZAR PROMPTS",

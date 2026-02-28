@@ -48,7 +48,7 @@ window.FramesModule = {
             ghost: null,
             preventClick: false
         },
-        imgUrl: 'http://127.0.0.1:' + (window.PORT || 8765) + '/local-data/app/frames/images'
+        imgUrl: window.location.origin + '/local-data/app/frames/images'
     },
 
     init() {
@@ -167,7 +167,7 @@ window.FramesModule = {
                         <img src="/static/img/print_test.jpg" class="frame-test-bg">
                         <img src="${this.state.imgUrl}/${frame.filename}" class="frame-overlay-img">
                     </div>
-                    <div class="category-header">${frame.name}</div>
+                    <div class="category-header">${window._escapeHtml(frame.name)}</div>
                 `;
 
                 grid.appendChild(card);

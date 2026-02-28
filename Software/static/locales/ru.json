@@ -128,7 +128,16 @@
     "error_settings": "Ошибка: Не удалось открыть настройки",
     "error_print": "Ошибка: Не удалось распечатать",
     "error_camera_access": "КАМЕРА: Доступ запрещен",
-    "alert_update_coming": "ПРОВЕРКА ОБНОВЛЕНИЙ СКОРО",
+    "title_update": "ОБНОВЛЕНИЕ ПО",
+    "update_btn_check": "ПРОВЕРИТЬ ОБНОВЛЕНИЯ",
+    "update_checking": "Проверка...",
+    "update_up_to_date": "У вас последняя версия",
+    "update_available_label": "доступно",
+    "update_btn_download": "СКАЧАТЬ",
+    "update_downloading": "Загрузка...",
+    "update_ready": "Загрузка завершена",
+    "update_btn_install": "УСТАНОВИТЬ И ПЕРЕЗАПУСТИТЬ",
+    "update_btn_retry": "ПОВТОРИТЬ",
     "error_no_emails": "НЕТ ЭЛ. АДРЕСОВ ДЛЯ ЭКСПОРТА",
     "success_emails_exported": "ЭЛ. АДРЕСА УСПЕШНО ЭКСПОРТИРОВАНЫ",
     "error_export_failed": "ОШИБКА ЭКСПОРТА",
@@ -194,7 +203,8 @@
     "error_select_printer": "Сначала выберите принтер в Настройки > Печать.",
     "error_print_failed": "Ошибка печати",
     "success_print_sent": "Задание на печать отправлено",
-    "error_print": "Ошибка печати"
+    "error_print": "Ошибка печати",
+    "error_no_session": "НЕТ СЕССИИ — ПОЖАЛУЙСТА, ВОЙДИТЕ"
   },
   "promptlab": {
     "btn_update": "ОБНОВИТЬ ПРОМПТЫ",

@@ -128,7 +128,16 @@
     "error_settings": "错误：无法打开设置",
     "error_print": "错误：无法打印",
     "error_camera_access": "相机：拒绝访问",
-    "alert_update_coming": "检查更新功能即将推出",
+    "title_update": "软件更新",
+    "update_btn_check": "检查更新",
+    "update_checking": "正在检查...",
+    "update_up_to_date": "已是最新版本",
+    "update_available_label": "可用",
+    "update_btn_download": "下载",
+    "update_downloading": "正在下载...",
+    "update_ready": "下载完成",
+    "update_btn_install": "安装并重启",
+    "update_btn_retry": "重试",
     "error_no_emails": "没有可导出的电子邮件",
     "success_emails_exported": "电子邮件导出成功",
     "error_export_failed": "导出失败",
@@ -194,7 +203,8 @@
     "error_select_printer": "请先在“设置 > 打印”中选择一台打印机。",
     "error_print_failed": "打印失败",
     "success_print_sent": "打印任务已发送",
-    "error_print": "打印错误"
+    "error_print": "打印错误",
+    "error_no_session": "无会话 — 请登录"
   },
   "promptlab": {
     "btn_update": "更新提示词",

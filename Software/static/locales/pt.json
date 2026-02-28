@@ -128,7 +128,16 @@
     "error_settings": "Erro: Não foi possível abrir as configurações",
     "error_print": "Erro: Não foi possível imprimir",
     "error_camera_access": "CÂMERA: Acesso negado",
-    "alert_update_coming": "VERIFICAÇÃO DE ATUALIZAÇÃO EM BREVE",
+    "title_update": "ATUALIZAÇÃO DE SOFTWARE",
+    "update_btn_check": "VERIFICAR ATUALIZAÇÕES",
+    "update_checking": "Verificando...",
+    "update_up_to_date": "Você está atualizado",
+    "update_available_label": "disponível",
+    "update_btn_download": "BAIXAR",
+    "update_downloading": "Baixando...",
+    "update_ready": "Download concluído",
+    "update_btn_install": "INSTALAR E REINICIAR",
+    "update_btn_retry": "TENTAR NOVAMENTE",
     "error_no_emails": "NÃO HÁ E-MAILS PARA EXPORTAR",
     "success_emails_exported": "E-MAILS EXPORTADOS COM SUCESSO",
     "error_export_failed": "FALHA NA EXPORTAÇÃO",
@@ -194,7 +203,8 @@
     "error_select_printer": "Selecione uma impressora em Configurações > Impressão primeiro.",
     "error_print_failed": "Falha na impressão",
     "success_print_sent": "Trabalho de impressão enviado",
-    "error_print": "Erro de impressão"
+    "error_print": "Erro de impressão",
+    "error_no_session": "SEM SESSÃO — FAÇA LOGIN"
   },
   "promptlab": {
     "btn_update": "ATUALIZAR PROMPTS",

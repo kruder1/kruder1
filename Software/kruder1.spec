@@ -36,8 +36,6 @@ a = Analysis(
         'qrcode',
         'qrcode.image.pil',
         'requests',
-        'pythonnet',
-        'clr_loader',
     ],
     hookspath=[],
     hooksconfig={},

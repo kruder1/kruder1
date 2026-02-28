@@ -128,7 +128,16 @@
     "error_settings": "Erreur : Impossible d'ouvrir les paramètres",
     "error_print": "Erreur : Impossible d'imprimer",
     "error_camera_access": "CAMÉRA : Accès refusé",
-    "alert_update_coming": "VÉRIFICATION DES MISES À JOUR BIENTÔT DISPONIBLE",
+    "title_update": "MISE À JOUR",
+    "update_btn_check": "VÉRIFIER LES MISES À JOUR",
+    "update_checking": "Vérification...",
+    "update_up_to_date": "Vous êtes à jour",
+    "update_available_label": "disponible",
+    "update_btn_download": "TÉLÉCHARGER",
+    "update_downloading": "Téléchargement...",
+    "update_ready": "Téléchargement terminé",
+    "update_btn_install": "INSTALLER ET REDÉMARRER",
+    "update_btn_retry": "RÉESSAYER",
     "error_no_emails": "AUCUN E-MAIL À EXPORTER",
     "success_emails_exported": "E-MAILS EXPORTÉS AVEC SUCCÈS",
     "error_export_failed": "ÉCHEC DE L'EXPORTATION",
@@ -194,7 +203,8 @@
     "error_select_printer": "Sélectionnez d'abord une imprimante dans Paramètres > Impression.",
     "error_print_failed": "L'impression a échoué",
     "success_print_sent": "Tâche d'impression envoyée",
-    "error_print": "Erreur d'impression"
+    "error_print": "Erreur d'impression",
+    "error_no_session": "PAS DE SESSION — VEUILLEZ VOUS CONNECTER"
   },
   "promptlab": {
     "btn_update": "METTRE À JOUR LES PROMPTS",
