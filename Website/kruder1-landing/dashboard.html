@@ -134,14 +134,33 @@
                 } catch (e) { console.error(e); }
             };
 
-            const simulateDownload = () => {
-                const blob = new Blob(['Kruder 1 - Placeholder executable'], { type: 'application/octet-stream' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a'); a.href = url; a.download = 'kruder1.exe'; a.click();
-                URL.revokeObjectURL(url);
+            const downloadSoftware = async () => {
+                const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
+                if (!token) return;
+                KRUDER.setBtnLoading(DOM.btnDownload, true);
+                try {
+                    const res = await fetch('https://kruder1-gen.kruder1-master.workers.dev/check-software-update', {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    if (!res.ok) throw new Error('Failed to get download info');
+                    const data = await res.json();
+                    if (data.ok && data.url) {
+                        const a = document.createElement('a');
+                        a.href = data.url;
+                        a.download = '';
+                        a.click();
+                    } else {
+                        throw new Error('No download available');
+                    }
+                } catch (e) {
+                    console.error(e);
+                    alert(KRUDER.STATE.lang === 'es' ? 'No se pudo descargar. Intenta de nuevo.' : 'Download failed. Please try again.');
+                } finally {
+                    KRUDER.setBtnLoading(DOM.btnDownload, false);
+                }
             };
 
-            if (DOM.btnDownload) DOM.btnDownload.addEventListener('click', simulateDownload);
+            if (DOM.btnDownload) DOM.btnDownload.addEventListener('click', downloadSoftware);
             if (DOM.btnLogout) DOM.btnLogout.addEventListener('click', (e) => { e.preventDefault(); KRUDER.logout(); });
 
             if (checkAuth()) {
