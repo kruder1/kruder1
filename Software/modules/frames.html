@@ -1,0 +1,383 @@
+<!-- ========================================
+     FRAMES MODULE - HTML
+     ======================================== -->
+
+<!-- Frames Grid View -->
+<section id="view-frames" class="view-section">
+    <button class="btn-back" data-action="goto-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="frames.title">FRAMES</h1>
+        <div id="frames-grid" class="events-grid"></div>
+    </div>
+</section>
+
+<!-- Delete Frame Modal -->
+<div id="delete-frame-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="frames.modal_delete">DELETE THIS FRAME?</div>
+        <div class="modal-actions">
+            <button data-action="delete-frame-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="delete-frame-confirm" class="btn-main" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Frame Preview View (full screen, like event gallery) -->
+<section id="view-frame-preview" class="view-section hidden">
+    <button class="btn-back" data-action="close-frame-preview"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper frame-preview-content">
+        <div id="frame-preview-view-content"></div>
+    </div>
+</section>
+
+<!-- Drag Trash -->
+<div id="frame-drag-trash" class="prompt-drag-actions" aria-hidden="true">
+    <div class="prompt-drag-icon prompt-drag-icon--trash"><i class="fa-solid fa-trash"></i></div>
+</div>
+
+<script>
+window.FramesModule = {
+    state: {
+        currentView: 'frames',
+        deleteFrameId: null,
+        drag: {
+            el: null,
+            startX: 0,
+            startY: 0,
+            isDragging: false,
+            ghost: null,
+            preventClick: false
+        },
+        imgUrl: 'http://127.0.0.1:' + (window.PORT || 8765) + '/local-data/app/frames/images'
+    },
+
+    init() {
+        console.debug('[FRAMES] Module initialized');
+        this.bindEvents();
+        this.renderFrames();
+        this._initDragAndDrop();
+    },
+
+    bindEvents() {
+        const self = this;
+
+        const deleteModal = document.getElementById('delete-frame-modal');
+        if (deleteModal) {
+            deleteModal.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-action]');
+                if (btn && (btn.dataset.action === 'delete-frame-cancel' || btn.dataset.action === 'delete-frame-confirm')) {
+                    e.stopPropagation();
+                    window.playButtonSound?.();
+                    self.handleAction(btn.dataset.action, btn.dataset);
+                }
+            });
+        }
+
+        window.moduleHandlers.click = (e) => {
+            if (e.target.closest('.switch')) return;
+            const frameCard = e.target.closest('.prompt-card[data-id]');
+            if (frameCard && !e.target.closest('button') && self.state.currentView === 'frames' && !self.state.drag.preventClick) {
+                window.playButtonSound?.();
+                self.openFramePreview(frameCard);
+                return;
+            }
+            const el = e.target.closest('[data-action]');
+            if (el) {
+                if (!el.classList.contains('btn-back')) window.playButtonSound?.();
+                self.handleAction(el.dataset.action, el.dataset);
+            }
+        };
+
+        window.moduleHandlers.change = (e) => {
+            if (e.target.dataset.toggle === 'frame') {
+                const frameId = e.target.dataset.id;
+                const enabled = e.target.checked;
+                window.pywebview.api.toggle_frame(frameId, enabled).then(() => {
+                    if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'frame_toggled', { frameId, enabled }).catch(() => {});
+                    self.renderFrames();
+                });
+            }
+        };
+
+        window.moduleHandlers.keydown = (e) => {
+            if (e.key === 'Escape') {
+                if (self.state.currentView === 'frame-preview') {
+                    self.showView('frames');
+                } else {
+                    self.hideModal('delete-frame-modal');
+                }
+            }
+        };
+    },
+
+    handleAction(action, data = {}) {
+        switch(action) {
+            case 'goto-dashboard':
+                window.navigateTo('dashboard');
+                break;
+            case 'add-frame':
+                this.addFrame();
+                break;
+            case 'delete-frame-cancel':
+                this.hideModal('delete-frame-modal');
+                break;
+            case 'delete-frame-confirm':
+                this.confirmDeleteFrame();
+                break;
+            case 'close-frame-preview':
+                this.showView('frames');
+                break;
+            case 'close-alert':
+                this.hideModal('alert-modal');
+                break;
+        }
+    },
+
+    async renderFrames() {
+        const grid = document.getElementById('frames-grid');
+        grid.innerHTML = '';
+
+        try {
+            const frames = await window.pywebview.api.get_frames();
+
+            // Add Frame button (always first)
+            const addBtn = document.createElement('button');
+            addBtn.className = 'btn-main btn-primary';
+            addBtn.dataset.action = 'add-frame';
+            addBtn.innerHTML = '<i class="fa-solid fa-plus"></i> ' + (typeof window.t === 'function' ? window.t('frames.btn_add_frame') : 'ADD FRAME');
+            grid.appendChild(addBtn);
+
+            if (!frames || frames.length === 0) return;
+
+            frames.forEach(frame => {
+                const card = document.createElement('div');
+                card.className = 'prompt-card';
+                card.dataset.id = frame.id;
+
+                const previewClass = frame.enabled ? 'frame-card-preview active-preview' : 'frame-card-preview';
+
+                card.innerHTML = `
+                    <div class="card-toggle-wrapper">
+                        <label class="switch">
+                            <input type="checkbox" data-toggle="frame" data-id="${frame.id}" ${frame.enabled ? 'checked' : ''}>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="${previewClass}">
+                        <img src="/static/img/print_test.jpg" class="frame-test-bg">
+                        <img src="${this.state.imgUrl}/${frame.filename}" class="frame-overlay-img">
+                    </div>
+                    <div class="category-header">${frame.name}</div>
+                `;
+
+                grid.appendChild(card);
+            });
+        } catch (e) {
+            console.error('[FRAMES] Error loading frames:', e);
+        }
+    },
+
+    async addFrame() {
+        try {
+            const res = await window.pywebview.api.add_frame();
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'frame_added', {}).catch(() => {});
+                this.renderFrames();
+            } else if (!res.cancelled) {
+                this.showAlert(res.error || (window.t ? window.t('frames.error_adding') : 'ERROR ADDING FRAME'));
+            }
+        } catch (e) {
+            this.showAlert(window.t ? window.t('frames.error_adding') : 'ERROR ADDING FRAME');
+        }
+    },
+
+    async confirmDeleteFrame() {
+        const frameId = this.state.deleteFrameId;
+        if (!frameId) return;
+
+        const btn = document.querySelector('[data-action="delete-frame-confirm"]');
+        const origHTML = btn ? btn.innerHTML : (window.t ? window.t('common.confirm') : 'CONFIRM');
+        if (btn) this.setLoading(btn, true, typeof window.t === 'function' ? window.t('common.loading_deleting') : 'DELETING...');
+
+        try {
+            const res = await window.pywebview.api.delete_frame(frameId);
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'frame_deleted', { frameId }).catch(() => {});
+                this.hideModal('delete-frame-modal');
+                this.renderFrames();
+            } else {
+                this.showAlert(res.error || (window.t ? window.t('frames.error_deleting') : 'ERROR DELETING FRAME'));
+            }
+        } catch (e) {
+            this.showAlert(window.t ? window.t('frames.error_deleting') : 'ERROR DELETING FRAME');
+        } finally {
+            this.state.deleteFrameId = null;
+            if (btn) {
+                this.setLoading(btn, false);
+                btn.innerHTML = origHTML;
+            }
+        }
+    },
+
+    async openFramePreview(cardEl) {
+        const frameId = cardEl && cardEl.dataset && cardEl.dataset.id;
+        if (!frameId) return;
+        try {
+            const frames = await window.pywebview.api.get_frames();
+            const frame = frames && frames.find(f => f.id === frameId);
+            if (!frame) return;
+            const container = document.getElementById('frame-preview-view-content');
+            if (!container) return;
+            const imgUrl = this.state.imgUrl;
+            const withTest = frame.enabled;
+            container.innerHTML = '<div class="full-view-frame">' +
+                '<div class="frame-preview-photo' + (withTest ? ' frame-preview-with-bg' : '') + '">' +
+                (withTest ? '<img src="/static/img/print_test.jpg" class="frame-test-bg" alt="">' : '') +
+                '<img src="' + imgUrl + '/' + frame.filename + '" class="frame-overlay-img" alt="">' +
+                '</div></div>';
+            this.showView('frame-preview');
+        } catch (e) {
+            console.error('[FRAMES] Error opening frame preview:', e);
+        }
+    },
+
+    showView(viewId) {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        const el = document.getElementById('view-' + viewId);
+        if (el) el.classList.remove('hidden');
+        this.state.currentView = viewId;
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'frames_view', { view: viewId }).catch(() => {});
+    },
+
+    // Helpers
+    showModal(id) { window.showModal(id); },
+    hideModal(id) { window.hideModal(id); },
+    showAlert(msg) { window.showAlert(msg); },
+    setLoading(btn, loading, text) { window.setLoading(btn, loading, text); }
+};
+
+// --- DRAG AND DROP (misma lógica que Events: event card → trash) ---
+window.FramesModule._initDragAndDrop = function() {
+    const self = this;
+    const state = this.state;
+
+    const onPointerDown = function(e) {
+        if (e.target.closest('.switch') || e.target.closest('button')) return;
+
+        // DOM-based guard: only capture cards inside #view-frames
+        const card = e.target.closest('.prompt-card[data-id]');
+        if (card && card.closest('#view-frames')) {
+            e.preventDefault();
+            state.drag.el = card;
+            state.drag.startX = e.clientX;
+            state.drag.startY = e.clientY;
+            state.drag.isDragging = false;
+            try { card.setPointerCapture(e.pointerId); } catch(err) {}
+        }
+    };
+
+    const onPointerMove = function(e) {
+        const drag = state.drag;
+        if (!drag.el) return;
+        e.preventDefault();
+        if (!drag.isDragging) {
+            if (Math.abs(e.clientX - drag.startX) > 10 || Math.abs(e.clientY - drag.startY) > 10) {
+                drag.isDragging = true;
+                drag.preventClick = true;
+                const rect = drag.el.getBoundingClientRect();
+                drag.ghost = drag.el.cloneNode(true);
+                drag.ghost.classList.add('draggable-ghost');
+                drag.ghost.style.position = 'fixed';
+                drag.ghost.style.top = rect.top + 'px';
+                drag.ghost.style.left = rect.left + 'px';
+                drag.ghost.style.width = rect.width + 'px';
+                drag.ghost.style.height = rect.height + 'px';
+                drag.ghost.style.margin = '0';
+                document.body.appendChild(drag.ghost);
+                drag.el.style.opacity = '0.3';
+
+                const trashEl = document.getElementById('frame-drag-trash');
+                if (trashEl) trashEl.classList.add('visible');
+            }
+        }
+        if (drag.isDragging) {
+            e.preventDefault();
+            drag.ghost.style.left = (e.clientX - drag.ghost.offsetWidth / 2) + 'px';
+            drag.ghost.style.top = (e.clientY - drag.ghost.offsetHeight / 2) + 'px';
+
+            const trashIcon = document.querySelector('#frame-drag-trash .prompt-drag-icon');
+            if (trashIcon) {
+                const r = trashIcon.getBoundingClientRect();
+                trashIcon.classList.toggle('is-over', e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom);
+            }
+        }
+    };
+
+    const endDrag = function(e) {
+        const drag = state.drag;
+        if (!drag.el) return;
+
+        if (drag.isDragging) {
+            const frameTrash = document.getElementById('frame-drag-trash');
+            const trashIcon = frameTrash ? frameTrash.querySelector('.prompt-drag-icon') : null;
+
+            let droppedOnTrash = false;
+            if (trashIcon) {
+                const r = trashIcon.getBoundingClientRect();
+                droppedOnTrash = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+            }
+
+            if (frameTrash) frameTrash.classList.remove('visible');
+            if (trashIcon) trashIcon.classList.remove('is-over');
+
+            drag.el.style.opacity = '1';
+            if (drag.ghost && drag.ghost.parentNode) drag.ghost.parentNode.removeChild(drag.ghost);
+
+            if (droppedOnTrash) {
+                self.state.deleteFrameId = drag.el.dataset.id;
+                self.showModal('delete-frame-modal');
+            }
+            setTimeout(function() { drag.preventClick = false; }, 100);
+        }
+        try {
+            if (drag.el && e.pointerId && drag.el.hasPointerCapture(e.pointerId)) {
+                drag.el.releasePointerCapture(e.pointerId);
+            }
+        } catch (err) {}
+        drag.el = null;
+        drag.isDragging = false;
+        drag.ghost = null;
+    };
+
+    const onClickCapture = function(e) {
+        if (state.drag.preventClick && e.target.closest('#view-frames')) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', endDrag);
+    document.addEventListener('pointercancel', endDrag);
+    document.addEventListener('click', onClickCapture, true);
+
+    // Register cleanup so loadModule can remove these listeners
+    window._dragCleanup = function() {
+        document.removeEventListener('pointerdown', onPointerDown);
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', endDrag);
+        document.removeEventListener('pointercancel', endDrag);
+        document.removeEventListener('click', onClickCapture, true);
+        state.drag.preventClick = false;
+        state.drag.el = null;
+        state.drag.isDragging = false;
+        if (state.drag.ghost && state.drag.ghost.parentNode) {
+            state.drag.ghost.parentNode.removeChild(state.drag.ghost);
+        }
+        state.drag.ghost = null;
+    };
+};
+
+window.FramesModule.init();
+</script>

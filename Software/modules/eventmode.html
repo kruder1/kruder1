@@ -1,0 +1,938 @@
+<!-- ========================================
+     EVENTMODE MODULE - HTML
+     ======================================== -->
+
+<!-- Event Start (Touch to Begin) -->
+<section id="view-event-start" class="view-section" data-action="goto-categories">
+    <div class="event-top-left-actions">
+        <button class="btn-main" data-action="goto-dashboard"><span data-i18n="eventmode.btn_exit">EXIT</span></button>
+        <button class="btn-main btn-primary" data-action="open-gallery"><span data-i18n="eventmode.btn_gallery">GALLERY</span></button>
+    </div>
+    <h1 class="animate-breathe" data-i18n="eventmode.touch_start">TOUCH TO START...</h1>
+</section>
+
+<!-- Select Category -->
+<section id="view-select-category" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-start"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="eventmode.select_category">SELECT CATEGORY</h1>
+        <div id="event-categories-grid" class="prompt-library-grid"></div>
+    </div>
+</section>
+
+<!-- Select Style -->
+<section id="view-select-style" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-categories"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 id="style-selection-title" data-i18n="eventmode.select_style">SELECT STYLE</h1>
+        <div id="event-styles-grid" class="prompt-library-grid"></div>
+    </div>
+</section>
+
+<!-- Preview Style -->
+<section id="view-event-preview" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-styles"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="btn-main btn-header-action btn-primary" data-action="confirm-style">
+        CONFIRM <i class="fa-solid fa-check"></i>
+    </button>
+    <h1 data-i18n="eventmode.confirm_style">CONFIRM STYLE?</h1>
+    <div class="preview-frame">
+        <img id="event-preview-img" class="preview-image" src="" alt="Style Preview">
+    </div>
+</section>
+
+<!-- Take Photo -->
+<section id="view-take-photo" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-preview"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="btn-main btn-header-action btn-primary" data-action="init-countdown">
+        TAKE PHOTO <i class="fa-solid fa-camera"></i>
+    </button>
+    <h1 data-i18n="eventmode.look_camera">LOOK AT THE CAMERA!</h1>
+    <div class="preview-frame">
+        <video id="camera-feed" autoplay playsinline muted></video>
+        <canvas id="camera-feed-canvas"></canvas>
+        <div id="countdown-display" class="hidden"></div>
+    </div>
+</section>
+
+<!-- Review Photo -->
+<section id="view-review-photo" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-camera"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="btn-main btn-header-action btn-primary" data-action="confirm-generation">
+        CONFIRM <i class="fa-solid fa-check"></i>
+    </button>
+    <h1 data-i18n="eventmode.confirm_photo">CONFIRM PHOTO?</h1>
+    <div class="preview-frame">
+        <img id="review-photo-img" class="preview-image" src="" alt="Review Photo">
+    </div>
+</section>
+
+<!-- Loading -->
+<section id="view-loading" class="view-section hidden">
+    <div class="content-wrapper">
+        <h1 class="animate-breathe" data-i18n="common.loading">LOADING...</h1>
+        <div class="progress-track">
+            <div id="gen-progress-bar" class="progress-fill"></div>
+        </div>
+        <h1 id="loading-percentage">0%</h1>
+        <p id="high-demand-message" data-i18n="eventmode.high_demand">HIGH DEMAND — YOUR IMAGE IS BEING PROCESSED</p>
+    </div>
+</section>
+
+<!-- Result -->
+<section id="view-result" class="view-section hidden">
+    <button class="btn-back" data-action="finish-cycle"><i class="fa-solid fa-house"></i></button>
+    <button class="btn-main btn-top-right btn-primary" data-action="open-print-modal">
+        <i class="fa-solid fa-print"></i> PRINT
+    </button>
+    <h1 data-i18n="eventmode.result_title">HERE'S YOUR IMAGE!</h1>
+    <div class="preview-frame">
+        <img id="result-img-display" class="preview-image" src="" alt="Result">
+        <div class="qr-overlay">
+            <img id="result-qr-display" src="">
+        </div>
+    </div>
+</section>
+
+<!-- Flash Overlay -->
+<div id="flash-overlay"></div>
+
+<!-- Print modal (how many copies) - not connected yet -->
+<div id="print-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="eventmode.modal_prints">HOW MANY PRINTS?</div>
+        <div class="print-counter">
+            <button type="button" class="btn-control" data-action="print-minus"><i class="fa-solid fa-minus"></i></button>
+            <span id="print-count-display">1</span>
+            <button type="button" class="btn-control" data-action="print-plus"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div class="modal-actions">
+            <button type="button" data-action="print-cancel" class="btn-main btn-primary" data-i18n="common.cancel">CANCEL</button>
+            <button type="button" data-action="print-confirm" class="btn-main" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Email Modal (with same virtual keyboard as Events create-event) -->
+<div id="event-email-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box-keyboard">
+        <div class="modal-text" data-i18n="eventmode.modal_email">ENTER EMAIL OR ID</div>
+        <div class="keyboard-input-display">
+            <input type="text" id="event-email-input" class="keyboard-real-input" placeholder="email@address.com" data-i18n="eventmode.placeholder_email" data-i18n-attr="placeholder" autocomplete="off" inputmode="none">
+            <button type="button" id="btn-clear-email-input" class="input-clear-btn">X</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="1">1</button>
+            <button type="button" class="kb-key" data-key="2">2</button>
+            <button type="button" class="kb-key" data-key="3">3</button>
+            <button type="button" class="kb-key" data-key="4">4</button>
+            <button type="button" class="kb-key" data-key="5">5</button>
+            <button type="button" class="kb-key" data-key="6">6</button>
+            <button type="button" class="kb-key" data-key="7">7</button>
+            <button type="button" class="kb-key" data-key="8">8</button>
+            <button type="button" class="kb-key" data-key="9">9</button>
+            <button type="button" class="kb-key" data-key="0">0</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="BACKSPACE">DEL</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="Q">q</button>
+            <button type="button" class="kb-key" data-key="W">w</button>
+            <button type="button" class="kb-key" data-key="E">e</button>
+            <button type="button" class="kb-key" data-key="R">r</button>
+            <button type="button" class="kb-key" data-key="T">t</button>
+            <button type="button" class="kb-key" data-key="Y">y</button>
+            <button type="button" class="kb-key" data-key="U">u</button>
+            <button type="button" class="kb-key" data-key="I">i</button>
+            <button type="button" class="kb-key" data-key="O">o</button>
+            <button type="button" class="kb-key" data-key="P">p</button>
+        </div>
+        <div class="kb-row kb-row--shift">
+            <button type="button" class="kb-key" data-key="A">a</button>
+            <button type="button" class="kb-key" data-key="S">s</button>
+            <button type="button" class="kb-key" data-key="D">d</button>
+            <button type="button" class="kb-key" data-key="F">f</button>
+            <button type="button" class="kb-key" data-key="G">g</button>
+            <button type="button" class="kb-key" data-key="H">h</button>
+            <button type="button" class="kb-key" data-key="J">j</button>
+            <button type="button" class="kb-key" data-key="K">k</button>
+            <button type="button" class="kb-key" data-key="L">l</button>
+            <button type="button" class="kb-key" data-key="@">@</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="SHIFT">SHIFT</button>
+            <button type="button" class="kb-key" data-key="Z">z</button>
+            <button type="button" class="kb-key" data-key="X">x</button>
+            <button type="button" class="kb-key" data-key="C">c</button>
+            <button type="button" class="kb-key" data-key="V">v</button>
+            <button type="button" class="kb-key" data-key="B">b</button>
+            <button type="button" class="kb-key" data-key="N">n</button>
+            <button type="button" class="kb-key" data-key="M">m</button>
+            <button type="button" class="kb-key" data-key=".">.</button>
+            <button type="button" class="kb-key" data-key="-">-</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key=".COM">.COM</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--space" data-key="SPACE"></button>
+        </div>
+        <div class="modal-actions mt-15">
+            <button type="button" data-action="submit-email" class="btn-main" id="btn-submit-email" disabled data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Exit PIN Modal -->
+<div id="exit-pin-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box--compact">
+        <div class="pin-pad">
+            <h2 class="pin-pad__label" data-i18n="eventmode.pin_label">ENTER PIN</h2>
+            <div class="pin-pad__display" id="exit-pin-display"></div>
+            <div class="pin-pad__grid">
+                <button type="button" class="pin-pad__key" data-verify-val="1">1</button>
+                <button type="button" class="pin-pad__key" data-verify-val="2">2</button>
+                <button type="button" class="pin-pad__key" data-verify-val="3">3</button>
+                <button type="button" class="pin-pad__key" data-verify-val="4">4</button>
+                <button type="button" class="pin-pad__key" data-verify-val="5">5</button>
+                <button type="button" class="pin-pad__key" data-verify-val="6">6</button>
+                <button type="button" class="pin-pad__key" data-verify-val="7">7</button>
+                <button type="button" class="pin-pad__key" data-verify-val="8">8</button>
+                <button type="button" class="pin-pad__key" data-verify-val="9">9</button>
+                <button type="button" class="pin-pad__key pin-pad__key--empty"></button>
+                <button type="button" class="pin-pad__key" data-verify-val="0">0</button>
+                <button type="button" class="pin-pad__key" data-verify-val="clear">X</button>
+            </div>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="exit-pin-cancel" class="btn-main">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================
+     EVENTMODE MODULE - JAVASCRIPT
+     ======================================== -->
+<script>
+function _escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+window.EventModeModule = {
+    state: {
+        currentView: 'event-start',
+        eventId: null,
+        eventName: null,
+        categoryId: null,
+        styleId: null,
+        promptText: null,
+        lastCapturedPhoto: null,
+        cameraStream: null,
+        cameraDrawId: null,
+        cameraSettings: { deviceId: null, brightness: 50, contrast: 50, whiteBalance: 50 },
+        imgUrl: `${window.location.origin}/local-data/images`,
+        eventGen: {
+            active: false,
+            genId: null,
+            timer: null
+        },
+        printCount: 1,
+        resultImageFilename: null,
+        verifyPinCurrent: '',
+        verifyPinTimer: null
+    },
+
+    async init() {
+        console.debug('[EVENTMODE] Module initialized');
+        
+        this.state.eventId = window.AppState?.currentEvent?.id;
+        this.state.eventName = window.AppState?.currentEvent?.name;
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'eventmode_entered', { eventId: this.state.eventId, eventName: (this.state.eventName || '').substring(0, 80) }).catch(() => {});
+        
+        if (!this.state.eventId) {
+            console.error('[EVENTMODE] No event ID provided');
+        }
+        
+        try {
+            const res = await window.pywebview.api.get_camera_settings();
+            if (res && res.ok && res.camera) this.state.cameraSettings = res.camera;
+        } catch (e) { console.error('[EVENTMODE] camera settings load failed', e); }
+        
+        this.bindEvents();
+        this.initEmailKeyboard();
+    },
+
+    initEmailKeyboard() {
+        window.initKeyboard({
+            container: '#event-email-modal',
+            inputId: 'event-email-input',
+            confirmBtnId: 'btn-submit-email',
+            clearBtnId: 'btn-clear-email-input',
+            minLength: 6
+        });
+    },
+
+    bindEvents() {
+        const self = this;
+        
+        window.moduleHandlers.click = (e) => {
+            // Exit PIN verify pad buttons
+            const verifyBtn = e.target.closest('[data-verify-val]');
+            if (verifyBtn) {
+                self.verifyPinKeyPress(verifyBtn.dataset.verifyVal);
+                return;
+            }
+
+            const action = e.target.closest('[data-action]');
+            if (action) {
+                if (!action.classList.contains('btn-back')) window.playButtonSound?.();
+                self.handleAction(action.dataset.action, action.dataset);
+            }
+
+            // Touch to start - click on event-start section
+            if (e.target.closest('#view-event-start') && !e.target.closest('button')) {
+                self.gotoCategories();
+            }
+        };
+
+        window.moduleHandlers.keydown = (e) => {
+            if (e.key === 'Escape') {
+                self.hideModal('alert-modal');
+                self.hideModal('print-modal');
+                self.closeVerifyPinModal();
+            }
+            // ENTER confirms email modal (if visible and enabled)
+            if (e.key === 'Enter') {
+                const emailModal = document.getElementById('event-email-modal');
+                if (emailModal && !emailModal.classList.contains('hidden')) {
+                    const btn = document.getElementById('btn-submit-email');
+                    if (btn && !btn.disabled) btn.click();
+                }
+            }
+        };
+    },
+
+    handleAction(action, data = {}) {
+        switch(action) {
+            // Navigation
+            case 'goto-dashboard': this.attemptExit(); break;
+            case 'open-gallery': 
+                window.AppState.openGalleryFor = { 
+                    id: this.state.eventId, 
+                    name: this.state.eventName || 'EVENT' 
+                };
+                window.navigateTo('events'); 
+                break;
+            case 'goto-categories': this.gotoCategories(); break;
+            case 'back-to-start': this.showView('event-start'); break;
+            case 'back-to-categories': this.showView('select-category'); break;
+            case 'back-to-styles': this.showView('select-style'); break;
+            case 'back-to-preview': this.showView('event-preview'); break;
+            case 'back-to-camera': this.showView('take-photo'); this.startCamera(); break;
+            
+            // Selection
+            case 'select-event-category': this.openCategory(data.id, data.name); break;
+            case 'select-event-style': this.previewStyle(data.id, data.name, data.image, data.text); break;
+            case 'confirm-style': this.showView('take-photo'); this.startCamera(); break;
+            
+            // Photo flow
+            case 'init-countdown': this.triggerPhotoSequence(); break;
+            case 'confirm-generation': this.startGeneration(); break;
+            case 'submit-email': this.submitEmail(); break;
+            case 'finish-cycle': this.finishCycle(); break;
+            
+            // Print modal
+            case 'open-print-modal':
+                this.state.printCount = 1;
+                document.getElementById('print-count-display').textContent = '1';
+                this.showModal('print-modal');
+                break;
+            case 'print-minus':
+                if (this.state.printCount > 1) {
+                    this.state.printCount--;
+                    document.getElementById('print-count-display').textContent = this.state.printCount;
+                }
+                break;
+            case 'print-plus':
+                this.state.printCount++;
+                document.getElementById('print-count-display').textContent = this.state.printCount;
+                break;
+            case 'print-cancel':
+                this.hideModal('print-modal');
+                break;
+            case 'print-confirm':
+                this.doPrintResult();
+                break;
+            
+            // Utils
+            case 'exit-pin-cancel': this.closeVerifyPinModal(); break;
+            case 'close-alert': this.hideModal('alert-modal'); break;
+        }
+    },
+
+    // ===================== EXIT PIN GATE =====================
+
+    attemptExit() {
+        const stored = sessionStorage.getItem('KRUDER1-pin');
+        if (stored) {
+            this.showVerifyPinModal(() => {
+                window.navigateTo('dashboard');
+            });
+        } else {
+            window.navigateTo('dashboard');
+        }
+    },
+
+    showVerifyPinModal(callback) {
+        this.state.verifyPinCurrent = '';
+        this.state.verifyPinCallback = callback;
+        const display = document.getElementById('exit-pin-display');
+        if (display) display.textContent = '';
+        this.showModal('exit-pin-modal');
+        this.resetVerifyPinTimer();
+    },
+
+    closeVerifyPinModal() {
+        if (this.state.verifyPinTimer) clearTimeout(this.state.verifyPinTimer);
+        this.hideModal('exit-pin-modal');
+        this.state.verifyPinCurrent = '';
+        this.state.verifyPinCallback = null;
+    },
+
+    resetVerifyPinTimer() {
+        if (this.state.verifyPinTimer) clearTimeout(this.state.verifyPinTimer);
+        this.state.verifyPinTimer = setTimeout(() => {
+            this.closeVerifyPinModal();
+        }, 5000);
+    },
+
+    verifyPinKeyPress(val) {
+        this.resetVerifyPinTimer();
+        if (val === 'clear') {
+            this.state.verifyPinCurrent = '';
+            const display = document.getElementById('exit-pin-display');
+            if (display) display.textContent = '';
+            return;
+        }
+        if (this.state.verifyPinCurrent.length >= 4) return;
+        this.state.verifyPinCurrent += val;
+        const display = document.getElementById('exit-pin-display');
+        if (display) display.textContent = '\u25CF'.repeat(this.state.verifyPinCurrent.length);
+
+        if (this.state.verifyPinCurrent.length === 4) {
+            setTimeout(() => {
+                const stored = sessionStorage.getItem('KRUDER1-pin');
+                if (this.state.verifyPinCurrent === stored) {
+                    const cb = this.state.verifyPinCallback;
+                    this.closeVerifyPinModal();
+                    if (cb) cb();
+                } else {
+                    this.closeVerifyPinModal();
+                }
+            }, 200);
+        }
+    },
+
+    showView(viewId) {
+        // Stop camera if leaving take-photo
+        if (viewId !== 'take-photo') {
+            this.stopCamera();
+        }
+        
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById(`view-${viewId}`)?.classList.remove('hidden');
+        this.state.currentView = viewId;
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'eventmode_view', { view: viewId }).catch(() => {});
+        if (viewId === 'result') this.updatePrintButtonVisibility();
+        
+        // Enable zoom on preview images
+        if (viewId === 'event-preview') {
+            const img = document.getElementById('event-preview-img');
+            if (img) {
+                img.style.transform = 'translate(0px, 0px) scale(1)';
+                this.enableZoom(img);
+            }
+        }
+        if (viewId === 'result') {
+            const img = document.getElementById('result-img-display');
+            if (img) {
+                img.style.transform = 'translate(0px, 0px) scale(1)';
+                this.enableZoom(img);
+            }
+        }
+    },
+
+    async gotoCategories() {
+        const container = document.getElementById('event-categories-grid');
+        container.innerHTML = '<div class="spinner"></div>';
+        
+        this.showView('select-category');
+
+        try {
+            const lib = await window.pywebview.api.get_prompt_library();
+            container.innerHTML = '';
+
+            lib.forEach(cat => {
+                if (cat.enabled === false) return;
+
+                let imagesHtml = '';
+                for (let i = 0; i < 4; i++) {
+                    imagesHtml += cat.images[i]
+                        ? `<img src="${this.state.imgUrl}/${_escapeHtml(cat.images[i])}" class="mini-img">`
+                        : `<div class="mini-img"></div>`;
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.dataset.action = 'select-event-category';
+                card.dataset.id = cat.id;
+                card.dataset.name = cat.name;
+
+                card.innerHTML = `
+                    <div class="category-preview-grid">${imagesHtml}</div>
+                    <div class="category-header">${_escapeHtml(cat.name)}</div>
+                `;
+                container.appendChild(card);
+            });
+        } catch(e) {
+            container.innerHTML = '<div class="text-muted">ERROR LOADING</div>';
+        }
+    },
+
+    async openCategory(catId, catName) {
+        this.state.categoryId = catId;
+        document.getElementById('style-selection-title').textContent = catName;
+        
+        const container = document.getElementById('event-styles-grid');
+        container.innerHTML = '<div class="spinner"></div>';
+        
+        this.showView('select-style');
+
+        try {
+            const prompts = await window.pywebview.api.get_prompts_by_category(catId);
+            container.innerHTML = '';
+
+            prompts.forEach(p => {
+                if (p.enabled === false) return;
+
+                const card = document.createElement('div');
+                card.className = 'prompt-card';
+                card.dataset.action = 'select-event-style';
+                card.dataset.id = p.id;
+                card.dataset.name = p.name;
+                card.dataset.text = p.text || p.name;
+                card.dataset.image = p.image;
+
+                card.innerHTML = `
+                    <img src="${this.state.imgUrl}/${_escapeHtml(p.image)}" class="prompt-full-img">
+                    <div class="category-header">${_escapeHtml(p.name)}</div>
+                `;
+                container.appendChild(card);
+            });
+        } catch(e) {
+            container.innerHTML = '<div class="text-muted">ERROR LOADING</div>';
+        }
+    },
+
+    previewStyle(styleId, styleName, styleImage, promptText) {
+        this.state.styleId = styleId;
+        this.state.promptText = promptText || styleName;
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'style_selected', { styleId, styleName: (styleName || '').substring(0, 80) }).catch(() => {});
+        
+        const img = document.getElementById('event-preview-img');
+        if (img && styleImage) {
+            img.src = `${this.state.imgUrl}/${styleImage}`;
+        }
+        
+        this.showView('event-preview');
+    },
+
+    // ========================================
+    // CAMERA (uses saved settings: deviceId, brightness, contrast, whiteBalance)
+    // ========================================
+    _applyCameraFilters(ctx, w, h, brightness, contrast, whiteBalance) {
+        window.applyCameraFilters(ctx, w, h, brightness, contrast, whiteBalance);
+    },
+
+    async startCamera() {
+        const video = document.getElementById('camera-feed');
+        const canvas = document.getElementById('camera-feed-canvas');
+        if (!video || !canvas) return;
+
+        const s = this.state.cameraSettings;
+        const deviceId = s.deviceId && s.deviceId.length ? s.deviceId : null;
+        let stream = null;
+
+        // Attempt 1: Try with saved deviceId (or generic if none saved)
+        try {
+            const constraints = { video: { width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false };
+            if (deviceId) constraints.video.deviceId = { exact: deviceId };
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (e1) {
+            // Attempt 2: If specific deviceId failed, retry with generic constraints
+            // This also triggers the permission popup if not yet granted
+            if (deviceId) {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false });
+                } catch (e2) {
+                    this.showAlert((window.t ? window.t('eventmode.error_camera') : 'CAMERA ERROR: Access denied'));
+                    return;
+                }
+            } else {
+                this.showAlert((window.t ? window.t('eventmode.error_camera') : 'CAMERA ERROR: Access denied'));
+                return;
+            }
+        }
+
+        if (!stream) return;
+        video.srcObject = stream;
+        this.state.cameraStream = stream;
+        const self = this;
+        const drawLoop = () => {
+            if (!video.srcObject || video.readyState < 2) {
+                self.state.cameraDrawId = requestAnimationFrame(drawLoop);
+                return;
+            }
+            const vw = video.videoWidth, vh = video.videoHeight;
+            if (!vw || !vh) {
+                self.state.cameraDrawId = requestAnimationFrame(drawLoop);
+                return;
+            }
+            let cw = canvas.clientWidth, ch = canvas.clientHeight;
+            if (cw <= 0 || ch <= 0) {
+                self.state.cameraDrawId = requestAnimationFrame(drawLoop);
+                return;
+            }
+            if (canvas.width !== cw || canvas.height !== ch) {
+                canvas.width = cw;
+                canvas.height = ch;
+            }
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            const scale = Math.max(cw / vw, ch / vh);
+            const dw = vw * scale, dh = vh * scale;
+            const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+            ctx.drawImage(video, 0, 0, vw, vh, dx, dy, dw, dh);
+            const b = Math.max(0, Math.min(100, s.brightness ?? 50));
+            const c = Math.max(0, Math.min(100, s.contrast ?? 50));
+            const wb = Math.max(0, Math.min(100, s.whiteBalance ?? 50));
+            if (b !== 50 || c !== 50 || wb !== 50) self._applyCameraFilters(ctx, cw, ch, b, c, wb);
+            self.state.cameraDrawId = requestAnimationFrame(drawLoop);
+        };
+        drawLoop();
+    },
+
+    stopCamera() {
+        const video = document.getElementById('camera-feed');
+        const canvas = document.getElementById('camera-feed-canvas');
+        if (this.state.cameraStream) {
+            this.state.cameraStream.getTracks().forEach(track => track.stop());
+            this.state.cameraStream = null;
+        }
+        if (this.state.cameraDrawId) {
+            cancelAnimationFrame(this.state.cameraDrawId);
+            this.state.cameraDrawId = null;
+        }
+        if (video) video.srcObject = null;
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    },
+
+    async triggerPhotoSequence() {
+        const countEl = document.getElementById('countdown-display');
+        const flashEl = document.getElementById('flash-overlay');
+        const btn = document.querySelector('[data-action="init-countdown"]');
+        const backBtn = document.querySelector('#view-take-photo .btn-back');
+
+        if (btn) btn.classList.add('hidden');
+        if (backBtn) { backBtn.disabled = true; backBtn.style.opacity = '0.3'; backBtn.style.pointerEvents = 'none'; }
+
+        // 1. Countdown
+        countEl.classList.remove('hidden');
+        for (let i = 3; i > 0; i--) {
+            countEl.textContent = i;
+            await new Promise(r => setTimeout(r, 1000));
+        }
+        countEl.classList.add('hidden');
+
+        // 2. Flash
+        flashEl.classList.add('animate-strobe');
+        await new Promise(r => setTimeout(r, 250));
+
+        // 3. Capture
+        this.captureFrame();
+        flashEl.classList.remove('animate-strobe');
+
+        if (btn) btn.classList.remove('hidden');
+        if (backBtn) { backBtn.disabled = false; backBtn.style.opacity = ''; backBtn.style.pointerEvents = ''; }
+
+        // 4. Navigate to review
+        this.showView('review-photo');
+    },
+
+    captureFrame() {
+        const previewCanvas = document.getElementById('camera-feed-canvas');
+        if (!previewCanvas || !previewCanvas.width || !previewCanvas.height) return;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = previewCanvas.width;
+        canvas.height = previewCanvas.height;
+        const ctx = canvas.getContext('2d');
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(previewCanvas, 0, 0);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+        document.getElementById('review-photo-img').src = dataUrl;
+        this.state.lastCapturedPhoto = dataUrl;
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'photo_captured', { eventId: this.state.eventId }).catch(() => {});
+    },
+
+    // ========================================
+    // GENERATION
+    // ========================================
+    async startGeneration() {
+        const img = document.getElementById('review-photo-img').src;
+        const evtId = this.state.eventId;
+        const styleId = this.state.styleId;
+        const promptText = this.state.promptText || "Portrait photo";
+        const token = window.AppState?.session?.token;
+
+        if (!token) return this.showAlert(window.t ? window.t('eventmode.error_no_session') : 'NO SESSION — PLEASE LOG IN');
+        if (!evtId) return this.showAlert(window.t ? window.t('eventmode.error_no_event') : 'NO EVENT STARTED');
+
+        this.showView('loading');
+
+        try {
+            if (!window.pywebview.api.start_event_generation) {
+                throw new Error("PYTHON API MISSING - RESTART APP");
+            }
+
+            const res = await window.pywebview.api.start_event_generation(
+                token, evtId, img, styleId || 'default', promptText
+            );
+
+            if (res && res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'generation_started', { eventId: evtId, styleId: styleId || 'default', genId: res.genId }).catch(() => {});
+                this.state.eventGen.genId = res.genId;
+                this.state.eventGen.active = true;
+                this.runLoadingSequence(evtId, res.genId);
+            } else {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('WARN', 'generation_request_failed', { eventId: evtId, error: (res && res.error) ? String(res.error).substring(0, 200) : 'unknown' }).catch(() => {});
+                this.showAlert(res?.error || (window.t ? window.t('eventmode.error_generation') : 'GENERATION FAILED, TRY AGAIN'));
+            }
+        } catch(e) {
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('ERROR', 'generation_request_exception', { error: String(e && (e.message || e)).substring(0, 200) }).catch(() => {});
+            console.error(e);
+            this.showAlert(window.t ? window.t('eventmode.error_generation') : 'GENERATION FAILED, TRY AGAIN');
+        }
+    },
+
+    runLoadingSequence(eventId, genId) {
+        const bar = document.getElementById('gen-progress-bar');
+        const textEl = document.getElementById('loading-percentage');
+        const hdMsg = document.getElementById('high-demand-message');
+        const duration = 90000;
+        let modalShown = false;
+        let hdShown = false;
+
+        // Reset
+        bar.style.transition = 'none';
+        bar.style.width = '0%';
+        if (textEl) textEl.textContent = '0%';
+        if (hdMsg) hdMsg.style.display = 'none';
+        if (this.state.eventGen.timer) clearInterval(this.state.eventGen.timer);
+
+        // Force reflow then start CSS transition
+        void bar.offsetWidth;
+        bar.style.transition = `width ${duration / 1000}s linear`;
+        bar.style.width = '95%';
+
+        const startTime = Date.now();
+        const self = this;
+
+        this.state.eventGen.timer = setInterval(async () => {
+            const elapsed = Date.now() - startTime;
+
+            // Update percentage text
+            const pct = Math.min((elapsed / duration) * 100, 95);
+            if (textEl) textEl.textContent = Math.floor(pct) + '%';
+
+            // Show email/ID modal at 15s
+            if (elapsed >= 15000 && !modalShown) {
+                modalShown = true;
+                self.showModal('event-email-modal');
+                setTimeout(() => document.getElementById('event-email-input')?.focus(), 100);
+            }
+
+            // Show high demand message at 40s
+            if (elapsed >= 40000 && !hdShown) {
+                hdShown = true;
+                if (hdMsg) hdMsg.style.display = 'block';
+            }
+
+            // Poll every 1s
+            if (Math.floor(elapsed / 1000) > Math.floor((elapsed - 100) / 1000)) {
+                try {
+                    const status = await window.pywebview.api.check_generation_status(eventId, genId);
+                    if (status && status.status === 'completed') {
+                        self.finishGeneration(status);
+                    } else if (status && status.status === 'failed') {
+                        self.failGeneration(status.error);
+                    }
+                } catch(e) { console.error('[EVENTMODE] status poll error', e); }
+            }
+        }, 100);
+    },
+
+    async submitEmail() {
+        const email = document.getElementById('event-email-input').value.trim();
+        if (!email) return;
+        
+        try {
+            await window.pywebview.api.finalize_event_generation(
+                window.AppState?.session?.token,
+                this.state.eventId,
+                this.state.eventGen.genId,
+                email
+            );
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'generation_finalized', { eventId: this.state.eventId, genId: this.state.eventGen.genId }).catch(() => {});
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'generation_email_submitted', {}).catch(() => {});
+        } catch(e) { console.error('[EVENTMODE] email submit error', e); }
+        
+        this.hideModal('event-email-modal');
+    },
+
+    finishGeneration(data) {
+        if (this.state.eventGen.timer) clearInterval(this.state.eventGen.timer);
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'generation_completed', { eventId: this.state.eventId, genId: this.state.eventGen.genId, creditsRemaining: data.creditsRemaining }).catch(() => {});
+
+        // Update credits in AppState and in DOM (only if #home-credits exists)
+        if (data.creditsRemaining !== undefined) {
+            if (window.AppState && window.AppState.session && window.AppState.session.account) {
+                window.AppState.session.account.credits = data.creditsRemaining;
+            }
+            const h1 = document.getElementById('home-credits');
+            if (h1) h1.textContent = `${data.creditsRemaining} CREDITS`;
+        }
+
+        // Jump to 100% with smooth transition
+        const bar = document.getElementById('gen-progress-bar');
+        bar.style.transition = 'width 0.5s linear';
+        bar.style.width = '100%';
+        document.getElementById('loading-percentage').textContent = '100%';
+        const hdMsg = document.getElementById('high-demand-message');
+        if (hdMsg) hdMsg.style.display = 'none';
+        
+        // Show result (guardar filename para imprimir)
+        this.state.resultImageFilename = data.resultImage || null;
+        setTimeout(() => {
+            document.getElementById('result-img-display').src = data.localUrl;
+            document.getElementById('result-qr-display').src = data.qrUrl;
+            this.showView('result');
+            this.doAutoPrintIfEnabled();
+        }, 500);
+    },
+
+    async doAutoPrintIfEnabled() {
+        if (!this.state.resultImageFilename || !this.state.eventId) return;
+        let printing = null;
+        try {
+            const res = await window.pywebview.api.get_printing_settings();
+            if (res && res.ok && res.printing) printing = res.printing;
+        } catch (e) { console.error('[EVENTMODE] auto-print settings error', e); return; }
+        if (!printing || !printing.automaticPrinting) return;
+        const printer = printing.printer && printing.printer.trim() ? printing.printer.trim() : null;
+        if (!printer) return;
+        const copies = Math.max(1, Math.min(999, parseInt(printing.copies, 10) || 1));
+        try {
+            await window.pywebview.api.print_event_image(
+                this.state.eventId,
+                this.state.resultImageFilename,
+                printer,
+                copies
+            );
+        } catch (e) { console.error('[EVENTMODE] auto-print failed', e); }
+    },
+
+    failGeneration(err) {
+        if (this.state.eventGen.timer) clearInterval(this.state.eventGen.timer);
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('ERROR', 'generation_failed', { eventId: this.state.eventId, genId: this.state.eventGen.genId, error: String(err || '').substring(0, 300) }).catch(() => {});
+        this.hideModal('event-email-modal');
+        const hdMsg = document.getElementById('high-demand-message');
+        if (hdMsg) hdMsg.style.display = 'none';
+        this.showAlert(err || 'GENERATION FAILED, TRY AGAIN');
+        this.showView('event-start');
+    },
+
+    finishCycle() {
+        this.showView('event-start');
+    },
+
+    async doPrintResult() {
+        const eventId = this.state.eventId;
+        const filename = this.state.resultImageFilename;
+        const copies = this.state.printCount || 1;
+        if (!eventId || !filename) {
+            this.hideModal('print-modal');
+            this.showAlert(window.t ? window.t('eventmode.error_no_image') : 'No image to print');
+            return;
+        }
+        let printer = null;
+        try {
+            const res = await window.pywebview.api.get_printing_settings();
+            if (res && res.ok && res.printing && res.printing.printer) printer = res.printing.printer;
+        } catch (e) { console.error('[EVENTMODE] print settings load error', e); }
+        if (!printer || !printer.trim()) {
+            this.hideModal('print-modal');
+            this.showAlert(window.t ? window.t('eventmode.error_select_printer') : 'Select a printer in Settings > Printing first.');
+            return;
+        }
+        this.hideModal('print-modal');
+        try {
+            const res = await window.pywebview.api.print_event_image(eventId, filename, printer.trim(), copies);
+            if (res && !res.ok) this.showAlert(res.error || (window.t ? window.t('eventmode.error_print_failed') : 'Print failed'));
+            else if (res && res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'print_job_sent', { eventId, filename, copies }).catch(() => {});
+                this.showAlert(window.t ? window.t('eventmode.success_print_sent') : 'Print job sent');
+            }
+        } catch (e) {
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.log_event) {
+                window.pywebview.api.log_event('WARN', 'eventmode_print_failed', { error: String(e && (e.message || e)) });
+            }
+            this.showAlert((window.t ? window.t('eventmode.error_print') : 'Print error') + ': ' + (e.message || e));
+        }
+    },
+
+    // ========================================
+    // HELPERS
+    // ========================================
+    async updatePrintButtonVisibility() {
+        const btn = document.querySelector('#view-result [data-action="open-print-modal"]');
+        if (!btn) return;
+        let showBtn = true;
+        try {
+            const res = await window.pywebview.api.get_printing_settings();
+            if (res && res.ok && res.printing) {
+                const p = res.printing;
+                if (p.enabled === false) showBtn = false;
+                if (p.automaticPrinting === true) showBtn = false;
+            }
+        } catch (e) { console.error('[EVENTMODE] print visibility check error', e); }
+        if (showBtn) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+    },
+
+    showModal(id) { window.showModal(id); },
+    openModal(id, focusInputId) { window.openModal(id, focusInputId); },
+    hideModal(id) { window.hideModal(id); },
+    showAlert(msg) { window.showAlert(msg); },
+
+    enableZoom(img) { window.enableZoom(img); }
+};
+
+window.EventModeModule.init();
+</script>

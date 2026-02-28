@@ -1,0 +1,438 @@
+<!-- ========================================
+     DASHBOARD MODULE - HTML
+     ======================================== -->
+<section id="view-home" class="view-section">
+    <button class="btn-control dashboard-lock-btn" data-action="lock-dashboard" aria-label="Lock booth" data-i18n="dashboard.aria_lock" data-i18n-attr="aria-label">
+        <i class="fa-solid fa-lock"></i>
+    </button>
+    <div class="content-wrapper">
+        <h1 data-i18n="dashboard.title">DASHBOARD</h1>
+        <div class="home-grid">
+            <button class="btn-main" data-action="open-account-modal">
+                <i class="fa-solid fa-circle-user"></i> <span data-i18n="dashboard.btn_account">ACCOUNT</span>
+            </button>
+            <button class="btn-main" data-action="goto-events">
+                <i class="fa-solid fa-bolt"></i> <span data-i18n="dashboard.btn_event_manager">EVENT MANAGER</span>
+            </button>
+            <button class="btn-main" data-action="goto-promptlab">
+                <i class="fa-solid fa-flask"></i> <span data-i18n="dashboard.btn_prompt_lab">PROMPT LAB</span>
+            </button>
+            <button class="btn-main" data-action="goto-frames">
+                <i class="fa-solid fa-image"></i> <span data-i18n="dashboard.btn_frames">FRAMES</span>
+            </button>
+            <button class="btn-main" data-action="goto-stats">
+                <i class="fa-solid fa-chart-simple"></i> <span data-i18n="dashboard.btn_statistics">STATISTICS</span>
+            </button>
+            <button class="btn-main" data-action="goto-settings">
+                <i class="fa-solid fa-gear"></i> <span data-i18n="dashboard.btn_settings">SETTINGS</span>
+            </button>
+            <button class="btn-main" data-action="quit">
+                <i class="fa-solid fa-power-off"></i> <span data-i18n="dashboard.btn_quit">QUIT</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section id="view-dashboard-locked" class="view-section hidden">
+    <button class="btn-control dashboard-lock-btn" data-action="unlock-dashboard" aria-label="Unlock booth" data-i18n="dashboard.aria_unlock" data-i18n-attr="aria-label">
+        <i class="fa-solid fa-lock-open"></i>
+    </button>
+    <h1 class="animate-breathe" id="dashboard-lock-text">WE'LL BE BACK IN A FEW MINUTES...</h1>
+</section>
+
+<!-- Account Info Modal -->
+<div id="account-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" data-action="close-account-modal">
+    <div class="card-panel" data-action="account-modal-stop">
+        <div class="card-row">
+            <div class="card-info-header">
+                <i class="fa-solid fa-envelope"></i>
+                <span class="card-label" data-i18n="dashboard.card_label_signed_in">SIGNED IN AS</span>
+            </div>
+            <span class="card-value card-value--email" id="account-modal-email">LOADING...</span>
+            <button type="button" class="btn-main card-action-btn" data-action="account-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="dashboard.btn_logout">LOGOUT</span>
+            </button>
+        </div>
+        <div class="card-row">
+            <div class="card-info-header">
+                <i class="fa-solid fa-coins"></i>
+                <span class="card-label" data-i18n="dashboard.card_label_credits">CREDITS</span>
+            </div>
+            <span class="card-value" id="account-modal-credits">0</span>
+            <button type="button" class="btn-main card-action-btn" data-action="account-refresh">
+                <i class="fa-solid fa-rotate-right"></i> <span data-i18n="dashboard.btn_refresh">REFRESH</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Unlock PIN Modal -->
+<div id="dashboard-unlock-pin-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box--compact">
+        <div class="pin-pad">
+            <h2 class="pin-pad__label" data-i18n="dashboard.pin_label">ENTER PIN</h2>
+            <div class="pin-pad__display" id="dashboard-unlock-pin-display"></div>
+            <div class="pin-pad__grid">
+                <button type="button" class="pin-pad__key" data-verify-val="1">1</button>
+                <button type="button" class="pin-pad__key" data-verify-val="2">2</button>
+                <button type="button" class="pin-pad__key" data-verify-val="3">3</button>
+                <button type="button" class="pin-pad__key" data-verify-val="4">4</button>
+                <button type="button" class="pin-pad__key" data-verify-val="5">5</button>
+                <button type="button" class="pin-pad__key" data-verify-val="6">6</button>
+                <button type="button" class="pin-pad__key" data-verify-val="7">7</button>
+                <button type="button" class="pin-pad__key" data-verify-val="8">8</button>
+                <button type="button" class="pin-pad__key" data-verify-val="9">9</button>
+                <button type="button" class="pin-pad__key pin-pad__key--empty"></button>
+                <button type="button" class="pin-pad__key" data-verify-val="0">0</button>
+                <button type="button" class="pin-pad__key" data-verify-val="clear">X</button>
+            </div>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="dashboard-unlock-pin-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<!-- Quit Modal -->
+<div id="quit-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="dashboard.modal_exit">EXIT SYSTEM?</div>
+        <div class="modal-actions">
+            <button data-action="quit-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="quit-confirm" class="btn-main" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Logout Modal (with virtual keyboard) -->
+<div id="logout-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box-keyboard">
+        <div class="modal-text" data-i18n="dashboard.modal_logout">ENTER PASSWORD TO LOGOUT</div>
+        <div class="keyboard-input-display">
+            <input type="password" id="logout-pass-input" class="keyboard-real-input" placeholder="PASSWORD" data-i18n="dashboard.placeholder_password" data-i18n-attr="placeholder" autocomplete="off" inputmode="none">
+            <button type="button" id="btn-clear-logout-input" class="input-clear-btn">X</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="1">1</button>
+            <button type="button" class="kb-key" data-key="2">2</button>
+            <button type="button" class="kb-key" data-key="3">3</button>
+            <button type="button" class="kb-key" data-key="4">4</button>
+            <button type="button" class="kb-key" data-key="5">5</button>
+            <button type="button" class="kb-key" data-key="6">6</button>
+            <button type="button" class="kb-key" data-key="7">7</button>
+            <button type="button" class="kb-key" data-key="8">8</button>
+            <button type="button" class="kb-key" data-key="9">9</button>
+            <button type="button" class="kb-key" data-key="0">0</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="BACKSPACE">DEL</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="Q">q</button>
+            <button type="button" class="kb-key" data-key="W">w</button>
+            <button type="button" class="kb-key" data-key="E">e</button>
+            <button type="button" class="kb-key" data-key="R">r</button>
+            <button type="button" class="kb-key" data-key="T">t</button>
+            <button type="button" class="kb-key" data-key="Y">y</button>
+            <button type="button" class="kb-key" data-key="U">u</button>
+            <button type="button" class="kb-key" data-key="I">i</button>
+            <button type="button" class="kb-key" data-key="O">o</button>
+            <button type="button" class="kb-key" data-key="P">p</button>
+        </div>
+        <div class="kb-row kb-row--shift">
+            <button type="button" class="kb-key" data-key="A">a</button>
+            <button type="button" class="kb-key" data-key="S">s</button>
+            <button type="button" class="kb-key" data-key="D">d</button>
+            <button type="button" class="kb-key" data-key="F">f</button>
+            <button type="button" class="kb-key" data-key="G">g</button>
+            <button type="button" class="kb-key" data-key="H">h</button>
+            <button type="button" class="kb-key" data-key="J">j</button>
+            <button type="button" class="kb-key" data-key="K">k</button>
+            <button type="button" class="kb-key" data-key="L">l</button>
+            <button type="button" class="kb-key" data-key="@">@</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="SHIFT">SHIFT</button>
+            <button type="button" class="kb-key" data-key="Z">z</button>
+            <button type="button" class="kb-key" data-key="X">x</button>
+            <button type="button" class="kb-key" data-key="C">c</button>
+            <button type="button" class="kb-key" data-key="V">v</button>
+            <button type="button" class="kb-key" data-key="B">b</button>
+            <button type="button" class="kb-key" data-key="N">n</button>
+            <button type="button" class="kb-key" data-key="M">m</button>
+            <button type="button" class="kb-key" data-key=".">.</button>
+            <button type="button" class="kb-key" data-key="-">-</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key=".COM">.COM</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--space" data-key="SPACE"></button>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="logout-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="logout-confirm" class="btn-main" id="btn-logout-confirm" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================
+     DASHBOARD MODULE - JAVASCRIPT
+     ======================================== -->
+<script>
+window.DashboardModule = {
+    state: {
+        currentView: 'home',
+        verifyPinCurrent: '',
+        verifyPinCallback: null,
+        verifyPinTimer: null
+    },
+
+    init() {
+        console.debug('[DASHBOARD] Module initialized');
+        this.bindEvents();
+        this.initLogoutKeyboard();
+        this.loadUserData();
+    },
+
+    initLogoutKeyboard() {
+        if (typeof window.initKeyboard === 'function') {
+            window.initKeyboard({
+                container: '#logout-modal',
+                inputId: 'logout-pass-input',
+                confirmBtnId: 'btn-logout-confirm',
+                clearBtnId: 'btn-clear-logout-input'
+            });
+        }
+    },
+
+    bindEvents() {
+        const self = this;
+        
+        window.moduleHandlers.click = (e) => {
+            const verifyBtn = e.target.closest('[data-verify-val]');
+            if (verifyBtn) {
+                self.verifyPinKeyPress(verifyBtn.dataset.verifyVal);
+                return;
+            }
+            const action = e.target.closest('[data-action]');
+            if (action) {
+                var a = action.dataset.action;
+                if (!action.classList.contains('btn-back') && a !== 'quit' && a !== 'account-quit' && a !== 'account-logout' && a !== 'lock-dashboard' && a !== 'unlock-dashboard') {
+                    window.playButtonSound?.();
+                }
+                self.handleAction(a, action);
+            }
+        };
+
+        window.moduleHandlers.keydown = (e) => {
+            if (e.key === 'Escape') {
+                self.hideModal('account-modal');
+                self.hideModal('quit-modal');
+                self.hideModal('logout-modal');
+                self.closeVerifyPinModal();
+            }
+        };
+    },
+
+    showView(viewId) {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById(`view-${viewId}`)?.classList.remove('hidden');
+        this.state.currentView = viewId;
+        if (viewId === 'dashboard-locked') {
+            const h1 = document.getElementById('dashboard-lock-text');
+            if (h1) {
+                h1.textContent = window.t ? window.t('dashboard.lock_text') : "WE'LL BE BACK IN A FEW MINUTES...";
+                (async () => {
+                    try {
+                        const res = await window.pywebview.api.get_lock_screen_text();
+                        if (res && res.ok && res.text != null) h1.textContent = String(res.text).trim() || h1.textContent;
+                    } catch (e) { console.error('[DASHBOARD] lock screen text load error', e); }
+                })();
+            }
+        }
+    },
+
+    showVerifyPinModal(callback) {
+        this.state.verifyPinCurrent = '';
+        this.state.verifyPinCallback = callback;
+        const display = document.getElementById('dashboard-unlock-pin-display');
+        if (display) display.textContent = '';
+        this.showModal('dashboard-unlock-pin-modal');
+        this.resetVerifyPinTimer();
+    },
+
+    closeVerifyPinModal() {
+        if (this.state.verifyPinTimer) clearTimeout(this.state.verifyPinTimer);
+        this.hideModal('dashboard-unlock-pin-modal');
+        this.state.verifyPinCurrent = '';
+        this.state.verifyPinCallback = null;
+    },
+
+    resetVerifyPinTimer() {
+        if (this.state.verifyPinTimer) clearTimeout(this.state.verifyPinTimer);
+        this.state.verifyPinTimer = setTimeout(() => {
+            this.closeVerifyPinModal();
+        }, 5000);
+    },
+
+    verifyPinKeyPress(val) {
+        this.resetVerifyPinTimer();
+        if (val === 'clear') {
+            this.state.verifyPinCurrent = '';
+            const display = document.getElementById('dashboard-unlock-pin-display');
+            if (display) display.textContent = '';
+            return;
+        }
+        if (this.state.verifyPinCurrent.length >= 4) return;
+        this.state.verifyPinCurrent += val;
+        const display = document.getElementById('dashboard-unlock-pin-display');
+        if (display) display.textContent = '\u25CF'.repeat(this.state.verifyPinCurrent.length);
+        if (this.state.verifyPinCurrent.length === 4) {
+            setTimeout(() => {
+                const stored = sessionStorage.getItem('KRUDER1-pin');
+                if (this.state.verifyPinCurrent === stored) {
+                    if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'pin_unlock_ok', {}).catch(() => {});
+                    const cb = this.state.verifyPinCallback;
+                    this.closeVerifyPinModal();
+                    if (cb) cb();
+                } else {
+                    if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('WARN', 'pin_unlock_failed', { reason: 'wrong_pin' }).catch(() => {});
+                    this.closeVerifyPinModal();
+                }
+            }, 200);
+        }
+    },
+
+    handleAction(action, element) {
+        switch(action) {
+            case 'dashboard-unlock-pin-cancel': if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'pin_unlock_cancelled', {}).catch(() => {}); this.closeVerifyPinModal(); break;
+            case 'open-account-modal': this.openAccountModal(); break;
+            case 'close-account-modal': this.hideModal('account-modal'); break;
+            case 'account-modal-stop': break;
+            case 'account-refresh': this.refreshCredits(element); break;
+            case 'account-logout': this.hideModal('account-modal'); window.openModal('logout-modal', 'logout-pass-input'); break;
+            case 'account-quit': this.hideModal('account-modal'); this.showModal('quit-modal'); break;
+            case 'lock-dashboard':
+                window.playLockSound?.();
+                this.showView('dashboard-locked');
+                break;
+            case 'unlock-dashboard': this.unlockDashboard(); break;
+            case 'refresh-credits': this.refreshCredits(element); break;
+            case 'logout': window.openModal('logout-modal', 'logout-pass-input'); break;
+            case 'logout-cancel': this.hideModal('logout-modal'); break;
+            case 'logout-confirm': this.verifyLogout(); break;
+            case 'goto-events': window.navigateTo('events'); break;
+            case 'goto-promptlab': window.navigateTo('promptlab'); break;
+            case 'goto-frames': window.navigateTo('frames'); break;
+            case 'goto-stats': window.navigateTo('settings', { openView: 'stats' }); break;
+            case 'goto-settings': window.navigateTo('settings'); break;
+            case 'quit': this.showModal('quit-modal'); break;
+            case 'quit-cancel': this.hideModal('quit-modal'); break;
+            case 'quit-confirm': this.quitApp(); break;
+        }
+    },
+
+    openAccountModal() {
+        this.updateAccountModalDisplay();
+        this.showModal('account-modal');
+    },
+
+    updateAccountModalDisplay() {
+        const emailEl = document.getElementById('account-modal-email');
+        const creditsEl = document.getElementById('account-modal-credits');
+        const session = window.AppState?.session;
+        if (emailEl) emailEl.textContent = session?.account?.email || 'LOADING...';
+        if (creditsEl) creditsEl.textContent = String(session?.account?.credits ?? 0);
+    },
+
+    async loadUserData() {
+        try {
+            let session = window.AppState?.session;
+            if (!session) {
+                session = await window.pywebview.api.get_session_data();
+                window.AppState.session = session;
+            }
+
+            if (session?.account) {
+                this.updateAccountModalDisplay();
+            }
+        } catch (error) {
+            console.error('[DASHBOARD] Error loading user data:', error);
+        }
+    },
+
+    async refreshCredits(btn) {
+        const icon = btn?.querySelector('i');
+        const creditsEl = document.getElementById('account-modal-credits');
+        const prevCredits = creditsEl ? creditsEl.textContent : '0';
+        if (creditsEl) creditsEl.textContent = '--';
+        if (icon) icon.classList.add('fa-spin');
+
+        try {
+            const result = await window.pywebview.api.refresh_account();
+            if (result.ok && result.account) {
+                if (creditsEl) creditsEl.textContent = String(result.account.credits ?? 0);
+                window.AppState.session.account = result.account;
+            } else if (creditsEl) {
+                creditsEl.textContent = prevCredits;
+            }
+        } catch (error) {
+            if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.log_event === 'function') {
+                window.pywebview.api.log_event('ERROR', 'refresh_credits_failed', { error: (error && error.message) ? error.message : String(error) }).catch(function() {});
+            }
+            if (creditsEl) creditsEl.textContent = prevCredits;
+        } finally {
+            if (icon) icon.classList.remove('fa-spin');
+        }
+    },
+
+    async verifyLogout() {
+        const passEl = document.getElementById('logout-pass-input');
+        const pass = passEl ? passEl.value : '';
+        const email = window.AppState?.session?.account?.email;
+        const btn = document.querySelector('[data-action="logout-confirm"]');
+
+        if (!pass) return;
+
+        if (typeof window.setLoading === 'function') window.setLoading(btn, true);
+
+        try {
+            const result = await window.pywebview.api.login(email, pass);
+            if (result.error) {
+                this.showAlert(typeof window.t === 'function' ? window.t('dashboard.error_wrong_password') : 'WRONG PASSWORD');
+                if (typeof window.setLoading === 'function') window.setLoading(btn, false);
+                return;
+            }
+            await window.pywebview.api.clear_session();
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'user_logout', {}).catch(() => {});
+            this.hideModal('logout-modal');
+            window.AppState.session = null;
+            window.navigateTo('auth');
+        } catch (e) {
+            this.showAlert(typeof window.t === 'function' ? window.t('dashboard.error_wrong_password') : 'WRONG PASSWORD');
+        } finally {
+            if (typeof window.setLoading === 'function') window.setLoading(btn, false);
+        }
+    },
+
+    unlockDashboard() {
+        const stored = sessionStorage.getItem('KRUDER1-pin');
+        if (stored) {
+            this.showVerifyPinModal(() => {
+                window.playUnlockSound?.();
+                this.showView('home');
+            });
+        } else {
+            window.playUnlockSound?.();
+            this.showView('home');
+        }
+    },
+
+    quitApp() {
+        try { window.pywebview.api.close_app(); } catch { window.close(); }
+    },
+
+    showModal(id) { window.showModal(id); },
+    hideModal(id) { window.hideModal(id); },
+    showAlert(msg) { window.showAlert(msg); }
+};
+
+window.DashboardModule.init();
+</script>

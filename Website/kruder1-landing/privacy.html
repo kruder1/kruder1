@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kruder 1 - Privacy Policy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <style>
+        :root {
+            /* --- 1. Design Tokens --- */
+            
+            /* Layers (Z-Index System) */
+            --z-negative: -1;
+            --z-particles: 0;
+            --z-content: 10;
+            --z-overlay: 900;
+            --z-menu: 1000;
+            --z-header: 1200;
+            --z-button: 1300;
+            --z-modal: 2000;
+            --z-scanlines: 9999;
+
+            /* Typography */
+            --font-main: 'Inter Tight', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --ls-base: 0.01em;
+            --ls-condensed: -0.02em;
+            --ls-wide: 0.05em;
+            
+            --fs-hero: clamp(2rem, 6vw, 2.8rem);
+            --fs-title: 2.8rem;
+            --fs-subtitle: 1.5rem;
+            --fs-nav: 1.5rem;
+            --fs-btn: 1.2rem;
+            --fs-input: 1rem;
+            --fs-body: 1rem;
+            --fs-small: 0.8rem;
+
+            /* Spacing & Layout */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 4rem;
+            
+            --nav-height: 130px;
+            --logo-width: 80px;
+            --container-max: 900px;
+            --auth-max: 400px;
+            
+            --border-width: 2px;
+            --border-radius: 12px;
+
+            /* Colors (Light Theme Default) */
+            --color-bg: #ffffff;
+            --color-text: #000000;
+            --color-accent: #000000;
+            --color-contrast: #ffffff;
+            --color-border: #000000;
+            --color-muted: rgba(0, 0, 0, 0.5);
+            
+            --bg-overlay-light: rgba(0, 0, 0, 0.05);
+            --bg-overlay-focus: rgba(0, 0, 0, 0.06);
+            --bg-overlay-medium: rgba(0, 0, 0, 0.4);
+            --shadow-strong: rgba(0, 0, 0, 0.15);
+        }
+
+        [data-theme="dark"] {
+            --color-bg: #000000;
+            --color-text: #ffffff;
+            --color-accent: #ffffff;
+            --color-contrast: #000000;
+            --color-border: #ffffff;
+            --color-muted: rgba(255, 255, 255, 0.5);
+            
+            --bg-overlay-light: rgba(255, 255, 255, 0.05);
+            --bg-overlay-focus: rgba(255, 255, 255, 0.06);
+            --bg-overlay-medium: rgba(0, 0, 0, 0.8);
+            --shadow-strong: rgba(0, 0, 0, 0.5);
+            
+            color-scheme: dark;
+        }
+
+        /* --- 2. Global Reset & Base --- */
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        *::-webkit-scrollbar { display: none; }
+        
+        html, body { height: 100%; width: 100%; }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-main);
+            font-size: var(--fs-body);
+            line-height: 1.5;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a { text-decoration: none !important; color: inherit; cursor: pointer; }
+        button { border: none; background: transparent; cursor: pointer; color: inherit; font-family: inherit; }
+        
+        [data-theme="dark"] .brand-logo img { filter: invert(1); }
+
+        /* --- 3. Global Effects --- */
+        
+        #scanlines {
+            position: fixed; inset: 0;
+            background: repeating-linear-gradient(0deg, var(--bg-overlay-light), var(--bg-overlay-light) 1px, transparent 1px, transparent 3px);
+            pointer-events: none; z-index: var(--z-scanlines);
+        }
+
+        #particles-js {
+            position: fixed; inset: 0;
+            z-index: var(--z-particles);
+            pointer-events: none;
+        }
+
+        /* --- 4. Navigation (Header) --- */
+        
+        .nav-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 var(--space-lg);
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--bg-overlay-light);
+            z-index: var(--z-header);
+        }
+
+        .brand-logo img { display: block; width: var(--logo-width); height: auto; padding: var(--space-md) 0; }
+
+        .nav-actions { display: flex; align-items: center; gap: var(--space-md); }
+        
+        .nav-action-btn { 
+            font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; 
+            text-transform: uppercase; padding: 0; transition: opacity 0.2s;
+        }
+        .nav-action-btn:hover { opacity: 0.6; }
+
+        /* --- 5. Navigation (Drawer) --- */
+        
+        .menu-btn {
+            position: relative; z-index: var(--z-button);
+            width: 50px; height: 50px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        .menu-icon {
+            position: relative; width: 30px; height: 2px;
+            background: var(--color-text); transition: all 0.3s ease;
+        }
+        .menu-icon::before, .menu-icon::after {
+            content: ''; position: absolute; left: 0;
+            width: 30px; height: 2px; background: var(--color-text);
+            transition: all 0.3s ease;
+        }
+        .menu-icon::before { top: -8px; }
+        .menu-icon::after { top: 8px; }
+
+        .menu-btn.is-active .menu-icon { background: transparent; }
+        .menu-btn.is-active .menu-icon::before { top: 0; transform: rotate(45deg); }
+        .menu-btn.is-active .menu-icon::after { top: 0; transform: rotate(-45deg); }
+
+        .side-menu {
+            position: fixed; 
+            top: var(--nav-height);
+            right: -100%;
+            width: auto;
+            min-width: 250px;
+            height: calc(100vh - var(--nav-height));
+            background: var(--color-bg);
+            border-left: 1px solid var(--bg-overlay-light);
+            border-top: 1px solid var(--bg-overlay-light);
+            padding: var(--space-lg) var(--space-xl);
+            display: flex; flex-direction: column;
+            z-index: var(--z-menu);
+            
+            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: -10px 10px 30px var(--shadow-strong);
+        }
+        .side-menu.is-open { right: 0; }
+
+        .menu-links { display: flex; flex-direction: column; gap: var(--space-md); flex: 1; }
+
+        .menu-link {
+            font-family: var(--font-main); font-size: var(--fs-nav); font-weight: 900;
+            text-transform: uppercase; letter-spacing: var(--ls-condensed);
+            color: var(--color-text); opacity: 1;
+            text-decoration: none;
+        }
+        .menu-link:hover, .menu-link.is-active { opacity: 1; }
+        .menu-link.is-highlight { opacity: 1; color: var(--color-text); } 
+
+        .menu-overlay {
+            position: fixed; inset: 0;
+            background: var(--bg-overlay-medium);
+            z-index: var(--z-overlay);
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .menu-overlay.is-active { opacity: 1; pointer-events: all; }
+
+        .auth-hidden { display: none !important; }
+
+        /* --- 6. Main Layout --- */
+
+        main {
+            flex: 1; width: 100%; padding-top: var(--nav-height);
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; z-index: var(--z-content);
+        }
+
+        .section {
+            flex: 1; width: 100%; max-width: var(--container-max);
+            display: flex; flex-direction: column; justify-content: center;
+            padding: var(--space-lg) var(--space-md); margin: 0 auto;
+        }
+
+        /* --- 7. UI Components: Common --- */
+
+        .btn-link {
+            background: transparent; text-align: center; font-size: 1.1rem;
+            color: var(--color-text); padding: var(--space-xs) 0;
+            opacity: 0.7; text-decoration: underline !important; 
+        }
+        .btn-link:hover { opacity: 1; }
+
+        /* --- 8. View: Legal (Privacy) --- */
+
+        .legal-container {
+            width: 100%; text-align: center;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .legal-title {
+            font-weight: 900; font-size: var(--fs-title); line-height: 1.1;
+            letter-spacing: var(--ls-condensed); text-transform: uppercase;
+            margin-bottom: var(--space-xs);
+        }
+
+        .legal-date {
+            font-family: var(--font-mono); font-size: var(--fs-small);
+            opacity: 0.5; margin-bottom: var(--space-lg);
+            text-transform: uppercase; letter-spacing: var(--ls-base);
+        }
+
+        .legal-subtitle {
+            font-family: var(--font-main); font-weight: 700; font-size: 1.5rem;
+            text-transform: uppercase; letter-spacing: var(--ls-condensed);
+            margin-top: var(--space-lg); margin-bottom: var(--space-sm);
+        }
+
+        .legal-text {
+            font-size: 1.1rem; opacity: 0.8; margin-bottom: var(--space-sm);
+            max-width: 800px;
+        }
+
+        .legal-list {
+            list-style: none; padding: 0; margin-bottom: var(--space-sm);
+            font-size: 1.1rem; opacity: 0.8;
+        }
+        .legal-list li { margin-bottom: 0.5rem; }
+
+        /* --- 9. Footer --- */
+        
+        .site-footer {
+            position: relative; z-index: var(--z-content);
+            padding: var(--space-lg) 0; text-align: center; font-size: var(--fs-small);
+        }
+        .footer-links a { 
+            font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; 
+            margin: 0 var(--space-sm); transition: opacity 0.2s;
+        }
+        .footer-links a:hover { opacity: 0.7; }
+        .footer-copyright { opacity: 0.5; margin-top: var(--space-sm); }
+
+        /* --- 10. Responsive --- */
+        
+        @media (max-width: 900px) {
+            .legal-title { font-size: 2.2rem; }
+            .section { padding-left: var(--space-md); padding-right: var(--space-md); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div id="scanlines"></div>
+
+    <nav class="nav-container">
+        <a href="index.html" class="brand-logo">
+            <img src="img/logo.png" alt="Kruder 1">
+        </a>
+        <div class="nav-actions">
+            <button id="btn-theme" class="nav-action-btn"><i class="fa-solid fa-moon"></i></button>
+            <button id="btn-lang" class="nav-action-btn">EN</button>
+            <button class="menu-btn" id="menu-toggle" aria-label="Menu">
+                <div class="menu-icon"></div>
+            </button>
+        </div>
+    </nav>
+
+    <div class="menu-overlay" id="menu-overlay"></div>
+    <div class="side-menu" id="side-menu">
+        <nav class="menu-links">
+            <a href="index.html" class="menu-link" data-i18n="m_home"></a>
+            <a href="pricing.html" class="menu-link" data-i18n="m_pricing"></a>
+            <a href="faqs.html" class="menu-link" data-i18n="m_faqs"></a>
+            <a href="login.html" class="menu-link is-highlight" data-i18n="m_access" data-auth-guest></a>
+            <a href="dashboard.html" class="menu-link auth-hidden" data-i18n="m_dash" data-auth-user></a>
+            <a href="#" class="menu-link is-highlight auth-hidden" data-i18n="m_logout" data-auth-user id="link-logout"></a>
+        </nav>
+    </div>
+
+    <main>
+        <section class="section">
+            <div class="legal-container">
+                <h1 class="legal-title" data-i18n="p_title"></h1>
+                <p class="legal-date" data-i18n="p_date"></p>
+                <p class="legal-text" data-i18n="p_intro"></p>
+
+                <h2 class="legal-subtitle" data-i18n="p_h_collect"></h2>
+                <p class="legal-text" data-i18n="p_collect_sub"></p>
+                <ul class="legal-list" data-i18n="p_l_collect"></ul>
+
+                <h2 class="legal-subtitle" data-i18n="p_h_img"></h2>
+                <p class="legal-text" data-i18n="p_img_1"></p>
+                <ul class="legal-list" data-i18n="p_l_img"></ul>
+                <p class="legal-text" data-i18n="p_img_2"></p>
+
+                <h2 class="legal-subtitle" data-i18n="p_h_ops"></h2>
+                <p class="legal-text" data-i18n="p_ops"></p>
+
+                <h2 class="legal-subtitle" data-i18n="p_h_use"></h2>
+                <ul class="legal-list" data-i18n="p_l_use"></ul>
+                <p class="legal-text" data-i18n="p_use_note"></p>
+
+                <h2 class="legal-subtitle" data-i18n="p_h_share"></h2>
+                <p class="legal-text" data-i18n="p_share"></p>
+                <ul class="legal-list" data-i18n="p_l_share"></ul>
+
+                <h2 class="legal-subtitle" data-i18n="p_h_sec"></h2>
+                <p class="legal-text" data-i18n="p_sec"></p>
+
+                <h2 class="legal-subtitle" data-i18n="p_h_rights"></h2>
+                <ul class="legal-list" data-i18n="p_l_rights"></ul>
+                <p class="legal-text" data-i18n="p_rights_contact"></p>
+                <a href="mailto:hola@kruder1.com" class="btn-link">hola@kruder1.com</a>
+
+                <h2 class="legal-subtitle" data-i18n="p_h_changes"></h2>
+                <p class="legal-text" data-i18n="p_changes"></p>
+
+                <h2 class="legal-subtitle" data-i18n="p_h_contact"></h2>
+                <p class="legal-text" data-i18n="p_contact"></p>
+                <a href="mailto:hola@kruder1.com" class="btn-link">hola@kruder1.com</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="privacy.html" data-i18n="footer_privacy"></a>
+            <span>·</span>
+            <a href="terms.html" data-i18n="footer_terms"></a>
+            <span>·</span>
+            <a href="contact.html" data-i18n="footer_contact"></a>
+        </div>
+        <div class="footer-copyright">© 2026 Kruder 1. All rights reserved.</div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /* --- 1. Global Configuration & State --- */
+            
+            const CONFIG = {
+                keyLang: 'KRUDER1-concept-lang',
+                keyTheme: 'KRUDER1-concept-theme',
+                keyToken: 'KRUDER1_token',
+                particlesColor: { light: '#000000', dark: '#ffffff' }
+            };
+
+            const detectSystemLang = () => {
+                const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+                return lang.startsWith('es') ? 'es' : 'en';
+            };
+
+            const STATE = {
+                lang: localStorage.getItem(CONFIG.keyLang) || detectSystemLang(),
+                theme: localStorage.getItem(CONFIG.keyTheme) || 'light'
+            };
+
+            const DOM = {
+                root: document.documentElement,
+                btnLang: document.getElementById('btn-lang'),
+                btnTheme: document.getElementById('btn-theme'),
+                btnMenu: document.getElementById('menu-toggle'),
+                menuDrawer: document.getElementById('side-menu'),
+                menuOverlay: document.getElementById('menu-overlay'),
+                i18nElements: document.querySelectorAll('[data-i18n]')
+            };
+
+            /* --- 2. Localization Dictionary (I18N) --- */
+            
+            const DICTIONARY = {
+                // --- Navigation ---
+                m_home: { en: 'Home', es: 'Inicio' },
+                m_pricing: { en: 'Pricing', es: 'Precios' },
+                m_faqs: { en: 'FAQ\'s', es: 'Preguntas' },
+                m_access: { en: 'Login / Join', es: 'Entrar / Unirse' },
+                m_dash: { en: 'Dashboard', es: 'Panel' },
+                m_logout: { en: 'Logout', es: 'Salir' },
+
+                // --- View: Privacy Policy ---
+                p_title: { en: 'Privacy Policy', es: 'Política de Privacidad' },
+                p_date: { en: 'Last updated: January 2026', es: 'Última actualización: Enero 2026' },
+                p_intro: { 
+                    en: 'Kruder 1 respects your privacy. This Privacy Policy explains how we handle information when you use our software.', 
+                    es: 'Kruder 1 respeta tu privacidad. Esta Política de Privacidad explica cómo manejamos la información cuando utilizas nuestro software.' 
+                },
+                
+                p_h_collect: { en: 'Information We Collect', es: 'Información que Recopilamos' },
+                p_collect_sub: { en: 'We may collect:', es: 'Podemos recopilar:' },
+                p_l_collect: { 
+                    en: '<li>Account information such as name and email address</li><li>Payment information (processed by third-party providers)</li><li>Images uploaded or captured through the software</li><li>Basic usage data required to operate the system</li>',
+                    es: '<li>Información de cuenta como nombre y correo electrónico</li><li>Información de pago (procesada por proveedores externos)</li><li>Imágenes cargadas o tomadas mediante el software</li><li>Datos básicos de uso necesarios para la operación del sistema</li>'
+                },
+
+                p_h_img: { en: 'Image Data', es: 'Datos de Imágenes' },
+                p_img_1: { 
+                    en: 'All images uploaded to or generated by Kruder 1 are deleted immediately after processing.<br>Images are:', 
+                    es: 'Todas las imágenes cargadas o generadas en Kruder 1 se eliminan de forma inmediata después de su procesamiento.<br>Las imágenes:' 
+                },
+                p_l_img: {
+                    en: '<li>Not stored</li><li>Not archived</li><li>Not reused</li><li>Not sold</li><li>Not shared</li>',
+                    es: '<li>No se almacenan</li><li>No se archivan</li><li>No se reutilizan</li><li>No se venden</li><li>No se comparten</li>'
+                },
+                p_img_2: {
+                    en: 'Temporary download links for generated images are available for up to 7 days after upload. After this period, images are permanently deleted from our servers.',
+                    es: 'Los enlaces de descarga de las imágenes generadas están disponibles por un máximo de 7 días. Después de ese periodo, las imágenes se eliminan permanentemente de nuestros servidores.'
+                },
+
+                p_h_ops: { en: 'Emails Collected by Operators', es: 'Correos Electrónicos Recopilados por los Operadores' },
+                p_ops: {
+                    en: 'Kruder 1 is not responsible for how photo booth owners or operators collect, store, manage, or use email addresses obtained from their customers during events.<br>Each operator is solely responsible for complying with applicable privacy and data protection laws related to their own customers.',
+                    es: 'Kruder 1 no es responsable de la forma en que los dueños u operadores de cabinas de fotos recopilan, almacenan, gestionan o utilizan los correos electrónicos obtenidos de sus clientes durante los eventos.<br>Cada operador es el único responsable de cumplir con las leyes de privacidad y protección de datos aplicables a sus propios clientes.'
+                },
+
+                p_h_use: { en: 'How We Use Information', es: 'Uso de la Información' },
+                p_l_use: {
+                    en: '<li>Operate and provide the service</li><li>Manage accounts and credits</li><li>Process payments</li><li>Communicate service-related information</li>',
+                    es: '<li>Operar y proporcionar el servicio</li><li>Gestionar cuentas y créditos</li><li>Procesar pagos</li><li>Comunicar información relacionada con el servicio</li>'
+                },
+                p_use_note: { en: 'We do not use personal data for advertising or resale.', es: 'No utilizamos datos personales para publicidad ni para su reventa.' },
+
+                p_h_share: { en: 'Data Sharing', es: 'Compartición de Datos' },
+                p_share: { en: 'Kruder 1 does not sell personal data.<br>Limited information may be shared with trusted third-party providers strictly for:', es: 'Kruder 1 no vende datos personales.<br>Información limitada puede compartirse con proveedores externos confiables únicamente para:' },
+                p_l_share: {
+                    en: '<li>Payment processing</li><li>Infrastructure and system operation</li>',
+                    es: '<li>Procesamiento de pagos</li><li>Operación de la infraestructura</li>'
+                },
+
+                p_h_sec: { en: 'Data Security', es: 'Seguridad de los Datos' },
+                p_sec: { 
+                    en: 'We apply reasonable technical and organizational measures to protect information.<br>However, no digital system can guarantee absolute security.',
+                    es: 'Aplicamos medidas técnicas y organizativas razonables para proteger la información.<br>Sin embargo, ningún sistema digital puede garantizar seguridad absoluta.'
+                },
+
+                p_h_rights: { en: 'Your Rights', es: 'Tus Derechos' },
+                p_l_rights: {
+                    en: '<li>Access to your personal data</li><li>Correction or deletion of your data</li><li>Account deletion</li>',
+                    es: '<li>Acceso a tus datos personales</li><li>Corrección o eliminación de tus datos</li><li>Eliminación de tu cuenta</li>'
+                },
+                p_rights_contact: { en: 'Requests can be made by contacting:', es: 'Las solicitudes pueden realizarse escribiendo a:' },
+
+                p_h_changes: { en: 'Changes to This Policy', es: 'Cambios a esta Política' },
+                p_changes: { 
+                    en: 'This Privacy Policy may be updated at any time.<br>Continued use of Kruder 1 implies acceptance of the updated version.',
+                    es: 'Esta Política de Privacidad puede actualizarse en cualquier momento.<br>El uso continuo de Kruder 1 implica la aceptación de la versión vigente.'
+                },
+
+                p_h_contact: { en: 'Contact', es: 'Contacto' },
+                p_contact: { en: 'For privacy-related questions, contact:', es: 'Para dudas relacionadas con privacidad, contáctanos en:' },
+
+                // --- Footer ---
+                footer_privacy: { en: 'Privacy', es: 'Privacidad' },
+                footer_terms: { en: 'Terms', es: 'Términos' },
+                footer_contact: { en: 'Contact', es: 'Contacto' }
+            };
+
+            /* --- 3. Core Functions --- */
+            
+            const t = (key) => {
+                const entry = DICTIONARY[key];
+                return entry ? (entry[STATE.lang] || entry.en) : key;
+            };
+
+            const updateTexts = () => {
+                DOM.i18nElements.forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (key) el.innerHTML = t(key);
+                });
+            };
+
+            const setLang = (newLang) => {
+                STATE.lang = newLang;
+                localStorage.setItem(CONFIG.keyLang, newLang);
+                DOM.root.lang = newLang;
+                if (DOM.btnLang) DOM.btnLang.textContent = newLang.toUpperCase();
+                updateTexts();
+            };
+
+            const setTheme = (newTheme) => {
+                STATE.theme = newTheme;
+                localStorage.setItem(CONFIG.keyTheme, newTheme);
+                if (newTheme === 'dark') {
+                    DOM.root.setAttribute('data-theme', 'dark');
+                    if (DOM.btnTheme) DOM.btnTheme.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                } else {
+                    DOM.root.removeAttribute('data-theme');
+                    if (DOM.btnTheme) DOM.btnTheme.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                }
+                initParticles(); 
+            };
+
+            const toggleMenu = () => {
+                DOM.btnMenu.classList.toggle('is-active');
+                DOM.menuDrawer.classList.toggle('is-open');
+                DOM.menuOverlay.classList.toggle('is-active');
+            };
+
+            const updateAuthUI = () => {
+                const token = localStorage.getItem(CONFIG.keyToken);
+                const isLoggedIn = !!token;
+                document.querySelectorAll('[data-auth-guest]').forEach(el => el.classList.toggle('auth-hidden', isLoggedIn));
+                document.querySelectorAll('[data-auth-user]').forEach(el => el.classList.toggle('auth-hidden', !isLoggedIn));
+            };
+
+            const logout = () => {
+                localStorage.removeItem(CONFIG.keyToken);
+                window.location.href = 'login.html';
+            };
+
+            /* --- 4. Particles System --- */
+            
+            const initParticles = () => {
+                if (!window.particlesJS) return;
+                const color = STATE.theme === 'dark' ? CONFIG.particlesColor.dark : CONFIG.particlesColor.light;
+                
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 200, density: { enable: true, value_area: 800 } },
+                        color: { value: color },
+                        shape: { type: 'circle' },
+                        opacity: { value: 0.1, random: true },
+                        size: { value: 2, random: true },
+                        line_linked: { 
+                            enable: true, 
+                            distance: 150, 
+                            color: color, 
+                            opacity: 0.1, 
+                            width: 1 
+                        },
+                        move: { enable: true, speed: 2, direction: 'none', out_mode: 'out' }
+                    },
+                    interactivity: { detect_on: 'canvas', events: { onhover: { enable: false }, onclick: { enable: false } } },
+                    retina_detect: true
+                });
+            };
+
+            /* --- 5. Initialization & Events --- */
+            
+            if (DOM.btnLang) DOM.btnLang.addEventListener('click', () => setLang(STATE.lang === 'en' ? 'es' : 'en'));
+            if (DOM.btnTheme) DOM.btnTheme.addEventListener('click', () => setTheme(STATE.theme === 'light' ? 'dark' : 'light'));
+            if (DOM.btnMenu) DOM.btnMenu.addEventListener('click', toggleMenu);
+            if (DOM.menuOverlay) DOM.menuOverlay.addEventListener('click', toggleMenu);
+            document.getElementById('link-logout')?.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+
+            setLang(STATE.lang);
+            setTheme(STATE.theme);
+            updateAuthUI();
+        });
+    </script>
+</body>
+</html>

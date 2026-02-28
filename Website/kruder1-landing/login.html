@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kruder 1 - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <style>
+       :root {
+            /* --- 1. Design Tokens --- */
+            
+            /* Layers (Z-Index System) */
+            --z-negative: -1;
+            --z-particles: 0;
+            --z-content: 10;
+            --z-overlay: 900;
+            --z-menu: 1000;
+            --z-header: 1200; /* Header on top */
+            --z-button: 1300;
+            --z-modal: 2000;
+            --z-scanlines: 9999;
+
+            /* Typography */
+            --font-main: 'Inter Tight', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --ls-base: 0.01em;
+            --ls-condensed: -0.02em;
+            --ls-wide: 0.05em;
+            
+            --fs-hero: clamp(2rem, 6vw, 2.8rem);
+            --fs-title: 2.8rem;
+            --fs-subtitle: 1.5rem;
+            --fs-nav: 1.5rem;
+            --fs-btn: 1.2rem;
+            --fs-input: 1rem;
+            --fs-body: 1rem;
+            --fs-small: 0.8rem;
+
+            /* Spacing & Layout */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 4rem;
+            
+            --nav-height: 130px;
+            --logo-width: 80px;
+            --container-max: 900px;
+            --auth-max: 400px;
+            
+            --border-width: 2px;
+            --border-radius: 12px;
+
+            /* Colors (Light Theme Default) */
+            --color-bg: #ffffff;
+            --color-text: #000000;
+            --color-accent: #000000;
+            --color-contrast: #ffffff;
+            --color-border: #000000;
+            --color-muted: rgba(0, 0, 0, 0.5);
+            
+            --bg-overlay-light: rgba(0, 0, 0, 0.05);
+            --bg-overlay-focus: rgba(0, 0, 0, 0.06);
+            --bg-overlay-medium: rgba(0, 0, 0, 0.4);
+            --shadow-strong: rgba(0, 0, 0, 0.15);
+        }
+
+        [data-theme="dark"] {
+            --color-bg: #000000;
+            --color-text: #ffffff;
+            --color-accent: #ffffff;
+            --color-contrast: #000000;
+            --color-border: #ffffff;
+            --color-muted: rgba(255, 255, 255, 0.5);
+            
+            --bg-overlay-light: rgba(255, 255, 255, 0.05);
+            --bg-overlay-focus: rgba(255, 255, 255, 0.06);
+            --bg-overlay-medium: rgba(0, 0, 0, 0.8);
+            --shadow-strong: rgba(0, 0, 0, 0.5);
+            
+            color-scheme: dark;
+        }
+
+        /* --- 2. Global Reset & Base --- */
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        *::-webkit-scrollbar { display: none; }
+        
+        html, body { height: 100%; width: 100%; }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-main);
+            font-size: var(--fs-body);
+            line-height: 1.5;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a { text-decoration: none !important; color: inherit; cursor: pointer; }
+        button { border: none; background: transparent; cursor: pointer; color: inherit; font-family: inherit; }
+        
+        [data-theme="dark"] .brand-logo img { filter: invert(1); }
+
+        /* --- 3. Global Effects --- */
+        
+        #scanlines {
+            position: fixed; inset: 0;
+            background: repeating-linear-gradient(0deg, var(--bg-overlay-light), var(--bg-overlay-light) 1px, transparent 1px, transparent 3px);
+            pointer-events: none; z-index: var(--z-scanlines);
+        }
+
+        #particles-js {
+            position: fixed; inset: 0;
+            z-index: var(--z-particles);
+            pointer-events: none;
+        }
+
+        /* --- 4. Navigation (Header) --- */
+        
+        .nav-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 var(--space-lg);
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--bg-overlay-light);
+            z-index: var(--z-header);
+        }
+
+        .brand-logo img { display: block; width: var(--logo-width); height: auto; padding: var(--space-md) 0; }
+
+        .nav-actions { display: flex; align-items: center; gap: var(--space-md); }
+        
+        .nav-action-btn { 
+            font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; 
+            text-transform: uppercase; padding: 0; transition: opacity 0.2s;
+        }
+        .nav-action-btn:hover { opacity: 0.6; }
+
+        /* --- 5. Navigation (Drawer) --- */
+        
+        .menu-btn {
+            position: relative; z-index: var(--z-button);
+            width: 50px; height: 50px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        .menu-icon {
+            position: relative; width: 30px; height: 2px;
+            background: var(--color-text); transition: all 0.3s ease;
+        }
+        .menu-icon::before, .menu-icon::after {
+            content: ''; position: absolute; left: 0;
+            width: 30px; height: 2px; background: var(--color-text);
+            transition: all 0.3s ease;
+        }
+        .menu-icon::before { top: -8px; }
+        .menu-icon::after { top: 8px; }
+
+        .menu-btn.is-active .menu-icon { background: transparent; }
+        .menu-btn.is-active .menu-icon::before { top: 0; transform: rotate(45deg); }
+        .menu-btn.is-active .menu-icon::after { top: 0; transform: rotate(-45deg); }
+
+        .side-menu {
+            position: fixed; 
+            top: var(--nav-height);
+            right: -100%;
+            width: auto;
+            min-width: 250px;
+            height: calc(100vh - var(--nav-height));
+            background: var(--color-bg);
+            border-left: 1px solid var(--bg-overlay-light);
+            border-top: 1px solid var(--bg-overlay-light);
+            padding: var(--space-lg) var(--space-xl);
+            display: flex; flex-direction: column;
+            z-index: var(--z-menu);
+            
+            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: -10px 10px 30px var(--shadow-strong);
+        }
+        .side-menu.is-open { right: 0; }
+
+        .menu-links { display: flex; flex-direction: column; gap: var(--space-md); flex: 1; }
+
+        .menu-link {
+            font-family: var(--font-main); font-size: var(--fs-nav); font-weight: 900;
+            text-transform: uppercase; letter-spacing: var(--ls-condensed);
+            color: var(--color-text); opacity: 1;
+            text-decoration: none;
+        }
+        .menu-link:hover, .menu-link.is-active { opacity: 1; }
+        .menu-link.is-highlight { opacity: 1; color: var(--color-text); /* No underline */ } 
+
+        .menu-overlay {
+            position: fixed; inset: 0;
+            background: var(--bg-overlay-medium);
+            z-index: var(--z-overlay);
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .menu-overlay.is-active { opacity: 1; pointer-events: all; }
+
+        .auth-hidden { display: none !important; }
+
+        /* --- 6. Main Layout --- */
+
+        main {
+            flex: 1; width: 100%; padding-top: var(--nav-height);
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; z-index: var(--z-content);
+        }
+
+        .section {
+            flex: 1; width: 100%; max-width: var(--container-max);
+            display: flex; flex-direction: column; justify-content: center;
+            padding: var(--space-lg) var(--space-md); margin: 0 auto;
+        }
+
+        /* --- 7. UI Components: Buttons --- */
+
+        .btn-primary {
+            display: inline-flex; align-items: center; justify-content: center;
+            min-width: 200px; padding: var(--space-sm) var(--space-lg);
+            font-family: var(--font-mono); font-size: var(--fs-btn); font-weight: 700;
+            letter-spacing: var(--ls-base); text-transform: uppercase;
+            background: var(--color-text); color: var(--color-contrast);
+            border: var(--border-width) solid var(--color-text); 
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover { background: var(--color-bg); color: var(--color-text); }
+        .btn-primary.is-disabled { opacity: 0.5; pointer-events: none; }
+        .btn-primary.is-loading { opacity: 0.8; pointer-events: none; }
+        .btn-primary.is-loading .btn-loading { display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-primary.is-loading .fa-spin { animation: fa-spin 1s infinite linear; }
+        @keyframes fa-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .btn-primary.is-full { display: flex; width: 100%; margin-top: var(--space-md); }
+        .btn-primary.is-sharp { border-radius: 0; }
+
+        .btn-link {
+            background: transparent; text-align: center; font-size: 1.1rem;
+            color: var(--color-text); padding: var(--space-xs) 0;
+            opacity: 0.7; text-decoration: underline !important; 
+        }
+        .btn-link:hover { opacity: 1; }
+
+        /* --- 8. UI Components: Forms --- */
+
+        .input-wrap { position: relative; width: 100%; margin-bottom: var(--space-sm); }
+
+        .input-field {
+            display: block; width: 100%; padding: var(--space-sm); padding-right: 3.5rem;
+            font-family: var(--font-mono); font-size: var(--fs-input); font-weight: 500;
+            background: transparent; color: var(--color-text);
+            border: var(--border-width) solid var(--color-border); 
+            border-radius: var(--border-radius);
+            outline: none; transition: background 0.2s ease;
+        }
+        .input-field:focus { background: var(--bg-overlay-focus); }
+
+        .password-toggle {
+            position: absolute; top: 0; right: 0; height: 100%; width: 3.5rem;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0.5; cursor: pointer; z-index: 20;
+        }
+        .password-toggle:hover { opacity: 1; }
+        .password-toggle i { font-size: 1.25rem; }
+        .password-toggle .fa-eye-slash { display: none; }
+        .password-toggle.is-visible .fa-eye { display: none; }
+        .password-toggle.is-visible .fa-eye-slash { display: block; }
+
+        /* --- 9. UI Components: Modals --- */
+
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: var(--z-modal);
+            background: var(--bg-overlay-medium); backdrop-filter: blur(5px);
+            display: none; align-items: center; justify-content: center;
+        }
+        .modal-overlay.is-active { display: flex; }
+
+        .modal-box {
+            width: min(400px, 90vw); background: var(--color-bg);
+            border: var(--border-width) solid var(--color-border); 
+            border-radius: var(--border-radius);
+            padding: var(--space-lg) var(--space-md);
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            box-shadow: 0 20px 50px var(--shadow-strong);
+        }
+
+        .modal-message {
+            font-size: var(--fs-subtitle); font-weight: 900; line-height: 1.2;
+            text-transform: uppercase; margin-bottom: var(--space-md); 
+            overflow-wrap: break-word;
+        }
+
+        .modal-btn {
+            display: block; width: 100%; padding: var(--space-sm);
+            font-family: var(--font-mono); font-size: var(--fs-btn); font-weight: 700;
+            text-transform: uppercase; letter-spacing: var(--ls-base);
+            background: var(--color-text); color: var(--color-contrast);
+            border: var(--border-width) solid var(--color-border); 
+            border-radius: var(--border-radius);
+            transition: all 0.2s ease; text-align: center;
+        }
+        .modal-btn:hover { background: var(--color-bg); color: var(--color-text); }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .modal-box.shake { animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both; }
+
+        /* --- 10. View: Hero (Home) - [UNUSED IN LOGIN] --- */
+
+        /* --- 11. View: Auth (Login) --- */
+
+        .auth-screen {
+            display: none; flex-direction: column; text-align: center;
+            width: 100%; max-width: var(--auth-max); margin: auto;
+        }
+        .auth-screen.is-active { display: flex; }
+
+        .auth-title {
+            font-weight: 900; font-size: var(--fs-title); line-height: 1.1;
+            letter-spacing: var(--ls-condensed); text-transform: uppercase;
+            margin-bottom: var(--space-md);
+        }
+
+        .auth-actions { 
+            margin-top: var(--space-sm); display: flex; 
+            flex-direction: column; align-items: center; gap: 0; 
+        }
+
+        /* --- 12. View: Pricing - [UNUSED IN LOGIN] --- */
+
+        /* --- 13. Footer --- */
+        
+        .site-footer {
+            position: relative; z-index: var(--z-content);
+            padding: var(--space-lg) 0; text-align: center; font-size: var(--fs-small);
+        }
+        .footer-links a { 
+            font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; 
+            margin: 0 var(--space-sm); transition: opacity 0.2s;
+        }
+        .footer-links a:hover { opacity: 0.7; }
+        .footer-copyright { opacity: 0.5; margin-top: var(--space-sm); }
+
+        /* --- 14. Responsive --- */
+        
+        @media (max-width: 900px) {
+            .hero-title, .auth-title { font-size: 2.2rem; }
+            .hero-subtitle { font-size: 1.1rem; }
+            .section { padding-left: var(--space-md); padding-right: var(--space-md); }
+            .pricing-grid { grid-template-columns: 1fr; gap: var(--space-lg); }
+            .pricing-card { aspect-ratio: auto; padding: var(--space-lg) var(--space-sm); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div id="scanlines"></div>
+
+    <nav class="nav-container">
+        <a href="index.html" class="brand-logo">
+            <img src="img/logo.png" alt="Kruder 1">
+        </a>
+        <div class="nav-actions">
+            <button id="btn-theme" class="nav-action-btn"><i class="fa-solid fa-moon"></i></button>
+            <button id="btn-lang" class="nav-action-btn">EN</button>
+            <button class="menu-btn" id="menu-toggle" aria-label="Menu">
+                <div class="menu-icon"></div>
+            </button>
+        </div>
+    </nav>
+
+    <div class="menu-overlay" id="menu-overlay"></div>
+    <div class="side-menu" id="side-menu">
+        <nav class="menu-links">
+            <a href="index.html" class="menu-link" data-i18n="m_home"></a>
+            <a href="pricing.html" class="menu-link" data-i18n="m_pricing"></a>
+            <a href="faqs.html" class="menu-link" data-i18n="m_faqs"></a>
+            <a href="login.html" class="menu-link is-highlight" data-i18n="m_access" data-auth-guest></a>
+            <a href="dashboard.html" class="menu-link auth-hidden" data-i18n="m_dash" data-auth-user></a>
+            <a href="#" class="menu-link is-highlight auth-hidden" data-i18n="m_logout" data-auth-user id="link-logout"></a>
+        </nav>
+    </div>
+
+    <main>
+        <section class="section">
+            <div class="auth-screen" id="auth-create">
+                <h1 class="auth-title" data-i18n="auth_title_create"></h1>
+                <div class="auth-form">
+                    <div class="input-wrap">
+                        <input class="input-field" type="email" data-i18n-placeholder="auth_placeholder_email">
+                    </div>
+                    <div class="input-wrap">
+                        <input class="input-field" type="password" data-i18n-placeholder="auth_placeholder_password">
+                        <button type="button" class="password-toggle" tabindex="-1">
+                            <i class="fa-solid fa-eye"></i>
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <div class="input-wrap">
+                        <input class="input-field" type="password" data-i18n-placeholder="auth_placeholder_confirm">
+                        <button type="button" class="password-toggle" tabindex="-1">
+                            <i class="fa-solid fa-eye"></i>
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <button type="button" class="btn-primary is-full is-disabled" data-auth="create" data-i18n="auth_btn_create"></button>
+                    <div class="auth-actions">
+                        <button type="button" class="btn-link" data-auth-view="login" data-i18n="auth_link_back_login"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-screen is-active" id="auth-login">
+                <h1 class="auth-title" data-i18n="auth_title_login"></h1>
+                <div class="auth-form">
+                    <div class="input-wrap">
+                        <input class="input-field" type="email" data-i18n-placeholder="auth_placeholder_email">
+                    </div>
+                    <div class="input-wrap">
+                        <input class="input-field" type="password" data-i18n-placeholder="auth_placeholder_password">
+                        <button type="button" class="password-toggle" tabindex="-1">
+                            <i class="fa-solid fa-eye"></i>
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <button type="button" class="btn-primary is-full is-disabled" data-auth="login" data-i18n="auth_btn_login"></button>
+                    <div class="auth-actions">
+                        <button type="button" class="btn-link" data-auth-view="create" data-i18n="auth_link_create"></button>
+                        <button type="button" class="btn-link" data-auth-view="forgot" data-i18n="auth_link_forgot"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-screen" id="auth-forgot">
+                <h1 class="auth-title" data-i18n="auth_title_forgot"></h1>
+                <div class="auth-form">
+                    <div class="input-wrap">
+                        <input class="input-field" type="email" data-i18n-placeholder="auth_placeholder_email">
+                    </div>
+                    <button type="button" class="btn-primary is-full is-disabled" data-auth="reset" data-i18n="auth_btn_reset"></button>
+                    <div class="auth-actions">
+                        <button type="button" class="btn-link" data-auth-view="login" data-i18n="auth_link_back_login"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-box">
+            <p id="modal-message" class="modal-message"></p>
+            <button type="button" id="modal-btn-ok" class="modal-btn" data-i18n="modal_btn_ok"></button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="privacy.html" data-i18n="footer_privacy"></a>
+            <span>·</span>
+            <a href="terms.html" data-i18n="footer_terms"></a>
+            <span>·</span>
+            <a href="contact.html" data-i18n="footer_contact"></a>
+        </div>
+        <div class="footer-copyright">© 2026 Kruder 1. All rights reserved.</div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            /* --- 1. Global Configuration & State --- */
+
+            const CONFIG = {
+                keyLang: 'KRUDER1-concept-lang',
+                keyTheme: 'KRUDER1-concept-theme',
+                keyToken: 'KRUDER1_token',
+                apiBase: 'https://kruder1-auth.kruder1-master.workers.dev',
+                particlesColor: { light: '#000000', dark: '#ffffff' }
+            };
+
+            const detectSystemLang = () => {
+                const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+                return lang.startsWith('es') ? 'es' : 'en';
+            };
+
+            const STATE = {
+                lang: localStorage.getItem(CONFIG.keyLang) || detectSystemLang(),
+                theme: localStorage.getItem(CONFIG.keyTheme) || 'light',
+                modalCallback: null
+            };
+
+            const DOM = {
+                root: document.documentElement,
+                btnLang: document.getElementById('btn-lang'),
+                btnTheme: document.getElementById('btn-theme'),
+                btnMenu: document.getElementById('menu-toggle'),
+                menuDrawer: document.getElementById('side-menu'),
+                menuOverlay: document.getElementById('menu-overlay'),
+                modal: {
+                    overlay: document.getElementById('modal-overlay'),
+                    message: document.getElementById('modal-message'),
+                    box: document.querySelector('.modal-box'),
+                    btnOk: document.getElementById('modal-btn-ok')
+                },
+                authScreens: document.querySelectorAll('.auth-screen'),
+                i18nElements: document.querySelectorAll('[data-i18n]'),
+                i18nPlaceholders: document.querySelectorAll('[data-i18n-placeholder]')
+            };
+
+            /* --- 2. Localization Dictionary (I18N) --- */
+            
+            const DICTIONARY = {
+                // --- Navigation ---
+                m_home: { en: 'Home', es: 'Inicio' },
+                m_pricing: { en: 'Pricing', es: 'Precios' },
+                m_faqs: { en: 'FAQ\'s', es: 'Preguntas' },
+                m_access: { en: 'Login / Join', es: 'Entrar / Unirse' },
+                m_dash: { en: 'Dashboard', es: 'Panel' },
+                m_logout: { en: 'Logout', es: 'Salir' },
+
+                // --- View: Auth ---
+                auth_title_login: { en: 'Login', es: 'Iniciar sesión' },
+                auth_title_create: { en: 'Create Account', es: 'Crear cuenta' },
+                auth_title_forgot: { en: 'Reset Password', es: 'Restablecer contraseña' },
+                auth_placeholder_email: { en: 'EMAIL', es: 'EMAIL' },
+                auth_placeholder_password: { en: 'PASSWORD', es: 'CONTRASEÑA' },
+                auth_placeholder_confirm: { en: 'CONFIRM PASSWORD', es: 'CONFIRMAR CONTRASEÑA' },
+                auth_btn_login: { en: 'Login', es: 'Iniciar sesión' },
+                auth_btn_create: { en: 'Create Account', es: 'Crear cuenta' },
+                auth_btn_reset: { en: 'Send Reset Link', es: 'Enviar enlace' },
+                auth_link_create: { en: 'Create Account', es: 'Crear cuenta' },
+                auth_link_forgot: { en: 'Reset Password', es: 'Restablecer contraseña' },
+                auth_link_back_login: { en: 'Log in instead', es: 'Iniciar sesión' },
+                
+                // --- View: Modals ---
+                modal_verification_sent: { en: 'Verification email sent,<br>please verify', es: 'Email de verificación enviado,<br>por favor verifique' },
+                modal_reset_sent: { en: 'Reset password link sent,<br>check your email', es: 'Enlace de restablecimiento enviado,<br>revise su correo' },
+                modal_pass_mismatch: { en: 'Passwords do not match', es: 'Las contraseñas no coinciden' },
+                modal_pass_empty: { en: 'Please fill in all fields', es: 'Complete todos los campos' },
+                modal_email_invalid: { en: 'Please enter a valid email address', es: 'Ingresa una dirección de correo válida' },
+                modal_email_in_use: { en: 'This email is already registered', es: 'Este correo ya está registrado' },
+                modal_pass_weak: { en: 'Password must be at least 6 characters and contain a number', es: 'La contraseña debe tener al menos 6 caracteres y un número' },
+                modal_verify_first: { en: 'Please verify your email first. Check your inbox.', es: 'Verifica tu correo primero. Revisa tu bandeja de entrada.' },
+                modal_invalid_credentials: { en: 'Invalid credentials', es: 'Credenciales incorrectas' },
+                modal_btn_ok: { en: 'OK', es: 'OK' },
+
+                // --- Footer ---
+                footer_privacy: { en: 'Privacy', es: 'Privacidad' },
+                footer_terms: { en: 'Terms', es: 'Términos' },
+                footer_contact: { en: 'Contact', es: 'Contacto' }
+            };
+
+            /* --- 3. Core Functions (Shared) --- */
+
+            const t = (key) => {
+                const entry = DICTIONARY[key];
+                return entry ? (entry[STATE.lang] || entry.en) : key;
+            };
+
+            const updateTexts = () => {
+                DOM.i18nElements.forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (key) el.innerHTML = t(key);
+                });
+                DOM.i18nPlaceholders.forEach(el => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    if (key) el.placeholder = t(key);
+                });
+            };
+
+            const setLang = (newLang) => {
+                STATE.lang = newLang;
+                localStorage.setItem(CONFIG.keyLang, newLang);
+                DOM.root.lang = newLang;
+                if (DOM.btnLang) DOM.btnLang.textContent = newLang.toUpperCase();
+                updateTexts();
+            };
+
+            const setTheme = (newTheme) => {
+                STATE.theme = newTheme;
+                localStorage.setItem(CONFIG.keyTheme, newTheme);
+                if (newTheme === 'dark') {
+                    DOM.root.setAttribute('data-theme', 'dark');
+                    if (DOM.btnTheme) DOM.btnTheme.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                } else {
+                    DOM.root.removeAttribute('data-theme');
+                    if (DOM.btnTheme) DOM.btnTheme.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                }
+                initParticles();
+            };
+
+            const toggleMenu = () => {
+                DOM.btnMenu.classList.toggle('is-active');
+                DOM.menuDrawer.classList.toggle('is-open');
+                DOM.menuOverlay.classList.toggle('is-active');
+            };
+
+            const updateAuthUI = () => {
+                const token = localStorage.getItem(CONFIG.keyToken);
+                const isLoggedIn = !!token;
+                document.querySelectorAll('[data-auth-guest]').forEach(el => el.classList.toggle('auth-hidden', isLoggedIn));
+                document.querySelectorAll('[data-auth-user]').forEach(el => el.classList.toggle('auth-hidden', !isLoggedIn));
+            };
+
+            const logout = () => {
+                localStorage.removeItem(CONFIG.keyToken);
+                window.location.href = 'login.html';
+            };
+
+            /* --- 4. Particles System --- */
+
+            const initParticles = () => {
+                if (!window.particlesJS) return;
+                const color = STATE.theme === 'dark' ? CONFIG.particlesColor.dark : CONFIG.particlesColor.light;
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 200, density: { enable: true, value_area: 800 } },
+                        color: { value: color },
+                        shape: { type: 'circle' },
+                        opacity: { value: 0.1, random: true },
+                        size: { value: 2, random: true },
+                        line_linked: { enable: true, distance: 150, color: color, opacity: 0.1, width: 1 },
+                        move: { enable: true, speed: 2, direction: 'none', out_mode: 'out' }
+                    },
+                    interactivity: { detect_on: 'canvas', events: { onhover: { enable: false }, onclick: { enable: false } } },
+                    retina_detect: true
+                });
+            };
+
+            /* --- 5. Auth Logic & UI --- */
+
+            const showModal = (msgKey, isError, callback) => {
+                const text = DICTIONARY[msgKey] ? t(msgKey) : msgKey;
+                if (DOM.modal.message) DOM.modal.message.innerHTML = String(text).replace(/\n/g, '<br>');
+                STATE.modalCallback = callback;
+                
+                if (DOM.modal.box) {
+                    if (isError) DOM.modal.box.classList.add('shake');
+                    else DOM.modal.box.classList.remove('shake');
+                }
+                if (DOM.modal.overlay) DOM.modal.overlay.classList.add('is-active');
+            };
+
+            const hideModal = () => {
+                if (DOM.modal.overlay) DOM.modal.overlay.classList.remove('is-active');
+                if (STATE.modalCallback) {
+                    STATE.modalCallback();
+                    STATE.modalCallback = null;
+                }
+            };
+
+            const switchAuthView = (viewId) => {
+                DOM.authScreens.forEach(screen => {
+                    screen.classList.remove('is-active');
+                    screen.querySelectorAll('input').forEach(i => i.value = '');
+                    const btn = screen.querySelector('.btn-primary');
+                    if (btn) btn.classList.add('is-disabled');
+                });
+                const target = document.getElementById('auth-' + viewId);
+                if (target) target.classList.add('is-active');
+            };
+
+            const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isValidEmail = (s) => typeof s === 'string' && s.trim().length > 0 && EMAIL_REGEX.test(s.trim());
+            const isValidPassword = (s) => typeof s === 'string' && s.length >= 6 && /\d/.test(s);
+
+            const parseApiError = (errMsg) => {
+                if (!errMsg) return null;
+                let s = String(errMsg);
+                try {
+                    const parsed = JSON.parse(s);
+                    if (parsed.message) s = parsed.message;
+                } catch (_) {}
+                const sl = s.toLowerCase();
+                if (sl.includes('email is not valid') || sl.includes('invalid_parameter') || sl.includes('invalid email') || sl.includes('valid in to')) return 'modal_email_invalid';
+                if (sl.includes('verify your email') || sl.includes('verify')) return 'modal_verify_first';
+                if (sl.includes('already registered')) return 'modal_email_in_use';
+                if (sl.includes('invalid credentials')) return 'modal_invalid_credentials';
+                return s;
+            };
+
+            const validateInput = (e) => {
+                const container = e.target.closest('.auth-screen');
+                if (!container) return;
+                const btn = container.querySelector('.btn-primary');
+                const inputs = container.querySelectorAll('input');
+                if (!btn) return;
+
+                const isValid = Array.from(inputs).every(i => i.value.trim() !== '');
+                if (isValid) btn.classList.remove('is-disabled');
+                else btn.classList.add('is-disabled');
+            };
+
+            const setBtnLoading = (btn, loading) => {
+                if (!btn) return;
+                btn.disabled = loading;
+                if (loading) {
+                    btn.dataset.origHtml = btn.innerHTML;
+                    btn.innerHTML = '<span class="btn-loading"><i class="fa-solid fa-circle-notch fa-spin"></i></span>';
+                    btn.classList.add('is-loading');
+                } else {
+                    const key = btn.getAttribute('data-i18n');
+                    if (key) btn.innerHTML = t(key);
+                    else if (btn.dataset.origHtml) btn.innerHTML = btn.dataset.origHtml;
+                    btn.classList.remove('is-loading');
+                }
+            };
+
+            const handleAuthAction = async (btn) => {
+                const action = btn.getAttribute('data-auth');
+                btn.disabled = true;
+                setBtnLoading(btn, true);
+
+                try {
+                    if (action === 'login') {
+                        const form = document.getElementById('auth-login');
+                        const loginInputs = form.querySelectorAll('.auth-form input');
+                        const email = (loginInputs[0]?.value ?? '').trim();
+                        const password = loginInputs[1]?.value ?? '';
+                        if (!isValidEmail(email)) {
+                            showModal('modal_email_invalid', true);
+                            return;
+                        }
+                        if (!password) {
+                            showModal('modal_pass_empty', true);
+                            return;
+                        }
+                        const res = await fetch(CONFIG.apiBase + '/login', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email, password })
+                        });
+                        const data = await res.json().catch(() => ({}));
+                        if (!res.ok) {
+                            const msg = data.error || 'Login failed';
+                            const key = parseApiError(msg);
+                            throw new Error(DICTIONARY[key] ? key : msg);
+                        }
+                        localStorage.setItem(CONFIG.keyToken, data.token);
+                        window.location.href = 'dashboard.html';
+                        return;
+                    }
+                    if (action === 'create') {
+                        const form = document.getElementById('auth-create');
+                        const allInputs = form.querySelectorAll('.auth-form input');
+                        const email = (allInputs[0]?.value ?? '').trim();
+                        const p1 = allInputs[1]?.value ?? '';
+                        const p2 = allInputs[2]?.value ?? '';
+                        if (!isValidEmail(email)) {
+                            showModal('modal_email_invalid', true);
+                            return;
+                        }
+                        if (!p1 || !p2) {
+                            showModal('modal_pass_empty', true);
+                            return;
+                        }
+                        if (!isValidPassword(p1)) {
+                            showModal('modal_pass_weak', true);
+                            return;
+                        }
+                        if (p1 !== p2) {
+                            showModal('modal_pass_mismatch', true);
+                            return;
+                        }
+                        const res = await fetch(CONFIG.apiBase + '/register', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email, password: p1, lang: STATE.lang })
+                        });
+                        const data = await res.json().catch(() => ({}));
+                        if (!res.ok) {
+                            const msg = data.error || 'Registration failed';
+                            const key = parseApiError(msg);
+                            throw new Error(DICTIONARY[key] ? key : msg);
+                        }
+                        showModal('modal_verification_sent', false, () => switchAuthView('login'));
+                        return;
+                    }
+                    if (action === 'reset') {
+                        const form = document.getElementById('auth-forgot');
+                        const email = form.querySelector('input[type="email"]')?.value?.trim() ?? '';
+                        if (!isValidEmail(email)) {
+                            showModal('modal_email_invalid', true);
+                            return;
+                        }
+                        const res = await fetch(CONFIG.apiBase + '/forgot-password', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email, lang: STATE.lang })
+                        });
+                        const data = await res.json().catch(() => ({}));
+                        if (!res.ok) {
+                            const msg = data.error || 'Request failed';
+                            const key = parseApiError(msg);
+                            throw new Error(DICTIONARY[key] ? key : msg);
+                        }
+                        showModal('modal_reset_sent', false, () => switchAuthView('login'));
+                        return;
+                    }
+                } catch (err) {
+                    const msg = err.message || 'Error';
+                    const key = msg.startsWith('modal_') ? msg : null;
+                    showModal(key || msg, true);
+                } finally {
+                    setBtnLoading(btn, false);
+                    btn.disabled = false;
+                }
+            };
+
+            /* --- 6. Event Delegation & Init --- */
+
+            document.addEventListener('click', (e) => {
+                // View Switching
+                const viewTrigger = e.target.closest('[data-auth-view]');
+                if (viewTrigger) {
+                    e.preventDefault();
+                    switchAuthView(viewTrigger.getAttribute('data-auth-view'));
+                    return;
+                }
+
+                // Password Toggle
+                const passToggle = e.target.closest('.password-toggle');
+                if (passToggle) {
+                    e.preventDefault();
+                    const input = passToggle.parentElement.querySelector('input');
+                    if (input) {
+                        const isPass = input.type === 'password';
+                        input.type = isPass ? 'text' : 'password';
+                        passToggle.classList.toggle('is-visible', isPass);
+                    }
+                    return;
+                }
+
+                // Auth Actions
+                const authBtn = e.target.closest('[data-auth]');
+                if (authBtn) {
+                    e.preventDefault();
+                    if (!authBtn.classList.contains('is-disabled')) {
+                        handleAuthAction(authBtn);
+                    }
+                    return;
+                }
+            });
+
+            // Redirect if already logged in
+            if (localStorage.getItem(CONFIG.keyToken)) {
+                window.location.href = 'dashboard.html';
+                return;
+            }
+
+            // Modal Close
+            if (DOM.modal.btnOk) DOM.modal.btnOk.addEventListener('click', hideModal);
+
+            // Input Validation & Enter Key
+            document.querySelectorAll('.auth-form input').forEach(input => {
+                input.addEventListener('input', validateInput);
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const btn = e.target.closest('.auth-form').querySelector('.btn-primary');
+                        if (btn && !btn.classList.contains('is-disabled')) btn.click();
+                    }
+                });
+            });
+
+            // Global Events
+            if (DOM.btnLang) DOM.btnLang.addEventListener('click', () => setLang(STATE.lang === 'en' ? 'es' : 'en'));
+            if (DOM.btnTheme) DOM.btnTheme.addEventListener('click', () => setTheme(STATE.theme === 'light' ? 'dark' : 'light'));
+            if (DOM.btnMenu) DOM.btnMenu.addEventListener('click', toggleMenu);
+            if (DOM.menuOverlay) DOM.menuOverlay.addEventListener('click', toggleMenu);
+            document.getElementById('link-logout')?.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+
+            // Initial Boot
+            setLang(STATE.lang);
+            setTheme(STATE.theme);
+            updateAuthUI();
+        });
+    </script>
+</body>
+</html>

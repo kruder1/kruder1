@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRUDER 1 - AI Photo Booth Software</title>
+    <link rel="stylesheet" href="static/css/app.css">
+    <link rel="stylesheet" href="static/css/fonts.css">
+    <link rel="stylesheet" href="static/css/all.min.css">
+    <link rel="icon" type="image/png" href="static/img/icon.png">
+</head>
+<body data-theme="light">
+
+    <div id="particles-js"></div>
+    <div class="header-overlay"></div>
+    <audio id="btn-sound" src="static/sounds/button.mp3" preload="auto" class="hidden"></audio>
+    <audio id="bg-loop" src="static/sounds/loop.mp3" preload="auto" loop class="hidden"></audio>
+    <audio id="sound-warning" src="static/sounds/warning.mp3" preload="auto" class="hidden"></audio>
+    <audio id="sound-keyboard" src="static/sounds/keyboard.mp3" preload="auto" class="hidden"></audio>
+    <audio id="sound-pinpad" src="static/sounds/pinpad.mp3" preload="auto" class="hidden"></audio>
+    <audio id="sound-lock" src="static/sounds/lock.mp3" preload="auto" class="hidden"></audio>
+    <audio id="sound-unlock" src="static/sounds/unlock.mp3" preload="auto" class="hidden"></audio>
+    <audio id="sound-toggle" src="static/sounds/toggle.mp3" preload="auto" class="hidden"></audio>
+    <audio id="sound-back" src="static/sounds/back.mp3" preload="auto" class="hidden"></audio>
+
+    <div class="app-logo hidden">
+        <img src="static/img/logo.png" alt="KRUDER 1">
+    </div>
+
+    <!-- Boot Intro Overlay -->
+    <div id="boot-intro">
+        <img id="boot-logo" src="static/img/logo.png" alt="KRUDER 1">
+        <span id="boot-url">www.kruder1.com</span>
+    </div>
+
+    <main id="app">
+        <div class="shell-loading"></div>
+    </main>
+
+    <!-- Global Alert Modal (persists across module loads) -->
+    <div id="alert-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+        <div class="modal-box">
+            <div id="alert-text" class="modal-text"></div>
+            <div class="modal-actions">
+                <button data-action="close-alert" class="btn-main" data-i18n="common.ok" onclick="window.hideModal('alert-modal')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/i18n.js"></script>
+    <script src="static/js/particles.min.js"></script>
+    <script>
+        // ========================================
+        // GLOBAL STATE
+        // ========================================
+        window.AppState = {
+            currentModule: null,
+            currentEvent: null,
+            currentCategory: null,
+            currentPrompt: null,
+            session: null,
+            theme: 'light'
+        };
+
+        // ========================================
+        // PARTICLES CONFIG
+        // ========================================
+        const particlesConfig = {
+            particles: {
+                number: { value: 200, density: { enable: true, value_area: 800 } },
+                color: { value: "#000000" },
+                shape: { type: "circle" },
+                opacity: { value: 0.1, random: true },
+                size: { value: 2, random: true },
+                line_linked: { enable: true, distance: 150, color: "#000000", opacity: 0.1, width: 1 },
+                move: { enable: true, speed: 2, direction: "none", out_mode: "out" }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: false } },
+                modes: { grab: { distance: 140, line_linked: { opacity: 1 } } }
+            },
+            retina_detect: true
+        };
+
+        // ========================================
+        // MODULE LOADER
+        // ========================================
+        
+        // Centralized event handler - modules register their handlers here
+        window.moduleHandlers = {
+            click: null,
+            keydown: null,
+            change: null
+        };
+
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.pin-pad__key')) {
+                window.playPinpadSound?.();
+            } else if (e.target.closest('.btn-back')) {
+                window.playBackSound?.();
+            }
+            if (window.moduleHandlers.click) {
+                window.moduleHandlers.click(e);
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (window.moduleHandlers.keydown) {
+                window.moduleHandlers.keydown(e);
+            }
+        });
+
+        document.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox' && (e.target.closest('.switch') || e.target.closest('.printing-switch') || e.target.getAttribute('data-toggle'))) {
+                window.playToggleSound?.();
+            }
+            if (window.moduleHandlers.change) {
+                window.moduleHandlers.change(e);
+            }
+        });
+
+        async function loadModule(name) {
+            try {
+                console.log(`[KRUDER] Loading module: ${name}`);
+                
+                // Clean up previous module's drag listeners
+                if (typeof window._dragCleanup === 'function') {
+                    window._dragCleanup();
+                    window._dragCleanup = null;
+                }
+
+                // Clear previous module handlers
+                window.moduleHandlers = { click: null, keydown: null, change: null };
+                
+                const response = await fetch(`/modules/${name}.html`);
+                if (!response.ok) throw new Error(`Module not found: ${name}`);
+                
+                const html = await response.text();
+                const app = document.getElementById('app');
+                
+                // Remove old module scripts
+                document.querySelectorAll('script[data-module]').forEach(s => s.remove());
+                
+                app.innerHTML = html;
+                if (window.i18n && typeof window.i18n.apply === 'function') window.i18n.apply();
+                
+                // Execute scripts from the module
+                const scripts = app.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = oldScript.textContent;
+                    newScript.setAttribute('data-module', name);
+                    oldScript.remove();
+                    document.body.appendChild(newScript);
+                });
+                
+                window.AppState.currentModule = name;
+                console.log(`[KRUDER] Module loaded: ${name}`);
+                
+            } catch (error) {
+                console.error('[KRUDER] Error loading module:', error);
+                if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.log_event === 'function') {
+                    window.pywebview.api.log_event('ERROR', 'module_load_failed', { module: name, error: (error && error.message) ? error.message : String(error) }).catch(function() {});
+                }
+                const errMsg = (typeof window.t === 'function') ? window.t('common.error_module', { name }) : `ERROR: ${name}`;
+                document.getElementById('app').innerHTML = `
+                    <div class="shell-loading">${errMsg}</div>
+                `;
+            }
+        }
+
+        // ========================================
+        // NAVIGATION
+        // ========================================
+        window.navigateTo = function(moduleName, data = {}) {
+            var fromModule = window.AppState.currentModule || 'none';
+            Object.assign(window.AppState, data);
+            loadModule(moduleName);
+            if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.log_event === 'function') {
+                window.pywebview.api.log_event('INFO', 'navigate_to', { from: fromModule, to: moduleName }).catch(function() {});
+            }
+        };
+
+        // Logo: siempre lleva al dashboard, excepto en event mode
+        // Easter egg: 5 taps in < 2 seconds → upload debug log
+        (function() {
+            var logoTaps = 0;
+            var logoFirstTap = 0;
+            var logoUploading = false;
+            document.querySelector('.app-logo')?.addEventListener('click', function(e) {
+                e.preventDefault();
+                var now = Date.now();
+                if (now - logoFirstTap > 2000) {
+                    logoTaps = 0;
+                    logoFirstTap = now;
+                }
+                logoTaps++;
+                if (logoTaps >= 5) {
+                    logoTaps = 0;
+                    logoFirstTap = 0;
+                    if (logoUploading) return;
+                    logoUploading = true;
+                    if (window.pywebview && window.pywebview.api && window.pywebview.api.upload_debug_log) {
+                        window.pywebview.api.upload_debug_log().then(function(res) {
+                            logoUploading = false;
+                            if (res && res.ok) {
+                                window.showAlert(window.t ? window.t('common.debug_log_sent') : 'Debug log sent. Thank you.');
+                            } else {
+                                window.showAlert(window.t ? window.t('common.debug_log_failed') : 'Could not send log. Try again later.');
+                            }
+                        }).catch(function() {
+                            logoUploading = false;
+                            window.showAlert(window.t ? window.t('common.debug_log_failed') : 'Could not send log. Try again later.');
+                        });
+                    } else {
+                        logoUploading = false;
+                    }
+                    return;
+                }
+                if (window.AppState.currentModule === 'eventmode') return;
+                window.playButtonSound?.();
+                window.navigateTo('dashboard');
+            });
+        })();
+
+        // ========================================
+        // THEME
+        // ========================================
+        window.toggleTheme = function() {
+            const body = document.body;
+            const current = body.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            window.AppState.theme = newTheme;
+        };
+
+        // ========================================
+        // VIRTUAL KEYBOARD
+        // Shared keyboard logic — modules only call:
+        //   window.initKeyboard({ container, inputId, confirmBtnId, clearBtnId })
+        // ========================================
+        window.initKeyboard = function(opts) {
+            const container = document.querySelector(opts.container);
+            const input = document.getElementById(opts.inputId);
+            const btnConfirm = opts.confirmBtnId ? document.getElementById(opts.confirmBtnId) : null;
+            const btnClear = opts.clearBtnId ? document.getElementById(opts.clearBtnId) : null;
+            if (!container || !input) return;
+
+            const keys = container.querySelectorAll('.kb-key');
+            let isShift = false;
+
+            const shiftMap = {
+                '1': '!', '2': '"', '3': '#', '4': '$', '5': '%',
+                '6': '&', '7': '/', '8': '(', '9': ')', '0': '=',
+                '.': ':', '-': '_'
+            };
+
+            const minLen = opts.minLength || 1;
+            const validate = () => {
+                if (!btnConfirm) return;
+                btnConfirm.disabled = input.value.trim().length < minLen;
+            };
+
+            const getChar = (baseKey) => {
+                if (isShift) {
+                    if (shiftMap[baseKey]) return shiftMap[baseKey];
+                    if (/^[a-zA-Z]$/.test(baseKey)) return baseKey.toUpperCase();
+                } else {
+                    if (/^[a-zA-Z]$/.test(baseKey)) return baseKey.toLowerCase();
+                }
+                return baseKey;
+            };
+
+            const updateKeys = () => {
+                keys.forEach(btn => {
+                    const key = btn.getAttribute('data-key');
+                    if (!key || ['SHIFT','BACKSPACE','SPACE','CLEAR','ENTER','.COM'].includes(key)) {
+                        if (key === 'SHIFT') btn.classList.toggle('is-active', isShift);
+                        return;
+                    }
+                    btn.textContent = getChar(key);
+                });
+            };
+
+            const insertAtCursor = (text) => {
+                const start = input.selectionStart;
+                const end = input.selectionEnd;
+                input.value = input.value.substring(0, start) + text + input.value.substring(end);
+                input.selectionStart = input.selectionEnd = start + text.length;
+                validate();
+                input.focus();
+            };
+
+            const backspaceAtCursor = () => {
+                const start = input.selectionStart;
+                const end = input.selectionEnd;
+                if (start === end) {
+                    if (start > 0) {
+                        input.value = input.value.substring(0, start - 1) + input.value.substring(end);
+                        input.selectionStart = input.selectionEnd = start - 1;
+                    }
+                } else {
+                    input.value = input.value.substring(0, start) + input.value.substring(end);
+                    input.selectionStart = input.selectionEnd = start;
+                }
+                validate();
+                input.focus();
+            };
+
+            input.addEventListener('input', validate);
+
+            if (btnClear) {
+                btnClear.addEventListener('click', () => {
+                    input.value = '';
+                    validate();
+                    input.focus();
+                });
+            }
+
+            keys.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.playKeyboardSound?.();
+                    btn.setAttribute('data-pressed', 'on');
+                    setTimeout(() => btn.removeAttribute('data-pressed'), 120);
+                    const key = btn.getAttribute('data-key');
+                    if (!key) return;
+                    if (key === 'SHIFT') { isShift = !isShift; updateKeys(); return; }
+                    if (key === 'BACKSPACE') { backspaceAtCursor(); return; }
+                    if (key === 'SPACE') { insertAtCursor(' '); return; }
+                    if (key === '.COM') { insertAtCursor('.com'); return; }
+                    insertAtCursor(getChar(key));
+                });
+            });
+
+            updateKeys();
+            validate();
+
+            // Auto-init password toggles for this keyboard's input
+            window.initPasswordToggles?.();
+        };
+
+        // ========================================
+        // PASSWORD VISIBILITY TOGGLE
+        // Finds all input[type="password"] and adds eye toggle button.
+        // Safe to call multiple times — skips already-initialized inputs.
+        // ========================================
+        window.initPasswordToggles = function() {
+            document.querySelectorAll('input[type="password"]:not([data-pass-toggle])').forEach(input => {
+                input.setAttribute('data-pass-toggle', 'true');
+
+                // Create eye button
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'pass-toggle';
+                btn.innerHTML = '<i class="fa-solid fa-eye"></i>';
+                btn.tabIndex = -1;
+
+                // Insert button in the right place
+                const kbDisplay = input.closest('.keyboard-input-display');
+                if (kbDisplay) {
+                    // Keyboard modal: insert before the clear button (or at end)
+                    const clearBtn = kbDisplay.querySelector('.input-clear-btn');
+                    if (clearBtn) {
+                        kbDisplay.insertBefore(btn, clearBtn);
+                    } else {
+                        kbDisplay.appendChild(btn);
+                    }
+                } else {
+                    // Regular input-wrapper: insert after input
+                    const wrapper = input.closest('.input-wrapper');
+                    if (wrapper) {
+                        wrapper.appendChild(btn);
+                    } else {
+                        input.parentElement.appendChild(btn);
+                    }
+                }
+
+                // Show/hide eye based on input value
+                const updateVisibility = () => {
+                    btn.classList.toggle('visible', input.value.length > 0);
+                };
+
+                // Toggle password/text
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const isPassword = input.type === 'password';
+                    input.type = isPassword ? 'text' : 'password';
+                    btn.innerHTML = isPassword
+                        ? '<i class="fa-solid fa-eye-slash"></i>'
+                        : '<i class="fa-solid fa-eye"></i>';
+                    input.focus();
+                });
+
+                // Listen for input changes (physical keyboard + virtual keyboard)
+                input.addEventListener('input', updateVisibility);
+
+                // Also observe value changes via polling (for virtual keyboard insertAtCursor)
+                let lastVal = input.value;
+                const observer = setInterval(() => {
+                    if (input.value !== lastVal) {
+                        lastVal = input.value;
+                        updateVisibility();
+                    }
+                    // Stop polling if input is removed from DOM
+                    if (!document.body.contains(input)) clearInterval(observer);
+                }, 100);
+
+                updateVisibility();
+            });
+        };
+
+        // ========================================
+        // MODAL HELPERS
+        // Shared modal logic — modules can call:
+        //   window.showModal(id)
+        //   window.hideModal(id)
+        //   window.openModal(id, focusInputId)
+        //   window.showAlert(message)
+        //   window.setLoading(btn, loading, text)
+        // ========================================
+        var DESTRUCTIVE_MODAL_IDS = [
+            'delete-frame-modal', 'quit-modal', 'logout-modal',
+            'delete-cat-modal', 'delete-prompt-modal', 'delete-event-modal', 'delete-image-modal'
+        ];
+        window.showModal = function(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove('hidden');
+            if (DESTRUCTIVE_MODAL_IDS.indexOf(id) !== -1) {
+                var box = el.querySelector('.modal-box');
+                if (box) {
+                    box.classList.remove('shake');
+                    void box.offsetWidth;
+                    box.classList.add('shake');
+                }
+                var warningAudio = document.getElementById('sound-warning');
+                if (warningAudio) {
+                    warningAudio.currentTime = 0;
+                    warningAudio.play().catch(function() {});
+                }
+            }
+        };
+
+        window.hideModal = function(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.add('hidden');
+            var box = el.querySelector('.modal-box');
+            if (box) box.classList.remove('shake');
+            // Clear inputs inside the modal
+            const input = el.querySelector('input');
+            if (input) input.value = '';
+            // Clear error messages
+            const err = el.querySelector('.text-error');
+            if (err) err.classList.add('hidden');
+        };
+
+        window.openModal = function(id, focusInputId) {
+            window.showModal(id);
+            if (focusInputId) {
+                setTimeout(() => document.getElementById(focusInputId)?.focus(), 100);
+            }
+
+            // Auto-bind ESC=Cancel, ENTER=Confirm for keyboard modals
+            const modal = document.getElementById(id);
+            if (!modal) return;
+            const box = modal.querySelector('.modal-box-keyboard');
+            if (!box) return;
+
+            // Find confirm and cancel buttons inside this modal
+            const confirmBtn = box.querySelector('.modal-actions .btn-main:last-child');
+            const cancelBtn = box.querySelectorAll('.modal-actions .btn-main').length > 1
+                ? box.querySelector('.modal-actions .btn-main:first-child')
+                : null;
+
+            const keyHandler = (e) => {
+                // Only act if this modal is still visible
+                if (modal.classList.contains('hidden')) {
+                    document.removeEventListener('keydown', keyHandler, true);
+                    return;
+                }
+                if (e.key === 'Escape') {
+                    e.stopImmediatePropagation();
+                    if (cancelBtn) cancelBtn.click();
+                    else window.hideModal(id);
+                    document.removeEventListener('keydown', keyHandler, true);
+                }
+                if (e.key === 'Enter') {
+                    e.stopImmediatePropagation();
+                    if (confirmBtn && !confirmBtn.disabled) {
+                        confirmBtn.click();
+                    }
+                }
+            };
+
+            // Use capture phase so it fires before module keydown handlers
+            document.addEventListener('keydown', keyHandler, true);
+
+            // Cleanup when modal hides
+            const obs = new MutationObserver(() => {
+                if (modal.classList.contains('hidden')) {
+                    document.removeEventListener('keydown', keyHandler, true);
+                    obs.disconnect();
+                }
+            });
+            obs.observe(modal, { attributes: true, attributeFilter: ['class'] });
+        };
+
+        window.showAlert = function(message) {
+            const el = document.getElementById('alert-text');
+            if (el) el.textContent = message;
+            window.showModal('alert-modal');
+        };
+
+        window.setLoading = function(btn, loading, text) {
+            if (!btn) return;
+            if (loading) {
+                btn.dataset.originalText = btn.innerHTML;
+                btn.innerHTML = text
+                    ? '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + text
+                    : '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+                btn.classList.add('btn-disabled');
+            } else {
+                btn.innerHTML = btn.dataset.originalText || btn.innerHTML;
+                btn.classList.remove('btn-disabled');
+            }
+        };
+
+        // ========================================
+        // IMAGE ZOOM / PAN
+        // Shared zoom logic — modules call:
+        //   window.enableZoom(imgElement)
+        // Supports mouse wheel, mouse drag, touch pinch & pan.
+        // Safe to call multiple times on the same image.
+        // ========================================
+        window.enableZoom = function(img) {
+            if (!img) return;
+
+            // Clean up previous listeners (if re-initializing same node)
+            if (img._zoomCleanup) img._zoomCleanup();
+
+            let scale = 1;
+            let panning = false;
+            let pointX = 0, pointY = 0;
+            let startX = 0, startY = 0;
+            let lastTouchDist = 0;
+
+            img.style.transform = 'translate(0px, 0px) scale(1)';
+
+            const updateTransform = () => {
+                if (scale < 1) scale = 1;
+                if (scale > 2.5) scale = 2.5;
+                const limitX = (img.offsetWidth * (scale - 1)) / 2;
+                const limitY = (img.offsetHeight * (scale - 1)) / 2;
+                if (pointX > limitX) pointX = limitX;
+                if (pointX < -limitX) pointX = -limitX;
+                if (pointY > limitY) pointY = limitY;
+                if (pointY < -limitY) pointY = -limitY;
+                img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+            };
+
+            // Mouse wheel zoom
+            const onWheel = (e) => {
+                e.preventDefault();
+                scale += e.deltaY * -0.002;
+                updateTransform();
+            };
+
+            // Mouse drag
+            const onMouseDown = (e) => {
+                if (scale > 1) {
+                    e.preventDefault();
+                    panning = true;
+                    startX = e.clientX - pointX;
+                    startY = e.clientY - pointY;
+                    img.style.transition = 'none';
+                }
+            };
+            const onMouseMove = (e) => {
+                if (!panning) return;
+                e.preventDefault();
+                pointX = e.clientX - startX;
+                pointY = e.clientY - startY;
+                updateTransform();
+            };
+            const onMouseUp = () => {
+                if (panning) {
+                    panning = false;
+                    img.style.transition = 'transform 0.1s linear';
+                }
+            };
+
+            // Touch pinch zoom & pan
+            const onTouchStart = (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const t1 = e.touches[0], t2 = e.touches[1];
+                    lastTouchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+                } else if (e.touches.length === 1 && scale > 1) {
+                    e.preventDefault();
+                    const t = e.touches[0];
+                    panning = true;
+                    startX = t.clientX - pointX;
+                    startY = t.clientY - pointY;
+                    img.style.transition = 'none';
+                }
+            };
+            const onTouchMove = (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const t1 = e.touches[0], t2 = e.touches[1];
+                    const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+                    scale += (dist - lastTouchDist) * 0.005;
+                    lastTouchDist = dist;
+                    updateTransform();
+                } else if (e.touches.length === 1 && panning) {
+                    e.preventDefault();
+                    const t = e.touches[0];
+                    pointX = t.clientX - startX;
+                    pointY = t.clientY - startY;
+                    updateTransform();
+                }
+            };
+            const onTouchEnd = (e) => {
+                if (e.touches.length === 0) {
+                    panning = false;
+                    img.style.transition = 'transform 0.1s linear';
+                }
+            };
+
+            // Attach
+            img.addEventListener('wheel', onWheel, { passive: false });
+            img.addEventListener('mousedown', onMouseDown);
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('mouseup', onMouseUp);
+            img.addEventListener('touchstart', onTouchStart, { passive: false });
+            img.addEventListener('touchmove', onTouchMove, { passive: false });
+            img.addEventListener('touchend', onTouchEnd);
+
+            // Store cleanup so we can remove on re-init
+            img._zoomCleanup = () => {
+                img.removeEventListener('wheel', onWheel);
+                img.removeEventListener('mousedown', onMouseDown);
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mouseup', onMouseUp);
+                img.removeEventListener('touchstart', onTouchStart);
+                img.removeEventListener('touchmove', onTouchMove);
+                img.removeEventListener('touchend', onTouchEnd);
+                img._zoomCleanup = null;
+            };
+        };
+
+        // ========================================
+        // CAMERA FILTERS
+        // Shared pixel-level brightness/contrast/white-balance.
+        // Modules call:
+        //   window.applyCameraFilters(ctx, w, h, brightness, contrast, whiteBalance)
+        // All values 0-100, 50 = neutral.
+        // ========================================
+        window.applyCameraFilters = function(ctx, w, h, brightness, contrast, whiteBalance) {
+            const img = ctx.getImageData(0, 0, w, h);
+            const d = img.data;
+            const bAdd = (brightness - 50) * (255 / 50) * 0.5;
+            const cMul = contrast <= 50 ? contrast / 50 : 1 + (contrast - 50) / 50;
+            const wbR = 1 + (whiteBalance - 50) / 50 * 0.4;
+            const wbB = 1 - (whiteBalance - 50) / 50 * 0.4;
+            for (let i = 0; i < d.length; i += 4) {
+                let r = d[i], g = d[i+1], b = d[i+2];
+                r = (r - 128) * cMul + 128 + bAdd;
+                g = (g - 128) * cMul + 128 + bAdd;
+                b = (b - 128) * cMul + 128 + bAdd;
+                r *= wbR; b *= wbB;
+                d[i]   = Math.max(0, Math.min(255, r));
+                d[i+1] = Math.max(0, Math.min(255, g));
+                d[i+2] = Math.max(0, Math.min(255, b));
+            }
+            ctx.putImageData(img, 0, 0);
+        };
+
+        // ========================================
+        // SOUND
+        // ========================================
+        window._uiSoundVolume = 0.75;
+        window.playButtonSound = function() {
+            const sound = document.getElementById('btn-sound');
+            if (sound) {
+                sound.volume = Math.max(0, Math.min(1, window._uiSoundVolume));
+                sound.pause();
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
+        };
+
+        window.playKeyboardSound = function() {
+            const sound = document.getElementById('sound-keyboard');
+            if (sound) {
+                sound.volume = Math.max(0, Math.min(1, window._uiSoundVolume));
+                sound.pause();
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
+        };
+
+        window.playPinpadSound = function() {
+            const sound = document.getElementById('sound-pinpad');
+            if (sound) {
+                sound.volume = Math.max(0, Math.min(1, window._uiSoundVolume));
+                sound.pause();
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
+        };
+
+        window.playLockSound = function() {
+            const sound = document.getElementById('sound-lock');
+            if (sound) {
+                sound.volume = Math.max(0, Math.min(1, window._uiSoundVolume));
+                sound.pause();
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
+        };
+
+        window.playUnlockSound = function() {
+            const sound = document.getElementById('sound-unlock');
+            if (sound) {
+                sound.volume = Math.max(0, Math.min(1, window._uiSoundVolume));
+                sound.pause();
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
+        };
+
+        window.playToggleSound = function() {
+            const sound = document.getElementById('sound-toggle');
+            if (sound) {
+                sound.volume = Math.max(0, Math.min(1, window._uiSoundVolume));
+                sound.pause();
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
+        };
+
+        window.playBackSound = function() {
+            const sound = document.getElementById('sound-back');
+            if (sound) {
+                sound.volume = Math.max(0, Math.min(1, window._uiSoundVolume));
+                sound.pause();
+                sound.currentTime = 0;
+                sound.play().catch(() => {});
+            }
+        };
+
+        window.setUiSoundVolume = function(vol) {
+            window._uiSoundVolume = Math.max(0, Math.min(1, vol));
+        };
+
+        window.bgLoopStarted = false;
+        
+        window.startBgLoop = function() {
+            const loop = document.getElementById('bg-loop');
+            if (loop && !window.bgLoopStarted) {
+                loop.volume = typeof window._bgLoopVolume === 'number' ? window._bgLoopVolume : 0.15;
+                loop.play().then(() => {
+                    window.bgLoopStarted = true;
+                    console.debug('[AUDIO] Background loop started');
+                }).catch(() => {});
+            }
+        };
+
+        window.stopBgLoop = function() {
+            const loop = document.getElementById('bg-loop');
+            if (loop) {
+                loop.pause();
+                window.bgLoopStarted = false;
+            }
+        };
+
+        window.setBgLoopVolume = function(vol) {
+            const v = Math.max(0, Math.min(1, vol));
+            window._bgLoopVolume = v;
+            const loop = document.getElementById('bg-loop');
+            if (loop) loop.volume = v;
+        };
+
+        // ========================================
+        // INIT
+        // ========================================
+        function initParticles() {
+            if (window.particlesJS) {
+                particlesJS('particles-js', particlesConfig);
+            }
+        }
+
+        function playBootIntro() {
+            return new Promise(resolve => {
+                const intro = document.getElementById('boot-intro');
+                const logo = document.getElementById('boot-logo');
+                // Animate: fade in + scale up + fade out (~3s total via CSS)
+                logo.classList.add('boot-animate');
+                intro.classList.add('boot-animate');
+                logo.addEventListener('animationend', () => {
+                    intro.classList.add('boot-fade');
+                    setTimeout(() => {
+                        intro.classList.add('hidden');
+                        document.querySelector('.app-logo')?.classList.remove('hidden');
+                        resolve();
+                    }, 500);
+                });
+            });
+        }
+
+        async function initApp() {
+            console.debug('[KRUDER] Initializing...');
+            
+            // Disable context menu and drag
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('dragstart', e => e.preventDefault());
+            
+            // Start background loop on first interaction
+            document.addEventListener('click', function startLoop() {
+                window.startBgLoop();
+                document.removeEventListener('click', startLoop);
+            }, { once: true });
+            
+            // Init particles
+            initParticles();
+            
+            // Check session, load settings (theme + sound)
+            try {
+                const [session, settingsRes] = await Promise.all([
+                    window.pywebview.api.get_session_data(),
+                    window.pywebview.api.get_settings().catch(() => null)
+                ]);
+                if (settingsRes && settingsRes.ok && settingsRes.settings) {
+                    const s = settingsRes.settings;
+                    if (typeof s.themeLuminance === 'number' && s.themeLuminance >= 0 && s.themeLuminance <= 100) {
+                        const bgPct = s.themeLuminance / 100;
+                        const inkPct = (typeof s.inkLuminance === 'number' && s.inkLuminance >= 0 && s.inkLuminance <= 100)
+                            ? s.inkLuminance / 100
+                            : 1;
+                        const paperVal = Math.round(255 * (1 - bgPct));
+                        const inkVal = Math.round(255 * (1 - inkPct));
+                        const opacity = 0.05 + 0.03 * inkPct;
+                        document.body.style.setProperty('--theme-ink', `rgb(${inkVal},${inkVal},${inkVal})`);
+                        document.body.style.setProperty('--theme-paper', `rgb(${paperVal},${paperVal},${paperVal})`);
+                        document.body.style.setProperty('--theme-input-bg', `rgb(${paperVal},${paperVal},${paperVal})`);
+                        document.body.style.setProperty('--theme-focus', `rgba(${inkVal},${inkVal},${inkVal},${opacity})`);
+                        document.body.style.setProperty('--theme-scanline', `rgba(${inkVal},${inkVal},${inkVal},${opacity})`);
+                        document.body.style.setProperty('--theme-border', `rgba(${inkVal},${inkVal},${inkVal},0.2)`);
+                        document.body.style.setProperty('--theme-ink-brightness', (inkVal / 255).toFixed(3));
+                        document.body.setAttribute('data-theme', bgPct >= 0.5 ? 'dark' : 'light');
+                        window.AppState.theme = bgPct >= 0.5 ? 'dark' : 'light';
+                    } else {
+                        const theme = s.theme === 'dark' || s.theme === 'light' ? s.theme : 'light';
+                        document.body.setAttribute('data-theme', theme);
+                        window.AppState.theme = theme;
+                    }
+                    const lang = (s.language && typeof s.language === 'string') ? s.language : 'en';
+                    if (window.i18n) await window.i18n.load(lang);
+                    if (typeof s.accentHue === 'number' && s.accentHue >= 0 && s.accentHue <= 360) {
+                        const h = Math.round(s.accentHue);
+                        document.body.style.setProperty('--theme-accent', `hsl(${h}, 70%, 50%)`);
+                        document.body.style.setProperty('--theme-accent-dark', `hsl(${h}, 70%, 35%)`);
+                    }
+                    if (s.sound) {
+                        if (typeof s.sound.volume === 'number') window.setBgLoopVolume(s.sound.volume);
+                        if (typeof s.sound.uiVolume === 'number') window.setUiSoundVolume(s.sound.uiVolume);
+                    }
+                } else if (window.i18n) {
+                    await window.i18n.load('en');
+                }
+                // Play boot intro, then load module
+                const targetModule = (session && session.token) ? 'dashboard' : 'auth';
+                if (session && session.token) window.AppState.session = session;
+                if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.log_event === 'function') {
+                    window.pywebview.api.log_event('INFO', 'session_loaded', { has_token: !!(session && session.token) }).catch(function() {});
+                }
+                await playBootIntro();
+                loadModule(targetModule);
+            } catch (error) {
+                if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.log_event === 'function') {
+                    window.pywebview.api.log_event('ERROR', 'init_app_failed', { error: (error && error.message) ? error.message : String(error) }).catch(function() {});
+                }
+                if (window.i18n) await window.i18n.load('en').catch(() => {});
+                // Skip intro on error, go straight to auth
+                document.getElementById('boot-intro')?.classList.add('hidden');
+                document.querySelector('.app-logo')?.classList.remove('hidden');
+                loadModule('auth');
+            }
+        }
+
+        // Wait for pywebview
+        if (window.pywebview) {
+            initApp();
+        } else {
+            window.addEventListener('pywebviewready', initApp);
+        }
+    </script>
+</body>
+</html>

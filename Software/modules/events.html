@@ -1,0 +1,1236 @@
+<!-- ========================================
+     EVENTS MODULE - HTML
+     ======================================== -->
+
+<!-- Events List View -->
+<section id="view-events" class="view-section">
+    <button class="btn-back" data-action="go-home"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="events.title">EVENT MANAGER</h1>
+        <div id="events-grid" class="events-grid">
+            <button class="btn-main btn-primary u-order-second" data-action="create-event">
+                <i class="fa-solid fa-calendar-plus"></i>
+                <div class="category-header" data-i18n="events.btn_create_event">CREATE EVENT</div>
+            </button>
+        </div>
+    </div>
+</section>
+
+<div id="event-drag-trash" class="prompt-drag-actions" aria-hidden="true">
+    <div class="prompt-drag-icon prompt-drag-icon--trash"><i class="fa-solid fa-trash"></i></div>
+</div>
+
+<!-- Event Actions View -->
+<section id="view-event-actions" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-events"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <div class="title-with-edit">
+            <h1 id="event-actions-title">EVENT NAME</h1>
+            <button class="btn-edit-icon" data-action="event-rename"><i class="fa-solid fa-pen"></i></button>
+        </div>
+        <div class="event-actions-grid">
+            <button class="btn-main btn-primary" data-action="event-start">
+                <i class="fa-solid fa-play"></i> <span data-i18n="events.btn_start">START</span>
+            </button>
+            <button class="btn-main" data-action="event-gallery">
+                <i class="fa-solid fa-images"></i> <span data-i18n="events.btn_gallery">GALLERY</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Event Dashboard (Gallery) View -->
+<section id="view-event-dashboard" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-event-actions"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 id="event-dashboard-title">EVENT NAME</h1>
+        <div id="gallery-choice" class="gallery-choice">
+            <button class="btn-main btn-primary" data-action="gallery-search">
+                <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="events.btn_search">SEARCH</span>
+            </button>
+            <button class="btn-main" data-action="gallery-show-all">
+                <i class="fa-solid fa-images"></i> <span data-i18n="events.btn_show_all">SHOW ALL GALLERY</span>
+            </button>
+        </div>
+        <div id="gallery-grid-wrap" class="gallery-grid-wrap hidden">
+            <div id="event-gallery-grid" class="events-grid gallery-large"></div>
+        </div>
+    </div>
+</section>
+
+<div id="gallery-drag-trash" class="prompt-drag-actions" aria-hidden="true">
+    <div class="prompt-drag-icon prompt-drag-icon--trash"><i class="fa-solid fa-trash"></i></div>
+</div>
+
+<!-- Create Event Modal -->
+<div id="create-event-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box-keyboard">
+        <div class="modal-text" data-i18n="events.modal_create">CREATE NEW EVENT</div>
+        
+        <div class="keyboard-input-display">
+            <input type="text" id="create-event-name" class="keyboard-real-input" placeholder="EVENT NAME" data-i18n="events.label_event_name" data-i18n-attr="placeholder" autocomplete="off" autofocus inputmode="none">
+            <button type="button" id="btn-clear-input" class="input-clear-btn">X</button>
+        </div>
+        <div id="create-event-error" class="text-error hidden u-mb-sm"></div>
+
+        <div class="kb-row">
+            <button class="kb-key" data-key="1">1</button>
+            <button class="kb-key" data-key="2">2</button>
+            <button class="kb-key" data-key="3">3</button>
+            <button class="kb-key" data-key="4">4</button>
+            <button class="kb-key" data-key="5">5</button>
+            <button class="kb-key" data-key="6">6</button>
+            <button class="kb-key" data-key="7">7</button>
+            <button class="kb-key" data-key="8">8</button>
+            <button class="kb-key" data-key="9">9</button>
+            <button class="kb-key" data-key="0">0</button>
+            <button class="kb-key kb-key--action kb-key--wide" data-key="BACKSPACE">DEL</button>
+        </div>
+        <div class="kb-row">
+            <button class="kb-key" data-key="Q">q</button>
+            <button class="kb-key" data-key="W">w</button>
+            <button class="kb-key" data-key="E">e</button>
+            <button class="kb-key" data-key="R">r</button>
+            <button class="kb-key" data-key="T">t</button>
+            <button class="kb-key" data-key="Y">y</button>
+            <button class="kb-key" data-key="U">u</button>
+            <button class="kb-key" data-key="I">i</button>
+            <button class="kb-key" data-key="O">o</button>
+            <button class="kb-key" data-key="P">p</button>
+        </div>
+        <div class="kb-row kb-row--shift">
+            <button class="kb-key" data-key="A">a</button>
+            <button class="kb-key" data-key="S">s</button>
+            <button class="kb-key" data-key="D">d</button>
+            <button class="kb-key" data-key="F">f</button>
+            <button class="kb-key" data-key="G">g</button>
+            <button class="kb-key" data-key="H">h</button>
+            <button class="kb-key" data-key="J">j</button>
+            <button class="kb-key" data-key="K">k</button>
+            <button class="kb-key" data-key="L">l</button>
+            <button class="kb-key" data-key="@">@</button>
+        </div>
+        <div class="kb-row">
+            <button class="kb-key kb-key--action kb-key--wide" data-key="SHIFT">SHIFT</button>
+            <button class="kb-key" data-key="Z">z</button>
+            <button class="kb-key" data-key="X">x</button>
+            <button class="kb-key" data-key="C">c</button>
+            <button class="kb-key" data-key="V">v</button>
+            <button class="kb-key" data-key="B">b</button>
+            <button class="kb-key" data-key="N">n</button>
+            <button class="kb-key" data-key="M">m</button>
+            <button class="kb-key" data-key=".">.</button>
+            <button class="kb-key" data-key="-">-</button>
+            <button class="kb-key kb-key--action kb-key--wide" data-key=".COM">.COM</button>
+        </div>
+        <div class="kb-row">
+            <button class="kb-key kb-key--space" data-key="SPACE"></button>
+        </div>
+
+        <div class="modal-actions mt-15">
+            <button data-action="create-event-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="create-event-confirm" class="btn-main" id="btn-create-event-continue" disabled data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Rename Event Modal (same virtual keyboard as create-event) -->
+<div id="rename-event-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box-keyboard">
+        <div class="modal-text" data-i18n="events.modal_rename">RENAME EVENT</div>
+        <div class="keyboard-input-display">
+            <input type="text" id="rename-event-name" class="keyboard-real-input" placeholder="EVENT NAME" data-i18n="events.label_event_name" data-i18n-attr="placeholder" autocomplete="off" inputmode="none">
+            <button type="button" id="btn-clear-rename-input" class="input-clear-btn">X</button>
+        </div>
+        <div id="rename-event-error" class="text-error hidden u-mb-sm"></div>
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="1">1</button>
+            <button type="button" class="kb-key" data-key="2">2</button>
+            <button type="button" class="kb-key" data-key="3">3</button>
+            <button type="button" class="kb-key" data-key="4">4</button>
+            <button type="button" class="kb-key" data-key="5">5</button>
+            <button type="button" class="kb-key" data-key="6">6</button>
+            <button type="button" class="kb-key" data-key="7">7</button>
+            <button type="button" class="kb-key" data-key="8">8</button>
+            <button type="button" class="kb-key" data-key="9">9</button>
+            <button type="button" class="kb-key" data-key="0">0</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="BACKSPACE">DEL</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="Q">q</button>
+            <button type="button" class="kb-key" data-key="W">w</button>
+            <button type="button" class="kb-key" data-key="E">e</button>
+            <button type="button" class="kb-key" data-key="R">r</button>
+            <button type="button" class="kb-key" data-key="T">t</button>
+            <button type="button" class="kb-key" data-key="Y">y</button>
+            <button type="button" class="kb-key" data-key="U">u</button>
+            <button type="button" class="kb-key" data-key="I">i</button>
+            <button type="button" class="kb-key" data-key="O">o</button>
+            <button type="button" class="kb-key" data-key="P">p</button>
+        </div>
+        <div class="kb-row kb-row--shift">
+            <button type="button" class="kb-key" data-key="A">a</button>
+            <button type="button" class="kb-key" data-key="S">s</button>
+            <button type="button" class="kb-key" data-key="D">d</button>
+            <button type="button" class="kb-key" data-key="F">f</button>
+            <button type="button" class="kb-key" data-key="G">g</button>
+            <button type="button" class="kb-key" data-key="H">h</button>
+            <button type="button" class="kb-key" data-key="J">j</button>
+            <button type="button" class="kb-key" data-key="K">k</button>
+            <button type="button" class="kb-key" data-key="L">l</button>
+            <button type="button" class="kb-key" data-key="@">@</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="SHIFT">SHIFT</button>
+            <button type="button" class="kb-key" data-key="Z">z</button>
+            <button type="button" class="kb-key" data-key="X">x</button>
+            <button type="button" class="kb-key" data-key="C">c</button>
+            <button type="button" class="kb-key" data-key="V">v</button>
+            <button type="button" class="kb-key" data-key="B">b</button>
+            <button type="button" class="kb-key" data-key="N">n</button>
+            <button type="button" class="kb-key" data-key="M">m</button>
+            <button type="button" class="kb-key" data-key=".">.</button>
+            <button type="button" class="kb-key" data-key="-">-</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key=".COM">.COM</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--space" data-key="SPACE"></button>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="rename-event-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="rename-event-confirm" class="btn-main" id="btn-rename-event-continue" disabled data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Gallery Search Modal -->
+<div id="gallery-search-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box-keyboard">
+        <div class="modal-text" data-i18n="events.modal_search">ENTER EMAIL OR ID</div>
+        <div class="keyboard-input-display">
+            <input type="text" id="gallery-search-query" class="keyboard-real-input" placeholder="EMAIL OR ID" data-i18n="events.modal_search" data-i18n-attr="placeholder" autocomplete="off" inputmode="none">
+            <button type="button" id="btn-clear-gallery-search" class="input-clear-btn">X</button>
+        </div>
+        <div id="gallery-search-error" class="text-error hidden"></div>
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="1">1</button>
+            <button type="button" class="kb-key" data-key="2">2</button>
+            <button type="button" class="kb-key" data-key="3">3</button>
+            <button type="button" class="kb-key" data-key="4">4</button>
+            <button type="button" class="kb-key" data-key="5">5</button>
+            <button type="button" class="kb-key" data-key="6">6</button>
+            <button type="button" class="kb-key" data-key="7">7</button>
+            <button type="button" class="kb-key" data-key="8">8</button>
+            <button type="button" class="kb-key" data-key="9">9</button>
+            <button type="button" class="kb-key" data-key="0">0</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="BACKSPACE">DEL</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="Q">q</button>
+            <button type="button" class="kb-key" data-key="W">w</button>
+            <button type="button" class="kb-key" data-key="E">e</button>
+            <button type="button" class="kb-key" data-key="R">r</button>
+            <button type="button" class="kb-key" data-key="T">t</button>
+            <button type="button" class="kb-key" data-key="Y">y</button>
+            <button type="button" class="kb-key" data-key="U">u</button>
+            <button type="button" class="kb-key" data-key="I">i</button>
+            <button type="button" class="kb-key" data-key="O">o</button>
+            <button type="button" class="kb-key" data-key="P">p</button>
+        </div>
+        <div class="kb-row kb-row--shift">
+            <button type="button" class="kb-key" data-key="A">a</button>
+            <button type="button" class="kb-key" data-key="S">s</button>
+            <button type="button" class="kb-key" data-key="D">d</button>
+            <button type="button" class="kb-key" data-key="F">f</button>
+            <button type="button" class="kb-key" data-key="G">g</button>
+            <button type="button" class="kb-key" data-key="H">h</button>
+            <button type="button" class="kb-key" data-key="J">j</button>
+            <button type="button" class="kb-key" data-key="K">k</button>
+            <button type="button" class="kb-key" data-key="L">l</button>
+            <button type="button" class="kb-key" data-key="@">@</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="SHIFT">SHIFT</button>
+            <button type="button" class="kb-key" data-key="Z">z</button>
+            <button type="button" class="kb-key" data-key="X">x</button>
+            <button type="button" class="kb-key" data-key="C">c</button>
+            <button type="button" class="kb-key" data-key="V">v</button>
+            <button type="button" class="kb-key" data-key="B">b</button>
+            <button type="button" class="kb-key" data-key="N">n</button>
+            <button type="button" class="kb-key" data-key="M">m</button>
+            <button type="button" class="kb-key" data-key=".">.</button>
+            <button type="button" class="kb-key" data-key="-">-</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key=".COM">.COM</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--space" data-key="SPACE"></button>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="gallery-search-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="gallery-search-confirm" class="btn-main" id="btn-gallery-search-continue" disabled data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Gallery PIN Modal (Show all gallery) -->
+<div id="gallery-pin-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box--compact">
+        <div class="pin-pad">
+            <h2 class="pin-pad__label" data-i18n="dashboard.pin_label">ENTER PIN</h2>
+            <div class="pin-pad__display" id="gallery-pin-display"></div>
+            <div class="pin-pad__grid">
+                <button type="button" class="pin-pad__key" data-verify-val="1">1</button>
+                <button type="button" class="pin-pad__key" data-verify-val="2">2</button>
+                <button type="button" class="pin-pad__key" data-verify-val="3">3</button>
+                <button type="button" class="pin-pad__key" data-verify-val="4">4</button>
+                <button type="button" class="pin-pad__key" data-verify-val="5">5</button>
+                <button type="button" class="pin-pad__key" data-verify-val="6">6</button>
+                <button type="button" class="pin-pad__key" data-verify-val="7">7</button>
+                <button type="button" class="pin-pad__key" data-verify-val="8">8</button>
+                <button type="button" class="pin-pad__key" data-verify-val="9">9</button>
+                <button type="button" class="pin-pad__key pin-pad__key--empty"></button>
+                <button type="button" class="pin-pad__key" data-verify-val="0">0</button>
+                <button type="button" class="pin-pad__key" data-verify-val="clear">X</button>
+            </div>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="gallery-pin-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Event Modal -->
+<div id="delete-event-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="events.modal_delete_event">DELETE EVENT AND ALL FILES?</div>
+        <div class="modal-actions">
+            <button data-action="delete-event-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="delete-event-confirm" class="btn-main" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<div id="export-gallery-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="events.modal_export">EXPORT GALLERY AS...</div>
+        <div class="modal-actions">
+            <button data-action="export-images" class="btn-main"><i class="fa-solid fa-images"></i> <span data-i18n="events.export_images">IMAGES</span></button>
+            <button data-action="export-zip" class="btn-main"><i class="fa-solid fa-file-zipper"></i> <span data-i18n="events.export_zip">ZIP</span></button>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="export-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<div id="delete-image-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="events.modal_delete_image">DELETE THIS IMAGE? THIS ACTION IS IRREVERSIBLE.</div>
+        <div class="modal-actions">
+            <button data-action="delete-image-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="delete-image-confirm" class="btn-main" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<div id="print-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="events.modal_prints">HOW MANY PRINTS?</div>
+        <div class="print-counter">
+            <button class="btn-control" data-action="print-minus"><i class="fa-solid fa-minus"></i></button>
+            <span id="print-count-display">1</span>
+            <button class="btn-control" data-action="print-plus"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div class="modal-actions">
+            <button data-action="print-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="print-confirm" class="btn-main" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Full Image Viewer -->
+<section id="view-full-image" class="view-section hidden">
+    <button class="btn-back" data-action="close-full-image"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="btn-main btn-top-right btn-primary" data-action="open-print-modal">
+        <i class="fa-solid fa-print"></i> <span data-i18n="events.btn_print">PRINT</span>
+    </button>
+    <div class="content-wrapper">
+        <h2 id="full-image-title"></h2>
+        <div class="full-view-frame">
+            <img id="full-image-display" class="preview-image" src="">
+            <div class="qr-overlay hidden" id="full-image-qr-container">
+                <img id="full-image-qr-display" src="">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========================================
+     EVENTS MODULE - JAVASCRIPT
+     ======================================== -->
+<script>
+window.EventsModule = {
+    state: {
+        currentEventId: null,
+        currentEventName: null,
+        currentView: 'events',
+        returnView: 'events',
+        returnToEventMode: false,
+        printCount: 1,
+        currentImageId: null,
+        verifyPinCurrent: '',
+        verifyPinCallback: null,
+        verifyPinTimer: null,
+        drag: { el: null, startX: 0, startY: 0, isDragging: false, ghost: null, preventClick: false, type: null }
+    },
+
+    init() {
+        console.debug('[EVENTS] Module initialized');
+        this.bindEvents();
+        this._initDragAndDrop();
+        this.initKeyboard();
+        this.initRenameKeyboard();
+        this.initSearchKeyboard();
+
+        const dashboardView = document.getElementById('view-event-dashboard');
+        if (dashboardView && !document.getElementById('btn-export-gallery')) {
+            const btn = document.createElement('button');
+            btn.id = 'btn-export-gallery';
+            btn.className = 'btn-main btn-top-right btn-primary';
+            btn.dataset.action = 'open-export-modal';
+            btn.innerHTML = '<i class="fa-solid fa-file-export"></i> <span data-i18n="events.btn_export_gallery">EXPORT GALLERY</span>';
+            dashboardView.appendChild(btn);
+            window.i18n?.apply?.();
+        }
+        
+        if (window.AppState && window.AppState.openGalleryFor) {
+            const galleryData = window.AppState.openGalleryFor;
+            this.state.returnToEventMode = true;
+            window.AppState.openGalleryFor = null;
+            const eBtn = document.getElementById('btn-export-gallery');
+            if (eBtn) eBtn.classList.add('hidden');
+            this.openEvent(galleryData.id, galleryData.name);
+        } else {
+            this.state.returnToEventMode = false;
+            const eBtn = document.getElementById('btn-export-gallery');
+            if (eBtn) eBtn.classList.remove('hidden');
+            this.loadEvents();
+        }
+    },
+
+    initKeyboard() {
+        window.initKeyboard({
+            container: '#create-event-modal',
+            inputId: 'create-event-name',
+            confirmBtnId: 'btn-create-event-continue',
+            clearBtnId: 'btn-clear-input'
+        });
+    },
+
+    initRenameKeyboard() {
+        window.initKeyboard({
+            container: '#rename-event-modal',
+            inputId: 'rename-event-name',
+            confirmBtnId: 'btn-rename-event-continue',
+            clearBtnId: 'btn-clear-rename-input'
+        });
+    },
+
+    initSearchKeyboard() {
+        window.initKeyboard({
+            container: '#gallery-search-modal',
+            inputId: 'gallery-search-query',
+            confirmBtnId: 'btn-gallery-search-continue',
+            clearBtnId: 'btn-clear-gallery-search'
+        });
+    },
+
+    bindEvents() {
+        const self = this;
+        
+        window.moduleHandlers.click = (e) => {
+            const verifyBtn = e.target.closest('[data-verify-val]');
+            if (verifyBtn) {
+                self.verifyPinKeyPress(verifyBtn.dataset.verifyVal);
+                return;
+            }
+            const action = e.target.closest('[data-action]');
+            if (action) {
+                if (!action.classList.contains('btn-back')) window.playButtonSound?.();
+                if (action.classList.contains('btn-back')) {
+                    const openModal = document.querySelector('.modal-overlay:not(.hidden)');
+                    if (openModal) {
+                        self.hideModal(openModal.id);
+                        return;
+                    }
+                }
+                self.handleAction(action.dataset.action, action.dataset);
+            }
+        };
+
+        window.moduleHandlers.keydown = (e) => {
+            if (e.key === 'Escape') {
+                if (self.state.currentView === 'full-image') {
+                    self.showView(self.state.returnView || 'event-dashboard');
+                    return;
+                }
+                const pinModal = document.getElementById('gallery-pin-modal');
+                if (pinModal && !pinModal.classList.contains('hidden')) {
+                    self.closeVerifyPinModal();
+                    return;
+                }
+                self.hideAllModals();
+            }
+            if (e.key === 'Enter') {
+                const createModal = document.getElementById('create-event-modal');
+                const renameModal = document.getElementById('rename-event-modal');
+                const searchModal = document.getElementById('gallery-search-modal');
+                if (createModal && !createModal.classList.contains('hidden')) {
+                    self.createEvent();
+                } else if (renameModal && !renameModal.classList.contains('hidden')) {
+                    self.renameEvent();
+                } else if (searchModal && !searchModal.classList.contains('hidden')) {
+                    self.gallerySearchConfirm();
+                }
+            }
+        };
+    },
+
+    handleAction(action, data = {}) {
+        switch(action) {
+            // Navigation
+            case 'go-home': window.navigateTo('dashboard'); break;
+            case 'goto-stats': window.navigateTo('settings', { openView: 'stats' }); break;
+            case 'back-to-events': this.showView('events'); this.loadEvents(); break;
+            case 'back-to-event-actions': {
+                if (this.state.currentView === 'event-dashboard') {
+                    const gridWrap = document.getElementById('gallery-grid-wrap');
+                    if (gridWrap && !gridWrap.classList.contains('hidden')) {
+                        this.showGalleryChoice();
+                        return;
+                    }
+                }
+                if (this.state.returnToEventMode) {
+                    this.state.returnToEventMode = false;
+                    window.navigateTo('eventmode');
+                } else {
+                    this.showView('event-actions');
+                }
+                break;
+            }
+            
+            // CRUD
+            case 'create-event': this.openModal('create-event-modal', 'create-event-name'); break;
+            case 'create-event-cancel': this.hideModal('create-event-modal'); break;
+            case 'create-event-confirm': this.createEvent(); break;
+            
+            // Event Actions View
+            case 'open-event-actions': 
+                this.openEventActions(data.id, data.name); 
+                break;
+            case 'event-start': 
+                window.AppState.currentEvent = { id: this.state.currentEventId, name: this.state.currentEventName };
+                window.navigateTo('eventmode'); 
+                break;
+            case 'event-gallery':
+                this.openEvent(this.state.currentEventId, this.state.currentEventName);
+                break;
+            case 'gallery-search': {
+                const q = document.getElementById('gallery-search-query');
+                const err = document.getElementById('gallery-search-error');
+                if (q) q.value = '';
+                if (err) { err.textContent = ''; err.classList.add('hidden'); }
+                this.openModal('gallery-search-modal', 'gallery-search-query');
+                break;
+            }
+            case 'gallery-search-cancel':
+                this.hideModal('gallery-search-modal');
+                break;
+            case 'gallery-search-confirm':
+                this.gallerySearchConfirm();
+                break;
+            case 'gallery-show-all':
+                this.attemptShowAllGallery();
+                break;
+            case 'gallery-pin-cancel':
+                this.closeVerifyPinModal();
+                break;
+            case 'event-rename': 
+                this.openModal('rename-event-modal', 'rename-event-name');
+                const renameInput = document.getElementById('rename-event-name');
+                if (renameInput) {
+                    renameInput.value = this.state.currentEventName || '';
+                    renameInput.dispatchEvent(new Event('input'));
+                }
+                break;
+
+            case 'rename-event-cancel': this.hideModal('rename-event-modal'); break;
+            case 'rename-event-confirm': this.renameEvent(); break;
+            case 'delete-event-cancel': this.hideModal('delete-event-modal'); break;
+            case 'delete-event-confirm': this.deleteEvent(); break;
+            
+            // Gallery
+            case 'view-gallery-image': 
+                this.viewImage(data.src, data.qr, data.email, data.imgid);
+                break;
+            case 'close-full-image':
+                this.showView(this.state.returnView || 'event-dashboard');
+                break;
+            
+            // Print Logic
+            case 'open-print-modal':
+                this.state.printCount = 1;
+                document.getElementById('print-count-display').textContent = '1';
+                this.showModal('print-modal');
+                break;
+            case 'print-minus':
+                if (this.state.printCount > 1) {
+                    this.state.printCount--;
+                    document.getElementById('print-count-display').textContent = this.state.printCount;
+                }
+                break;
+            case 'print-plus':
+                this.state.printCount++;
+                document.getElementById('print-count-display').textContent = this.state.printCount;
+                break;
+            case 'print-cancel':
+                this.hideModal('print-modal');
+                break;
+            case 'print-confirm':
+                this.doPrintGalleryImage();
+                break;
+
+            // Delete Image Logic
+            case 'open-delete-image-modal':
+                this.showModal('delete-image-modal');
+                break;
+            case 'delete-image-cancel':
+                this.hideModal('delete-image-modal');
+                break;
+            case 'delete-image-confirm':
+                this.deleteImage();
+                break;
+
+            case 'open-export-modal':
+                this.showModal('export-gallery-modal');
+                break;
+            case 'export-cancel':
+                this.hideModal('export-gallery-modal');
+                break;
+            case 'export-images':
+                this.exportGallery('images');
+                break;
+            case 'export-zip':
+                this.exportGallery('zip');
+                break;
+        }
+    },
+
+    viewImage(src, qrSrc, email, imgId) {
+        this.state.returnView = this.state.currentView;
+        this.state.currentImageId = imgId;
+        
+        const titleEl = document.getElementById('full-image-title');
+        if (titleEl) {
+            titleEl.textContent = email || 'NO EMAIL';
+        }
+        
+        // Reset element to clear old handlers
+        const oldImg = document.getElementById('full-image-display');
+        if (!oldImg) return;
+        
+        const img = oldImg.cloneNode(true);
+        oldImg.parentNode.replaceChild(img, oldImg);
+        img.src = src;
+        
+        // Handle QR Overlay
+        const qrContainer = document.getElementById('full-image-qr-container');
+        const qrDisplay = document.getElementById('full-image-qr-display');
+        
+        if (qrSrc && qrContainer && qrDisplay) {
+            qrDisplay.src = qrSrc;
+            qrContainer.classList.remove('hidden');
+        } else if (qrContainer) {
+            qrContainer.classList.add('hidden');
+        }
+        
+        // Enable zoom/pan (shared global function)
+        window.enableZoom(img);
+
+        this.showView('full-image');
+        this.updatePrintButtonVisibility();
+    },
+
+    async updatePrintButtonVisibility() {
+        const btn = document.querySelector('#view-full-image [data-action="open-print-modal"]');
+        if (!btn) return;
+        let enabled = true;
+        try {
+            const res = await window.pywebview.api.get_printing_settings();
+            if (res && res.ok && res.printing && res.printing.enabled === false) enabled = false;
+        } catch (e) { console.error('[EVENTS] print settings load error', e); }
+        if (enabled) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+    },
+
+    showView(viewId) {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById(`view-${viewId}`)?.classList.remove('hidden');
+        this.state.currentView = viewId;
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'events_view', { view: viewId, eventId: this.state.currentEventId || null }).catch(() => {});
+    },
+
+    async loadEvents() {
+        try {
+            const events = await window.pywebview.api.get_events();
+            this.renderEventList(events);
+        } catch(e) {
+            console.error('[EVENTS] Error loading events:', e);
+        }
+    },
+
+    renderEventList(events) {
+        const grid = document.getElementById('events-grid');
+        if (!grid) return;
+        
+        // Remove old event cards
+        grid.querySelectorAll('.event-card').forEach(c => c.remove());
+
+        events.forEach(ev => {
+            const card = document.createElement('div');
+            card.className = 'event-card';
+            card.dataset.action = 'open-event-actions';
+            card.dataset.id = ev.id;
+            card.dataset.name = ev.name;
+            
+            card.innerHTML = `
+                <i class="fa-solid fa-camera"></i>
+                <div class="category-header">${ev.name}</div>
+            `;
+            grid.appendChild(card);
+        });
+    },
+
+    openEventActions(id, name) {
+        this.state.currentEventId = id;
+        this.state.currentEventName = name;
+        document.getElementById('event-actions-title').textContent = name;
+        this.showView('event-actions');
+    },
+
+    openEvent(id, name) {
+        this.state.currentEventId = id;
+        this.state.currentEventName = name;
+        document.getElementById('event-dashboard-title').textContent = name;
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'event_entered', { eventId: id, name: (name || '').substring(0, 80) }).catch(() => {});
+        this.showGalleryChoice();
+        this.showView('event-dashboard');
+    },
+
+    showGalleryChoice() {
+        const choiceEl = document.getElementById('gallery-choice');
+        const gridWrapEl = document.getElementById('gallery-grid-wrap');
+        const grid = document.getElementById('event-gallery-grid');
+        const exportBtn = document.getElementById('btn-export-gallery');
+        if (choiceEl) choiceEl.classList.remove('hidden');
+        if (gridWrapEl) gridWrapEl.classList.add('hidden');
+        if (grid) grid.innerHTML = '';
+        if (exportBtn) exportBtn.classList.add('hidden');
+    },
+
+    renderGalleryGrid(images, emptyMessage) {
+        const id = this.state.currentEventId;
+        const grid = document.getElementById('event-gallery-grid');
+        grid.innerHTML = '';
+
+        if (images && images.length > 0) {
+            images.forEach(img => {
+                const card = document.createElement('div');
+                card.className = 'prompt-card';
+                card.dataset.action = 'view-gallery-image';
+                card.dataset.src = `${window.location.origin}/event-data/${id}/images/${img.image}`;
+                if (img.qrImage) {
+                    card.dataset.qr = `${window.location.origin}/event-data/${id}/images/${img.qrImage}`;
+                }
+                card.dataset.email = img.email || 'NO EMAIL';
+                card.dataset.imgid = img.id;
+                card.innerHTML = `
+                    <img src="${window.location.origin}/event-data/${id}/images/${img.image}" class="prompt-full-img">
+                    <div class="category-header">${img.email || 'NO EMAIL'}</div>
+                `;
+                grid.appendChild(card);
+            });
+        } else {
+            grid.innerHTML = '<div class="text-placeholder">' + (emptyMessage || 'NO IMAGES YET') + '</div>';
+        }
+
+        document.getElementById('gallery-choice').classList.add('hidden');
+        document.getElementById('gallery-grid-wrap').classList.remove('hidden');
+        const exportBtn = document.getElementById('btn-export-gallery');
+        if (exportBtn && !this.state.returnToEventMode) exportBtn.classList.remove('hidden');
+    },
+
+    async galleryShowAll() {
+        const id = this.state.currentEventId;
+        if (!id) return;
+        try {
+            const events = await window.pywebview.api.get_events();
+            const currentEvent = events.find(e => e.id === id);
+            this.renderGalleryGrid(currentEvent?.images || [], 'NO IMAGES YET');
+        } catch (e) {
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.log_event) {
+                window.pywebview.api.log_event('WARN', 'events_gallery_load_failed', { error: String(e && (e.message || e)) });
+            }
+            this.renderGalleryGrid([], 'ERROR LOADING GALLERY');
+        }
+    },
+
+    async gallerySearchConfirm() {
+        const input = document.getElementById('gallery-search-query');
+        const errEl = document.getElementById('gallery-search-error');
+        const query = (input && input.value) ? input.value.trim() : '';
+        if (!query) {
+            if (errEl) {
+                errEl.textContent = window.t ? window.t('events.error_fill_all') : 'FILL ALL FIELDS';
+                errEl.classList.remove('hidden');
+            }
+            return;
+        }
+        if (errEl) errEl.classList.add('hidden');
+
+        const id = this.state.currentEventId;
+        if (!id) return;
+        try {
+            const events = await window.pywebview.api.get_events();
+            const currentEvent = events.find(e => e.id === id);
+            const images = (currentEvent?.images || []).filter(img => {
+                const email = String(img.email || '').trim();
+                const imgId = String(img.id || '').trim();
+                return email === query || imgId === query;
+            });
+            this.hideModal('gallery-search-modal');
+            if (input) input.value = '';
+            const btn = document.getElementById('btn-gallery-search-continue');
+            if (btn) btn.disabled = true;
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'gallery_search', { eid: id, query: query.substring(0, 80), matchCount: (images || []).length }).catch(() => {});
+            this.renderGalleryGrid(images, window.t ? window.t('events.no_matches') : 'NO MATCHES');
+        } catch (e) {
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.log_event) {
+                window.pywebview.api.log_event('WARN', 'events_gallery_search_failed', { error: String(e && (e.message || e)) });
+            }
+            if (errEl) {
+                errEl.textContent = window.t ? window.t('events.error_generic') : 'ERROR';
+                errEl.classList.remove('hidden');
+            }
+        }
+    },
+
+    async createEvent() {
+        const name = document.getElementById('create-event-name').value.trim();
+        const err = document.getElementById('create-event-error');
+        
+        if (!name) {
+            err.textContent = window.t ? window.t('events.error_fill_all') : 'FILL ALL FIELDS';
+            err.classList.remove('hidden');
+            return;
+        }
+
+        try {
+            await window.pywebview.api.create_event(name);
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'event_created', { name }).catch(() => {});
+            this.hideModal('create-event-modal');
+            document.getElementById('create-event-name').value = '';
+            const btnContinue = document.getElementById('btn-create-event-continue');
+            if (btnContinue) btnContinue.disabled = true;
+            this.loadEvents();
+        } catch(e) {
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.log_event) {
+                window.pywebview.api.log_event('WARN', 'events_create_failed', { error: String(e && (e.message || e)) });
+            }
+            err.textContent = window.t ? window.t('events.error_creating') : 'ERROR CREATING EVENT';
+            err.classList.remove('hidden');
+        }
+    },
+
+    async renameEvent() {
+        const name = document.getElementById('rename-event-name').value.trim();
+        const err = document.getElementById('rename-event-error');
+        const eid = this.state.currentEventId;
+
+        if (!name) {
+            err.textContent = window.t ? window.t('events.error_fill_all') : 'FILL ALL FIELDS';
+            err.classList.remove('hidden');
+            return;
+        }
+
+        try {
+            const res = await window.pywebview.api.rename_event(eid, name);
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'event_renamed', { eid, new_name: name }).catch(() => {});
+                // Update state and titles
+                this.state.currentEventName = res.name;
+                document.getElementById('event-actions-title').textContent = res.name;
+                document.getElementById('event-dashboard-title').textContent = res.name;
+                this.hideModal('rename-event-modal');
+            } else {
+                err.textContent = window.t ? window.t('events.error_generic') : 'ERROR';
+                err.classList.remove('hidden');
+            }
+        } catch(e) {
+            err.textContent = window.t ? window.t('events.error_generic') : 'ERROR';
+            err.classList.remove('hidden');
+        }
+    },
+
+    async deleteEvent() {
+        const eid = this.state.currentEventId;
+        if (!eid) return;
+
+        try {
+            const res = await window.pywebview.api.delete_event(eid);
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'event_deleted', { eid }).catch(() => {});
+                this.hideModal('delete-event-modal');
+                this.showView('events');
+                this.loadEvents();
+            }
+        } catch(e) {
+            console.error('[EVENTS] Error deleting event:', e);
+        }
+    },
+
+    // Modal Helpers
+    openModal(id, focusInputId) { window.openModal(id, focusInputId); },
+    showModal(id) { window.showModal(id); },
+    hideModal(id) { window.hideModal(id); },
+    showAlert(msg) { window.showAlert(msg); },
+    async exportGallery(type) {
+        const eid = this.state.currentEventId;
+        const ename = this.state.currentEventName || 'EVENT';
+        if (!eid) return;
+
+        const btn = document.querySelector(`[data-action="export-${type}"]`);
+        const origHTML = btn.innerHTML;
+        btn.classList.add('btn-disabled');
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> EXPORTING...';
+
+        try {
+            const res = await window.pywebview.api.export_gallery(eid, ename, type);
+            if (res && res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'gallery_exported', { eid, type }).catch(() => {});
+                this.hideModal('export-gallery-modal');
+                this.showAlert(typeof window.t === 'function' ? window.t('events.success_gallery_exported') : 'GALLERY EXPORTED SUCCESSFULLY');
+            } else if (res && !res.ok && !res.cancelled) {
+                this.showAlert(res.error || (typeof window.t === 'function' ? window.t('events.error_exporting') : 'ERROR EXPORTING'));
+            }
+        } catch(e) {
+            this.showAlert(typeof window.t === 'function' ? window.t('events.error_exporting') : 'ERROR EXPORTING');
+        } finally {
+            btn.classList.remove('btn-disabled');
+            btn.innerHTML = origHTML;
+        }
+    },
+
+    async doPrintGalleryImage() {
+        const eid = this.state.currentEventId;
+        const imgId = this.state.currentImageId;
+        const copies = this.state.printCount || 1;
+        if (!eid || !imgId) {
+            this.hideModal('print-modal');
+            return;
+        }
+        let printer = null;
+        try {
+            const res = await window.pywebview.api.get_printing_settings();
+            if (res && res.ok && res.printing && res.printing.printer) printer = res.printing.printer;
+        } catch (e) { console.error('[EVENTS] print settings load error', e); }
+        if (!printer || !printer.trim()) {
+            this.hideModal('print-modal');
+            alert(window.t ? window.t('eventmode.error_select_printer') : 'Select a printer in Settings > Printing first.');
+            return;
+        }
+        this.hideModal('print-modal');
+        const filename = imgId + '.jpg';
+        try {
+            const res = await window.pywebview.api.print_event_image(eid, filename, printer.trim(), copies);
+            if (res && res.ok && window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'print_job_sent', { eid, filename, copies }).catch(() => {});
+            if (res && !res.ok) alert(res.error || (window.t ? window.t('eventmode.error_print_failed') : 'Print failed'));
+        } catch (e) {
+            if (window.pywebview && window.pywebview.api && window.pywebview.api.log_event) {
+                window.pywebview.api.log_event('WARN', 'events_print_failed', { error: String(e && (e.message || e)) });
+            }
+            alert((window.t ? window.t('eventmode.error_print') : 'Print error') + ': ' + (e.message || e));
+        }
+    },
+
+    async deleteImage() {
+        const eid = this.state.currentEventId;
+        const imgId = this.state.currentImageId;
+        if (!eid || !imgId) return;
+
+        const btn = document.querySelector('[data-action="delete-image-confirm"]');
+        btn.classList.add('btn-disabled');
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + (window.t ? window.t('common.loading_deleting') : 'DELETING...');
+
+        try {
+            const res = await window.pywebview.api.delete_event_image(eid, imgId);
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'image_deleted', { eid, imgId }).catch(() => {});
+                this.hideModal('delete-image-modal');
+                // If deleting from gallery grid, stay in grid and refresh
+                if (this.state.currentView === 'event-dashboard') {
+                    await this.galleryShowAll();
+                } else {
+                    this.showView(this.state.returnView || 'event-dashboard');
+                    this.openEvent(eid, this.state.currentEventName);
+                }
+            } else {
+                console.error('[EVENTS] Error deleting image:', res.error);
+            }
+        } catch(e) {
+            console.error('[EVENTS] System Error:', e);
+        } finally {
+            btn.classList.remove('btn-disabled');
+            btn.innerHTML = window.t ? window.t('common.confirm') : 'CONFIRM';
+        }
+    },
+
+    hideAllModals() {
+        ['create-event-modal', 'rename-event-modal', 'gallery-search-modal', 'gallery-pin-modal', 'delete-event-modal', 'print-modal', 'delete-image-modal', 'export-gallery-modal'].forEach(id => this.hideModal(id));
+    },
+
+    attemptShowAllGallery() {
+        const stored = sessionStorage.getItem('KRUDER1-pin');
+        const fromEventMode = this.state.returnToEventMode;
+        if (stored && fromEventMode) {
+            this.showVerifyPinModal(() => this.galleryShowAll());
+        } else {
+            this.galleryShowAll();
+        }
+    },
+
+    showVerifyPinModal(callback) {
+        this.state.verifyPinCurrent = '';
+        this.state.verifyPinCallback = callback;
+        const display = document.getElementById('gallery-pin-display');
+        if (display) display.textContent = '';
+        this.showModal('gallery-pin-modal');
+        this.resetVerifyPinTimer();
+    },
+
+    closeVerifyPinModal() {
+        if (this.state.verifyPinTimer) clearTimeout(this.state.verifyPinTimer);
+        this.hideModal('gallery-pin-modal');
+        this.state.verifyPinCurrent = '';
+        this.state.verifyPinCallback = null;
+    },
+
+    resetVerifyPinTimer() {
+        if (this.state.verifyPinTimer) clearTimeout(this.state.verifyPinTimer);
+        this.state.verifyPinTimer = setTimeout(() => {
+            this.closeVerifyPinModal();
+        }, 5000);
+    },
+
+    _initDragAndDrop() {
+        const self = this;
+
+        const onPointerDown = (e) => {
+            if (e.target.closest('button')) return;
+
+            // Gallery image drag
+            const galleryCard = e.target.closest('#event-gallery-grid .prompt-card');
+            if (galleryCard) {
+                e.preventDefault();
+                self.state.drag.el = galleryCard;
+                self.state.drag.startX = e.clientX;
+                self.state.drag.startY = e.clientY;
+                self.state.drag.isDragging = false;
+                self.state.drag.type = 'gallery';
+                try { galleryCard.setPointerCapture(e.pointerId); } catch(err) {}
+                return;
+            }
+
+            // Event card drag — DOM-based guard
+            const card = e.target.closest('.event-card');
+            if (card && card.closest('#view-events')) {
+                e.preventDefault();
+                self.state.drag.el = card;
+                self.state.drag.startX = e.clientX;
+                self.state.drag.startY = e.clientY;
+                self.state.drag.isDragging = false;
+                self.state.drag.type = 'event';
+                try { card.setPointerCapture(e.pointerId); } catch(err) {}
+            }
+        };
+
+        const onPointerMove = (e) => {
+            const drag = self.state.drag;
+            if (!drag.el) return;
+            if (!drag.isDragging) {
+                if (Math.abs(e.clientX - drag.startX) > 10 || Math.abs(e.clientY - drag.startY) > 10) {
+                    drag.isDragging = true;
+                    drag.preventClick = true;
+                    const rect = drag.el.getBoundingClientRect();
+                    drag.ghost = drag.el.cloneNode(true);
+                    drag.ghost.classList.add('draggable-ghost');
+                    drag.ghost.style.position = 'fixed';
+                    drag.ghost.style.top = rect.top + 'px';
+                    drag.ghost.style.left = rect.left + 'px';
+                    drag.ghost.style.width = rect.width + 'px';
+                    drag.ghost.style.height = rect.height + 'px';
+                    drag.ghost.style.margin = '0';
+                    document.body.appendChild(drag.ghost);
+                    drag.el.style.opacity = '0.3';
+
+                    if (drag.type === 'gallery') {
+                        const galleryTrash = document.getElementById('gallery-drag-trash');
+                        if (galleryTrash) galleryTrash.classList.add('visible');
+                    } else {
+                        const trashEl = document.getElementById('event-drag-trash');
+                        if (trashEl) trashEl.classList.add('visible');
+                    }
+                }
+            }
+            if (drag.isDragging) {
+                e.preventDefault();
+                drag.ghost.style.left = (e.clientX - drag.ghost.offsetWidth / 2) + 'px';
+                drag.ghost.style.top = (e.clientY - drag.ghost.offsetHeight / 2) + 'px';
+
+                // Hover detection for trash icons
+                if (drag.type === 'gallery') {
+                    const trashIcon = document.querySelector('#gallery-drag-trash .prompt-drag-icon');
+                    if (trashIcon) {
+                        const r = trashIcon.getBoundingClientRect();
+                        trashIcon.classList.toggle('is-over', e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom);
+                    }
+                } else {
+                    const trashIcon = document.querySelector('#event-drag-trash .prompt-drag-icon');
+                    if (trashIcon) {
+                        const r = trashIcon.getBoundingClientRect();
+                        trashIcon.classList.toggle('is-over', e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom);
+                    }
+                }
+            }
+        };
+
+        const endDrag = async (e) => {
+            const drag = self.state.drag;
+            if (!drag.el) return;
+
+            if (drag.isDragging) {
+                // Gallery image drag → delete
+                if (drag.type === 'gallery') {
+                    const galleryTrash = document.getElementById('gallery-drag-trash');
+                    const trashIcon = galleryTrash?.querySelector('.prompt-drag-icon');
+
+                    let droppedOnTrash = false;
+                    if (trashIcon) {
+                        const r = trashIcon.getBoundingClientRect();
+                        droppedOnTrash = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+                    }
+
+                    if (galleryTrash) galleryTrash.classList.remove('visible');
+                    if (trashIcon) trashIcon.classList.remove('is-over');
+
+                    drag.el.style.opacity = '1';
+                    if (drag.ghost && drag.ghost.parentNode) drag.ghost.parentNode.removeChild(drag.ghost);
+
+                    if (droppedOnTrash) {
+                        self.state.currentImageId = drag.el.dataset.imgid;
+                        self.showModal('delete-image-modal');
+                    }
+                } else {
+                    // Event card drag — detect BEFORE hiding
+                    const eventTrash = document.getElementById('event-drag-trash');
+                    const trashIcon = eventTrash?.querySelector('.prompt-drag-icon');
+
+                    let droppedOnTrash = false;
+                    if (trashIcon) {
+                        const r = trashIcon.getBoundingClientRect();
+                        droppedOnTrash = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+                    }
+
+                    if (eventTrash) eventTrash.classList.remove('visible');
+                    if (trashIcon) trashIcon.classList.remove('is-over');
+
+                    drag.el.style.opacity = '1';
+                    if (drag.ghost && drag.ghost.parentNode) drag.ghost.parentNode.removeChild(drag.ghost);
+
+                    if (droppedOnTrash) {
+                        self.state.currentEventId = drag.el.dataset.id;
+                        self.showModal('delete-event-modal');
+                    }
+                }
+                setTimeout(() => { drag.preventClick = false; }, 100);
+            }
+            try {
+                if (drag.el && e.pointerId && drag.el.hasPointerCapture(e.pointerId)) {
+                    drag.el.releasePointerCapture(e.pointerId);
+                }
+            } catch (err) {}
+            drag.el = null;
+            drag.isDragging = false;
+            drag.ghost = null;
+            drag.type = null;
+        };
+
+        const onClickCapture = (e) => {
+            if (self.state.drag.preventClick && (e.target.closest('#view-events') || e.target.closest('#view-event-dashboard'))) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        };
+
+        document.addEventListener('pointerdown', onPointerDown);
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', endDrag);
+        document.addEventListener('pointercancel', endDrag);
+        document.addEventListener('click', onClickCapture, true);
+
+        // Register cleanup so loadModule can remove these listeners
+        window._dragCleanup = function() {
+            document.removeEventListener('pointerdown', onPointerDown);
+            document.removeEventListener('pointermove', onPointerMove);
+            document.removeEventListener('pointerup', endDrag);
+            document.removeEventListener('pointercancel', endDrag);
+            document.removeEventListener('click', onClickCapture, true);
+            self.state.drag.preventClick = false;
+            self.state.drag.el = null;
+            self.state.drag.isDragging = false;
+            if (self.state.drag.ghost && self.state.drag.ghost.parentNode) {
+                self.state.drag.ghost.parentNode.removeChild(self.state.drag.ghost);
+            }
+            self.state.drag.ghost = null;
+        };
+    },
+
+    verifyPinKeyPress(val) {
+        this.resetVerifyPinTimer();
+        if (val === 'clear') {
+            this.state.verifyPinCurrent = '';
+            const display = document.getElementById('gallery-pin-display');
+            if (display) display.textContent = '';
+            return;
+        }
+        if (this.state.verifyPinCurrent.length >= 4) return;
+        this.state.verifyPinCurrent += val;
+        const display = document.getElementById('gallery-pin-display');
+        if (display) display.textContent = '\u25CF'.repeat(this.state.verifyPinCurrent.length);
+        if (this.state.verifyPinCurrent.length === 4) {
+            setTimeout(() => {
+                const stored = sessionStorage.getItem('KRUDER1-pin');
+                if (this.state.verifyPinCurrent === stored) {
+                    const cb = this.state.verifyPinCallback;
+                    this.closeVerifyPinModal();
+                    if (cb) cb();
+                } else {
+                    this.closeVerifyPinModal();
+                }
+            }, 200);
+        }
+    }
+};
+
+window.EventsModule.init();
+</script>

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Builder V2 — Kruder1</title>
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --surface2: #242424;
+      --border: #333;
+      --accent: #7c5cfc;
+      --accent-hover: #9b80ff;
+      --text: #e8e8e8;
+      --text-dim: #888;
+      --green: #4caf50;
+      --red: #f44336;
+      --orange: #ff9800;
+      --blue: #2196f3;
+      --radius: 8px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--accent);
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 24px;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    /* --- PANEL IZQUIERDO: Selectores --- */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      max-height: calc(100vh - 80px);
+      overflow-y: auto;
+    }
+    .panel::-webkit-scrollbar { width: 6px; }
+    .panel::-webkit-scrollbar-track { background: transparent; }
+    .panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .group-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--accent);
+      margin: 16px 0 6px 0;
+    }
+    .group-label:first-child { margin-top: 0; }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 3px;
+    }
+    select, input[type="text"] {
+      width: 100%;
+      padding: 8px 10px;
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    select:focus, input[type="text"]:focus {
+      border-color: var(--accent);
+    }
+    select:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 14px 0;
+    }
+
+    .optional-tag {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      font-style: italic;
+      margin-left: 6px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 9px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-accent:hover { background: var(--accent-hover); }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-green:hover { background: #5cbf60; }
+    .btn-orange { background: var(--orange); color: #fff; }
+    .btn-orange:hover { background: #ffad33; }
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-blue:hover { background: #42a5f5; }
+    .btn-dark { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
+    .btn-dark:hover { background: var(--border); color: var(--text); }
+
+    /* --- PANEL DERECHO: Preview --- */
+    .preview-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 80px);
+    }
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .preview-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-accent { background: rgba(124,92,252,0.2); color: var(--accent); }
+    .badge-green { background: rgba(76,175,80,0.2); color: var(--green); }
+
+    .suggested-name {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .suggested-name .name-text {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--orange);
+    }
+    .suggested-name .name-label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .copy-small {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-dim);
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .copy-small:hover { border-color: var(--accent); color: var(--accent); }
+
+    .prompt-output {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.82rem;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .prompt-output::-webkit-scrollbar { width: 6px; }
+    .prompt-output::-webkit-scrollbar-track { background: transparent; }
+    .prompt-output::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .section-header {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .critical-tag {
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .stats-bar {
+      margin-top: 12px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+    .stats-bar span { white-space: nowrap; }
+    .stats-bar strong { color: var(--text); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--green);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .combo-counter {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+    .combo-counter strong {
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Prompt Builder V2</h1>
+<p class="subtitle">Kruder1 Photo Booth — Generador de prompts coherentes con formato de 5 secciones</p>
+
+<div class="layout">
+
+  <!-- ============ LEFT PANEL: Selectors ============ -->
+  <div class="panel" id="selectors">
+
+    <div class="group-label">Tipo & Categoria</div>
+
+    <label for="sel-type">Type</label>
+    <select id="sel-type">
+      <option value="">— Select type —</option>
+      <option value="male">Male (Individual)</option>
+      <option value="female">Female (Individual)</option>
+      <option value="couple_group">Couple / Group</option>
+    </select>
+
+    <label for="sel-category">Category</label>
+    <select id="sel-category" disabled>
+      <option value="">— Select category —</option>
+    </select>
+
+    <hr class="divider">
+    <div class="group-label">Concepto</div>
+
+    <label for="sel-character">Character / Concept</label>
+    <select id="sel-character" disabled>
+      <option value="">— Select character —</option>
+    </select>
+
+    <hr class="divider">
+    <div class="group-label">Variantes coherentes <span class="optional-tag">opcional — default ya incluido</span></div>
+
+    <label for="sel-scene-variant">Scene Variant</label>
+    <select id="sel-scene-variant" disabled>
+      <option value="default">Default (preset)</option>
+    </select>
+
+    <label for="sel-wardrobe-variant">Wardrobe Variant</label>
+    <select id="sel-wardrobe-variant" disabled>
+      <option value="default">Default (preset)</option>
+    </select>
+
+    <label for="sel-lighting-variant">Lighting Variant</label>
+    <select id="sel-lighting-variant" disabled>
+      <option value="default">Default (preset)</option>
+    </select>
+
+    <hr class="divider">
+    <div class="group-label">Estilo & Calidad</div>
+
+    <label for="sel-quality">Art Quality / Style</label>
+    <select id="sel-quality">
+      <option value="">— Select quality —</option>
+    </select>
+
+    <hr class="divider">
+
+    <div class="btn-row">
+      <button class="btn btn-accent" onclick="randomizeAll()">Randomize</button>
+      <button class="btn btn-dark" onclick="resetAll()">Reset</button>
+    </div>
+
+    <div class="combo-counter" id="combo-counter"></div>
+  </div>
+
+  <!-- ============ RIGHT PANEL: Preview ============ -->
+  <div class="preview-panel">
+    <div class="preview-header">
+      <span class="preview-title">Prompt Preview</span>
+      <span>
+        <span class="badge badge-accent" id="badge-type">—</span>
+        <span class="badge badge-green" id="badge-category">—</span>
+      </span>
+    </div>
+
+    <div class="suggested-name" id="name-box">
+      <div>
+        <div class="name-label">Suggested Name</div>
+        <div class="name-text" id="suggested-name">—</div>
+      </div>
+      <button class="copy-small" onclick="copyName()">Copy Name</button>
+    </div>
+
+    <div class="prompt-output" id="prompt-output">
+      Select options on the left to generate a prompt...
+    </div>
+
+    <div class="stats-bar">
+      <span>Characters: <strong id="stat-chars">0</strong></span>
+      <span>Words: <strong id="stat-words">0</strong></span>
+      <span>Sections: <strong id="stat-sections">0</strong></span>
+    </div>
+
+    <div class="btn-row" style="margin-top:12px;">
+      <button class="btn btn-green" onclick="copyPrompt()">Copy Prompt</button>
+      <button class="btn btn-blue" onclick="copyAll()">Copy All (Name + Prompt)</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast">Copied!</div>
+
+<script src="prompt-builder-categories.js"></script>
+<script>
+// ============================================================
+// QUALITY OPTIONS (unique universal dropdown)
+// ============================================================
+const QUALITY_OPTIONS = [
+  { value: 'ultra_real', label: 'Ultra-realistic photography', frag: '8K resolution, ultra-realistic photography, hyper-detailed, professional DSLR quality. No watermarks, no text overlays, no logos, no signatures.' },
+  { value: 'cinematic', label: 'Cinematic film quality', frag: '8K resolution, cinematic film quality, 35mm film grain, anamorphic lens. Color-graded, professional cinema look. No watermarks, no text overlays.' },
+  { value: 'editorial', label: 'High-end editorial', frag: '8K resolution, high-end fashion/editorial photography. Magazine cover quality, perfect retouching. No watermarks, no text overlays.' },
+  { value: 'fine_art', label: 'Fine art print quality', frag: '8K resolution, fine art print quality, gallery-worthy detail and composition. No watermarks, no text overlays.' },
+  { value: 'anime_3d', label: '3D anime / Pixar quality', frag: 'Pixar/DreamWorks quality 3D rendering, Octane render, global illumination, subsurface scattering. No watermarks, no text overlays.' },
+  { value: 'concept_art', label: 'Concept art / illustration', frag: 'Professional concept art quality, rich detail and atmospheric depth. Digital painting aesthetic with photorealistic lighting. No watermarks, no text overlays.' },
+  { value: 'vintage_film', label: 'Vintage / retro film', frag: 'Vintage analog film quality — 35mm Kodak Portra aesthetic, warm tones, film grain, soft focus edges, light leak. No watermarks, no text overlays.' },
+  { value: 'sharp_studio', label: 'Sharp studio product', frag: '8K resolution, sharp studio photography quality, crisp detail, controlled lighting. Product/portrait studio aesthetic. No watermarks, no text overlays.' },
+  { value: 'dramatic_hdr', label: 'Dramatic HDR', frag: '8K resolution, dramatic HDR processing, extreme detail in highlights and shadows, heightened contrast. No watermarks, no text overlays.' }
+];
+
+// ============================================================
+// IDENTITY PRESERVATION TEMPLATES
+// ============================================================
+const IDENTITY = {
+  male: "CRITICAL: The subject's facial features must remain completely unaltered from the reference image — bone structure, jawline, nose shape, eye shape and color, lip shape, skin tone, complexion, facial hair, and any visible unique features (moles, scars, freckles) must be preserved exactly. Maintain natural skin texture. The subject is shown with face fully visible and realistic.",
+  female: "CRITICAL: The subject's facial features must remain completely unaltered from the reference image — bone structure, jawline, nose shape, eye shape and color, lip shape, skin tone, complexion, and any visible unique features (moles, scars, freckles) must be preserved exactly. Maintain natural skin texture. The subject is shown with face fully visible and realistic.",
+  couple_group: "CRITICAL: Each person's facial features must remain completely unaltered from the reference image — bone structure, jawline, nose shape, eye shape and color, lip shape, skin tone, complexion, and any visible unique features (moles, scars, freckles) must be preserved exactly for EVERY individual. Each face fully visible and distinctly recognizable."
+};
+
+// ============================================================
+// DOM REFS
+// ============================================================
+const $type = document.getElementById('sel-type');
+const $category = document.getElementById('sel-category');
+const $character = document.getElementById('sel-character');
+const $sceneVariant = document.getElementById('sel-scene-variant');
+const $wardrobeVariant = document.getElementById('sel-wardrobe-variant');
+const $lightingVariant = document.getElementById('sel-lighting-variant');
+const $quality = document.getElementById('sel-quality');
+const $output = document.getElementById('prompt-output');
+const $name = document.getElementById('suggested-name');
+const $badgeType = document.getElementById('badge-type');
+const $badgeCategory = document.getElementById('badge-category');
+const $statChars = document.getElementById('stat-chars');
+const $statWords = document.getElementById('stat-words');
+const $statSections = document.getElementById('stat-sections');
+const $comboCounter = document.getElementById('combo-counter');
+
+// ============================================================
+// POPULATE QUALITY DROPDOWN
+// ============================================================
+function populateSelect(sel, options, placeholder) {
+  sel.innerHTML = `<option value="">${placeholder}</option>`;
+  options.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o.value;
+    opt.textContent = o.label;
+    sel.appendChild(opt);
+  });
+}
+
+populateSelect($quality, QUALITY_OPTIONS, '— Select quality —');
+
+// ============================================================
+// CATEGORY FILTER LOGIC
+// ============================================================
+function getValidCategoryKeys() {
+  return Object.keys(CATEGORIES).filter(k => !k.startsWith('_'));
+}
+
+function rebuildCategories() {
+  $category.innerHTML = '<option value="">— Select category —</option>';
+  getValidCategoryKeys().forEach(key => {
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = CATEGORIES[key].label;
+    $category.appendChild(opt);
+  });
+  $category.disabled = !$type.value;
+}
+
+function rebuildCharacters() {
+  const type = $type.value;
+  const catKey = $category.value;
+  const cat = catKey ? CATEGORIES[catKey] : null;
+
+  $character.innerHTML = '<option value="">— Select character —</option>';
+  if (cat && type && cat.characters[type]) {
+    cat.characters[type].forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o.value;
+      opt.textContent = o.label;
+      $character.appendChild(opt);
+    });
+  }
+  $character.disabled = !cat || !type;
+}
+
+// ============================================================
+// GET SELECTED CHARACTER OBJECT
+// ============================================================
+function getSelectedCharacter() {
+  const type = $type.value;
+  const catKey = $category.value;
+  const cat = catKey ? CATEGORIES[catKey] : null;
+  if (!cat || !type || !$character.value) return null;
+  const chars = cat.characters[type];
+  if (!chars) return null;
+  return chars.find(c => c.value === $character.value) || null;
+}
+
+// ============================================================
+// POPULATE VARIANT DROPDOWNS FROM CHARACTER
+// ============================================================
+function populateVariants() {
+  const char = getSelectedCharacter();
+
+  // Scene variant
+  $sceneVariant.innerHTML = '<option value="default">Default (preset)</option>';
+  if (char && char.alt_scenes) {
+    char.alt_scenes.forEach((alt, i) => {
+      const opt = document.createElement('option');
+      opt.value = 'alt_' + i;
+      opt.textContent = alt.label;
+      $sceneVariant.appendChild(opt);
+    });
+  }
+  $sceneVariant.value = 'default';
+  $sceneVariant.disabled = !char;
+
+  // Wardrobe variant
+  $wardrobeVariant.innerHTML = '<option value="default">Default (preset)</option>';
+  if (char && char.alt_wardrobes) {
+    char.alt_wardrobes.forEach((alt, i) => {
+      const opt = document.createElement('option');
+      opt.value = 'alt_' + i;
+      opt.textContent = alt.label;
+      $wardrobeVariant.appendChild(opt);
+    });
+  }
+  $wardrobeVariant.value = 'default';
+  $wardrobeVariant.disabled = !char;
+
+  // Lighting variant
+  $lightingVariant.innerHTML = '<option value="default">Default (preset)</option>';
+  if (char && char.alt_lightings) {
+    char.alt_lightings.forEach((alt, i) => {
+      const opt = document.createElement('option');
+      opt.value = 'alt_' + i;
+      opt.textContent = alt.label;
+      $lightingVariant.appendChild(opt);
+    });
+  }
+  $lightingVariant.value = 'default';
+  $lightingVariant.disabled = !char;
+}
+
+function resetVariants() {
+  $sceneVariant.innerHTML = '<option value="default">Default (preset)</option>';
+  $sceneVariant.disabled = true;
+  $wardrobeVariant.innerHTML = '<option value="default">Default (preset)</option>';
+  $wardrobeVariant.disabled = true;
+  $lightingVariant.innerHTML = '<option value="default">Default (preset)</option>';
+  $lightingVariant.disabled = true;
+}
+
+// ============================================================
+// EVENT LISTENERS
+// ============================================================
+$type.addEventListener('change', () => {
+  rebuildCategories();
+  rebuildCharacters();
+  resetVariants();
+  buildPrompt();
+});
+
+$category.addEventListener('change', () => {
+  rebuildCharacters();
+  resetVariants();
+  buildPrompt();
+});
+
+$character.addEventListener('change', () => {
+  populateVariants();
+  buildPrompt();
+});
+
+[$sceneVariant, $wardrobeVariant, $lightingVariant, $quality].forEach(
+  sel => sel.addEventListener('change', buildPrompt)
+);
+
+// ============================================================
+// RESOLVE VARIANT FRAG
+// ============================================================
+function resolveVariant(selectEl, defaultFrag, altArray) {
+  const val = selectEl.value;
+  if (val === 'default' || !val) return defaultFrag;
+  const idx = parseInt(val.replace('alt_', ''), 10);
+  if (altArray && altArray[idx]) return altArray[idx].frag;
+  return defaultFrag;
+}
+
+// ============================================================
+// BUILD PROMPT
+// ============================================================
+function buildPrompt() {
+  const type = $type.value;
+  const catKey = $category.value;
+  const cat = catKey ? CATEGORIES[catKey] : null;
+
+  // Update badges
+  $badgeType.textContent = type ? { male: 'Male', female: 'Female', couple_group: 'Couple/Group' }[type] : '—';
+  $badgeCategory.textContent = cat ? cat.label : '—';
+
+  if (!type) {
+    $output.innerHTML = 'Select a <span class="section-header">Type</span> to start building your prompt...';
+    $name.textContent = '—';
+    updateStats('');
+    updateCombos();
+    return;
+  }
+
+  const char = getSelectedCharacter();
+
+  if (!char) {
+    $output.innerHTML = 'Select a <span class="section-header">Character</span> to generate a coherent prompt...';
+    const catLabel = cat ? cat.label : '';
+    if (catLabel && type) {
+      const typeLabel = { male: 'Male', female: 'Female', couple_group: 'Group' }[type];
+      $name.textContent = `${catLabel} — ${typeLabel}`;
+    } else {
+      $name.textContent = '—';
+    }
+    updateStats('');
+    updateCombos();
+    return;
+  }
+
+  // Get frags from character
+  const themeFrag = char.theme_frag || '';
+  const wardrobeFrag = resolveVariant($wardrobeVariant, char.wardrobe_frag, char.alt_wardrobes);
+  const sceneFrag = resolveVariant($sceneVariant, char.scene_frag, char.alt_scenes);
+  const lightingFrag = resolveVariant($lightingVariant, char.lighting_frag, char.alt_lightings);
+
+  // Quality (universal)
+  const qualityFrag = $quality.value
+    ? (QUALITY_OPTIONS.find(o => o.value === $quality.value) || {}).frag || ''
+    : '';
+
+  // === SECTION 1: Identity Preservation ===
+  const identityText = IDENTITY[type] || IDENTITY.male;
+  const sec1 = `**Identity Preservation:** ${identityText}`;
+
+  // === SECTION 2: Theme & Action ===
+  const sec2 = themeFrag
+    ? `**Theme & Action:** ${themeFrag}`
+    : '';
+
+  // === SECTION 3: Wardrobe & Details ===
+  const sec3 = wardrobeFrag
+    ? `**Wardrobe & Details:** ${wardrobeFrag}`
+    : '';
+
+  // === SECTION 4: Scene & Atmosphere ===
+  const sec4 = sceneFrag
+    ? `**Scene & Atmosphere:** ${sceneFrag}`
+    : '';
+
+  // === SECTION 5: Lighting & Tech ===
+  const lightParts = [lightingFrag, qualityFrag].filter(Boolean);
+  const sec5 = lightParts.length
+    ? `**Lighting & Tech:** ${lightParts.join('. ')}`
+    : '';
+
+  // Assemble
+  const sections = [sec1, sec2, sec3, sec4, sec5].filter(Boolean);
+  const rawPrompt = sections.join('\n\n');
+
+  // Render with syntax highlighting
+  const html = rawPrompt
+    .replace(/\*\*(.*?)\*\*/g, '<span class="section-header">**$1**</span>')
+    .replace(/CRITICAL:/g, '<span class="critical-tag">CRITICAL:</span>');
+  $output.innerHTML = html;
+
+  // Suggested name
+  $name.textContent = char.label;
+
+  updateStats(rawPrompt);
+  updateCombos();
+}
+
+// ============================================================
+// STATS
+// ============================================================
+function updateStats(text) {
+  $statChars.textContent = text.length.toLocaleString();
+  $statWords.textContent = text ? text.split(/\s+/).length.toLocaleString() : '0';
+  const sectionCount = (text.match(/\*\*[^*]+\*\*/g) || []).length;
+  $statSections.textContent = sectionCount;
+}
+
+// ============================================================
+// COMBINATION COUNTER
+// ============================================================
+function updateCombos() {
+  const type = $type.value;
+  const catKey = $category.value;
+  const cat = catKey ? CATEGORIES[catKey] : null;
+
+  if (!cat || !type) {
+    $comboCounter.innerHTML = '';
+    return;
+  }
+
+  const chars = cat.characters[type] ? cat.characters[type].length : 0;
+  // Average variants per character: 1 default + ~2 alts = ~3 per axis
+  // Total per character: scene(3) × wardrobe(3) × lighting(3) × quality(9) = ~243
+  const quals = QUALITY_OPTIONS.length;
+  // Count actual average alternatives
+  let totalSceneOpts = 0, totalWardrobeOpts = 0, totalLightingOpts = 0;
+  if (cat.characters[type]) {
+    cat.characters[type].forEach(c => {
+      totalSceneOpts += 1 + (c.alt_scenes ? c.alt_scenes.length : 0);
+      totalWardrobeOpts += 1 + (c.alt_wardrobes ? c.alt_wardrobes.length : 0);
+      totalLightingOpts += 1 + (c.alt_lightings ? c.alt_lightings.length : 0);
+    });
+  }
+  const avgScenes = chars ? Math.round(totalSceneOpts / chars) : 1;
+  const avgWardrobes = chars ? Math.round(totalWardrobeOpts / chars) : 1;
+  const avgLightings = chars ? Math.round(totalLightingOpts / chars) : 1;
+
+  const total = chars * avgScenes * avgWardrobes * avgLightings * quals;
+
+  $comboCounter.innerHTML = total > 0
+    ? `Combinaciones unicas: <strong>${total.toLocaleString()}</strong>`
+    : '';
+}
+
+// ============================================================
+// RANDOMIZE
+// ============================================================
+function randomizeAll() {
+  // Type
+  const types = ['male', 'female', 'couple_group'];
+  $type.value = types[Math.floor(Math.random() * types.length)];
+  rebuildCategories();
+
+  // Category
+  const catKeys = getValidCategoryKeys();
+  if (catKeys.length === 0) return;
+  $category.value = catKeys[Math.floor(Math.random() * catKeys.length)];
+  $category.disabled = false;
+  rebuildCharacters();
+
+  // Character
+  randomizeSelect($character);
+
+  // Populate variants with defaults (coherent by design)
+  populateVariants();
+  // Keep variants on Default for maximum coherence
+  $sceneVariant.value = 'default';
+  $wardrobeVariant.value = 'default';
+  $lightingVariant.value = 'default';
+
+  // Quality random
+  randomizeSelect($quality);
+
+  buildPrompt();
+}
+
+function randomizeSelect(sel) {
+  const options = Array.from(sel.options).filter(o => o.value && o.value !== 'default');
+  if (options.length === 0) return;
+  sel.value = options[Math.floor(Math.random() * options.length)].value;
+}
+
+// ============================================================
+// RESET
+// ============================================================
+function resetAll() {
+  $type.value = '';
+  $category.value = '';
+  $quality.value = '';
+  rebuildCategories();
+  rebuildCharacters();
+  resetVariants();
+  buildPrompt();
+}
+
+// ============================================================
+// COPY HELPERS
+// ============================================================
+function getCleanText() {
+  return $output.innerText || $output.textContent || '';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg || 'Copied!';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function copyPrompt() {
+  navigator.clipboard.writeText(getCleanText()).then(() => showToast('Prompt copied!'));
+}
+
+function copyName() {
+  const name = $name.textContent;
+  if (name && name !== '—') {
+    navigator.clipboard.writeText(name).then(() => showToast('Name copied!'));
+  }
+}
+
+function copyAll() {
+  const name = $name.textContent;
+  const prompt = getCleanText();
+  const combined = `Name: ${name}\n\n${prompt}`;
+  navigator.clipboard.writeText(combined).then(() => showToast('Name + Prompt copied!'));
+}
+
+// ============================================================
+// INIT
+// ============================================================
+rebuildCategories();
+rebuildCharacters();
+resetVariants();
+buildPrompt();
+</script>
+
+</body>
+</html>

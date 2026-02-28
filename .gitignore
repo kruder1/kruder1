@@ -1,0 +1,41 @@
+# Secrets & API keys
+Docs/sensitive/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.log
+venv/
+.venv/
+
+# PyInstaller build artifacts
+Software/build/
+Software/dist/
+Software/*.spec
+
+# Inno Setup output
+Software/Output/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Stress test logs
+stress tests/*.txt
+stress tests/*.log
+Docs/stress tests/*.txt
+Docs/stress tests/*.log
+
+# Session plan file
+enumerated-riding-taco.md
+
+# Claude Code
+.claude/

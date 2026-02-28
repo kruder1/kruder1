@@ -1,0 +1,771 @@
+{
+  "categories": [
+    {
+      "id": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Couples Intimate",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:47:58.706306+00:00"
+    },
+    {
+      "id": "fb21d65e-0834-4f2e-b0f5-d9c7a8abedc5",
+      "name": "Sci-fi",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:49:09.696307+00:00"
+    },
+    {
+      "id": "79faa172-1e96-47c6-b273-63a586f8dcd5",
+      "name": "3D Animation and Toon",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:46:50.552739+00:00"
+    },
+    {
+      "id": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "High End Photography",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:45:20.588035+00:00"
+    },
+    {
+      "id": "d1b16388-90d5-4391-a4ab-fdc24acd4645",
+      "name": "Superheroes",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:45:55.339114+00:00"
+    },
+    {
+      "id": "3c8b18da-c810-4abb-826a-163ca89949a8",
+      "name": "Vintage 50s Americana",
+      "enabled": true,
+      "createdAt": "2026-02-07T04:00:00.000000+00:00"
+    },
+    {
+      "id": "90d739e2-ead6-4fdf-8565-2360d7a74aa3",
+      "name": "Gothic - Horror",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:53:22.242297+00:00"
+    },
+    {
+      "id": "26a258aa-e9da-4582-b146-6a4e6b77edc2",
+      "name": "Fantasy",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:47:13.320912+00:00"
+    },
+    {
+      "id": "5e2a3b71-f44a-4d72-84f3-c9b44ff3502d",
+      "name": "Video Games",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:48:39.458791+00:00"
+    },
+    {
+      "id": "803c5325-7427-4fa2-8a39-0878c61cb654",
+      "name": "Elite Sports & High Action",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:57:35.804789+00:00"
+    },
+    {
+      "id": "750e9105-7c54-4948-98a8-5b1922aaa0f3",
+      "name": "Fine Art & Abstract Concepts",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:53:10.225211+00:00"
+    },
+    {
+      "id": "c5afb75a-7fae-4158-8cf9-ef69587bed94",
+      "name": "Cinema and Tv",
+      "enabled": true,
+      "createdAt": "2026-02-07T03:47:00.372839+00:00"
+    }
+  ],
+  "prompts": [
+    {
+      "id": "5414160a-0687-49b0-aa55-0a6461bdddc5",
+      "categoryId": "79faa172-1e96-47c6-b273-63a586f8dcd5",
+      "name": "Collectible Figure",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a premium collectible character figure (1/6 scale), rendered with smooth PVC and hand-painted resin textures, mimicking high-quality merchandise or an art toy.\n\nIdentity Preservation: The face retains absolute identity fidelity but is stylized as a realistic toy sculpture with painted skin tones and sculpted hair details.\n\nWardrobe & Props (Art Directed): Replace original clothing materials. The clothing is rendered to look like sculpted plastic with shaded folds and matte finishes. The figure stands firmly on a round plastic display base.\n\nScene & Context: The setting is a 3D artist's indoor workspace. Immediately behind the figure stands its packaging box featuring the character's printed image. Further in the background, a computer monitor displays the Blender 3D software interface, showing the wireframe mesh process of the model.\n\nLighting & Tech: Macro photography aesthetic. Soft, focused desk lighting highlights the plastic sheen of the figure. Shallow depth of field blurs the monitor slightly to keep focus on the toy. Ultra-sharp details, 8k resolution, tilt-shift effect.",
+      "image": "6348d88e222c.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:36:06.765239+00:00"
+    },
+    {
+      "id": "a67490b2-17f8-4a8f-a6c3-8236690ceead",
+      "categoryId": "79faa172-1e96-47c6-b273-63a586f8dcd5",
+      "name": "3D Toon Avatar",
+      "text": "Transformation & Style: The person from the reference image is completely transformed into a high-end 3D Pixar-style caricature. The body must be rendered in a full-body shot with exaggerated proportions: a slightly larger head and a smaller, stylized body to create a playful, charming aesthetic.\n\nIdentity Preservation: The face must remain recognizable and retain the subject's identity, but adapted to the smooth, subsurface-scattering skin texture of a 3D animated movie. Preserve eye color and hair style.\n\nWardrobe (Art Directed): Do not use the original clothes. Dress the subject in vibrant, stylized modern streetwear: think oversized hoodies, colorful layered shirts, and chunky cartoon sneakers. The clothing should look comfortable, fun, and high-fashion cartoon style.\n\nScene: Replace the original background completely. Place the character in a pristine, bright studio cyclorama with soft, colorful gradient lighting (purple and teal rim lights).\n\nTech Specs: 8k resolution, cinematic lighting, octane render, vivid colors, expressive pose looking at the camera.",
+      "image": "69c06d8d8e1f.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T04:35:00.629164+00:00"
+    },
+    {
+      "id": "6a8bf38b-a3ab-4b08-b4b7-3e24fac91e9b",
+      "categoryId": "79faa172-1e96-47c6-b273-63a586f8dcd5",
+      "name": "Toy Squad",
+      "text": "Transformation & Theme: The person from the reference image is transported into a vibrant \"Living Toys\" animated movie world. The aesthetic is colorful, nostalgic, and full of joy.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity. The subject is taking a cheerful selfie (arm extended towards the camera).\n\nWardrobe (Art Directed): Replace original clothing completely. Dress the subject in a casual, colorful outfit that fits the animated aesthetic (e.g., a simple bright t-shirt or flannel).\n\nScene & Characters: The scene takes place in a bedroom with iconic blue sky and cloud wallpaper. The subject is surrounded by living toy characters posing playfully for the selfie: a vintage cowboy doll, a futuristic space ranger action figure, a cowgirl doll, and a green dinosaur toy.\n\nLighting & Tech: Warm natural daylight streaming through the window. 3D animation style rendering mixed with photorealism (Pixar-esque style). Wide-angle lens effect (selfie perspective), vivid colors, high energy.",
+      "image": "81774e896a0e.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:41:17.996451+00:00"
+    },
+    {
+      "id": "0410c5f0-46f1-43bb-b258-5952b50397a1",
+      "categoryId": "79faa172-1e96-47c6-b273-63a586f8dcd5",
+      "name": "Night Market Caricature",
+      "text": "Identity Preservation & Gaze: CRITICAL: The subject's facial features, bone structure, and hair color/texture must remain 100% identical to the reference image. The subject is sitting with confidence and maintains intense, natural eye contact with the camera, flashing a beautiful smile.\n\nComposition & Subject: A full-body ultra-realistic photograph. In the immediate foreground, the back and shoulders of an artist are visible as they lean forward, drawing. The main subject sits on a black folding chair at a traditional Mexican night market.\n\nThe Caricature: On an easel beside the woman, a vibrant 2D caricature is clearly visible. It features exaggerated facial features and body proportions, strictly emulating the Sp\u00fcmc\u00f8 / John Kricfalusi animation style.\n\nWardrobe & Environment: The subject wears a tight cropped t-shirt, relaxed dark jeans, and casual sneakers. The background is a bustling night market filled with vibrant neon signs, traditional lanterns, and food stalls. Intense neon colors from the signs reflect off the subject's skin and clothing.\n\nTechnical Details: 8K resolution, cinematic realism. Shot with a 70mm lens at f/2.8, ISO 200. High dynamic range (HDR) with rich textures in fabric and skin. Eye-level shot with a shallow depth of field, keeping the subject and the caricature sharp while the market background has a soft, colorful bokeh.",
+      "image": "a397a57cec1f.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:42:47.563897+00:00"
+    },
+    {
+      "id": "a5b65aa9-f797-4ded-bfb2-05b7146d74ea",
+      "categoryId": "fb21d65e-0834-4f2e-b0f5-d9c7a8abedc5",
+      "name": "Fiery Techwear Hero",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features must remain 100% identical to the reference image. The subject maintains intense, piercing eye contact visible through the futuristic reflective sunglasses.\n\nComposition & Pose: A powerful low-angle hero portrait. The subject stands in an imposing and dominant stance, looking slightly down toward the camera.\n\nWardrobe & Styling: The subject wears a structured, dark techwear high-collar jacket with technical textures and a modern, sleek silhouette.\n\nLighting & Background: A dramatic fiery orange back-halo glows directly behind the subject's head, creating a sharp rim-light effect. The background is a smooth cinematic gradient transitioning from deep red to vibrant orange.\n\nTechnical Details: Ultra-realistic 8K resolution. High-contrast shadows and premium poster-style lighting. Captured as if shot with a Sony A7R IV and an 85mm f/1.4 lens, ensuring a very shallow depth of field with a sharp focus on the face and reflections in the sunglasses.",
+      "image": "71cbbdb70195.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:25:47.621737+00:00"
+    },
+    {
+      "id": "5dcd9882-a0db-49b6-abb1-7143b542f9f8",
+      "categoryId": "fb21d65e-0834-4f2e-b0f5-d9c7a8abedc5",
+      "name": "Black Ops Armor",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a futuristic, ultra-armored High-Tech Special Ops Warrior. The aesthetic is a hybrid of \"deadly ninja\" and \"heavy soldier\"\u2014dark, menacing, and elite.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity to the reference. The expression is intense, focused, and ready for combat.\n\nWardrobe (Art Directed): Replace original clothing completely. Dress the subject in a sleek, matte black armored suit with intricate chest plating and a sculpted abdominal design that mimics musculature and high-tech biomechanical patterns. Shoulders are heavily armored with angular plating; forearms feature gauntlets with rows of tactical metal spikes. Twin katanas are mounted in scabbards on the back, crossing over one another.\n\nProps & Action: The subject stands powerfully holding a heavy, sophisticated super-tech weapon with both hands. The kit includes heavy-duty tactical belts, pouches, and ammo cases.\n\nScene & Atmosphere: Posed against a dark, gritty, metallic urban wall with industrial panels and corrugated steel textures. The atmosphere feels like a secret vigilante operation.\n\nLighting & Tech: Dramatic cinematic lighting\u2014cool-toned with soft highlights on the armor\u2019s edges to emphasize shape and structure. Ultra-realistic, 8K detail, dark superhero style, editorial-grade photography.",
+      "image": "1e2dfe831621.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:26:45.963546+00:00"
+    },
+    {
+      "id": "4125765b-66e0-4d4c-a1c0-83aba8fab943",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Red Hood",
+      "text": "A striking half-body portrait of the person from the reference image with a bold, enigmatic presence in a powerful red, black and grayscale palette. They look upward and slightly to their left with a confident, intense expression. They wear modern rectangular sunglasses with dark frames and highly reflective bright red lenses that stand out against the grayscale face. They are wrapped in a large, rich red hooded garment or cloak draping over the shoulders and framing the face\u2014soft texture like velvet or thick fabric; red drawstrings visible at the chest. Beneath it, a dark grayscale shirt with intricate damask or paisley pattern. The image is dominated by deep red tones in the background and outer garment, creating drama, passion and power. Face and patterned shirt in grayscale so the red elements pop. Background: gradient from deep black to bright intense red. Overall: graphic, modern, high-contrast; intense, mysterious, stylish. Half-body from chest up, sharp focus on face and upper body. Facial identity from the reference image must be preserved exactly.",
+      "image": "3be098e240ae.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-05T22:05:35.880065+00:00"
+    },
+    {
+      "id": "92d12b91-3ade-415b-afa0-e9aa50ed92ef",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "L.A. Baddie",
+      "text": "Transformation & Vibe: The person from the reference image is transformed into a high-fashion \"baddie\" aesthetic influencer. The styling features a stylized hourglass figure with accentuated curves, posing with confident, high energy.\n\nIdentity Preservation: The face must remain fully recognizable, looking directly at the viewer with a \"dignified Instagram\" expression.\n\nWardrobe (Art Directed): Replace original clothing completely. The subject is wearing a daring, open navy blue varsity jacket with white leather sleeves and generic gold decorative trim (no text or logos). Beneath the jacket, style with a navy blue strappy micro-bottom and matching high heels. Accessorize with oversized cat-eye sunglasses and a high ponytail with soft waves.\n\nScene & Props: She is standing and leaning casually against a luxury car, holding a generic red-and-white soda cup with a straw. The car windows reflect palm trees, establishing a sunny Los Angeles vibe.\n\nLighting & Tech: Soft glamour lighting, sunny daytime atmosphere, 35mm lens, vertical 9:16 aspect ratio. Full-body shot. Glossy, vibrant, and commercial.",
+      "image": "755f1351a99f.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:03:17.551675+00:00"
+    },
+    {
+      "id": "781ce083-7d20-407e-9c37-8fa65f5c4fcc",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Red Studio",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a High-Fashion Icon starring in a dramatic, monochromatic editorial. The aesthetic is bold, glamorous, and intensely red.\n\nIdentity Preservation & Pose: The subject's face must remain fully recognizable with absolute fidelity. The pose is dynamic and specific: standing with the right leg lifted and knee bent, right hand on the waist, and the left hand playfully pulling a strand of long hair over the shoulder.\n\nWardrobe & Accessories (Art Directed): Replace original clothing completely. Dress the subject in a show-stopping vibrant red strapless mini-corset dress, featuring elaborate rose fabric ruffles concentrated on the hips and bodice. Accessories are key: stylish black-frame sunglasses, a delicate diamond choker, a small butterfly tattoo on the right arm, and towering high platform sandals adorned with gold studs and sparkling rhinestones.\n\nScene & Atmosphere: The background is a completely solid, intense scarlet red studio wall, creating high contrast against the skin. The subject stands on a sleek surface with subtle reflections beneath the feet.\n\nLighting & Tech: Bright, high-contrast studio spotlighting designed to sculpt the figure and make the red fabric pop. Ultra-detailed textures, sharp focus, glamorous editorial finish.",
+      "image": "a4ad2028dde4.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:44:27.905575+00:00"
+    },
+    {
+      "id": "b8a6cf69-8e47-42bc-8bbe-99b439e9110c",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Midnight G-Wagon Date",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and specific messy hairstyle must remain completely unaltered from the reference image.\n\nSubject & Attire: A stylish man standing confidently. He is wearing a tailored fitted black suit, a crisp black button-up shirt, and black trousers. Accessories include a luxury wristwatch visible on the wrist and dark designer sunglasses.\n\nAction & Prop: He is holding a large, elegant bouquet of pastel pink tulips and white daisies, wrapped in rustic brown paper and tied with a white ribbon.\n\nSetting & Atmosphere: A modern city parking lot at night. He stands beside a sleek, polished black Mercedes-Benz G-Wagon SUV. The ground is asphalt, reflecting urban lights.\n\nTechnical Details: 8K Hyper-realistic cinematic portrait. Dramatic nighttime city lighting (neon signs, streetlamps) creating deep shadows and highlights. Film grain, shallow depth of field focusing on the subject.",
+      "image": "648bbc728561.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:19:46.008519+00:00"
+    },
+    {
+      "id": "d114b21d-fe4b-4dde-bb06-9e4df80a5c7e",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Kashmir Winter Luxury",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and hair must remain completely unaltered from the reference image, visible beneath the sunglasses.\n\nComposition & Pose: A full-body cinematic portrait. The subject is seated gracefully on a large, snow-covered rock (or rustic bench). One leg is slightly bent, hands rest naturally, conveying a confident yet relaxed posture. He holds a latest model iPhone (Pro Max style) in one hand.\n\nWardrobe & Accessories (Specific): Dressed in premium winter fashion: a high-quality fur-lined puffer jacket, a maroon t-shirt underneath, baggy denim jeans, and rugged leather trekking boots. Accessories include green circular sunglasses and a modern round smart touch watch.\n\nSetting & Atmosphere: Set against the majestic, snow-laden mountain landscapes of Jammu & Kashmir, featuring towering peaks and pine forests under a soft winter sky. Snowflakes fall gently throughout the scene.\n\nTechnical Details: Ultra-realistic 8K resolution. Cinematic film photography style, natural cold daylight, highlighting textures of fur, snow, and leather.",
+      "image": "75ba538e3178.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:26:45.166021+00:00"
+    },
+    {
+      "id": "00caa5fa-fd37-4409-a120-df120c247651",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "The Midnight Executive",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and relaxed yet focused expression must remain completely unaltered from the reference image.\n\nTheme & Action: A high-end editorial photograph of the subject in an ultra-modern high-rise office at night. The subject is leaning back in an ergonomic leather chair with feet propped up on a highly polished mahogany desk, spinning a premium pen absentmindedly while maintaining an intense, alluring gaze directly at the camera. One patent leather high-heel shoe dangles precariously from her toes.\n\nWardrobe & Details: The subject wears a \"Luxurious Office Siren\" attire: a fitted charcoal pinstripe pencil skirt emphasizing an hourglass silhouette, paired with a high-quality sheer black silk turtleneck. Details include the silk sheen texture and the crisp tailoring of the skirt.\n\nScene & Atmosphere: A corner office suite with immense floor-to-ceiling windows overlooking an electrified city skyline. The mahogany desk acts as a mirror, reflecting the gold and blue light. The atmosphere is that of a powerful \"master of the universe\" in a high-stakes, nocturnal environment.\n\nLighting & Tech: Dramatic cinematic contrast featuring a stunning clash of temperatures: a warm golden pool of light from a vintage brass desk lamp illuminates the subject, set against the intense electric cyan, magenta, and deep sapphire glow of the city's neon bokeh. Hasselblad medium format look, 50mm lens at f/1.4, ultra-sharp focus on the face and pen with creamy depth of field. 8K resolution, photorealistic, rich jewel tones.",
+      "image": "517f4708e4a5.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:48:21.581388+00:00"
+    },
+    {
+      "id": "ac9e67fa-0b29-4633-8698-c77d030e15cc",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Parisian Morning Stroll",
+      "text": "Identity Preservation: CRITICAL: The subject's face and identity must remain unaltered from the provided reference.\n\nTheme & Action: A stylish full-body shot of the subject walking confidently with a takeaway coffee cup. Several pigeons fly in the foreground and background, adding dynamic movement.\n\nWardrobe & Details: The subject wears a tailored black overcoat, an open-collar dress shirt, dark trousers, dark round-frame sunglasses, and formal shoes. A classic wristwatch is visible.\n\nScene & Atmosphere: Located in front of the Eiffel Tower, Paris. An urban, elegant lifestyle atmosphere.\n\nLighting & Tech: Early morning golden hour lighting casting long shadows. Cinematic mood, 8K DSLR quality, sharp focus on the subject.",
+      "image": "cc6901d8681a.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T00:51:58.306667+00:00"
+    },
+    {
+      "id": "8fc69453-2a74-4ec9-af63-3d721fcb576c",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "The Monochrome Study",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features, bone structure, and dark wavy hair must remain 100% identical and unaltered from the reference image. Maintain the original anatomy dictated by the reference without adding external physical descriptors.\n\nComposition: A cinematic four-panel black and white photo collage. Each panel features the subject in a different artistic pose, including expressive facial profiles in close-up and a casual seated position. The subject maintains intense and direct eye contact with the camera.\n\nEnvironment & Wardrobe: Minimalist white or light-colored background to ensure maximum focus on the subject. The attire is modern and clean, maintaining a consistent aesthetic across all panels.\n\nLighting & Tech: High-contrast black and white photography. Dramatic lighting emphasizing deep shadows and sharp contours to enhance a raw, intense mood. Professional DSLR quality, 8K resolution, capturing realistic skin textures and fine hair detail.",
+      "image": "fae056f18a76.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:04:44.884302+00:00"
+    },
+    {
+      "id": "3af80391-97ca-47c8-8ffd-3b03b39b2bba",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "The Golden Tycoon",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features, bone structure, and proud expression must remain 100% identical to the reference image. No anatomical or age alterations.\n\nTheme & Action: A highly stylized cinematic movie-poster portrait of the subject. The subject is depicted in a three-quarter chest-up view with a confident posture: chin slightly raised and a strong, visible jawline.\n\nWardrobe & Details: The subject wears a dark tailored suit, a white dress shirt, and a silk tie with warm golden yellow stripes. He is wearing black rectangular sunglasses with amber-tinted lenses.\n\nScene & Style: The composition is a centered vertical poster with significant negative space. Scattered US-dollar bills, rendered as illustrated cut-paper money, fall in mid-air around the subject, with some overlapping the suit. The aesthetic is a limited palette: mostly desaturated grayscale for the skin, suit, and background, with strong graphic brush and engraving strokes.\n\nLighting & Tech: Intense eye contact behind the lenses (directed at the camera). Dramatic studio key light from the upper-left, creating deep, soft shadows. High-quality textures, 8K resolution, and professional cinematic finish without watermarks or logos.",
+      "image": "20f4bb9a5011.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:05:59.433320+00:00"
+    },
+    {
+      "id": "64fdf574-19fa-4e96-b561-71e38434d626",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "The Tiger's Guardian",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and bone structure must remain 100% identical to the reference image. No anatomical alterations or age modifications.\n\nTheme & Action: A tender and intimate portrait depicting a deep bond between the subject and a white tiger. The subject has his arms gently wrapped around the tiger, pressing his face close to the tiger's head in a gesture of affection. The white tiger has its eyes closed, appearing calm and resting its head against him.\n\nWardrobe & Details: The subject wears a simple black long-sleeve shirt. The white tiger features distinctive light fur with dark brown stripes and realistic fur texture.\n\nScene & Atmosphere: An outdoor natural habitat or sanctuary setting. The background consists of soft, blurred green and brown tones to maintain focus on the subjects.\n\nLighting & Tech: Warm, natural sunlight highlighting the textures of the tiger's fur and the subject's skin. 8K resolution, DSLR quality, realistic skin pores and textures. Direct eye contact with the camera is required for the subject to establish a connection with the viewer, despite the intimate pose.",
+      "image": "f1f6a2b72ec7.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:07:09.754716+00:00"
+    },
+    {
+      "id": "32605d5d-d23f-48d4-a80b-e8a787854f31",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "The Playful Outlaw",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and bone structure must remain 100% identical to the reference image. No glasses. The subject's physical build must strictly follow the original reference photo without adding unrequested muscularity or artificial proportions.\n\nTheme & Action: A criminal-style mugshot (prison photography) pose. The subject is looking directly at the camera with an intense eye contact, winking one eye and sticking out his tongue with a playful, arrogant \"songong\" expression. He is holding a vintage criminal ID board with a random four-digit identification number. One hand is visible in the frame making a defiant gesture.\n\nWardrobe & Details: The subject is shirtless, wearing classic blue jeans. The skin texture must be realistic, showing natural pores and subtle imperfections. The ID board should look authentic and weathered.\n\nScene & Atmosphere: A stark, dramatic prison intake background. The image features a vintage, old-photo feel with a slight grain and a subtle colorful filter effect. No watermarks, AI logos, or stock photo elements.\n\nLighting & Tech: Stable, dramatic cinematic lighting with high contrast shadows. Professional DSLR quality, 8k resolution, focused on the subject's direct gaze and expression.",
+      "image": "215afa5b4170.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:10:28.783660+00:00"
+    },
+    {
+      "id": "98342a54-07c5-4ddd-b065-ccad8862c308",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Streetwise Defender",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and bone structure must remain 100% identical to the reference image. No anatomical modifications or age adjustments are permitted.\n\nTheme & Action: A hyper-realistic low-angle closeup front shot of the subject leaning against a Land Rover Defender. The subject is positioned with hands crossed, maintaining an intense attitude gaze with direct eye contact toward the camera.\n\nWardrobe & Details: The subject is styled in urban streetwear, featuring an oversized Nike windbreaker, baggy basketball pants, and a basketball cap. On his feet are chunky Adidas sneakers. The clothing textures show realistic fabric folds and synthetic materials.\n\nScene & Atmosphere: Set in a dim, moody basement garage. The primary vehicle is a Land Rover Defender, while other luxury SUVs are visible in the background, softly blurred to create a sophisticated cinematic bokeh and strong subject separation.\n\nLighting & Tech: Low-angle composition with a shallow depth of field. The lighting is moody and atmospheric, typical of a sub-level garage, with professional cinematic color grading. 8K resolution, ultra-realistic skin textures including pores and natural imperfections, captured with a high-end DSLR aesthetic.",
+      "image": "ccefd9931455.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:27:09.704294+00:00"
+    },
+    {
+      "id": "54591c8b-b933-48a8-a4a0-58b0bed5e2b5",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Midnight poolside leisure",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and bone structure must remain 100% identical to the reference image. No anatomical modifications or age descriptors are permitted; the original anatomy and facial characteristics are dictated solely by the reference.\n\nTheme & Action: A stylish, hyper-realistic night shot of the subject lounging by a luxury poolside. The subject reclines on a sunbed in a relaxed, confident pose, looking directly at the camera with intense eye contact. A cigarette is held between his lips, releasing a gentle, wispy trail of smoke into the air.\n\nWardrobe & Details: The subject wears a half-open white linen shirt and dark tailored trousers. Accessories include a necklace and bracelets that catch the ambient light. His tousled hair has a slight glisten, suggesting a humid or poolside atmosphere.\n\nScene & Atmosphere: Set at night by a high-end swimming pool. On a side table, bottles of Red Bull and a glass filled with amber liquid and ice cubes reflect the surrounding pool lights. The background shows the shimmering water and luxury poolside architecture under a dark sky.\n\nLighting & Tech: Cinematic low-light photography. Soft ambient lighting creates highlights on the jewelry and liquid textures. Shallow depth of field with sharp focus on the subject and subtle bokeh in the background. 8K resolution, DSLR quality, showcasing realistic skin textures, pores, and atmospheric volumetric smoke.",
+      "image": "9897fb30de0a.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:28:20.742676+00:00"
+    },
+    {
+      "id": "f10ae24e-ba80-443c-98c1-02899cf597c8",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Azure Breeze on Deck",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features, bone structure, and long dark wavy hair must remain 100% identical to the reference image. The anatomy and physical frame are strictly dictated by the original photo; do not add external descriptors.\n\nTheme & Action: An ultra-realistic 8K shot of the subject standing on a white boat deck. She is smiling warmly with direct eye contact to the camera. Her pose is confident and stylish, with one arm raised holding an orange shirt that billows in the wind.\n\nWardrobe & Details: The subject wears a light-blue bralette bikini top with subtle embellishments and dark-patterned high-cut bottoms. Sunglasses are perched atop her head. Any minimal tattoos from the reference image are preserved. Her dark wavy hair is slightly windblown.\n\nScene & Atmosphere: Set on a bright, sunlit white luxury boat deck. The background features the vast, deep blue ocean meeting a clear sky, creating a vibrant and high-end nautical atmosphere.\n\nLighting & Tech: Bright, natural midday sunlight. The orange shirt creates a vibrant color contrast against the blue sea and white deck. 8K resolution, professional DSLR quality, capturing hyper-detailed skin textures, including pores and natural imperfections. Sharp focus on the subject with a clean, cinematic composition.",
+      "image": "605dac57c5de.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:34:43.428301+00:00"
+    },
+    {
+      "id": "20e7c714-7d6f-4c0d-8f4e-d08193d00e68",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Caf\u00e9 Sophisticate",
+      "text": "**Identity Preservation:** CRITICAL: The subject's facial features and hairstyle must remain completely unaltered from the reference image.\n\n**Theme & Action:** The subject sits stylishly in a modern chair with one leg crossed, in a relaxed and confident pose. One hand rests on the table, the other on the armrest. Direct, intense eye contact with the camera.\n\n**Wardrobe & Details:** Black sunglasses, white shirt, black formal trousers, black patent loafers. A modern table with designer cutlery in the foreground.\n\n**Scene & Atmosphere:** Outdoor cafe setting with geometric elements in the background.\n\n**Lighting & Tech:** Ultra-realistic 4K resolution, DSLR quality, professional photograph with natural lighting, sharp focus on the subject, creamy bokeh on the background.",
+      "image": "85ef8b9d2501.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:38:31.858148+00:00"
+    },
+    {
+      "id": "1cf9b2b1-cafa-4d32-b9e7-d6620a68f363",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Ocean Stance",
+      "text": "**Identity Preservation:** CRITICAL: The subject's face and hairstyle must exactly match the uploaded reference image, hair perfectly styled and set.\n\n**Theme & Action:** The subject stands in the ocean, facing the camera with direct eye contact. Stylish, confident pose. Wearing white shirt, white pants, white jute footwear, and sunglasses.\n\n**Scene & Atmosphere:** Ocean setting, standing in the water, cinematic atmosphere.\n\n**Lighting & Tech:** Ultra-realistic 8K cinematic full-body portrait, DSLR quality, professional photograph with natural lighting, sharp focus on the subject, shallow depth of field.",
+      "image": "9f8990f713b6.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:42:22.340526+00:00"
+    },
+    {
+      "id": "78059f41-5d62-415a-abb7-7e1ab0d95457",
+      "categoryId": "ca224ba1-3a04-4e57-9ab4-efdfaaf1790d",
+      "name": "Lion's Domain",
+      "text": "**Identity Preservation:** CRITICAL: The subject's facial features must remain completely unaltered from the reference image.\n\n**Theme & Action:** The subject sits confidently on an elegant red velvet sofa beside a majestic lion in a luxurious, classic room. One hand rests calmly on the lion. Direct, intense eye contact with the camera.\n\n**Wardrobe & Details:** Dark pinstripe suit, black shirt, sunglasses. Power and sophistication.\n\n**Scene & Atmosphere:** Luxurious classic room adorned with vintage portraits. Warm lighting creating a rich, cinematic atmosphere.\n\n**Lighting & Tech:** Cinematic lighting, 8K resolution, ultra-realistic, professional photograph with dramatic low-key ambience, DSLR quality.",
+      "image": "7f96cc375f6b.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:43:29.736544+00:00"
+    },
+    {
+      "id": "89968ed8-010b-415a-9b01-0f15a177aca0",
+      "categoryId": "803c5325-7427-4fa2-8a39-0878c61cb654",
+      "name": "Urban Rider",
+      "text": "Identity Preservation & Expression: CRITICAL: The subject's facial features, hairstyle, and natural skin tone must remain completely unaltered from the reference image. The expression is confident, calm, and bold.\n\nTheme & Action: A hyperrealistic close-up portrait of the subject sitting on a sleek, stylish black high-performance sport motorcycle (Hayabusa style). He is leaning slightly forward with one hand on the handlebar.\n\nWardrobe & Accessories: Wearing a black and red jacket with a prominent white fur collar, sunglasses, and black luxurious jeans. Accessories include a bracelet and a wristwatch.\n\nScene & Atmosphere: A blurred bustling Indian metropolitan city street bathed in warm sunlight. The background features cinematic bokeh and motion depth, giving a sense of movement.\n\nTechnical Details: 8K hyperrealistic resolution. Low-angle front close-up shot, slightly tilted, focusing on the face and upper body with the motorcycle handle in the frame. DSLR depth of field, cinematic lighting, rich fabric textures, and realistic reflections on the bike's bodywork.",
+      "image": "97a26dc43312.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:14:35.553188+00:00"
+    },
+    {
+      "id": "d0da254f-8829-470b-94e7-13e365686d4d",
+      "categoryId": "803c5325-7427-4fa2-8a39-0878c61cb654",
+      "name": "Flexing with the GOAT",
+      "text": "Identity Preservation & Action: CRITICAL: The subject's facial features and hairstyle must remain completely unaltered from the reference image. The subject is taking a full-body mirror selfie in a gym, holding a smartphone. The atmosphere is relaxed but confident.\n\nWardrobe & Specifics: The subject wears a black fitness T-shirt with a visible white Under Armour logo on the chest and a black Apple Watch on the left wrist. With the left hand, the subject lifts the hem of the shirt to reveal their chest and midsection (abs).\n\nCelebrity Guest: Standing immediately beside the subject is Cristiano Ronaldo. He is also lifting his shirt to reveal his famous stomach muscles and is pointing enthusiastically at his own abs with both hands, smiling at the mirror.\n\nSetting & Atmosphere: A well-equipped, modern gym. The mirror reflects gym equipment (racks, weights, machines) and bright, functional gym lighting. The shot is candid and authentic to a social media mirror photo.",
+      "image": "1650bbfbd11e.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:17:29.264388+00:00"
+    },
+    {
+      "id": "2e06d5b5-8dc4-46d8-9138-1d15ca0bc6d9",
+      "categoryId": "803c5325-7427-4fa2-8a39-0878c61cb654",
+      "name": "Sunset H2R Rider",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features must remain 100% identical to the reference image beneath the sunglasses. The subject has a modern voluminous hairstyle and a confident expression.\n\nAction & Motion: An ultra-realistic full-body photo of the subject actively riding a customized Kawasaki Ninja H2R motorcycle. The bike is in motion, slightly tilted forward, with heavy motion blur on the urban background and wheels, and dust motion trails kicking up to emphasize high speed and energy.\n\nWardrobe: The subject wears a stylish white designer jacket with black details, black cargo pants, white high-top sneakers, and black sunglasses.\n\nVehicle & Props: The Kawasaki Ninja H2R features glossy, reflective metallic green and golden accents. A matching green-golden helmet rests securely on the tank area. The subject's left hand is on the handle, and the right hand is placed on the helmet.\n\nSetting & Atmosphere: Outdoors on an open urban road during a dramatic golden sunset. The lighting is warm and cinematic, creating a powerful feel.",
+      "image": "25e7f2aba5bb.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:22:50.634543+00:00"
+    },
+    {
+      "id": "4c110ee5-0ca9-42e9-aa84-7015bb87e751",
+      "categoryId": "803c5325-7427-4fa2-8a39-0878c61cb654",
+      "name": "S1000RR Stance",
+      "text": "**Identity Preservation:** CRITICAL: The subject's facial features and hairstyle must remain exactly as in the reference image.\n\n**Theme & Action:** The subject stands beside a black BMW S1000RR superbike, one hand resting naturally on the fuel tank. Cool, confident expression. Direct, intense eye contact with the camera. Stylish sunglasses.\n\n**Wardrobe & Details:** Black outfit: black denim jacket, black fitted jeans, sneakers. Clean, modern, stylish aesthetic.\n\n**Scene & Atmosphere:** The superbike as key prop. Editorial, cinematic atmosphere.\n\n**Lighting & Tech:** Hyperrealistic cinematic portrait, 8K resolution, DSLR quality, professional photograph with sharp focus on the subject, shallow depth of field on background.",
+      "image": "2f596372ff70.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T02:11:15.553983+00:00"
+    },
+    {
+      "id": "d68b0783-83ad-4278-94d8-88b400f8ffa7",
+      "categoryId": "803c5325-7427-4fa2-8a39-0878c61cb654",
+      "name": "Wave Rider",
+      "text": "**Identity Preservation:** CRITICAL: The subject's facial features must remain completely unaltered from the reference image.\n\n**Theme & Action:** A hyper-realistic high-dynamic-range photo of the subject as a surfer riding inside a curling turquoise wave in perfect mid-motion. The subject is shirtless, windswept wet hair, intense eye contact with the camera, leaning dynamically on a sleek white surfboard, slicing through the water. Sunlight reflects sharply off the wave\u2019s crest, illuminating droplets and spray frozen in time. Up-close perspective is up-close and immersive, with bold textures on both the water surface and the surfer\u2019s body glistening under the midday sun. The ocean background fades into a soft gradient of open sky. **Scene & Atmosphere:** Ocean, wave, surf. Power, natural harmony, adrenaline. Action sports photography, tropical surf culture.\n\n**Lighting & Tech:** 200mm lens, fast shutter, low ISO, f/4, 8K resolution, hyper-realistic, professional photograph with cinematic lighting",
+      "image": "0f9acce9510c.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T02:39:32.020157+00:00"
+    },
+    {
+      "id": "34d8680c-aefc-492b-8383-7e42a358607d",
+      "categoryId": "d1b16388-90d5-4391-a4ab-fdc24acd4645",
+      "name": "Spidey Rooftop",
+      "text": "Transformation & Theme: The person from the reference image is transformed into an iconic Web-Slinging Superhero, crouched heroically on the edge of a building. The scene depicts the quiet moment after battle, conveying scale and wonder.\n\nIdentity Preservation: The subject's face is fully visible and unmasked, preserved exactly as it is with complete fidelity. The expression is gazing upward, heroic and reflective.\n\nWardrobe & Props (Art Directed): Replace original clothing completely. Dress the subject in a high-tech, textured red and blue superhero suit with a web pattern. Crucial detail: The subject is holding the superhero mask in one hand, resting it on their knee or letting it hang, emphasizing the human behind the hero.\n\nScene & Atmosphere: Nighttime rooftop setting with heavy rain falling dramatically. The background shows a glowing city skyline with neon bokeh (deep blues, intense reds, vivid neon yellows).\n\nLighting & Tech: Cinematic cool key light (5600K) highlighting the raindrops on the skin and the wet texture of the suit. Balanced with warm city reflections. Shot on a 50mm lens at f/2.0 for a natural perspective. Ultra-sharp focus on the face and water droplets, shallow depth of field, photorealistic, high dynamic range.",
+      "image": "7afea3e38c03.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:36:57.996251+00:00"
+    },
+    {
+      "id": "2d53cf6c-0baf-47a7-9e97-f90345de6770",
+      "categoryId": "d1b16388-90d5-4391-a4ab-fdc24acd4645",
+      "name": "Mecha Spidey Post-Battle",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a Cyborg Spider-Man immediately following an intense battle. The aesthetic is a gritty fusion of classic superhero design and futuristic mecha technology.\n\nIdentity Preservation: CRITICAL: The subject's face, including specific physiognomy, features, eye color, and skin tone, must remain completely unaltered and realistic, looking directly at the camera with an intense, determined expression.\n\nWardrobe (Art Directed): Replace original clothing completely. The suit is a complex fusion of the classic red and blue Spider-Man costume seamlessly integrated with a white high-tech mecha exoskeleton armor.\n\nDetails: Intricate mechanical surfaces, glowing integrated light lines, and a reflective silver spider emblem.\n\nDamage: Significant battle wear shows torn areas revealing frayed inner layers with jagged edges and exposed fibers.\n\nGlow: A subtle luminous glow emits from the web patterns and the white mecha elements.\n\nPose & Action: A dynamic pose, captured mid-movement stepping backward, maintaining intense eye contact with the camera just before turning to leave. The body language conveys tension.\n\nScene & Atmosphere: A dark, futuristic urban setting at night (sci-fi NYC style). Dark skyscrapers with futuristic elements loom in a dense foggy atmosphere.\n\nLighting & Tech: Dramatic, bright cinematic lighting from above and the sides (rim lighting) to sculpt facial contours and highlight the intricate textures of metal and torn fabric. Hyperrealistic 8k resolution, high contrast, cinematic color grading.",
+      "image": "0dad0b1d07bf.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:45:44.431106+00:00"
+    },
+    {
+      "id": "f21f01ac-3031-46c7-a4f6-a25fb87a05be",
+      "categoryId": "d1b16388-90d5-4391-a4ab-fdc24acd4645",
+      "name": "The Dark Knight's Garage",
+      "text": "Identity Preservation & Action: CRITICAL: A hyper-realistic portrait where the subject's facial features must remain completely unaltered from the reference image. The subject is sitting relaxed in a worn industrial chair, holding and drinking from a branded takeaway coffee cup.\n\nWardrobe: The subject wears casual, comfortable clothing appropriate for a workshop environment.\n\nSetting & Atmosphere: The location is a vast, futuristic underground industrial workshop. The atmosphere is dramatic and cinematic, lit by soft, diffused top-down lighting from geometric ceiling LED panels, creating gentle shadows. The color palette is dominated by neutral concrete, metal, and dark industrial tones.\n\nBackground Elements (Art Directed):\n\nBehind the subject: A highly detailed, textured modern tactical black superhero armor suit hangs on a heavy industrial metal rig enclosed within a large glass display encasement.\n\nTo the right: A rugged, heavy-duty tactical prototype assault vehicle (resembling a military-grade armored car with large off-road wheels) is parked.\n\nTechnical Details: Ultra-realistic 8K photograph. High detail in metal textures and fabric. Natural DSLR depth of field, keeping the subject sharp while gently blurring the complex background.",
+      "image": "a21fa2a31705.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:15:24.377429+00:00"
+    },
+    {
+      "id": "b4ea28f0-eaf0-44d5-acd6-8db1a5d42dc8",
+      "categoryId": "d1b16388-90d5-4391-a4ab-fdc24acd4645",
+      "name": "The Last Son of Krypton",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and determined expression must remain completely unaltered from the reference image.\n\nTheme & Action: A hyper-realistic wide-shot of the subject as Superman, flying directly towards the viewer. The pose is powerful and dynamic: arms bent at the elbows, fists clenched, and body angled slightly upwards to convey intense forward motion.\n\nWardrobe & Details: The subject wears the classic blue and red Superman suit with a highly detailed fabric texture. The iconic red and yellow 'S' shield is prominently displayed on the chest. The red cape billows dramatically behind, showing intricate folds and a sense of extreme speed.\n\nScene & Atmosphere: Set in the upper atmosphere. Below, the curved horizon of Earth stretches across the frame with scattered white clouds. Above, the deep blue-black expanse of outer space is dotted with bright stars.\n\nLighting & Tech: Cinematic low-angle composition. A brilliant, warm sun glare emanates from the horizon, creating a strong rim light on the subject's right side and the flowing cape. Volumetric lighting effects highlight the contours of the muscles and suit texture. 8K resolution, ultra-realistic, high-contrast shadows.",
+      "image": "0b0be948fd9e.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:36:18.015451+00:00"
+    },
+    {
+      "id": "3b1056ac-00a6-44f3-ae04-161108389454",
+      "categoryId": "26a258aa-e9da-4582-b146-6a4e6b77edc2",
+      "name": "Crystal Deep Sea",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a majestic Crystal Sea Monarch, ruling over a vibrant deep-sea realm. The aesthetic is a high-fashion fusion of fantasy and aquatic elegance.\n\nIdentity Preservation: The subject's facial identity must be preserved with absolute fidelity, looking regal and ethereal.\n\nWardrobe (Art Directed): Replace original clothing completely. Adorn the subject in shimmering silver body scales that catch the light and luxurious drapes of pearl finery that flow elegantly around them. The look should feel like organic, expensive underwater armor or couture.\n\nScene: An immersive underwater landscape filled with colorful coral reefs and schools of fish. The hair should appear to float weightlessly (underwater physics) but styled elegantly.\n\nLighting & Tech: Breathtaking professional underwater photography. Natural sunlight shafts (god rays) streaming through the water surface creating caustics on the skin. Dreamy bokeh effect in the background, sharp focus on the subject, ethereal glow, luminous and high-contrast.",
+      "image": "61401957a695.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T04:56:59.339764+00:00"
+    },
+    {
+      "id": "dd436dae-f79b-4e5c-8320-03818b9557b8",
+      "categoryId": "26a258aa-e9da-4582-b146-6a4e6b77edc2",
+      "name": "Candy World",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a Candy Pop Icon, strutting confidently through a surreal, sugar-coated fantasy world. The aesthetic is whimsical, retro-futuristic, and high-energy.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity. The expression is confident, playful, and radiant.\n\nWardrobe (Art Directed): Replace original clothing completely. Dress the subject in a structured pastel satin bodysuit featuring panels of shiny pink and turquoise. The fit is stylized to celebrate a confident, powerful physique. Accessories include holographic open-toe ankle boots and large glittering earrings that catch the light.\n\nScene & Atmosphere: A surreal, candy-themed fantasy setting. Floating around the subject are inflatable donut-shaped balloons in mint, lavender, gold, and peach tones. The background is filled with fluffy pastel clouds resembling cotton candy and oversized iridescent disco balls and chrome spheres adding sparkle.\n\nLighting & Tech: Bright, glossy high-key lighting giving the scene a polished commercial look. Vivid pastel color palette, sharp focus on textures (satin, latex, sugar), cinematic composition, 8k resolution, dreamlike but hyper-realistic.",
+      "image": "c7371c6e5a27.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:32:35.896466+00:00"
+    },
+    {
+      "id": "4575374d-3bbb-4e09-902a-1f07207ac9ee",
+      "categoryId": "26a258aa-e9da-4582-b146-6a4e6b77edc2",
+      "name": "The Emerald Wave Rider",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and bone structure must remain 100% identical to the reference image. Natural skin texture with visible pores and minor imperfections is mandatory. No skin smoothing, plastic shaders, or airbrushing effects.\n\nSubject & Action: The subject is looking directly at the camera with an intense, excited, and focused expression. The subject is in a dynamic surfing stance atop a giant, flat kiwi slice surfboard. One knee is bent while the other leg is straight for balance. One arm is extended forward, guiding the motion, while the other is back for counter-balance. The pose conveys real physical engagement and motion.\n\nWardrobe & Hair: A high-fashion kiwi shortcake corset mini dress with a \"kiwi seed\" dotted fabric and a leaf-shaped sweetheart neckline. The flouncy tulle skirt is blown backward by the speed. Sheer cream stockings with kiwi slice embroidery and glossy green rind-style heels. Hair is waist-length, deep brunette with bright kiwi-green and mint highlights, flowing dramatically behind the subject with clear motion.\n\nEnvironment: A photorealistic fantasy kiwi surf world. The subject is inside a massive, translucent green kiwi-juice wave barrel filled with suspended seeds and bubbles. Floating kiwi wedges and a surreal coastline of jelly-like cliffs are visible in the background. Fresh juice splashes and foam are created where the board cuts through the wave.\n\nTechnical Optics: Cinematic low-angle wide-shot from inside the wave barrel. Professional DSLR photography, 20mm wide-angle lens, 8K resolution. Bright sunny daylight with natural highlights on the skin and hair. Soft shadows inside the wave curl and under the feet. No graphics, signatures, or 3D/CGI stylization.",
+      "image": "2969dcf8649e.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T20:57:28.826142+00:00"
+    },
+    {
+      "id": "7ce8af41-2257-4742-9f93-104ff6202c2c",
+      "categoryId": "26a258aa-e9da-4582-b146-6a4e6b77edc2",
+      "name": "The Peach Aeronaut",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and bone structure must remain 100% identical to the reference image. Natural skin texture with visible pores, light freckles on the nose, and subtle imperfections is mandatory. No skin smoothing, plastic shaders, or airbrushing.\n\nSubject & Action: The subject is looking directly at the camera with a bright, excited, and intense smile. The subject is standing firmly inside a woven hot air balloon basket, with both feet clearly planted on the floorboards. One hand is tightly gripping a thick control rope hanging from above, and the other is holding the basket's rim. The posture shows active movement, leaning slightly forward and outward as if navigating.\n\nWardrobe & Hair: A high-fashion peach shortcake corset mini dress with \"peach\" dot textures and a green leaf sweetheart collar. Layered tulle and organza skirt in peach and blush. Sheer cream stockings with tiny peach embroidery and glossy peach heels with leaf-style straps. Hair is waist-length, warm brunette with peach and honey highlights, styled half-up with a glossy peach bow; strands show realistic movement and shine.\n\nEnvironment: A photorealistic fantasy peach picnic sky. The subject is in a basket beneath a massive, fuzzy-textured peach-shaped hot air balloon. Below, a landscape of peach orchards and picnic fields is visible. Smaller dessert-shaped balloons drift in a pastel gold and blue afternoon sky.\n\nTechnical Optics: Professional DSLR photography, 22mm wide-angle lens, 8K resolution. Warm, golden-hour lighting from the side, creating natural highlights on the face and soft shadows inside the basket. High-contrast, sharp focus on the subject, ropes, and basket rim. No graphics, signatures, or 3D/CGI stylization.",
+      "image": "cb609ae793bd.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T21:08:15.239905+00:00"
+    },
+    {
+      "id": "139f4ebd-e85e-488f-8d67-2462ac0f21ad",
+      "categoryId": "26a258aa-e9da-4582-b146-6a4e6b77edc2",
+      "name": "The Cherry Swing Fantasy",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features, bone structure, and expression must remain 100% identical to the reference image. No anatomical alterations or idealized body descriptors are permitted; the reference dictates the physique.\n\nTheme & Action: A high-resolution photographic wide-shot of the subject riding a giant cherry swing suspended over a massive sundae bowl. The subject is seated firmly on the glossy red cherry, hands gripping the vine-like ropes, leaning back slightly to show motion. One leg is bent, the other extended forward as if about to brush against the whipped cream below.\n\nWardrobe & Styling: The subject wears a high-fashion cherry-themed corset mini dress with a sweetheart neckline and leaf-shaped collar. The skirt is a voluminous mix of red and pink tulle. Accessories include sheer pink stockings with cherry embroidery, glossy red heels with leaf straps, and a cherry crystal pendant. Hair is waist-length, deep brunette with cherry-red streaks, styled in soft curls with a red bow.\n\nMakeup & Details: Cherry-glam makeup with a warm rosy blush, gradient cherry eyeshadow, and glossy rich red lips. Skin must exhibit natural texture, pores, and subtle imperfections; no smoothing, airbrushing, or digital filters. Natural human hair texture with visible strands.\n\nEnvironment & Atmosphere: A whimsical \"Sundae World\" fantasy set. The swing hangs from thick green vines over a giant glass bowl of vanilla ice cream, syrup, and sprinkles. The background features blurred, oversized cakes and cupcakes under a pastel cream and pink sky.\n\nLighting & Tech: Professional DSLR photography, 24mm wide-angle lens. Bright, warm afternoon daylight creating realistic shadows and highlights on the syrup and glossy surfaces. 8K resolution, cinematic quality, sharp focus on the subject and swing with a soft bokeh effect on the distant dessert landscape. Direct, bright eye contact with the camera.",
+      "image": "303a240c94f4.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T21:12:38.342735+00:00"
+    },
+    {
+      "id": "7dcb4f66-e012-4b67-8427-aee0661a8175",
+      "categoryId": "26a258aa-e9da-4582-b146-6a4e6b77edc2",
+      "name": "The Grape Carnival Queen",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features, bone structure, and expression must remain 100% identical to the reference image. No anatomical alterations or idealized body descriptors are permitted; the reference dictates the physique.\n\nTheme & Action: A high-resolution photographic wide-shot of the subject standing atop a giant, translucent grape jelly drum at a fantasy carnival. The subject is in a powerful, energetic stance: feet firmly sinking into the wobbly jelly surface with visible ripples. One arm is thrown high in the air, the other reaching toward the camera in an inviting gesture.\n\nWardrobe & Styling: High-fashion grape shortcake corset mini dress in deep purple and lavender with a leaf-shaped sweetheart collar. The skirt consists of layered violet tulle, caught in a mid-bounce motion. Styling includes sheer lilac stockings with grape embroidery, glossy purple heels with leaf-style ankle straps, and hair styled in deep plum curls with lavender streaks and jeweled grape-cluster space buns.\n\nMakeup & Details: \"Grape glam\" makeup featuring a lilac-to-plum gradient eyeshadow and juicy, glossy plum lips. Skin must exhibit authentic human texture, including pores and natural imperfections. No digital smoothing, airbrushing, or artificial glows.\n\nEnvironment & Atmosphere: A whimsical grape-themed carnival at twilight. The subject stands on a glossy jelly platform surrounded by floating candy drums and thick green vines. In the soft-focus background, a grape-shaped Ferris wheel and vine rollercoasters are visible under a lilac and pink sky dotted with carnival lights.\n\nLighting & Tech: Evening carnival lighting with purple and pink ambient glows. Professional DSLR photography using an 18-24mm wide-angle lens from a low angle, looking up at the subject. 8K resolution, cinematic contrast, and sharp focus on the subject's face and the jelly texture. Direct, intense eye contact with the camera.",
+      "image": "fdac2db61058.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T21:14:56.468941+00:00"
+    },
+    {
+      "id": "9072f7e8-61f3-45ca-99ad-d273b5c64441",
+      "categoryId": "26a258aa-e9da-4582-b146-6a4e6b77edc2",
+      "name": "The Golden Citrus Fountain",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features, bone structure, and expression must remain 100% identical to the reference image. No anatomical alterations or idealized body descriptors are permitted; the reference dictates the physique.\n\nTheme & Action: A high-resolution photographic wide-shot of the subject standing on a circular lemon-tiled platform surrounding a massive lemon soda fountain. The subject is captured in a joyful, energetic pose: one foot planted firmly on the platform while the other leg is kicked forward in a playful splash motion. One arm is raised high above the head, the other extended for balance. Sparkling droplets of soda are frozen in mid-air around the subject's leg.\n\nWardrobe & Styling: A high-fashion lemon shortcake corset mini dress with a sweetheart neckline and green leaf-style collar. The bodice features \"lemon segment\" paneling, while the skirt is composed of voluminous layers of yellow and pale gold tulle, fanned out by the movement. Styling includes sheer cream stockings with lemon-slice embroidery, glossy yellow heels with leaf straps, and waist-length chocolate-brown hair with golden-blonde highlights and a large yellow bow.\n\nMakeup & Details: Fresh \"lemon-sun glam\" makeup with warm bronzer, peachy-lemon blush, and golden honey eyeshadow. Skin must exhibit authentic human texture, including visible pores and natural imperfections. No digital smoothing, airbrushing, or artificial glows.\n\nEnvironment & Atmosphere: A fantasy citrus world. Behind the subject, a giant fountain blasts sparkling lemon soda into a soft turquoise and peach sky. The platform features lemon-slice tile rings. In the soft-focus distance, glass-trunked lemon trees and citrus-orb decorations create a whimsical but photorealistic fantasy set.\n\nLighting & Tech: Bright, sparkling cinematic daylight coming from a front-high angle. Professional DSLR photography using an 18-24mm wide-angle lens. 8K resolution with sharp focus on the subject's laughter and the texture of the platform, with realistic shadows at the feet to ground the subject. Direct, joyful eye contact.",
+      "image": "7f033602fab1.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T21:16:43.032863+00:00"
+    },
+    {
+      "id": "ec2f79f8-a010-4611-b421-922ad8de3d52",
+      "categoryId": "26a258aa-e9da-4582-b146-6a4e6b77edc2",
+      "name": "The Blueberry Slide Rush",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features, bone structure, and expression must remain 100% identical to the reference image. No anatomical alterations or idealized body descriptors are permitted; the reference dictates the physique.\n\nTheme & Action: A high-resolution photographic wide-shot of the subject lying on their stomach atop a giant blueberry donut float, sliding down a blueberry syrup waterslide. The subject's torso is propped up on forearms, chest lifted, with one hand gripping the edge of the donut. Legs are playfully bent at the knees with feet kicked up. The pose captures high-speed motion, with the subject's skirt trailing backward and an expression of joyful, open-mouthed laughter.\n\nWardrobe & Styling: High-fashion blueberry shortcake corset mini dress in deep navy, cobalt, and periwinkle. The corset features \"blueberry seed\" texture and a teal-blue leaf collar. The skirt is a flouncy layered tulle in shades of blue and lilac. Styling includes waist-length voluminous waves in navy with periwinkle highlights, a blueberry-print bow, sheer pastel blue stockings with berry embroidery, and midnight blue glossy heels.\n\nMakeup & Details: Cool-toned blueberry glam with soft berry blush and an icy-to-blueberry gradient eyeshadow. Lips are a glossy berry-plum shade. Skin must exhibit authentic human texture, including visible pores, fine lines, and natural imperfections. No digital smoothing, airbrushing, or artificial glows. Hair shows visible strands and movement as if blown by the wind.\n\nEnvironment & Atmosphere: A fantasy blueberry dessert waterpark. The subject is on a glossy donut float with icing, gliding on a wide slide of translucent blueberry syrup. Splashes of syrup and oversized blueberries are frozen in mid-air. The background features looping syrup slides and jelly hills under a lavender and indigo gradient sky with blue-tinted clouds.\n\nLighting & Tech: Soft, bright daylight with a cool color temperature. Professional DSLR photography using a 24mm wide-angle lens at a dynamic \"action-cam\" angle looking down the slide. 8K resolution, cinematic motion blur on the background while maintaining sharp focus on the subject and the float. Realistic reflections on the wet syrup surfaces.",
+      "image": "24f6c6290f64.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T21:19:24.886521+00:00"
+    },
+    {
+      "id": "d2ed2fbf-73de-4ef7-b707-b114be10df47",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Ugly Sweaters",
+      "text": "The two people from the reference image, faces completely visible and well-lit. in a festive holiday scene, looking directly into the camera lens with intense eye contact. in a gingerbread or candy-themed festive set. Lighting: Christmas tree lights bokeh, soft and magical. Mood: nostalgic, timeless. Both in festive sweaters. Expression: cozy, happy, at ease. Three-quarter body shot, from head to mid-thigh. Hyperrealistic, 8K, DSLR quality, high impact, professional photography, cinematic lighting, sharp focus. warm festive atmosphere, magical lighting, detailed decorations, Masterpiece, 8k resolution, highly detailed textures, sharp focus, professional color grading, award-winning photography. Absolute facial identity preservation. The face must remain exactly as the reference.",
+      "image": "50a2911eb8f4.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T02:47:59.555213+00:00"
+    },
+    {
+      "id": "f59a8733-158b-4b2a-8cb5-cb20ac8314cc",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Snowflakes",
+      "text": "The two people from the reference image in a festive holiday scene, Face clearly visible in frame, sharp focus on face, face never obscured. in a winter scene with soft snow, cozy and magical. Lighting: fairy lights, twinkling. Both in party festive. Expression: magical, wonder. Looking at each other, intimate connection, eyes meeting. Seated pose, composed, elegant or relaxed. Muted palette, soft and refined, desaturated elegance. Vintage film look, soft grain, analog feel, timeless. Facial identity and likeness from the reference image must be preserved exactly. Face must remain clearly visible, recognizable, and consistent.",
+      "image": "34cbf68964a9.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T04:29:26.789799+00:00"
+    },
+    {
+      "id": "47877cc1-fd20-476c-8ba8-f80b62bf84d3",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Floral Mesh",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a high-fashion lingerie model. The aesthetic is delicate, romantic, and highly detailed.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity to the reference.\n\nWardrobe (Art Directed): Replace original clothing completely. Dress the subject in a revealing, exquisite 3-piece floral embroidery mesh teddy bodysuit with structured underwire. The texture combines sheer mesh with intricate floral needlework.\n\nScene & Atmosphere: Posed in a soft-focus luxury boudoir setting or a clean studio with a neutral backdrop.\n\nLighting & Tech: Soft, flattering fashion lighting (butterfly or softbox) to accentuate skin texture. Shot on a 85mm portrait lens, f/1.8 for creamy bokeh depth of field. Ultra-detailed 8k resolution, sharp focus on the embroidery and face.",
+      "image": "03d5ed66be8b.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:15:41.051173+00:00"
+    },
+    {
+      "id": "6ef63b3e-57fb-4e29-b3d7-2e11d81393b2",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Cozy White Bedroom",
+      "text": "Transformation & Theme: The person from the reference image is the subject of a captivating, intimate lifestyle portrait. The aesthetic is clean, bright, and serene (\"Sunday Morning\" vibe).\n\nIdentity Preservation: CRITICAL: The subject's facial features, skin tone, and hair color/texture must remain completely unaltered from the provided reference. The gaze is direct and serious with quiet confidence.\n\nPose & Action: The subject is lying prone on a plush white bed with a quilted comforter. Their head is gently supported by crossed forearms. In the background, legs are crossed at the ankles and raised playfully (blurred).\n\nWardrobe & Accessories (Art Directed):\n\nOutfit: A simple, minimalist white top or soft loungewear that fits the bright aesthetic.\n\nDetails: Elegant gold accessories: a wristwatch on the left wrist, several gold rings, and gold hoop earrings.\n\nScene & Lighting: Soft, natural window lighting coming from the front/side, creating gentle highlights on the skin. The background is a white bedroom, shallowly focused (blurred) to keep attention on the face.\n\nTech: Medium shot, shallow depth of field (bokeh), high-key lighting, sharp focus on eyes, 8k resolution.",
+      "image": "7e266aa3d409.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T07:17:13.100754+00:00"
+    },
+    {
+      "id": "a8d49b38-4a5b-4a71-91ce-e42c27d3ee2e",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Rustic Romance",
+      "text": "Identity Preservation & Emotion: CRITICAL: The facial features, skin tone, hair color, hairstyle, and beard presence (if any) of both subjects from the reference image must remain completely unaltered. The man leans his head gently against the woman\u2019s head, looking peaceful and thoughtful. The woman has a soft smile, gazing lovingly upward.\n\nScene & Atmosphere: A romantic, cinematic portrait of the couple sitting close together in a dimly lit, rustic room. The atmosphere is cozy, emotional, and intimate.\n\nWardrobe (from input): The man wears a light-colored shirt with dark stripes.\n\nLighting & Tech: Warm and moody lighting (e.g., candlelight or lamplight). The image has a stronger vintage film tone with a soft focus (bokeh) and natural grain to enhance the emotional feel.",
+      "image": "9d8b4e7bbbfa.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:13:22.700842+00:00"
+    },
+    {
+      "id": "b50898b5-7eee-45de-ae55-add59644a806",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Frozen Endurance",
+      "text": "Identity Preservation & Gaze: CRITICAL: The facial features of both subjects must remain completely unaltered from the reference image. Both subjects maintain an intense, piercing gaze directly into the camera lens, conveying a sense of survival and endurance.\n\nComposition & Pose: An eye-level medium close-up with tight framing. The subjects are huddled together for warmth in the middle of a brutal storm, shielding each other in an intimate yet survivalist embrace.\n\nDetails & Texture: High-detail textures showing frost on eyelashes and facial hair, with skin visibly flushed and pink from the extreme cold. The focus is tack-sharp on the eyes and the crystalline frost textures.\n\nWardrobe: They are wrapped in heavy, thick buffalo and bear fur coats in dark brown and white, layered with wool scarves and blankets that show realistic fabric weaves.\n\nEnvironment & Atmosphere: A total blizzard whiteout with a high-key white background. Large, heavy snowflakes fall all around the subjects. The atmosphere is cold, harsh, and desperate.\n\nLighting & Technical: Survivalist photography style with diffused, bright white light reflecting off the snow. Soft contrast with visible frost sparkles. 8K resolution, ultra-photorealistic, shot at f/4 to maintain a shallow depth of field that emphasizes the texture-rich foreground against the chaotic whiteout.",
+      "image": "5608ebcf174c.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:41:29.181774+00:00"
+    },
+    {
+      "id": "81d0e923-a6d9-461f-b87b-370f5ed5be51",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Luxury Spa Nightmare",
+      "text": "Identity Preservation: CRITICAL: The subjects' facial features, bone structure, and expressions must remain 100% identical to the reference image. This is the absolute priority.\n\nTheme & Action: A hyper-realistic, symmetrical front-on shot of the subjects as a couple in an opulent marble bathroom. Both subjects stand side-by-side with a chilling, deadpan intense stare directly into the camera lens. They are captured mid-sip/holding elegant crystal glasses filled with vibrant pink ros\u00e9.\n\nWardrobe & Details: Both subjects are dressed in matching plush, expensive brilliant white robes and towel turbans. Subject one wears a slick, obsidian black charcoal sheet mask. Subject two wears a translucent white hydration mask with subtle cucumber green accents. The textures of the wet masks, the terry cloth robes, and the sparkling crystal are rendered with extreme precision.\n\nScene & Atmosphere: The setting is a high-end luxury spa bathroom. The background features glossy deep azure blue marble tiles and polished brass fixtures. The mood is a blend of high-society chic and \"American Psycho\" unsettling stillness\u2014expensive, creepy, and hilariously deadpan.\n\nLighting & Tech: High-gloss editorial flash photography. Harsh, sophisticated lighting that creates brilliant specular highlights and deep, rich shadows. Every surface looks wet and slick with high-shine textures. 8K resolution, razor-sharp focus on the eyes and mask textures, vibrant color saturation, and cinematic editorial color grading.",
+      "image": "c4798295ead7.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:49:58.687178+00:00"
+    },
+    {
+      "id": "181d5f91-1bd3-48bb-8c1a-aaee813911a3",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Urban Intimacy",
+      "text": "Identity Preservation: CRITICAL: The facial features of both subjects must remain 100% identical to the reference photos.\n\nTheme & Action: A tender, candid moment between two subjects, with one gently cupping the face of the other. Expressions of gentle affection and warmth.\n\nWardrobe & Details: Contemporary urban attire suitable for the setting.\n\nScene & Atmosphere: An urban or indoor setting with soft, ambient lighting. Intimate and emotional mood.\n\nLighting & Tech: Natural light, bokeh background, Fujifilm aesthetic, 35mm lens look. High-quality texture and skin details.",
+      "image": "794f511f3257.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T00:54:23.012907+00:00"
+    },
+    {
+      "id": "93757150-671b-4601-b8bb-2b8a6a7a9196",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "The Midnight Sonata",
+      "text": "Identity Preservation: CRITICAL: The subjects' facial features and bone structure must remain 100% identical and unaltered from the reference images.\n\nTheme & Action: A deeply romantic and cinematic close-up of a modern couple. The woman sits gracefully on the man\u2019s lap, one arm wrapped around his shoulders as they lean close, faces inches apart, locked in a passionate gaze. The man\u2019s hand rests on her thigh, the other arm encircling her waist.\n\nWardrobe & Details: The woman wears a black lace gown with elegant floral patterns, a thigh-high slit, and a black garter detail. The man is dressed in a perfectly tailored black suit with a black shirt, collar slightly open.\n\nScene & Atmosphere: An opulent, candlelit room with golden tones and ornate wall moldings. In the background, a glossy black grand piano is visible, surrounded by dozens of glowing candles. Shallow depth of field with smooth background bokeh.\n\nLighting & Tech: Warm golden candlelight casting soft glows and creating deep, sensual shadows. 85mm f/1.4 portrait lens aesthetic. 8K resolution, ultra-realistic skin textures with natural pores and imperfections.",
+      "image": "13cd04239c88.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:25:19.830111+00:00"
+    },
+    {
+      "id": "0a2aab18-ccce-4361-aad8-844bbbacf18f",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Heart Frame",
+      "text": "**Identity Preservation:** CRITICAL: The male subject's facial features, facial structure, hair and beard style, eye color, and skin tone must remain completely unaltered from his reference image. The female subject's facial features, facial structure, hairstyle, eye color, and skin tone must remain completely unaltered from her reference image.\n\n**Theme & Action:** A warm and joyful close-up portrait of a couple in a moment of affection and connection, seen through a heart shape made with hands in the foreground. Both faces in sharp focus within the heart formed by the blurred fingers. Both looking directly at the camera with wide, genuine smiles. Happiness and intimacy.\n\n**Wardrobe & Details:** Female subject: long hair, light-colored turtleneck or sweater in neutral tone. Male subject: casual hairstyle, well-trimmed beard, light-colored polo-neck or crewneck top in neutral tone.\n\n**Scene & Atmosphere:** Softly blurred outdoor setting, possibly a park or natural area with trees. Natural and soft lighting, typical of a clear or slightly cloudy day, creating a natural glow on the faces.\n\n**Lighting & Tech:** Prime portrait lens 50mm or 85mm on full-frame camera, aperture f/1.8\u2013f/2.8, shallow depth of field, creamy bokeh, faces sharp, ISO 100-200, 8K resolution, ultra-realistic, professional photograph.",
+      "image": "0c15e04f1aaa.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:50:22.583018+00:00"
+    },
+    {
+      "id": "1aab7d6e-5416-4025-b588-70f85e8b53f8",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Lace & Shadow",
+      "text": "**Identity Preservation:** CRITICAL: The subject's facial features must remain completely unaltered from the reference image.\n\n**Theme & Action:** The subject stands facing the camera with direct eye contact. Romantic, elegant pose. Long hair in waves. Almond French tip nails.\n\n**Wardrobe & Details:** Form-fitting floor-length black dress with lace details. Gold bracelet. The dress falls to the feet.\n\n**Scene & Atmosphere:** Wall with shadow of a window in the background. Minimalist, dramatic lighting.\n\n**Lighting & Tech:** Ultra-realistic 8K portrait, DSLR quality, professional photograph with cinematic lighting, sharp focus on the subject.",
+      "image": "59ec4e40963c.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:51:38.684884+00:00"
+    },
+    {
+      "id": "29cd1b0b-7fa0-48f5-b5f2-46e622ba4c70",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Silver & Black",
+      "text": "**Identity Preservation:** CRITICAL: The male subject's facial features must remain completely unaltered from the reference image. The female subject's facial features must remain completely unaltered from the reference image.\n\n**Theme & Action:** Elegant fashion photography of a couple. Male subject looking directly at the camera with a serious and confident expression. Female subject stands beside him, slightly behind, one hand on the male subject's shoulder, looking to the side.\n\n**Wardrobe & Details:** Male subject: classic black tuxedo, white shirt, black bow tie. Female subject: fitted floor-length evening gown covered in sequins or embroidery in silver tones, sleeveless with low back. Highlighted brunette hair, earrings, elegant watch.\n\n**Scene & Atmosphere:** Fashion editorial setting. Clean, luxurious atmosphere.\n\n**Lighting & Tech:** 8K resolution, ultra-realistic, professional fashion photography, DSLR quality, cinematic lighting, sharp focus.",
+      "image": "c1f3f9f55ed9.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:52:30.357178+00:00"
+    },
+    {
+      "id": "2515b734-353f-4f4c-a599-637a66f876e5",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Car Photoshoot",
+      "text": "**Identity Preservation:** CRITICAL: Both subjects' facial features must remain 100% identical to the reference images.\n\n**Theme & Action:** A couple having a photoshoot inside a car. Female subject sitting on the male subject's lap, striking a model pose. Both subjects with direct eye contact with the camera.\n\n**Wardrobe & Details:** Female subject: two-piece white outfit, white sneakers. Male subject: sky yellow jacket, white t-shirt, white pants underneath.\n\n**Scene & Atmosphere:** Interior of a car. Photoshoot setting. Modern, editorial atmosphere.\n\n**Lighting & Tech:** Ultra-realistic, 8K resolution, professional photograph, DSLR quality, sharp focus on both subjects.",
+      "image": "f4c90fa86bb7.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:54:07.663482+00:00"
+    },
+    {
+      "id": "43980091-d477-4e6c-b23b-f7b7d3501a10",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Album Cover Noir",
+      "text": "**Identity Preservation:** CRITICAL: Both subjects' facial features must remain completely unaltered from the reference images.\n\n**Theme & Action:** Black-and-white portrait inspired by a dramatic album cover. The male subject's hand above his head, resting in the female subject's hair; his other arm around her waist. She is slightly tilted back and to the side. Her expression soft yet distant, evocative. Direct or evocative gaze toward camera where visible.\n\n**Wardrobe & Details:** Female subject: black strapless tank top, denim jacket. Male subject: denim jacket without shirt.\n\n**Scene & Atmosphere:** Dark, minimalist background. Dim lighting creating shadows on arms and face.\n\n**Lighting & Tech:** Black-and-white, dramatic, cinematic, 8K resolution, ultra-realistic, professional photograph with high contrast.",
+      "image": "76643a40c86b.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:55:06.932868+00:00"
+    },
+    {
+      "id": "c3bfe6db-49be-467b-a3c5-1d74728aeb06",
+      "categoryId": "e1332893-f786-4f45-a0d9-fe37c1ffa8ec",
+      "name": "Heart Balloons",
+      "text": "**Identity Preservation:** CRITICAL: The male subject's facial features, facial structure, hairstyle, beard, eye color, and skin tone must remain completely unaltered from his reference image. The female subject's facial features, facial structure, hairstyle, eye color, and skin tone must remain completely unaltered from her reference image.\n\n**Theme & Action:** Full-length studio portrait with romantic and elegant aesthetic. The couple in a symmetrical, stylish pose, back to back, both holding a red heart-shaped balloon. Male subject turned toward the camera with subtle, confident smile. Female subject has her back turned but looks over her shoulder at the camera with a sweet smile.\n\n**Wardrobe & Details:** Female subject: elegant short strapless red dress, matching red high heels. Male subject: well-cut navy suit, white dress shirt, black dress shoes.\n\n**Scene & Atmosphere:** Solid-color studio backdrop in very light cream or beige. Bright, even high-key studio lighting from frontal angle.\n\n**Lighting & Tech:** Prime portrait lens 85mm or 50mm, full-frame camera, aperture f/8\u2013f/11, ISO 100, 8K resolution, ultra-realistic, professional studio photograph.",
+      "image": "71cc48decdda.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:56:24.100531+00:00"
+    },
+    {
+      "id": "777f906e-be9c-46e3-9059-15857192f0c4",
+      "categoryId": "90d739e2-ead6-4fdf-8565-2360d7a74aa3",
+      "name": "Neon Netherworld",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a glamorous, spooky character inspired by the Beetlejuice aesthetic. The atmosphere is magical, cinematic, and filled with neon Halloween energy.\n\nIdentity Preservation: CRITICAL: The subject's facial features and physiognomy must remain completely unaltered and realistic to the reference image.\n\nWardrobe & Styling (Art Directed):\n\nHair & Makeup: Long hair dyed with a striking neon green gradient (ombre). Makeup features metallic purple lips and dark, dramatic smoky eyes.\n\nOutfit: A fitted black and white vertical striped corset paired with a matching skirt featuring a high slit.\n\nProps & Action: The subject is posing dynamically, holding two magical items:\n\nA jack-o'-lantern emitting bright green spectral fire from inside.\n\nA translucent, luminous green ghost floating just above their other hand.\n\nScene & Atmosphere: A dark, twisted forest background. The scene is filled with gnarled trees, hanging illuminated pumpkins, and intense flashes of neon purple and green lights creating a magical, spooky effect.\n\nLighting & Tech: Dramatic cinematic lighting. High-contrast rim lighting from the neon sources (purple/green) mixed with the warm glow of the pumpkins. Sharp focus on the subject, shallow depth of field, rich saturated colors, 8k resolution.",
+      "image": "9bec7f062376.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T06:07:35.653854+00:00"
+    },
+    {
+      "id": "8781f810-dca4-4c9f-a319-1c4b2355ba7a",
+      "categoryId": "90d739e2-ead6-4fdf-8565-2360d7a74aa3",
+      "name": "Haunted Doll",
+      "text": "Transformation & Theme: The person from the reference image is the star of a surreal horror fashion editorial. The aesthetic is a nightmarish blend of innocent dollhouse imagery and psychological terror, like a high-fashion shoot in a haunted dream.\n\nIdentity Preservation: CRITICAL: The subject's facial features, body shape, and proportions must remain exactly unaltered from the reference image. The expression is dreamy yet unsettling.\n\nWardrobe & Styling (Art Directed):\n\nOutfit: An avant-garde fusion of schoolgirl and living doll aesthetics: a plunging mini-dress, white knee-high socks, and high-heeled black patent leather school shoes.\n\nHair & Accessories: Long wavy hair styled in two high pigtails with pink ribbons. A prominent gold cross necklace is worn.\n\nAction & Props: The subject stands holding a \"creepy-cute\" pink doll that appears to be staring back at them. The pose is dreamlike and eerie.\n\nScene & Atmosphere: Inside a dark, dilapidated pink dollhouse scaled to human size. The background is distressed and cluttered with unsettling miniature items: broken furniture, cobwebbed toys, and cracked porcelain faces hidden in the shadows.\n\nLighting & Tech: Dramatic, single-source practical lighting (like a bare carnival bulb) casting long, harsh shadows. A faint ambient red glow accents the shadows.\n\nCamera & Post: Shot on a DSLR with a 35mm f/1.8 lens for a dramatic perspective. Sharp focus on the subject, heavily distorted and unsettling bokeh in the background, noticeable film grain, cinematic color grading.",
+      "image": "f50704e688b9.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T06:09:28.236110+00:00"
+    },
+    {
+      "id": "afa99410-def6-43c7-ab8f-3576a8d05398",
+      "categoryId": "5e2a3b71-f44a-4d72-84f3-c9b44ff3502d",
+      "name": "Blue Legend",
+      "text": "Transformation & Theme: The person from the reference image is transformed into an iconic Arcade Fighting Legend, radiating confidence and athletic power. The aesthetic is ultra-realistic high-end cosplay photography with a moody, cinematic atmosphere.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity. The expression is cheerful, confident, and engaging, with a bright natural smile.\n\nWardrobe (Art Directed): Replace original clothing completely. Dress the subject in a modernized, revealing metallic blue combat bodysuit featuring intricate golden trim and crescent moon details. The look includes a matching blue loincloth panel tied with gold ribbons, spiked black wrist cuffs, white stockings, and signature large white ribbons styling the hair into double buns. The fit is athletic and daring, emphasizing a toned physique.\n\nScene & Atmosphere: Posed dynamically with one fist clenched and legs apart in a powerful stance. The background is a dark, industrial convention center wall illuminated by dramatic deep blue and purple mood lighting.\n\nLighting & Tech: High-definition HDR lighting enhancing the metallic sheen of the costume and the smoothness of the skin. Full body shot. Shot on a DSLR with a 50mm lens for a natural portrait look. Ultra-realistic style, fine detail, sharp focus, vivid colors, and shallow depth of field.",
+      "image": "c90825b8811e.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:22:07.452621+00:00"
+    },
+    {
+      "id": "67bf1901-7da9-453f-a552-a61eaf672add",
+      "categoryId": "5e2a3b71-f44a-4d72-84f3-c9b44ff3502d",
+      "name": "Combat Pin-up",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a confident Elite Tactical Icon, combining military strength with effortless high-fashion appeal. The aesthetic is \"Combat Chic\"\u2014gritty yet alluring.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity. The expression is strong, direct, and cool.\n\nWardrobe (Art Directed): Replace original clothing completely. Dress the subject in a stylized, distressed tactical tunic or shirt-dress, artfully unbuttoned to reveal a sleek, high-performance tactical two-piece set (bikini style) underneath. The look blends battlefield utility with editorial fashion. Accessories include a utility belt and tactical straps. Hair is casually tied back.\n\nScene & Atmosphere: Posed in a dynamic, action-oriented stance. The background hints at a softened urban tactical environment with muted industrial elements or blurred military vehicles in the distance.\n\nLighting & Tech: Cinematic lighting designed to highlight the physique and clothing textures. Shot on a DSLR, 85mm lens for flattering compression, sharp focus, 8k resolution, photorealistic textures.",
+      "image": "35255e69b529.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:23:06.286511+00:00"
+    },
+    {
+      "id": "906fa6c1-f412-4900-b00f-b0861b4fde81",
+      "categoryId": "5e2a3b71-f44a-4d72-84f3-c9b44ff3502d",
+      "name": "Dragon Monk",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a legendary Shaolin Dragon Warrior, a master of martial arts and fire magic. The aesthetic is a high-octane fusion of traditional eastern fantasy and modern action cinema.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity to the reference. The expression is focused, intense, and combat-ready.\n\nWardrobe (Art Directed): Replace original clothing completely. Dress the subject in elite Shaolin combat attire: black and red kung fu trousers, a red headband, and ornate metallic arm bracers. The chest can remain bare or feature a sleeveless vest to showcase strength and agility.\n\nSpecial Effects: The subject is channeling mystical fire energy, with flames wreathing their fists or forming a spectral dragon aura around them.\n\nScene & Atmosphere: Posed in an ancient martial arts tournament arena or a mystical temple courtyard at twilight. The atmosphere is charged with energy and heat.\n\nLighting & Tech: Dynamic cinematic lighting with warm fire glow contrasting against cool ambient shadows. Shot on a Sony Alpha 1, 50mm lens, f/1.4 for sharp separation. Ultra-detailed 8k resolution, freezing the action, dramatic composition.",
+      "image": "104361ffa08f.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:20:16.343679+00:00"
+    },
+    {
+      "id": "b5255c24-b426-4eee-82db-a6755e4206ec",
+      "categoryId": "5e2a3b71-f44a-4d72-84f3-c9b44ff3502d",
+      "name": "Thunder Guardian",
+      "text": "Transformation & Theme: The person from the reference image is transformed into an Eternal God of Thunder, radiating divine power and wisdom. The aesthetic is a majestic fusion of ancient mythology and high-voltage supernatural energy.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity to the reference. The expression is stoic, powerful, and commanding. The eyes should glow with intense electric blue light.\n\nWardrobe (Art Directed): Replace original clothing completely. Dress the subject in majestic divine warrior attire: intricate white and blue ceremonial robes with metallic armored accents, a wide-brimmed conical hat (optional but iconic to the archetype), and crackling arcs of blue lightning coursing over the fabric and armor.\n\nScene & Atmosphere: The subject stands amidst a raging storm at the peak of a sacred mountain or sky temple. Dark storm clouds swirl in the background, illuminated by jagged bolts of lightning.\n\nLighting & Tech: Dramatic, high-contrast lighting with cool electric blue highlights from the lightning contrasting against deep shadows. Shot on a Sony Alpha 1, 50mm lens, f/1.4 for sharp separation. Ultra-detailed 8k resolution, freezing the lightning action, dramatic composition.",
+      "image": "357d5259ec39.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:21:17.646769+00:00"
+    },
+    {
+      "id": "4a7af72e-7de9-4169-a176-ad51a3c695fa",
+      "categoryId": "5e2a3b71-f44a-4d72-84f3-c9b44ff3502d",
+      "name": "80s Cyber Console",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a high-end Retro-Future Android, channeling the essence of 1980s industrial design. The aesthetic is a sleek fusion of matte graphite and warm copper tones.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity to the reference. The expression is calm and analytical, looking back at the viewer.\n\nWardrobe & Body (Art Directed): Replace original clothing completely. The subject's body is reimagined as a sleek, athletic chassis wrapped in a matte-charcoal neo-fiber bodysuit layered with copper-toned biomechanical plating. The plating features ridged, vented details reminiscent of vintage gaming consoles. A translucent spinal shell reveals glowing amber circuitry pulsing beneath. (Optional: Polished silver hair styled in a precision braid).\n\nScene & Atmosphere: Inside a robotics development facility styled in bold retro-futurist architecture. The environment is saturated with deep bronze tones and glowing amber-orange neon striping pulsing along modular wall panels. Geometric angular emblems (no text) are embedded in the walls.\n\nLighting & Tech: Dramatically lit with rich key lighting and faint copper rim lights. Atmospheric haze, shallow depth of field, cinematic bokeh. Shot on a full-frame DSLR, razor-sharp textural fidelity, 8k resolution.",
+      "image": "33383039b4b4.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:25:46.423585+00:00"
+    },
+    {
+      "id": "2a094b61-1b48-49cf-8a62-9cbff86d158b",
+      "categoryId": "5e2a3b71-f44a-4d72-84f3-c9b44ff3502d",
+      "name": "Kingdom High-Five",
+      "text": "Transformation & Theme: The person from the reference image is transported into a vibrant Fantasy Platformer Video Game World. The aesthetic is a seamless blend of hyper-realistic photography and high-end 3D animation (CGI movie style).\n\nIdentity Preservation: CRITICAL: The subject's face must remain completely unaltered, preserving exact physiognomy and skin details. The subject is smiling joyfully.\n\nAction & Interaction: The subject is raising their hand to high-five a jumping, iconic plumber character (short, wearing a red cap, red shirt, and denim overalls). The interaction must look physically natural, with hands aligned and consistent shadows connecting the real human with the CGI character.\n\nCharacters (Art Directed): Surrounding them are detailed fantasy characters:\n\nA royal princess in a pink voluminous gown and white gloves, smiling warmly.\n\nA friendly green dinosaur-like companion raising its head joyfully.\n\nA giant muscular ape flexing proudly in the background.\n\nA spiked turtle-shelled monster grinning mischievously.\n\nScene & Atmosphere: Background features a fairytale castle with red turrets, rising above green hills, floating brown blocks, and green pipes.\n\nLighting & Tech: Bright, sunny, vibrant cinematic lighting. Hyperrealistic composite, 8k resolution, sharp focus, harmonious blending of real and digital elements.",
+      "image": "2b4ef16554eb.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:47:55.456336+00:00"
+    },
+    {
+      "id": "9defa17e-838e-489e-94bc-e66458d1cdca",
+      "categoryId": "750e9105-7c54-4948-98a8-5b1922aaa0f3",
+      "name": "Renaissance Rebel",
+      "text": "Transformation & Theme: The person from the reference image is immortalized in a \"lost\" High Renaissance masterpiece oil painting, rendered in the exact, meticulous style of Leonardo da Vinci. It is a comedic subversion of the classic \"Mona Lisa\" (La Gioconda).\n\nIdentity Preservation & Expression: CRITICAL: The subject's facial features must be rendered with absolute fidelity to the reference, translated into da Vinci's painting technique. The expression is the key contrast: the eyes maintain the soft, legendary enigmatic \"Gioconda gaze,\" but the mouth is playfully and irreverently sticking out the tongue, breaking the 16th-century decorum.\n\nComposition & Wardrobe: Posed in the iconic three-quarter stance with hands resting softly on a chair arm. The subject wears a dark, heavy 16th-century Italian gown with embroidered details and a sheer veil over dark hair.\n\nStyle & Texture (Art Directed): The image must look like an aged oil painting on wooden poplar panel. It features heavy craquelure (fine cracks) across the surface, yellowed varnish, and deep sfumato (smoky blending) shading. The color palette is muted, earthy, and deep tones.\n\nBackground: A classic Da Vinci atmospheric landscape with misty, winding paths, rugged mountains, and a distant bridge, framed by the pillars of a loggia.\n\nTech: 8k resolution scan of fine art, highly detailed paint textures and brushwork visible.",
+      "image": "29aadf5b5eff.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:59:07.981686+00:00"
+    },
+    {
+      "id": "100f53dc-cffe-49b4-8eb6-2fc103f0b629",
+      "categoryId": "750e9105-7c54-4948-98a8-5b1922aaa0f3",
+      "name": "Inverted Sands",
+      "text": "Identity Preservation & Emotion: CRITICAL: The facial features of both the man and the woman must exactly match their respective reference photos. Both subjects are smiling warmly.\n\nComposition & Pose: An extremely high-level (top-down drone view) medium-long shot, framing the subjects from head to stomach. They lie on soft, light brown sand in a relaxed \"inverted symmetry\" pose (their bodies oriented in opposite directions). The man lies on his back, supported by the woman's left arm. The woman lies on her back, her head resting gently on the man's shoulder.\n\nSpecific Actions: His left arm clasps her right hand. Her right hand lightly grasps his right hand beside his chest/ribs. Her left hand gently touches his neck/jaw.\n\nWardrobe: The man wears a white, long-sleeved button-down shirt. The woman wears a flowing white spaghetti strap dress.\n\nLighting & Atmosphere: Soft, warm, natural lighting enhances an intimate depth. The sand background is slightly blurred (shallow depth of field).",
+      "image": "8735eea7e0f1.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:16:19.944305+00:00"
+    },
+    {
+      "id": "c93b4beb-2c8e-49b6-8665-681dfa592b9f",
+      "categoryId": "750e9105-7c54-4948-98a8-5b1922aaa0f3",
+      "name": "The Elixir Con-Artists",
+      "text": "Identity Preservation & Expression: CRITICAL: The facial features of both subjects must remain completely unaltered from the reference image. One subject has a look of winking confidence, while the other displays a charming smile and a wink.\n\nTheme & Action: A whimsical theatrical portrait of the subjects as eccentric \"snake oil\" salesmen in a traveling show. They are playfully displaying colorful glass elixir bottles to the camera in a deceptive and lively performance.\n\nWardrobe & Styling: > * Person 1: A flashy plaid suit in poison green and violet patterns with a matching top hat.\n\nPerson 2: A feathered corset and a flashy skirt in violet and bottle-glass green tones.\n\nScene & Background: The setting is the exterior of a vibrantly painted wooden traveling wagon. In the immediate foreground, rows of colorful glass elixir bottles are visible.\n\nArt Style & Lighting: Whimsical theatrical photography with oversaturated, eclectic colors and vibrant contrast. The lighting is in a bright stage-daylight style, creating sharp glass reflections and punchy, saturated colors.\n\nTechnical Details: 8K resolution, ultra-photorealistic. Eye-level straight-on shot with a medium depth of field. Sharp focus on the couple and the bottles, with a clean, cinematic \"color popping\" effect.",
+      "image": "1632681d77f6.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:37:48.550969+00:00"
+    },
+    {
+      "id": "953a257f-b739-4752-b367-9b5ae166a0f2",
+      "categoryId": "750e9105-7c54-4948-98a8-5b1922aaa0f3",
+      "name": "The Card Architect",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features, bone structure, and expression of mysterious confidence must remain 100% identical and unaltered from the reference image. No anatomical modifications or external physical descriptors are permitted.\n\nSubject & Pose: A hyper-realistic fantasy portrait of the subject standing centrally within a void. The subject maintains intense and direct eye contact with the camera. The composition is a cinematic close-up angled from below to emphasize a sense of power and focus.\n\nWardrobe & Details: The subject wears a modern white hoodie featuring faint, glowing tech-line textures along the seams. No logos or text are present.\n\nThe Spiral Storm: A vortex of playing cards forms a spiral storm around the subject, with each card rotating slowly in zero-gravity. The cards feature clean, standard designs without any added text or etched graphics.\n\nAtmosphere & Lighting: Surreal lighting setup with a glowing bluish light emanating from above meeting a pink light from below, creating a vibrant aura. The background consists of infinite mist and neon streaks.\n\nTechnical Execution: Professional DSLR quality, 8K resolution. High-fidelity skin textures including visible pores and realistic light interaction. Cinematic depth of field.",
+      "image": "58778d9c9111.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:02:45.573069+00:00"
+    },
+    {
+      "id": "e9c18150-3623-4f5a-8a3d-705e036d4b3d",
+      "categoryId": "750e9105-7c54-4948-98a8-5b1922aaa0f3",
+      "name": "The Shadowed Soul",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features, bone structure, and dark hair must remain 100% identical to the reference image. Any stubble or beard must match the reference's natural growth pattern.\n\nTheme & Action: A cinematic editorial portrait of the subject with an intense, brooding, and mysterious expression. The subject maintains an intense gaze and direct eye contact with the camera, creating a powerful and moody atmosphere.\n\nWardrobe & Details: The subject wears a high-quality, black minimalist turtleneck. The focus is on the upper body and face, emphasizing the texture of the fabric and the subject's stoic presence.\n\nScene & Atmosphere: An abstract, dark studio setting that prioritizes high-contrast and an intense emotional mood. The environment is minimal to ensure absolute focus on the subject's expression and the interplay of light and shadow.\n\nLighting & Tech: Dramatic Chiaroscuro and Rembrandt lighting setup. Use of a red gel lighting as a rim or accent light to add depth. Stark contrast, split lighting, and low-key photography techniques are employed to create deep shadows and bright highlights. 8K resolution, high-end DSLR aesthetic, showing hyper-detailed skin textures, pores, and realistic facial details.",
+      "image": "de52dcb95d80.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:32:47.556542+00:00"
+    },
+    {
+      "id": "f0975e6a-4921-4ef3-9db6-0a1c45f585d1",
+      "categoryId": "750e9105-7c54-4948-98a8-5b1922aaa0f3",
+      "name": "Abstract Velocity",
+      "text": "**Identity Preservation:** CRITICAL: The subject's facial features must remain completely unaltered from the reference image. The subject is shown without helmet, face fully visible and realistic.\n\n**Theme & Action:** A powerful portrait of the subject as a race car driver in the style of abstract realism. The composition is dynamic, with the subject dissolving into energetic brushstrokes, paint splatters, and shattering fragments. Direct eye contact with the camera.\n\n**Scene & Atmosphere:** Dramatic color palette with strong contrast between warm oranges and cool blues. Intense, cinematic mood full of high-octane energy.\n\n**Lighting & Tech:** Ultra-realistic rendering, 8K resolution, hyper-detailed textures, professional photograph quality with cinematic color grading.",
+      "image": "e8b0d43a78ad.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:40:09.912381+00:00"
+    },
+    {
+      "id": "16f0a28b-0215-4a75-959f-72769a159129",
+      "categoryId": "750e9105-7c54-4948-98a8-5b1922aaa0f3",
+      "name": "Burning Ace",
+      "text": "**Identity Preservation:** CRITICAL: The subject's facial features must remain completely unaltered from the reference image.\n\n**Theme & Action:** The subject stands in a black hoodie performing a fiery magic trick, intense gaze fixed directly at the camera. A burning ace of spades card floats in midair near the chest surrounded by glowing embers and sparks. One outstretched hand reaches toward the viewer. Mystery and supernatural energy.\n\n**Wardrobe & Details:** Black hoodie.\n\n**Scene & Atmosphere:** Dark, smoky background. Blending realism with fantasy for a dramatic, magical effect.\n\n**Lighting & Tech:** Powerful cinematic portrait, lighting highlights the focused expression and vivid flames, 8K resolution, ultra-realistic, professional photograph with dramatic contrast.",
+      "image": "f2cb17bb792f.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:48:54.576227+00:00"
+    },
+    {
+      "id": "d2459eb5-319e-48a9-875c-3f89d4a1fb07",
+      "categoryId": "3c8b18da-c810-4abb-826a-163ca89949a8",
+      "name": "Neo-Noir Executive",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features (jawline, nose, mouth structure) must remain completely unaltered from the reference image, visible beneath the sunglasses.\n\nSubject & Action: A powerful, enigmatic man, seated in the luxurious interior of a vintage car. He is smoking a lit cigar, wearing a sharp dark suit and sleek rectangular sunglasses. Wisps of cigar smoke curl around him, catching the light.\n\nLighting & Atmosphere: Dramatic chiaroscuro lighting. Strong cinematic highlights pierce through rich, deep shadows, creating a gritty, mysterious, and neo-noir atmosphere.\n\nAesthetic & Color: A high-contrast, desaturated black and white aesthetic with a subtle, warm orange color pop coming only from the glowing tip of the cigar.\n\nTechnical Details: Hyper-detailed, photorealistic portrait shot in the style of Annie Leibovitz. Shot with an 85mm prime lens at f/2.0 aperture creating a shallow depth of field with creamy bokeh in the blurred, smoky background. 8k resolution.",
+      "image": "2924b2c94794.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T11:21:17.433471+00:00"
+    },
+    {
+      "id": "4e131dc6-f7b1-4d05-84e3-bfa4644365ed",
+      "categoryId": "3c8b18da-c810-4abb-826a-163ca89949a8",
+      "name": "The Midnight Sovereign",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and bone structure must remain 100% identical and unaltered from the reference image. No anatomical modifications or added descriptors.\n\nTheme & Action: A hyper-realistic 16K cinematic portrait of the subject seated on the chrome bumper of a vintage Lincoln. The subject is looking slightly to the side with a composed, deliberate, and authoritative gaze. The posture conveys a fusion of tranquility and quiet power.\n\nWardrobe & Details: The subject wears a premium navy wool blazer, a crisp white dress shirt, grey tailored trousers, and polished leather oxfords. Accessories include a silver wristwatch and visible cufflinks in soft reflection. Aviator sunglasses are worn.\n\nScene & Atmosphere: Set against a teal forest background. The composition is a sophisticated, high-end cinematic shot with a tactile analog film texture and subtle grain.\n\nLighting & Tech: Key 5000K / Fill 4700K lighting setup. A soft rim light separates the subject's silhouette from the background. Deep contrast with warm highlights. Captured with Hasselblad H6D aesthetics and Vision3 50D color science. Zero graphic clutter, watermarks, or AI artifacts.",
+      "image": "e6b1cd5e8a03.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:12:50.488185+00:00"
+    },
+    {
+      "id": "abe7d490-a234-4db4-8ebe-f62ff2c42edd",
+      "categoryId": "3c8b18da-c810-4abb-826a-163ca89949a8",
+      "name": "The 70s Sophisticate",
+      "text": "Identity Preservation: CRITICAL: The subject's facial features and charismatic expression must remain 100% identical to the reference image. No alterations to bone structure or facial proportions are permitted.\n\nTheme & Action: A high-end, 8K photorealistic editorial shot capturing the subject exuding 1970s sophistication. The subject is sitting casually yet elegantly on the hood of a vintage Cadillac Eldorado, looking directly at the camera with a genuine, warm smile and intense eye contact.\n\nWardrobe & Details: The subject wears a meticulously detailed cream-colored pinstripe blazer over an unbuttoned rich brown satin shirt. Tailored cream bell-bottom trousers are secured by a sleek brown leather belt. Accessories include retro aviator glasses, a classic wristwatch on the left wrist, a patterned pocket square, and polished brown leather loafers. Hair is styled in a classic, well-coiffed 70s cut.\n\nScene & Atmosphere: A deep, glossy metallic burgundy late-1970s luxury car serves as the centerpiece, featuring gleaming chrome bumpers, an intricate rectangular grille, and whitewall tires. The background consists of lush, dark green foliage with a soft bokeh effect (shallow depth of field). The ground is textured light-colored gravel.\n\nLighting & Tech: Captured during the golden hour with soft, warm sunlight. Cinematic lighting creates volumetric effects, elongated shadows, and highlights the metallic sheen of the car and the fabric textures. Shot with a professional DSLR, 50mm lens, 8K resolution, featuring hyper-detailed skin textures, pores, and realistic fabric weaves. High-contrast professional color grading.",
+      "image": "b4afcfccb386.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-07T01:26:15.387168+00:00"
+    },
+    {
+      "id": "dab200bc-70f8-4e01-8eb6-c15e9deb7b8f",
+      "categoryId": "c5afb75a-7fae-4158-8cf9-ef69587bed94",
+      "name": "Apocalypse Selfie",
+      "text": "Scene & Action: A realistic candid Polaroid-style selfie of the person from the reference image posing with a battle-damaged Terminator Model 101 cyborg. The angle is intimate and handheld (selfie perspective), with the cyborg\u2019s arm friendly around the subject's shoulder. Both are laughing and looking directly into the lens as if posing for a spontaneous, cheerful tourist photo.\n\nIdentity Preservation: The subject's face must remain fully recognizable with absolute fidelity to the reference.\n\nWardrobe: Keep the subject's original clothing to enhance the \"accidental time traveler\" vibe, contrasting normal attire with the sci-fi environment.\n\nThe Co-Star: The Terminator features detailed exposed metallic endoskeleton parts, a glowing red eye, and realistic battle damage, contrasting with its friendly posture.\n\nBackground: A cinematic apocalyptic cityscape lies in ruins behind them\u2014collapsed skyscrapers, burning vehicles, thick plumes of black smoke, and distant explosions. The chaotic destruction stands in humorous contrast to their happy expressions.\n\nTech & Aesthetic: Vintage Polaroid aesthetic with soft focus edges, muted analog colors, heavy 35mm film grain, flash reflection, and a slight overexposure in the sky to simulate an authentic retro snapshot.",
+      "image": "532218303f28.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T04:40:54.677470+00:00"
+    },
+    {
+      "id": "28918733-d37f-453e-b4e7-4defd7cf2972",
+      "categoryId": "c5afb75a-7fae-4158-8cf9-ef69587bed94",
+      "name": "Hogwarts Besties",
+      "text": "Transformation & Theme: The person from the reference image is transported into the Wizarding World, appearing as a legitimate Hogwarts student. The aesthetic captures the warm, magical, and cinematic atmosphere of the classic films.\n\nIdentity Preservation: CRITICAL: The subject's face must remain completely unaltered with absolute fidelity. The subject is smiling warmly, arm-in-arm in a friendly embrace with the target character.\n\nTarget Character (Art Directed): Beside the subject stands the iconic \"Boy Who Lived\" (a young wizard with messy dark hair, round wire-rimmed glasses, and a faint lightning bolt scar on his forehead). He is smiling back, looking like a close friend.\n\nWardrobe (Art Directed): Replace original clothing completely. Both characters are wearing authentic Gryffindor House uniforms: textured charcoal grey knit sweaters, white collared shirts, ties with crimson and gold stripes, and heavy, flowing black wizarding robes with the house crest embroidered on the chest.\n\nScene & Atmosphere: The setting is the Gryffindor Common Room or the Great Hall, featuring ancient stone walls, warm candlelight, and perhaps a moving portrait or floating candle in the soft-focus background.\n\nLighting & Tech: Warm, cinematic ambient lighting (candlelight feel). Shot on 35mm film stock aesthetics, fine grain, rich colors, shallow depth of field to separate the duo from the background, 8k resolution.",
+      "image": "d551d4200778.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:49:18.224945+00:00"
+    },
+    {
+      "id": "b3c169d4-eb65-4d5d-8454-9fe1d822ba20",
+      "categoryId": "c5afb75a-7fae-4158-8cf9-ef69587bed94",
+      "name": "Gothic Academy",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a student of Nevermore Academy, embracing the dark, gothic academic aesthetic.\n\nIdentity Preservation: CRITICAL: The subject's face must remain completely unaltered. The subject is smiling warmly, offering a contrast to the moody atmosphere.\n\nTarget Character (Art Directed): Beside the subject stands the iconic Goth Girl Prodigy (pale skin, signature black twin braids, bangs, and an intense, stoic expression or a very subtle, rare smirk). She accepts the embrace with her characteristic stiff, deadpan demeanor.\n\nWardrobe (Art Directed): Replace original clothing completely. Both characters are wearing the Nevermore Academy Uniform:\n\nSubject: A deep charcoal and black striped blazer, white stiff collar shirt, black tie, and matching dark grey trousers or pleated skirt. Texture is heavy wool and high-quality fabric.\n\nCharacter: Her signature black version of the uniform with an oversized sharp collar.\n\nScene & Atmosphere: The setting is the Ophelia Hall Dorm Room, featuring the iconic spiderweb stained-glass window in the background. One side is colorful, the other is dark, creating a perfect visual split.\n\nLighting & Tech: Moody, cinematic \"Tim Burton-esque\" lighting. Cool blue moonlight filtering through the stained glass, casting dramatic shadows. High contrast, desaturated color palette (except for the subject's skin tone), sharp focus, 8k resolution.",
+      "image": "8a1f24fc1e33.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T05:54:49.679062+00:00"
+    },
+    {
+      "id": "ddba9c5a-8b6b-40bc-8733-1cf998870027",
+      "categoryId": "c5afb75a-7fae-4158-8cf9-ef69587bed94",
+      "name": "Jinkies Tactical",
+      "text": "Transformation & Theme: The person from the reference image is transformed into a Tactical Mystery Solver (iconic orange/brown aesthetic), but in a gritty, live-action survival horror movie style.\n\nIdentity Preservation: CRITICAL: The subject's facial features must remain completely unaltered.\n\nWardrobe (Art Directed):\n\nHair: Styled in a sleek, precise bob cut with iconic square-rimmed glasses.\n\nOutfit: A fitted orange halter top, a brown pleated mini-skirt, orange thigh-high socks, and brown patent leather school shoes with wide soles and a front buckle.\n\nCompanions:\n\nThe Dog: Beside her stands a massive, angry Great Dane (brown with black spots) wearing a black collar with a diamond-shaped gold tag. The dog looks protective and fierce.\n\nProps & Action: The subject looks like she is hunting ghosts, holding a flashlight in one hand and a tactical handgun in the other.\n\nScene & Atmosphere: A dark, sinister forest path. Behind the subject is a retro 1960s panel van painted in teal and lime green (flower power style). To the right, a translucent, spooky ghost lurks in the shadows.\n\nLighting & Tech: Cinematic low-key lighting. The flashlight beam cuts through the fog. Sharp focus, dark moody atmosphere, realistic textures, 8k resolution.",
+      "image": "2f447d61dc51.jpg",
+      "enabled": true,
+      "createdAt": "2026-02-06T06:12:43.644386+00:00"
+    }
+  ]
+}

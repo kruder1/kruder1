@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Boot Sequence - Cyberpunk</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #050505; /* Casi negro, mejor para CRT */
+            --main-color: #ffffff;
+            --terminal-font: 'Fira Code', monospace;
+            --border-radius: 16px; /* Esquinas ligeramente redondeadas para el cuadro */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column; /* Elementos uno debajo del otro */
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+            color: var(--main-color);
+            font-family: var(--terminal-font);
+            letter-spacing: 1px;
+        }
+
+        /* --- EFECTO SCANLINES (CRT) --- */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px; /* Altura de la línea */
+            z-index: 1000; /* Por encima de todo */
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Efecto flicker sutil en toda la pantalla */
+        @keyframes flicker {
+            0% { opacity: 0.97; }
+            5% { opacity: 0.95; }
+            10% { opacity: 0.97; }
+            15% { opacity: 0.94; }
+            20% { opacity: 0.98; }
+            100% { opacity: 1; }
+        }
+        
+        #boot-sequence-wrapper {
+            animation: flicker 0.15s infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- CONTENEDOR DEL LOGO --- */
+        #logo-container-wrapper {
+            position: relative;
+            width: 140px; /* Un poco más compacto */
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px; /* Espacio para el texto de abajo */
+        }
+
+        #logo-box {
+            opacity: 0;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Ligero resplandor (glow) */
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+        }
+
+        #logo-border {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--main-color);
+            border-radius: var(--border-radius);
+            z-index: 1;
+        }
+          
+        #logo-border-inner {
+            position: absolute;
+            top: 3px; left: 3px; right: 3px; bottom: 3px;
+            background-color: var(--bg-color);
+            border-radius: calc(var(--border-radius) - 1px);
+            z-index: 2;
+        }
+
+        #logo-content {
+            position: relative;
+            z-index: 3;
+            width: 60%; 
+            height: 60%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #logo-image {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            /* Fuerza logo blanco */
+            filter: brightness(0) invert(1);
+        }
+
+        /* --- TEXTO DE CARGA Y GLITCH --- */
+        #status-text-container {
+            position: relative;
+            font-size: 1em;
+            text-transform: uppercase;
+            height: 1.2em; /* Altura fija para evitar saltos */
+        }
+
+        #status-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Clase para aplicar el efecto glitch (se quita en 'completed') */
+        .glitch-active {
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+
+        .glitch-active::before,
+        .glitch-active::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch-active::before {
+            animation: glitch-anim 0.4s infinite linear alternate-reverse;
+            color: #ff00ff; /* Magenta glitch */
+            z-index: -1;
+        }
+
+        .glitch-active::after {
+            animation: glitch-anim2 0.4s infinite linear alternate-reverse;
+            color: #00ffff; /* Cyan glitch */
+            z-index: -2;
+            left: -2px;
+        }
+
+        /* Animaciones del Glitch */
+        @keyframes glitch-anim {
+            0% { clip: rect(30px, 9999px, 10px, 0); transform: skew(0.1deg); }
+            20% { clip: rect(15px, 9999px, 30px, 0); transform: skew(0.2deg); }
+            40% { clip: rect(40px, 9999px, 20px, 0); transform: skew(0.3deg); }
+            60% { clip: rect(10px, 9999px, 35px, 0); transform: skew(0.1deg); }
+            80% { clip: rect(25px, 9999px, 15px, 0); transform: skew(0.4deg); }
+            100% { clip: rect(35px, 9999px, 25px, 0); transform: skew(0.2deg); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(10px, 9999px, 30px, 0); transform: skew(-0.1deg); }
+            20% { clip: rect(30px, 9999px, 15px, 0); transform: skew(-0.2deg); }
+            40% { clip: rect(20px, 9999px, 40px, 0); transform: skew(-0.3deg); }
+            60% { clip: rect(35px, 9999px, 10px, 0); transform: skew(-0.1deg); }
+            80% { clip: rect(15px, 9999px, 25px, 0); transform: skew(-0.4deg); }
+            100% { clip: rect(25px, 9999px, 35px, 0); transform: skew(-0.2deg); }
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            10% { transform: skew(0deg); }
+            11% { transform: skew(5deg); }
+            12% { transform: skew(0deg); }
+            50% { transform: skew(0deg); }
+            51% { transform: skew(-3deg); }
+            52% { transform: skew(0deg); }
+            100% { transform: skew(0deg); }
+        }
+
+        /* Botón reiniciar ajustado a la estética */
+        #restart-button {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            font-family: var(--terminal-font);
+            font-size: 0.7em;
+            padding: 5px 10px;
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            cursor: pointer;
+            z-index: 1100;
+            transition: all 0.3s;
+        }
+
+        #restart-button:hover {
+            background: var(--main-color);
+            color: var(--bg-color);
+            border-color: var(--main-color);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="boot-sequence-wrapper">
+        <div id="logo-container-wrapper">
+            <div id="logo-box">
+                <div id="logo-border"></div>
+                <div id="logo-border-inner"></div>
+                
+                <div id="logo-content">
+                    <img src="logo.png" alt="System Logo" id="logo-image">
+                </div>
+            </div>
+        </div>
+
+        <div id="status-text-container">
+            <span id="status-text" class="glitch-active" data-text="LOADING...">LOADING...</span>
+        </div>
+    </div>
+
+    <button id="restart-button" type="button">SYS_RESET</button>  
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+        const t1 = gsap.timeline();
+        const statusText = document.getElementById("status-text");
+
+        // Función para cambiar el texto y detener el glitch
+        function setCompleted() {
+            statusText.innerHTML = "COMPLETED";
+            statusText.setAttribute("data-text", "COMPLETED");
+            statusText.classList.remove("glitch-active"); // Detiene la animación de glitch
+            statusText.style.color = "#00ff00"; // Cambia a verde terminal para indicar éxito
+            statusText.style.textShadow = "0 0 10px rgba(0,255,0,0.7)";
+        }
+
+        // Función para reiniciar el estado del texto
+        function resetStatus() {
+            statusText.innerHTML = "LOADING...";
+            statusText.setAttribute("data-text", "LOADING...");
+            statusText.classList.add("glitch-active");
+            statusText.style.color = "var(--main-color)";
+            statusText.style.textShadow = "none";
+        }
+
+        // Secuencia de animación
+        t1.set("#logo-box", { opacity: 0, scale: 0.8 })
+          .call(resetStatus) // Asegura que el texto esté en loading al inicio
+          
+          // 1. Aparición rápida tipo boot
+          .to("#logo-box", { duration: 0.3, opacity: 1, scale: 1, ease: "steps(3)" }, "+=0.5")
+          
+          .from("#logo-border", { duration: 0.4, scale: 0.9, opacity: 0 }, "-=0.2")
+          
+          // 2. Espera sutil (simulando carga)
+          .to("#logo-box", { duration: 2.5, scale: 1.02, ease: "none" })
+          
+          // 3. Explosión final
+          .to("#logo-border", { duration: 0.8, scale: 40, ease: "power4.in" }, "-=0.5")
+          .to("#logo-border-inner", { duration: 0.6, scale: 45, ease: "power4.in" }, "-=0.6")
+          .to("#logo-content", { duration: 0.3, opacity: 0, scale: 0.8 }, "-=0.7")
+          
+          // 4. Cambio de estado del texto justo después de la explosión
+          .call(setCompleted, null, "-=0.3")
+
+          // 5. Desaparición final del contenedor
+          .to("#boot-sequence-wrapper", { duration: 0.5, opacity: 0, display: 'none' }, "+=1");
+
+        // Botón reiniciar
+        document.getElementById("restart-button").onclick = () => {
+            t1.restart();
+            // Aseguramos que el wrapper vuelva a ser visible si ya había terminado
+            gsap.set("#boot-sequence-wrapper", {display: 'flex', opacity: 1});
+        };
+    </script>
+</body>
+</html>

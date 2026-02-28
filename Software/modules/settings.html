@@ -1,0 +1,1791 @@
+<!-- ========================================
+     SETTINGS MODULE - HTML
+     ======================================== -->
+
+<!-- Main Settings View -->
+<section id="view-settings" class="view-section">
+    <button class="btn-back" data-action="go-home"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="settings.title">SETTINGS</h1>
+        <div class="settings-grid">
+            <button class="btn-main" data-action="goto-camera"><i class="fa-solid fa-camera"></i> <span data-i18n="settings.btn_camera">CAMERA</span></button>
+            <button class="btn-main" data-action="goto-printing"><i class="fa-solid fa-print"></i> <span data-i18n="settings.btn_printing">PRINTING</span></button>
+            <button class="btn-main" data-action="goto-sound"><i class="fa-solid fa-volume-high"></i> <span data-i18n="settings.btn_sound">SOUND</span></button>
+            <button class="btn-main" data-action="goto-language"><i class="fa-solid fa-language"></i> <span data-i18n="settings.btn_language">LANGUAGE</span></button>
+            <button class="btn-main" data-action="goto-interface"><i class="fa-solid fa-palette"></i> <span data-i18n="settings.btn_interface">INTERFACE</span></button>
+            <button class="btn-main" data-action="toggle-fullscreen"><i class="fa-solid fa-expand"></i> <span data-i18n="settings.btn_fullscreen">FULLSCREEN</span></button>
+            <button class="btn-main" data-action="goto-pin"><i class="fa-solid fa-key"></i> <span data-i18n="settings.btn_pin">SECURITY PIN</span></button>
+            <button class="btn-main" data-action="software-update"><i class="fa-solid fa-download"></i> <span data-i18n="settings.btn_update">UPDATE</span></button>
+        </div>
+    </div>
+</section>
+
+<!-- Sub-views -->
+<section id="view-sound" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-settings"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="settings.title_sound">SOUND SETTINGS</h1>
+        <div class="sound-slider-block">
+            <div class="sound-slider-header">
+                <span class="sound-slider-label" data-i18n="settings.sound_bg">BACKGROUND SOUND</span>
+                <span id="sound-bg-value" class="sound-slider-value">15%</span>
+            </div>
+            <div class="sound-slider-track" id="sound-bg-track">
+                <div class="sound-slider-fill" id="sound-bg-fill" style="width: 15%;"></div>
+                <div class="sound-slider-thumb" id="sound-bg-thumb" style="left: 15%;"></div>
+                <input type="range" class="sound-slider-input" id="sound-bg-input" min="0" max="100" value="15" aria-label="Background sound volume" data-i18n="settings.aria_bg_volume" data-i18n-attr="aria-label">
+            </div>
+        </div>
+        <div class="sound-slider-block">
+            <div class="sound-slider-header">
+                <span class="sound-slider-label" data-i18n="settings.sound_ui">UI SOUND</span>
+                <span id="sound-ui-value" class="sound-slider-value">75%</span>
+            </div>
+            <div class="sound-slider-track" id="sound-ui-track">
+                <div class="sound-slider-fill" id="sound-ui-fill" style="width: 75%;"></div>
+                <div class="sound-slider-thumb" id="sound-ui-thumb" style="left: 75%;"></div>
+                <input type="range" class="sound-slider-input" id="sound-ui-input" min="0" max="100" value="75" aria-label="UI sound volume" data-i18n="settings.aria_ui_volume" data-i18n-attr="aria-label">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="view-camera" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-settings"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="settings.title_camera">CAMERA SETTINGS</h1>
+        <div class="camera-select-wrap">
+            <select id="camera-select" aria-label="Select camera" data-i18n="settings.aria_select_camera" data-i18n-attr="aria-label">
+                <option value="" data-i18n="settings.select_camera">Select a camera</option>
+            </select>
+        </div>
+        <div class="camera-live-wrap">
+            <video id="camera-settings-video" autoplay playsinline muted></video>
+            <canvas id="camera-settings-canvas"></canvas>
+        </div>
+        <div class="camera-control-row">
+            <label for="camera-brightness" data-i18n="settings.label_brightness">BRIGHTNESS</label>
+            <input type="range" id="camera-brightness" min="0" max="100" value="50" aria-label="Brightness" data-i18n="settings.aria_brightness" data-i18n-attr="aria-label">
+        </div>
+        <div class="camera-control-row">
+            <label for="camera-contrast" data-i18n="settings.label_contrast">CONTRAST</label>
+            <input type="range" id="camera-contrast" min="0" max="100" value="50" aria-label="Contrast" data-i18n="settings.aria_contrast" data-i18n-attr="aria-label">
+        </div>
+        <div class="camera-control-row">
+            <label for="camera-whitebalance" data-i18n="settings.label_whitebalance">WHITE BALANCE</label>
+            <input type="range" id="camera-whitebalance" min="0" max="100" value="50" aria-label="White balance" data-i18n="settings.aria_whitebalance" data-i18n-attr="aria-label">
+        </div>
+        <button type="button" class="btn-main btn-primary u-mt-12" data-action="camera-reset-settings">
+            <i class="fa-solid fa-rotate-left"></i> <span data-i18n="settings.btn_reset">RESET SETTINGS</span>
+        </button>
+    </div>
+</section>
+
+<section id="view-printing" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-settings"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="settings.title_printing">PRINTING SETTINGS</h1>
+        <div class="printing-two-cols">
+            <div class="printing-left-col">
+                <div class="printing-preview-img-wrap">
+                    <img id="printing-preview-img" src="" alt="Print preview" referrerpolicy="no-referrer">
+                </div>
+            </div>
+            <div class="printing-right-col">
+                <div class="printing-toggle-row">
+                    <span class="printing-label" id="printing-enabled-label" data-i18n="settings.label_disabled">DISABLED</span>
+                    <label class="printing-switch" aria-label="Printing enabled">
+                        <input type="checkbox" id="printing-disabled" checked>
+                        <span class="printing-slider"></span>
+                    </label>
+                </div>
+                <div class="printing-toggle-row">
+                    <span class="printing-label" data-i18n="settings.label_automatic">AUTOMATIC PRINTING</span>
+                    <label class="printing-switch" aria-label="Automatic printing">
+                        <input type="checkbox" id="printing-automatic">
+                        <span class="printing-slider"></span>
+                    </label>
+                </div>
+                <div class="printing-copies-row">
+                    <span class="printing-label" data-i18n="settings.label_copies">NUMBER OF COPIES</span>
+                    <div class="printing-copies-control">
+                        <button type="button" class="btn-control" data-action="printing-copies-minus" aria-label="Less">−</button>
+                        <span class="printing-copies-value" id="printing-copies-display">1</span>
+                        <button type="button" class="btn-control" data-action="printing-copies-plus" aria-label="More">+</button>
+                    </div>
+                </div>
+                <div class="camera-select-wrap">
+                    <select id="printing-printer-select" aria-label="Printer">
+                        <option value="">—</option>
+                    </select>
+                </div>
+                <div class="printing-buttons">
+                    <button type="button" class="btn-main" data-action="printing-settings"><i class="fa-solid fa-cog"></i> <span data-i18n="settings.btn_printer_settings">PRINTER SETTINGS</span></button>
+                    <button type="button" class="btn-main btn-primary" data-action="printing-test"><i class="fa-solid fa-print"></i> <span data-i18n="settings.btn_test_print">TEST PRINTING</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="view-interface" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-settings"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="settings.title_interface">INTERFACE</h1>
+        <div class="sound-slider-block">
+            <div class="sound-slider-header">
+                <span class="sound-slider-label" data-i18n="settings.accent_color">ACCENT COLOR</span>
+                <span id="accent-hue-value" class="sound-slider-value">20°</span>
+            </div>
+            <div class="sound-slider-track" id="accent-hue-track">
+                <div class="sound-slider-fill" id="accent-hue-fill" style="width: 5.56%;"></div>
+                <div class="sound-slider-thumb" id="accent-hue-thumb" style="left: 5.56%;"></div>
+                <input type="range" class="sound-slider-input" id="accent-hue-input" min="0" max="360" value="20" aria-label="Accent color hue" data-i18n="settings.aria_accent_hue" data-i18n-attr="aria-label">
+            </div>
+        </div>
+        <div class="sound-slider-block">
+            <div class="sound-slider-header">
+                <span class="sound-slider-label" data-i18n="settings.background_luminance">BACKGROUND LUMINANCE</span>
+                <span id="theme-luminance-value" class="sound-slider-value">15%</span>
+            </div>
+            <div class="sound-slider-track" id="theme-luminance-track">
+                <div class="sound-slider-fill" id="theme-luminance-fill" style="width: 15%;"></div>
+                <div class="sound-slider-thumb" id="theme-luminance-thumb" style="left: 15%;"></div>
+                <input type="range" class="sound-slider-input" id="theme-luminance-input" min="0" max="100" value="15" aria-label="Background luminance" data-i18n="settings.aria_background_luminance" data-i18n-attr="aria-label">
+            </div>
+        </div>
+        <div class="sound-slider-block">
+            <div class="sound-slider-header">
+                <span class="sound-slider-label" data-i18n="settings.text_icons">TEXT / ICONS</span>
+                <span id="ink-luminance-value" class="sound-slider-value">75%</span>
+            </div>
+            <div class="sound-slider-track" id="ink-luminance-track">
+                <div class="sound-slider-fill" id="ink-luminance-fill" style="width: 75%;"></div>
+                <div class="sound-slider-thumb" id="ink-luminance-thumb" style="left: 75%;"></div>
+                <input type="range" class="sound-slider-input" id="ink-luminance-input" min="0" max="100" value="75" aria-label="Text and icons luminance" data-i18n="settings.aria_text_icons" data-i18n-attr="aria-label">
+            </div>
+        </div>
+        <div class="language-form-wrap">
+            <button type="button" class="btn-main btn-primary" data-action="interface-light-mode" data-i18n="settings.light_mode">LIGHT MODE</button>
+            <button type="button" class="btn-main btn-primary" data-action="interface-dark-mode" data-i18n="settings.dark_mode">DARK MODE</button>
+        </div>
+    </div>
+</section>
+
+<section id="view-language" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-settings"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="settings.title_language">LANGUAGE SETTINGS</h1>
+        <p class="text-muted u-mb-md" data-i18n="settings.select_language">SELECT LANGUAGE</p>
+        <div class="language-form-wrap">
+            <div class="input-wrapper">
+                <select id="language-select" aria-label="Language">
+                <!-- Populated from static/locales/*.json -->
+                </select>
+            </div>
+            <button type="button" class="btn-main btn-primary" data-action="language-apply" data-i18n="settings.btn_apply">APPLY</button>
+        </div>
+    </div>
+</section>
+
+<!-- Lock Screen Text Modal (with virtual keyboard) -->
+<div id="locktext-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box-keyboard">
+        <div class="modal-text" data-i18n="settings.modal_locktext">LOCK SCREEN TEXT</div>
+
+        <div class="keyboard-input-display">
+            <input type="text" id="locktext-input" class="keyboard-real-input" placeholder="Lock screen message" data-i18n="settings.placeholder_locktext" data-i18n-attr="placeholder" autocomplete="off" inputmode="none">
+            <button type="button" id="locktext-clear-btn" class="input-clear-btn">X</button>
+        </div>
+
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="1">1</button>
+            <button type="button" class="kb-key" data-key="2">2</button>
+            <button type="button" class="kb-key" data-key="3">3</button>
+            <button type="button" class="kb-key" data-key="4">4</button>
+            <button type="button" class="kb-key" data-key="5">5</button>
+            <button type="button" class="kb-key" data-key="6">6</button>
+            <button type="button" class="kb-key" data-key="7">7</button>
+            <button type="button" class="kb-key" data-key="8">8</button>
+            <button type="button" class="kb-key" data-key="9">9</button>
+            <button type="button" class="kb-key" data-key="0">0</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="BACKSPACE">DEL</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key" data-key="Q">q</button>
+            <button type="button" class="kb-key" data-key="W">w</button>
+            <button type="button" class="kb-key" data-key="E">e</button>
+            <button type="button" class="kb-key" data-key="R">r</button>
+            <button type="button" class="kb-key" data-key="T">t</button>
+            <button type="button" class="kb-key" data-key="Y">y</button>
+            <button type="button" class="kb-key" data-key="U">u</button>
+            <button type="button" class="kb-key" data-key="I">i</button>
+            <button type="button" class="kb-key" data-key="O">o</button>
+            <button type="button" class="kb-key" data-key="P">p</button>
+        </div>
+        <div class="kb-row kb-row--shift">
+            <button type="button" class="kb-key" data-key="A">a</button>
+            <button type="button" class="kb-key" data-key="S">s</button>
+            <button type="button" class="kb-key" data-key="D">d</button>
+            <button type="button" class="kb-key" data-key="F">f</button>
+            <button type="button" class="kb-key" data-key="G">g</button>
+            <button type="button" class="kb-key" data-key="H">h</button>
+            <button type="button" class="kb-key" data-key="J">j</button>
+            <button type="button" class="kb-key" data-key="K">k</button>
+            <button type="button" class="kb-key" data-key="L">l</button>
+            <button type="button" class="kb-key" data-key="@">@</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key="SHIFT">SHIFT</button>
+            <button type="button" class="kb-key" data-key="Z">z</button>
+            <button type="button" class="kb-key" data-key="X">x</button>
+            <button type="button" class="kb-key" data-key="C">c</button>
+            <button type="button" class="kb-key" data-key="V">v</button>
+            <button type="button" class="kb-key" data-key="B">b</button>
+            <button type="button" class="kb-key" data-key="N">n</button>
+            <button type="button" class="kb-key" data-key="M">m</button>
+            <button type="button" class="kb-key" data-key=".">.</button>
+            <button type="button" class="kb-key" data-key="-">-</button>
+            <button type="button" class="kb-key kb-key--action kb-key--wide" data-key=".COM">.COM</button>
+        </div>
+        <div class="kb-row">
+            <button type="button" class="kb-key kb-key--space" data-key="SPACE"></button>
+        </div>
+
+        <div class="modal-actions mt-15">
+            <button data-action="locktext-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="locktext-confirm" class="btn-main" id="btn-locktext-confirm" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Release PIN verification modal -->
+<div id="release-pin-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box--compact">
+        <div class="pin-pad">
+            <h2 class="pin-pad__label" data-i18n="settings.pin_label_current">ENTER CURRENT PIN</h2>
+            <div class="pin-pad__display" id="release-pin-display"></div>
+            <div class="pin-pad__grid">
+                <button type="button" class="pin-pad__key" data-verify-val="1">1</button>
+                <button type="button" class="pin-pad__key" data-verify-val="2">2</button>
+                <button type="button" class="pin-pad__key" data-verify-val="3">3</button>
+                <button type="button" class="pin-pad__key" data-verify-val="4">4</button>
+                <button type="button" class="pin-pad__key" data-verify-val="5">5</button>
+                <button type="button" class="pin-pad__key" data-verify-val="6">6</button>
+                <button type="button" class="pin-pad__key" data-verify-val="7">7</button>
+                <button type="button" class="pin-pad__key" data-verify-val="8">8</button>
+                <button type="button" class="pin-pad__key" data-verify-val="9">9</button>
+                <button type="button" class="pin-pad__key pin-pad__key--empty"></button>
+                <button type="button" class="pin-pad__key" data-verify-val="0">0</button>
+                <button type="button" class="pin-pad__key" data-verify-val="clear">X</button>
+            </div>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="release-pin-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<section id="view-pin" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-settings"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="settings.title_pin">EVENT SECURITY PIN</h1>
+
+        <div id="pin-setup-container">
+            <h2 class="pin-pad__label pin-status" id="pin-status" data-i18n="settings.pin_not_configured">PIN NOT CONFIGURED</h2>
+            <div class="pin-pad">
+                <h2 class="pin-pad__label" id="pin-instruction" data-i18n="settings.pin_enter_new">ENTER NEW PIN</h2>
+                <div class="pin-pad__display" id="pin-display"></div>
+                <div class="pin-pad__grid">
+                    <button type="button" class="pin-pad__key" data-pin-value="1">1</button>
+                    <button type="button" class="pin-pad__key" data-pin-value="2">2</button>
+                    <button type="button" class="pin-pad__key" data-pin-value="3">3</button>
+                    <button type="button" class="pin-pad__key" data-pin-value="4">4</button>
+                    <button type="button" class="pin-pad__key" data-pin-value="5">5</button>
+                    <button type="button" class="pin-pad__key" data-pin-value="6">6</button>
+                    <button type="button" class="pin-pad__key" data-pin-value="7">7</button>
+                    <button type="button" class="pin-pad__key" data-pin-value="8">8</button>
+                    <button type="button" class="pin-pad__key" data-pin-value="9">9</button>
+                    <button type="button" class="pin-pad__key pin-pad__key--empty"></button>
+                    <button type="button" class="pin-pad__key" data-pin-value="0">0</button>
+                    <button type="button" class="pin-pad__key" data-pin-value="clear">X</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="pin-success-container" class="pin-success hidden">
+            <h2 class="pin-pad__label" data-i18n="settings.pin_configured">PIN CONFIGURED</h2>
+            <button type="button" class="btn-main pin-success__btn" id="btn-release-pin" data-action="pin-release" data-i18n="settings.btn_release_pin">RELEASE PIN</button>
+        </div>
+
+        <div class="pin-locktext-row">
+            <button type="button" class="btn-main btn-primary pin-locktext-btn" data-action="goto-locktext">
+                <i class="fa-solid fa-lock"></i> <span data-i18n="settings.btn_edit_locktext">EDIT LOCK SCREEN TEXT</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section id="view-stats" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-settings"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="stats">
+        <h1 id="stats-title">GLOBAL<br>STATISTICS</h1>
+
+        <div class="stats__dropdown-wrap">
+            <select class="stats__select" id="stats-select">
+                <option value="">GLOBAL</option>
+            </select>
+            <div class="stats__dropdown-arrow">&#9660;</div>
+        </div>
+
+        <!-- EVENT MODE SECTION -->
+        <span class="stats__section-title" data-i18n="settings.stats_event_mode">EVENT MODE</span>
+
+        <div class="stats__grid">
+            <div class="stats__col">
+                <span class="stats__col-title" data-i18n="settings.stats_photos">Photos</span>
+                <div class="stats__row">
+                    <span class="stats__label" data-i18n="settings.stats_generations">Generations</span>
+                    <span class="stats__dots"></span>
+                    <span class="stats__value" id="stats-photos-taken">0</span>
+                </div>
+                <div class="stats__row">
+                    <span class="stats__label" data-i18n="settings.stats_successful">Successful</span>
+                    <span class="stats__dots"></span>
+                    <span class="stats__value" id="stats-photos-successful">0</span>
+                </div>
+                <div class="stats__row">
+                    <span class="stats__label" data-i18n="settings.stats_failed">Failed</span>
+                    <span class="stats__dots"></span>
+                    <span class="stats__value" id="stats-photos-failed">0</span>
+                </div>
+                <div class="stats__row">
+                    <span class="stats__label" data-i18n="settings.stats_success_rate">Success Rate</span>
+                    <span class="stats__dots"></span>
+                    <span class="stats__value" id="stats-photos-rate">0%</span>
+                </div>
+            </div>
+
+            <div class="stats__col">
+                <span class="stats__col-title" data-i18n="settings.stats_printing">Printing</span>
+                <div class="stats__row">
+                    <span class="stats__label" data-i18n="settings.stats_sent">Sent</span>
+                    <span class="stats__dots"></span>
+                    <span class="stats__value" id="stats-prints-sent">0</span>
+                </div>
+                <div class="stats__row">
+                    <span class="stats__label" data-i18n="settings.stats_successful">Successful</span>
+                    <span class="stats__dots"></span>
+                    <span class="stats__value" id="stats-prints-successful">0</span>
+                </div>
+                <div class="stats__row">
+                    <span class="stats__label" data-i18n="settings.stats_failed">Failed</span>
+                    <span class="stats__dots"></span>
+                    <span class="stats__value" id="stats-prints-failed">0</span>
+                </div>
+                <div class="stats__row">
+                    <span class="stats__label" data-i18n="settings.stats_success_rate">Success Rate</span>
+                    <span class="stats__dots"></span>
+                    <span class="stats__value" id="stats-prints-rate">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats__info-group">
+            <div class="stats__row">
+                <span class="stats__label">Average Generation Time</span>
+                <span class="stats__dots"></span>
+                <span class="stats__value" id="stats-avg-time">-</span>
+            </div>
+            <div class="stats__row">
+                <span class="stats__label" data-i18n="settings.stats_emails">Emails Collected</span>
+                <span class="stats__dots"></span>
+                <span class="stats__value" id="stats-emails">0</span>
+            </div>
+        </div>
+
+        <button type="button" class="stats__btn" data-action="export-emails" data-i18n="settings.btn_export_emails">EXPORT EMAILS</button>
+
+        <!-- PROMPT LAB SECTION -->
+        <div class="stats__divider"></div>
+        <span class="stats__section-title" data-i18n="settings.stats_prompt_lab">PROMPT LAB</span>
+
+        <div class="stats__info-group">
+            <div class="stats__row">
+                <span class="stats__label" data-i18n="settings.stats_generations">Generations</span>
+                <span class="stats__dots"></span>
+                <span class="stats__value" id="stats-pl-total">0</span>
+            </div>
+            <div class="stats__row">
+                <span class="stats__label" data-i18n="settings.stats_successful">Successful</span>
+                <span class="stats__dots"></span>
+                <span class="stats__value" id="stats-pl-successful">0</span>
+            </div>
+            <div class="stats__row">
+                <span class="stats__label" data-i18n="settings.stats_failed">Failed</span>
+                <span class="stats__dots"></span>
+                <span class="stats__value" id="stats-pl-failed">0</span>
+            </div>
+            <div class="stats__row">
+                <span class="stats__label" data-i18n="settings.stats_success_rate">Success Rate</span>
+                <span class="stats__dots"></span>
+                <span class="stats__value" id="stats-pl-rate">0%</span>
+            </div>
+            <div class="stats__row">
+                <span class="stats__label">Average Generation Time</span>
+                <span class="stats__dots"></span>
+                <span class="stats__value" id="stats-pl-avg-time">-</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========================================
+     SETTINGS MODULE - JAVASCRIPT
+     ======================================== -->
+<script>
+window.SettingsModule = {
+    state: {
+        currentView: 'settings',
+        cameraStream: null,
+        cameraDrawId: null,
+        releasePinCurrent: '',
+        releasePinTimer: null
+    },
+
+    init() {
+        console.debug('[SETTINGS] Module initialized');
+        this.bindEvents();
+        this.updateThemeIcon();
+        this.initFullscreenState();
+        this.initSoundSliders();
+        this.initAccentHueSlider();
+        this.initThemeLuminanceSlider();
+        this.initInkLuminanceSlider();
+        this.initLocktextKeyboard();
+        if (window.AppState?.openView === 'stats') {
+            this.state.statsFromDashboard = true;
+            this.showView('stats');
+            this.loadStatsView();
+            window.AppState.openView = null;
+        }
+    },
+
+    bindEvents() {
+        const self = this;
+
+        window.moduleHandlers.click = (e) => {
+            const verifyBtn = e.target.closest('[data-verify-val]');
+            if (verifyBtn) {
+                self.verifyReleasePinKeyPress(verifyBtn.dataset.verifyVal);
+                return;
+            }
+            const pinBtn = e.target.closest('[data-pin-value]');
+            if (pinBtn) {
+                self.pinKeyPress(pinBtn.dataset.pinValue);
+                return;
+            }
+            const action = e.target.closest('[data-action]');
+            if (action) {
+                if (!action.classList.contains('btn-back')) window.playButtonSound?.();
+                self.handleAction(action.dataset.action, action);
+            }
+        };
+
+        window.moduleHandlers.keydown = (e) => {
+            if (e.key === 'Escape') {
+                self.hideModal('locktext-modal');
+                self.hideModal('release-pin-modal');
+                self.hideModal('alert-modal');
+            }
+        };
+
+        window.addEventListener('languagechange', () => {
+            self.initFullscreenState?.();
+            if (self.state.currentView === 'language') self.loadLanguageView();
+            if (self.state.currentView === 'stats') {
+                const select = document.getElementById('stats-select');
+                const title = document.getElementById('stats-title');
+                if (select && title) {
+                    const val = select.value;
+                    if (val) {
+                        const opt = select.options[select.selectedIndex];
+                        title.innerHTML = (opt?.textContent || val) + '<br>' + (typeof window.t === 'function' ? window.t('settings.stats_statistics') : 'STATISTICS');
+                    } else {
+                        title.innerHTML = (typeof window.t === 'function' ? window.t('settings.stats_global') : 'GLOBAL') + '<br>' + (typeof window.t === 'function' ? window.t('settings.stats_statistics') : 'STATISTICS');
+                    }
+                }
+            }
+        });
+    },
+
+    handleAction(action, element) {
+        switch(action) {
+            // Navigation
+            case 'go-home': window.navigateTo('dashboard'); break;
+            case 'back-to-settings': this.backFromSubView(); break;
+            
+            // Sub-views
+            case 'goto-sound': this.showView('sound'); break;
+            case 'goto-camera': this.showView('camera'); break;
+            case 'goto-printing': this.showView('printing'); break;
+            case 'goto-language': this.showView('language'); break;
+            case 'goto-interface': this.showView('interface'); break;
+            case 'language-apply': this.applyLanguageSelection(); break;
+            case 'goto-locktext': this.openLocktextModal(); break;
+            case 'locktext-cancel': this.hideModal('locktext-modal'); break;
+            case 'locktext-confirm': this.saveLocktextAndExit(); break;
+            case 'goto-pin': this.showView('pin'); break;
+            case 'export-emails': this.exportEmails(); break;
+            case 'pin-release': this.pinRelease(); break;
+            case 'release-pin-cancel': this.closeReleasePinModal(); break;
+            
+            // Actions
+            case 'toggle-fullscreen': this.toggleFullscreen(); break;
+            case 'software-update': this.showAlert(typeof window.t === 'function' ? window.t('settings.alert_update_coming') : 'UPDATE CHECK COMING SOON'); break;
+            case 'close-alert': this.hideModal('alert-modal'); break;
+            case 'camera-reset-settings': this.resetCameraSettings(); break;
+            case 'printing-copies-minus': this.printingCopiesChange(-1); break;
+            case 'printing-copies-plus': this.printingCopiesChange(1); break;
+            case 'printing-settings': this.openPrinterSettings(); break;
+            case 'printing-test': this.testPrint(); break;
+            case 'interface-light-mode': this.setInterfaceLightMode(); break;
+            case 'interface-dark-mode': this.setInterfaceDarkMode(); break;
+        }
+    },
+
+    printingCopiesChange(delta) {
+        const el = document.getElementById('printing-copies-display');
+        if (!el) return;
+        let n = parseInt(el.textContent || '1', 10) + delta;
+        n = Math.max(1, Math.min(999, n));
+        el.textContent = n;
+        this._schedulePrintingSave();
+    },
+
+    _schedulePrintingSave() {
+        if (this._printingSaveTimer) clearTimeout(this._printingSaveTimer);
+        this._printingSaveTimer = setTimeout(() => {
+            this._printingSaveTimer = null;
+            this._savePrintingSettings();
+        }, 300);
+    },
+
+    async _savePrintingSettings() {
+        const disabledInput = document.getElementById('printing-disabled');
+        const automaticInput = document.getElementById('printing-automatic');
+        const copiesEl = document.getElementById('printing-copies-display');
+        const select = document.getElementById('printing-printer-select');
+        if (!disabledInput || !automaticInput || !copiesEl || !select) return;
+        const enabled = !disabledInput.checked;
+        const automaticPrinting = automaticInput.checked;
+        const copies = Math.max(1, Math.min(999, parseInt(copiesEl.textContent || '1', 10)));
+        const printer = select.value && select.value.trim() ? select.value.trim() : null;
+        try {
+            await window.pywebview.api.update_printing_settings({ enabled, automaticPrinting, copies, printer });
+        } catch (e) { console.error('[SETTINGS] printing save error', e); }
+    },
+
+    async resetCameraSettings() {
+        const brightness = document.getElementById('camera-brightness');
+        const contrast = document.getElementById('camera-contrast');
+        const whiteBalance = document.getElementById('camera-whitebalance');
+        if (brightness) brightness.value = 50;
+        if (contrast) contrast.value = 50;
+        if (whiteBalance) whiteBalance.value = 50;
+        try {
+            await window.pywebview.api.update_camera_settings({ brightness: 50, contrast: 50, whiteBalance: 50 });
+        } catch (e) { console.error('[SETTINGS] camera reset error', e); }
+    },
+
+    async loadLanguageView() {
+        const select = document.getElementById('language-select');
+        if (!select) return;
+        // Native names (hardcoded); add more codes here when adding new locale .json files
+        const LANG_DISPLAY = {
+            en: 'English',
+            es: 'Español',
+            fr: 'Français',
+            de: 'Deutsch',
+            it: 'Italiano',
+            pt: 'Português',
+            ja: '日本語',
+            zh: '中文',
+            ru: 'Русский',
+            ar: 'العربية'
+        };
+        let locales = [];
+        try {
+            const res = await window.pywebview.api.get_locales();
+            if (res && res.ok && Array.isArray(res.locales)) locales = res.locales;
+        } catch (e) {}
+        const currentLang = (window.i18n && window.i18n.lang) ? window.i18n.lang : 'en';
+        select.innerHTML = '';
+        for (const code of locales) {
+            const label = LANG_DISPLAY[code] || code;
+            const opt = document.createElement('option');
+            opt.value = code;
+            opt.textContent = label;
+            if (code === currentLang) opt.selected = true;
+            select.appendChild(opt);
+        }
+    },
+
+    async setLanguage(code) {
+        if (window.i18n && typeof window.i18n.setLanguage === 'function') {
+            const ok = await window.i18n.setLanguage(code);
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'language_changed', { code, ok }).catch(() => {});
+            if (ok) this.showAlert((typeof window.t === 'function' ? window.t('settings.title_language') : 'LANGUAGE') + ' • OK');
+        }
+    },
+
+    async applyLanguageSelection() {
+        const select = document.getElementById('language-select');
+        const code = select && select.value ? select.value.trim() : '';
+        if (!code) return;
+        window.playButtonSound?.();
+        await this.setLanguage(code);
+    },
+
+    showView(viewId) {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById(`view-${viewId}`)?.classList.remove('hidden');
+        this.state.currentView = viewId;
+        if (viewId === 'sound') this.loadSoundView();
+        if (viewId === 'camera') this.loadCameraView();
+        if (viewId === 'printing') this.loadPrintingView();
+        if (viewId === 'pin') this.loadPinView();
+        if (viewId === 'language') this.loadLanguageView();
+        if (viewId === 'interface') this.loadInterfaceView();
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'settings_view_opened', { view: viewId }).catch(() => {});
+    },
+
+    async openLocktextModal() {
+        const input = document.getElementById('locktext-input');
+        let text = "We'll be back in a few minutes...";
+        try {
+            const res = await window.pywebview.api.get_lock_screen_text();
+            if (res && res.ok && res.text != null && String(res.text).trim() !== '') text = String(res.text).trim();
+        } catch (e) {}
+        if (input) {
+            input.value = text;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'lock_screen_modal_opened', {}).catch(() => {});
+        this.openModal('locktext-modal', 'locktext-input');
+    },
+
+    initLocktextKeyboard() {
+        window.initKeyboard({
+            container: '#locktext-modal',
+            inputId: 'locktext-input',
+            confirmBtnId: 'btn-locktext-confirm',
+            clearBtnId: 'locktext-clear-btn'
+        });
+    },
+
+    async saveLocktextAndExit() {
+        const input = document.getElementById('locktext-input');
+        try {
+            await window.pywebview.api.update_lock_screen_text(input ? input.value : '');
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'lock_screen_updated', {}).catch(() => {});
+        } catch (e) { console.error('[SETTINGS] lock screen save error', e); }
+        this.hideModal('locktext-modal');
+    },
+
+    // ===================== PIN (sessionStorage, two-step) =====================
+
+    loadPinView() {
+        this.state.pinStep = 1;
+        this.state.pinFirst = '';
+        this.state.pinCurrent = '';
+        this.updatePinDisplay();
+
+        const setupEl = document.getElementById('pin-setup-container');
+        const successEl = document.getElementById('pin-success-container');
+        const stored = sessionStorage.getItem('KRUDER1-pin');
+
+        if (stored) {
+            if (setupEl) setupEl.classList.add('hidden');
+            if (successEl) successEl.classList.remove('hidden');
+        } else {
+            if (setupEl) setupEl.classList.remove('hidden');
+            if (successEl) successEl.classList.add('hidden');
+            const statusEl = document.getElementById('pin-status');
+            if (statusEl) statusEl.textContent = typeof window.t === 'function' ? window.t('settings.pin_not_configured') : 'PIN NOT CONFIGURED';
+            const instr = document.getElementById('pin-instruction');
+            if (instr) instr.textContent = typeof window.t === 'function' ? window.t('settings.pin_enter_new') : 'ENTER NEW PIN';
+        }
+    },
+
+    updatePinDisplay() {
+        const el = document.getElementById('pin-display');
+        if (el) el.textContent = '\u25CF'.repeat(this.state.pinCurrent.length);
+    },
+
+    pinKeyPress(val) {
+        if (val === 'clear') {
+            this.state.pinCurrent = '';
+            this.updatePinDisplay();
+            return;
+        }
+        if (this.state.pinCurrent.length >= 4) return;
+        this.state.pinCurrent += val;
+        this.updatePinDisplay();
+
+        if (this.state.pinCurrent.length === 4) {
+            setTimeout(() => {
+                if (this.state.pinStep === 1) {
+                    // Step 1 done — save first entry, ask to confirm
+                    this.state.pinFirst = this.state.pinCurrent;
+                    this.state.pinCurrent = '';
+                    this.state.pinStep = 2;
+                    this.updatePinDisplay();
+                    const instr = document.getElementById('pin-instruction');
+                    if (instr) instr.textContent = typeof window.t === 'function' ? window.t('settings.pin_confirm') : 'CONFIRM PIN';
+                } else {
+                    // Step 2 — verify match
+                    if (this.state.pinCurrent === this.state.pinFirst) {
+                        sessionStorage.setItem('KRUDER1-pin', this.state.pinFirst);
+                        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'pin_set', {}).catch(() => {});
+                        this.loadPinView();
+                    } else {
+                        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('WARN', 'pin_set_failed', { reason: 'mismatch' }).catch(() => {});
+                        // Mismatch — show error then reset
+                        const instr = document.getElementById('pin-instruction');
+                        if (instr) instr.textContent = typeof window.t === 'function' ? window.t('settings.pin_mismatch') : 'PINS DO NOT MATCH';
+                        this.state.pinCurrent = '';
+                        this.updatePinDisplay();
+                        setTimeout(() => {
+                            this.state.pinStep = 1;
+                            this.state.pinFirst = '';
+                            if (instr) instr.textContent = typeof window.t === 'function' ? window.t('settings.pin_enter_new') : 'ENTER NEW PIN';
+                        }, 1500);
+                    }
+                }
+            }, 200);
+        }
+    },
+
+    pinRelease() {
+        const stored = sessionStorage.getItem('KRUDER1-pin');
+        if (!stored) {
+            this.loadPinView();
+            return;
+        }
+        this.showReleasePinModal();
+    },
+
+    showReleasePinModal() {
+        this.state.releasePinCurrent = '';
+        const display = document.getElementById('release-pin-display');
+        if (display) display.textContent = '';
+        this.showModal('release-pin-modal');
+        this.resetReleasePinTimer();
+    },
+
+    closeReleasePinModal() {
+        if (this.state.releasePinTimer) clearTimeout(this.state.releasePinTimer);
+        this.hideModal('release-pin-modal');
+        this.state.releasePinCurrent = '';
+    },
+
+    resetReleasePinTimer() {
+        if (this.state.releasePinTimer) clearTimeout(this.state.releasePinTimer);
+        this.state.releasePinTimer = setTimeout(() => {
+            this.closeReleasePinModal();
+        }, 5000);
+    },
+
+    verifyReleasePinKeyPress(val) {
+        const modal = document.getElementById('release-pin-modal');
+        if (!modal || modal.classList.contains('hidden')) return;
+        this.resetReleasePinTimer();
+        if (val === 'clear') {
+            this.state.releasePinCurrent = '';
+            const display = document.getElementById('release-pin-display');
+            if (display) display.textContent = '';
+            return;
+        }
+        if (this.state.releasePinCurrent.length >= 4) return;
+        this.state.releasePinCurrent += val;
+        const display = document.getElementById('release-pin-display');
+        if (display) display.textContent = '\u25CF'.repeat(this.state.releasePinCurrent.length);
+        if (this.state.releasePinCurrent.length === 4) {
+            setTimeout(() => {
+                const stored = sessionStorage.getItem('KRUDER1-pin');
+                if (this.state.releasePinCurrent === stored) {
+                    if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'pin_removed', {}).catch(() => {});
+                    this.closeReleasePinModal();
+                    sessionStorage.removeItem('KRUDER1-pin');
+                    this.loadPinView();
+                } else {
+                    if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('WARN', 'pin_remove_failed', { reason: 'wrong_pin' }).catch(() => {});
+                    this.closeReleasePinModal();
+                }
+            }, 200);
+        }
+    },
+
+    updatePrintingEnabledLabel() {
+        const input = document.getElementById('printing-disabled');
+        const label = document.getElementById('printing-enabled-label');
+        if (!input || !label) return;
+        const isEnabled = !input.checked;
+        label.textContent = isEnabled ? (typeof window.t === 'function' ? window.t('settings.label_enabled') : 'ENABLED') : (typeof window.t === 'function' ? window.t('settings.label_disabled') : 'DISABLED');
+        label.classList.toggle('label-enabled', isEnabled);
+        label.classList.toggle('label-disabled', !isEnabled);
+    },
+
+    async loadPrintingView() {
+        const img = document.getElementById('printing-preview-img');
+        if (img) img.src = window.location.origin + '/static/img/print_test.jpg';
+        let printing = { enabled: true, automaticPrinting: false, copies: 1, printer: null };
+        try {
+            const res = await window.pywebview.api.get_printing_settings();
+            if (res && res.ok && res.printing) printing = res.printing;
+        } catch (e) {}
+        const disabledInput = document.getElementById('printing-disabled');
+        const automaticInput = document.getElementById('printing-automatic');
+        const copiesEl = document.getElementById('printing-copies-display');
+        const select = document.getElementById('printing-printer-select');
+        if (disabledInput) disabledInput.checked = !printing.enabled;
+        if (automaticInput) automaticInput.checked = !!printing.automaticPrinting;
+        if (copiesEl) copiesEl.textContent = Math.max(1, Math.min(999, parseInt(printing.copies, 10) || 1));
+        this.updatePrintingEnabledLabel();
+        const input = document.getElementById('printing-disabled');
+        if (input && !input._printingListener) {
+            input._printingListener = () => { this.updatePrintingEnabledLabel(); this._schedulePrintingSave(); };
+            input.addEventListener('change', input._printingListener);
+        }
+        if (automaticInput && !automaticInput._printingSaveBound) {
+            automaticInput._printingSaveBound = true;
+            automaticInput.addEventListener('change', () => this._schedulePrintingSave());
+        }
+        if (select) {
+            if (!select._printingSaveBound) {
+                select._printingSaveBound = true;
+                select.addEventListener('change', () => this._schedulePrintingSave());
+            }
+        }
+        if (select && window.pywebview?.api?.get_printers) {
+            try {
+                const res = await window.pywebview.api.get_printers();
+                const list = res?.printers || [];
+                const savedPrinter = printing.printer && printing.printer.trim() ? printing.printer.trim() : '';
+                select.innerHTML = list.length ? '' : '<option value="">—</option>';
+                list.forEach((name) => {
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.textContent = name;
+                    if (name === savedPrinter) opt.selected = true;
+                    select.appendChild(opt);
+                });
+            } catch (e) {
+                select.innerHTML = '<option value="">—</option>';
+            }
+        }
+    },
+
+    async openPrinterSettings() {
+        const select = document.getElementById('printing-printer-select');
+        const name = select?.value?.trim();
+        if (!name) {
+            this.showAlert(window.t ? window.t('settings.error_select_printer') : 'SELECT A PRINTER FIRST');
+            return;
+        }
+        try {
+            const res = await window.pywebview.api.open_printer_settings(name);
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'printing_open_settings', { printer: name }).catch(() => {});
+            if (res && !res.ok) this.showAlert(res.error || (window.t ? window.t('settings.error_open_printer') : 'Failed to open printer settings'));
+        } catch (e) {
+            this.showAlert((window.t ? window.t('settings.error_settings') : 'Error: Could not open settings'));
+        }
+    },
+
+    async testPrint() {
+        const select = document.getElementById('printing-printer-select');
+        const name = select?.value?.trim();
+        if (!name) {
+            this.showAlert(window.t ? window.t('settings.error_select_printer') : 'SELECT A PRINTER FIRST');
+            return;
+        }
+        try {
+            const res = await window.pywebview.api.test_print(name);
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'printing_test_print', { printer: name, ok: !!(res && res.ok) }).catch(() => {});
+            if (res && !res.ok) this.showAlert(res.error || (window.t ? window.t('settings.error_print_failed') : 'Print failed'));
+            else if (res && res.ok) this.showAlert(window.t ? window.t('settings.success_print_sent') : 'Print job sent');
+        } catch (e) {
+            this.showAlert((window.t ? window.t('settings.error_print') : 'Error: Could not print'));
+        }
+    },
+
+    async backFromSubView() {
+        if (this.state.currentView === 'sound') {
+            await this.saveSoundSettingsAndExit();
+        }
+        if (this.state.currentView === 'interface') {
+            await this.saveAccentHueAndExit();
+        }
+        if (this.state.currentView === 'camera') {
+            await this.saveCameraSettingsAndExit();
+            this.stopCameraView();
+        }
+        if (this.state.currentView === 'printing') {
+            await this.savePrintingSettingsAndExit();
+        }
+        if (this.state.currentView === 'stats' && this.state.statsFromDashboard) {
+            this.state.statsFromDashboard = false;
+            window.navigateTo('dashboard');
+            return;
+        }
+        this.showView('settings');
+    },
+
+    async savePrintingSettingsAndExit() {
+        if (this._printingSaveTimer) { clearTimeout(this._printingSaveTimer); this._printingSaveTimer = null; }
+        const disabledInput = document.getElementById('printing-disabled');
+        const automaticInput = document.getElementById('printing-automatic');
+        const copiesEl = document.getElementById('printing-copies-display');
+        const select = document.getElementById('printing-printer-select');
+        if (!disabledInput || !automaticInput || !copiesEl || !select) return;
+        const enabled = !disabledInput.checked;
+        const automaticPrinting = automaticInput.checked;
+        const copies = Math.max(1, Math.min(999, parseInt(copiesEl.textContent || '1', 10)));
+        const printer = select.value && select.value.trim() ? select.value.trim() : null;
+        try {
+            await window.pywebview.api.update_printing_settings({
+                enabled,
+                automaticPrinting,
+                copies,
+                printer
+            });
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'printing_settings_saved', { enabled, automaticPrinting, copies, printer: printer || null }).catch(() => {});
+        } catch (e) { console.error('[SETTINGS] printing save error', e); }
+    },
+
+    async saveSoundSettingsAndExit() {
+        if (this._soundSaveTimer) { clearTimeout(this._soundSaveTimer); this._soundSaveTimer = null; }
+        const bgInput = document.getElementById('sound-bg-input');
+        const uiInput = document.getElementById('sound-ui-input');
+        if (!bgInput || !uiInput) return;
+        const volume = parseInt(bgInput.value, 10) / 100;
+        const uiVolume = parseInt(uiInput.value, 10) / 100;
+        try {
+            await window.pywebview.api.update_sound_settings({ volume, uiVolume });
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'sound_settings_saved', {}).catch(() => {});
+        } catch (e) { console.error('[SETTINGS] sound save error', e); }
+    },
+
+    async saveCameraSettingsAndExit() {
+        if (this._cameraSaveTimer) { clearTimeout(this._cameraSaveTimer); this._cameraSaveTimer = null; }
+        const select = document.getElementById('camera-select');
+        const brightness = document.getElementById('camera-brightness');
+        const contrast = document.getElementById('camera-contrast');
+        const whiteBalance = document.getElementById('camera-whitebalance');
+        if (!select || !brightness || !contrast || !whiteBalance) return;
+        const deviceId = select.value || null;
+        const payload = {
+            deviceId: deviceId || null,
+            brightness: parseInt(brightness.value, 10),
+            contrast: parseInt(contrast.value, 10),
+            whiteBalance: parseInt(whiteBalance.value, 10)
+        };
+        try {
+            await window.pywebview.api.update_camera_settings(payload);
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'camera_settings_saved', { deviceId: payload.deviceId ? 'set' : null }).catch(() => {});
+        } catch (e) { console.error('[SETTINGS] camera save error', e); }
+    },
+
+    stopCameraView() {
+        if (this.state.cameraStream) {
+            this.state.cameraStream.getTracks().forEach(t => t.stop());
+            this.state.cameraStream = null;
+        }
+        if (this.state.cameraDrawId) {
+            cancelAnimationFrame(this.state.cameraDrawId);
+            this.state.cameraDrawId = null;
+        }
+        const video = document.getElementById('camera-settings-video');
+        if (video) video.srcObject = null;
+    },
+
+    async loadCameraView() {
+        const select = document.getElementById('camera-select');
+        const video = document.getElementById('camera-settings-video');
+        const canvas = document.getElementById('camera-settings-canvas');
+        if (!select || !video || !canvas) return;
+
+        let settings = { deviceId: null, brightness: 50, contrast: 50, whiteBalance: 50 };
+        try {
+            const res = await window.pywebview.api.get_camera_settings();
+            if (res && res.ok && res.camera) settings = res.camera;
+        } catch (e) {}
+
+        document.getElementById('camera-brightness').value = Math.max(0, Math.min(100, settings.brightness ?? 50));
+        document.getElementById('camera-contrast').value = Math.max(0, Math.min(100, settings.contrast ?? 50));
+        document.getElementById('camera-whitebalance').value = Math.max(0, Math.min(100, settings.whiteBalance ?? 50));
+
+        const r = 2 / 3;
+        let ch = Math.floor(window.innerHeight * 0.5);
+        let cw = Math.floor(ch * r);
+        if (cw > 420) { cw = 420; ch = Math.floor(cw / r); }
+        canvas.width = cw;
+        canvas.height = ch;
+        const ctx0 = canvas.getContext('2d');
+        if (ctx0) { ctx0.fillStyle = '#000'; ctx0.fillRect(0, 0, cw, ch); }
+
+        const self = this;
+
+        const populateList = (devices, selectId) => {
+            select.innerHTML = '<option value="">Select a camera</option>';
+            devices.forEach((d) => {
+                const opt = document.createElement('option');
+                opt.value = d.deviceId;
+                opt.textContent = (d.label && d.label.trim()) ? d.label.trim() : d.deviceId.slice(0, 20);
+                if (selectId && d.deviceId === selectId) opt.selected = true;
+                select.appendChild(opt);
+            });
+        };
+
+        const drawLoop = () => {
+            if (!canvas || !video || !video.srcObject || video.readyState < 2) {
+                self.state.cameraDrawId = requestAnimationFrame(drawLoop);
+                return;
+            }
+            const vw = video.videoWidth;
+            const vh = video.videoHeight;
+            const cw = canvas.width;
+            const ch = canvas.height;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            if (!vw || !vh) {
+                self.state.cameraDrawId = requestAnimationFrame(drawLoop);
+                return;
+            }
+            const scale = Math.max(cw / vw, ch / vh);
+            const dw = vw * scale;
+            const dh = vh * scale;
+            const dx = (cw - dw) / 2;
+            const dy = (ch - dh) / 2;
+            ctx.drawImage(video, 0, 0, vw, vh, dx, dy, dw, dh);
+            const brightness = parseInt(document.getElementById('camera-brightness')?.value || 50, 10);
+            const contrast = parseInt(document.getElementById('camera-contrast')?.value || 50, 10);
+            const wb = parseInt(document.getElementById('camera-whitebalance')?.value || 50, 10);
+            if (brightness !== 50 || contrast !== 50 || wb !== 50) {
+                window.applyCameraFilters(ctx, cw, ch, brightness, contrast, wb);
+            }
+            self.state.cameraDrawId = requestAnimationFrame(drawLoop);
+        };
+
+        const startStream = async (deviceId) => {
+            if (self.state.cameraStream) {
+                self.state.cameraStream.getTracks().forEach(t => t.stop());
+                self.state.cameraStream = null;
+            }
+            if (self.state.cameraDrawId) {
+                cancelAnimationFrame(self.state.cameraDrawId);
+                self.state.cameraDrawId = null;
+            }
+            video.srcObject = null;
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            if (ctx) { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+            let stream = null;
+            if (deviceId) {
+                // Attempt with specific deviceId
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1920 }, height: { ideal: 1080 }, deviceId: { exact: deviceId } }, audio: false });
+                } catch (e1) {
+                    // Specific device failed, try generic below
+                }
+            }
+            if (!stream) {
+                // Generic: triggers permission popup if not yet granted
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false });
+                } catch (e2) {
+                    self.showAlert(window.t ? window.t('settings.error_camera_access') : 'CAMERA: Access denied');
+                    return;
+                }
+            }
+            video.srcObject = stream;
+            self.state.cameraStream = stream;
+            const r = 2 / 3;
+            let ch2 = Math.floor(window.innerHeight * 0.5);
+            let cw2 = Math.floor(ch2 * r);
+            if (cw2 > 420) { cw2 = 420; ch2 = Math.floor(cw2 / r); }
+            canvas.width = cw2;
+            canvas.height = ch2;
+            // Re-enumerate to get labels and update dropdown
+            const devs = await navigator.mediaDevices.enumerateDevices();
+            const videoInputs = devs.filter(d => d.kind === 'videoinput');
+            populateList(videoInputs, stream.getVideoTracks()[0]?.getSettings()?.deviceId || deviceId);
+            if (!self.state.cameraDrawId) drawLoop();
+        };
+
+        // Always auto-start: handles permission + stream in one shot
+        startStream(settings.deviceId || null);
+
+        select.onchange = async () => {
+            const deviceId = select.value || null;
+            await startStream(deviceId);
+            self._scheduleCameraSave();
+        };
+
+        // Real-time save when sliders change (debounced)
+        ['brightness', 'contrast', 'whitebalance'].forEach(name => {
+            const el = document.getElementById('camera-' + name);
+            if (el && !el._cameraSaveBound) {
+                el._cameraSaveBound = true;
+                el.addEventListener('input', () => self._scheduleCameraSave());
+            }
+        });
+    },
+
+    _scheduleCameraSave() {
+        if (this._cameraSaveTimer) clearTimeout(this._cameraSaveTimer);
+        this._cameraSaveTimer = setTimeout(() => {
+            this._cameraSaveTimer = null;
+            this._saveCameraSettings();
+        }, 400);
+    },
+
+    async _saveCameraSettings() {
+        const select = document.getElementById('camera-select');
+        const brightness = document.getElementById('camera-brightness');
+        const contrast = document.getElementById('camera-contrast');
+        const whiteBalance = document.getElementById('camera-whitebalance');
+        if (!select || !brightness || !contrast || !whiteBalance) return;
+        const payload = {
+            deviceId: select.value && select.value.trim() ? select.value.trim() : null,
+            brightness: parseInt(brightness.value, 10),
+            contrast: parseInt(contrast.value, 10),
+            whiteBalance: parseInt(whiteBalance.value, 10)
+        };
+        try {
+            await window.pywebview.api.update_camera_settings(payload);
+        } catch (e) { console.error('[SETTINGS] camera update error', e); }
+    },
+
+    applyAccentHue(hue) {
+        const h = Math.max(0, Math.min(360, Math.round(hue)));
+        document.body.style.setProperty('--theme-accent', `hsl(${h}, 70%, 50%)`);
+        document.body.style.setProperty('--theme-accent-dark', `hsl(${h}, 70%, 35%)`);
+    },
+
+    applyThemeFromLuminance(backgroundPct, inkPct) {
+        // Misma escala para ambos: 0% = blanco, 100% = negro (igual que el slider de background).
+        backgroundPct = Math.max(0, Math.min(100, Number(backgroundPct))) / 100;
+        inkPct = Math.max(0, Math.min(100, Number(inkPct))) / 100;
+        const paperVal = Math.round(255 * (1 - backgroundPct));
+        const inkVal = Math.round(255 * (1 - inkPct));
+        const opacity = 0.05 + 0.03 * inkPct;
+        document.body.style.setProperty('--theme-ink', `rgb(${inkVal},${inkVal},${inkVal})`);
+        document.body.style.setProperty('--theme-paper', `rgb(${paperVal},${paperVal},${paperVal})`);
+        document.body.style.setProperty('--theme-input-bg', `rgb(${paperVal},${paperVal},${paperVal})`);
+        document.body.style.setProperty('--theme-focus', `rgba(${inkVal},${inkVal},${inkVal},${opacity})`);
+        document.body.style.setProperty('--theme-scanline', `rgba(${inkVal},${inkVal},${inkVal},${opacity})`);
+        document.body.style.setProperty('--theme-border', `rgba(${inkVal},${inkVal},${inkVal},0.2)`);
+        document.body.style.setProperty('--theme-ink-brightness', (inkVal / 255).toFixed(3));
+        document.body.setAttribute('data-theme', backgroundPct >= 0.5 ? 'dark' : 'light');
+        if (window.AppState) window.AppState.theme = backgroundPct >= 0.5 ? 'dark' : 'light';
+    },
+
+    async loadInterfaceView() {
+        const DEFAULT_HUE = 20;
+        const DEFAULT_BG = 15;
+        const DEFAULT_INK = 75;
+        try {
+            const res = await window.pywebview.api.get_settings();
+            let hue = DEFAULT_HUE;
+            let luminance = DEFAULT_BG;
+            let inkLum = DEFAULT_INK;
+            if (res && res.ok && res.settings) {
+                if (typeof res.settings.accentHue === 'number') {
+                    hue = Math.max(0, Math.min(360, Math.round(res.settings.accentHue)));
+                }
+                if (typeof res.settings.themeLuminance === 'number') {
+                    luminance = Math.max(0, Math.min(100, Math.round(res.settings.themeLuminance)));
+                } else if (res.settings.theme === 'dark') {
+                    luminance = 100;
+                }
+                if (typeof res.settings.inkLuminance === 'number') {
+                    inkLum = Math.max(0, Math.min(100, Math.round(res.settings.inkLuminance)));
+                } else if (res.settings.theme === 'dark') {
+                    inkLum = 0;
+                }
+            }
+            this.updateAccentHueSlider(hue);
+            this.applyAccentHue(hue);
+            this.updateThemeLuminanceSlider(luminance);
+            this.updateInkLuminanceSlider(inkLum);
+            this.applyThemeFromLuminance(luminance, inkLum);
+        } catch (e) {
+            this.updateAccentHueSlider(DEFAULT_HUE);
+            this.applyAccentHue(DEFAULT_HUE);
+            this.updateThemeLuminanceSlider(DEFAULT_BG);
+            this.updateInkLuminanceSlider(DEFAULT_INK);
+            this.applyThemeFromLuminance(DEFAULT_BG, DEFAULT_INK);
+        }
+    },
+
+    setInterfaceLightMode() {
+        const HUE = 20;
+        const BG = 15;
+        const INK = 75;
+        this.updateAccentHueSlider(HUE);
+        this.applyAccentHue(HUE);
+        this.updateThemeLuminanceSlider(BG);
+        this.updateInkLuminanceSlider(INK);
+        this._applyBothLuminances();
+        this._saveInterfaceSettings();
+    },
+
+    setInterfaceDarkMode() {
+        const HUE = 20;
+        const BG = 90;
+        const INK = 10;
+        this.updateAccentHueSlider(HUE);
+        this.applyAccentHue(HUE);
+        this.updateThemeLuminanceSlider(BG);
+        this.updateInkLuminanceSlider(INK);
+        this._applyBothLuminances();
+        this._saveInterfaceSettings();
+    },
+
+    _saveInterfaceSettings() {
+        const hueInput = document.getElementById('accent-hue-input');
+        const bgInput = document.getElementById('theme-luminance-input');
+        const inkInput = document.getElementById('ink-luminance-input');
+        const rawHue = hueInput ? parseInt(hueInput.value, 10) : NaN;
+        const rawBg = bgInput ? parseInt(bgInput.value, 10) : NaN;
+        const rawInk = inkInput ? parseInt(inkInput.value, 10) : NaN;
+        const hue = (!isNaN(rawHue) && rawHue >= 0 && rawHue <= 360) ? rawHue : 20;
+        const bgLum = (!isNaN(rawBg) && rawBg >= 0 && rawBg <= 100) ? rawBg : 15;
+        const inkLum = (!isNaN(rawInk) && rawInk >= 0 && rawInk <= 100) ? rawInk : 75;
+        window.pywebview.api.update_settings({
+            accentHue: hue,
+            themeLuminance: bgLum,
+            inkLuminance: inkLum,
+            theme: bgLum >= 50 ? 'dark' : 'light'
+        }).catch(() => {});
+    },
+
+    _scheduleInterfaceSave() {
+        if (this._interfaceSaveTimer) clearTimeout(this._interfaceSaveTimer);
+        this._interfaceSaveTimer = setTimeout(() => {
+            this._interfaceSaveTimer = null;
+            this._saveInterfaceSettings();
+        }, 400);
+    },
+
+    updateAccentHueSlider(hue) {
+        hue = Math.max(0, Math.min(360, Math.round(hue)));
+        const pct = (hue / 360) * 100;
+        const fill = document.getElementById('accent-hue-fill');
+        const thumb = document.getElementById('accent-hue-thumb');
+        const valueEl = document.getElementById('accent-hue-value');
+        const input = document.getElementById('accent-hue-input');
+        if (fill) fill.style.width = pct + '%';
+        if (thumb) thumb.style.left = pct + '%';
+        if (valueEl) valueEl.textContent = hue + '°';
+        if (input) input.value = hue;
+    },
+
+    initAccentHueSlider() {
+        const self = this;
+        const track = document.getElementById('accent-hue-track');
+        const thumb = document.getElementById('accent-hue-thumb');
+        const input = document.getElementById('accent-hue-input');
+        if (!track || !thumb || !input) return;
+
+        const setHue = (hue) => {
+            hue = Math.max(0, Math.min(360, Math.round(hue)));
+            self.updateAccentHueSlider(hue);
+            self.applyAccentHue(hue);
+            self._scheduleInterfaceSave();
+        };
+
+        input.addEventListener('input', () => {
+            const hue = parseInt(input.value, 10);
+            setHue(hue);
+        });
+
+        const hueFromEvent = (e) => {
+            const rect = track.getBoundingClientRect();
+            const x = e.touches ? e.touches[0].clientX : e.clientX;
+            const pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+            return Math.round(pct * 360);
+        };
+
+        track.addEventListener('click', (e) => {
+            if (e.target === thumb || thumb.contains(e.target)) return;
+            setHue(hueFromEvent(e));
+        });
+
+        const onMove = (e) => setHue(hueFromEvent(e));
+        const onEnd = () => {
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseup', onEnd);
+            document.removeEventListener('touchmove', onMove, { passive: false });
+            document.removeEventListener('touchend', onEnd);
+        };
+        thumb.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onEnd);
+        });
+        thumb.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            document.addEventListener('touchmove', onMove, { passive: false });
+            document.addEventListener('touchend', onEnd);
+        });
+    },
+
+    updateThemeLuminanceSlider(pct) {
+        pct = Math.max(0, Math.min(100, Math.round(pct)));
+        const fill = document.getElementById('theme-luminance-fill');
+        const thumb = document.getElementById('theme-luminance-thumb');
+        const valueEl = document.getElementById('theme-luminance-value');
+        const input = document.getElementById('theme-luminance-input');
+        if (fill) fill.style.width = pct + '%';
+        if (thumb) thumb.style.left = pct + '%';
+        if (valueEl) valueEl.textContent = pct + '%';
+        if (input) input.value = pct;
+    },
+
+    updateInkLuminanceSlider(pct) {
+        pct = Math.max(0, Math.min(100, Math.round(pct)));
+        const fill = document.getElementById('ink-luminance-fill');
+        const thumb = document.getElementById('ink-luminance-thumb');
+        const valueEl = document.getElementById('ink-luminance-value');
+        const input = document.getElementById('ink-luminance-input');
+        if (fill) fill.style.width = pct + '%';
+        if (thumb) thumb.style.left = pct + '%';
+        if (valueEl) valueEl.textContent = pct + '%';
+        if (input) input.value = pct;
+    },
+
+    _applyBothLuminances() {
+        const bgInput = document.getElementById('theme-luminance-input');
+        const inkInput = document.getElementById('ink-luminance-input');
+        const rawBg = bgInput ? parseInt(bgInput.value, 10) : NaN;
+        const rawInk = inkInput ? parseInt(inkInput.value, 10) : NaN;
+        const bg = (!isNaN(rawBg) && rawBg >= 0 && rawBg <= 100) ? rawBg : 0;
+        const ink = (!isNaN(rawInk) && rawInk >= 0 && rawInk <= 100) ? rawInk : 100;
+        this.applyThemeFromLuminance(bg, ink);
+        this._scheduleInterfaceSave();
+    },
+
+    initThemeLuminanceSlider() {
+        const self = this;
+        const track = document.getElementById('theme-luminance-track');
+        const thumb = document.getElementById('theme-luminance-thumb');
+        const input = document.getElementById('theme-luminance-input');
+        if (!track || !thumb || !input) return;
+
+        const setPct = (pct) => {
+            pct = Math.max(0, Math.min(100, Math.round(pct)));
+            self.updateThemeLuminanceSlider(pct);
+            self._applyBothLuminances();
+        };
+
+        input.addEventListener('input', () => {
+            setPct(parseInt(input.value, 10));
+        });
+
+        const pctFromEvent = (e) => {
+            const rect = track.getBoundingClientRect();
+            const x = e.touches ? e.touches[0].clientX : e.clientX;
+            return Math.max(0, Math.min(100, Math.round(((x - rect.left) / rect.width) * 100)));
+        };
+
+        track.addEventListener('click', (e) => {
+            if (e.target === thumb || thumb.contains(e.target)) return;
+            setPct(pctFromEvent(e));
+        });
+
+        const onMove = (e) => setPct(pctFromEvent(e));
+        const onEnd = () => {
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseup', onEnd);
+            document.removeEventListener('touchmove', onMove, { passive: false });
+            document.removeEventListener('touchend', onEnd);
+        };
+        thumb.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onEnd);
+        });
+        thumb.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            document.addEventListener('touchmove', onMove, { passive: false });
+            document.addEventListener('touchend', onEnd);
+        });
+    },
+
+    initInkLuminanceSlider() {
+        const self = this;
+        const track = document.getElementById('ink-luminance-track');
+        const thumb = document.getElementById('ink-luminance-thumb');
+        const input = document.getElementById('ink-luminance-input');
+        if (!track || !thumb || !input) return;
+
+        const setPct = (pct) => {
+            pct = Math.max(0, Math.min(100, Math.round(pct)));
+            self.updateInkLuminanceSlider(pct);
+            self._applyBothLuminances();
+        };
+
+        input.addEventListener('input', () => setPct(parseInt(input.value, 10)));
+
+        const pctFromEvent = (e) => {
+            const rect = track.getBoundingClientRect();
+            const x = e.touches ? e.touches[0].clientX : e.clientX;
+            return Math.max(0, Math.min(100, Math.round(((x - rect.left) / rect.width) * 100)));
+        };
+
+        track.addEventListener('click', (e) => {
+            if (e.target === thumb || thumb.contains(e.target)) return;
+            setPct(pctFromEvent(e));
+        });
+
+        const onMove = (e) => setPct(pctFromEvent(e));
+        const onEnd = () => {
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseup', onEnd);
+            document.removeEventListener('touchmove', onMove, { passive: false });
+            document.removeEventListener('touchend', onEnd);
+        };
+        thumb.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onEnd);
+        });
+        thumb.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            document.addEventListener('touchmove', onMove, { passive: false });
+            document.addEventListener('touchend', onEnd);
+        });
+    },
+
+    async saveAccentHueAndExit() {
+        if (this._interfaceSaveTimer) { clearTimeout(this._interfaceSaveTimer); this._interfaceSaveTimer = null; }
+        const hueInput = document.getElementById('accent-hue-input');
+        const bgInput = document.getElementById('theme-luminance-input');
+        const inkInput = document.getElementById('ink-luminance-input');
+        const rawHue = hueInput ? parseInt(hueInput.value, 10) : NaN;
+        const rawBg = bgInput ? parseInt(bgInput.value, 10) : NaN;
+        const rawInk = inkInput ? parseInt(inkInput.value, 10) : NaN;
+        const hue = (!isNaN(rawHue) && rawHue >= 0 && rawHue <= 360) ? rawHue : 20;
+        const bgLum = (!isNaN(rawBg) && rawBg >= 0 && rawBg <= 100) ? rawBg : 15;
+        const inkLum = (!isNaN(rawInk) && rawInk >= 0 && rawInk <= 100) ? rawInk : 75;
+        try {
+            await window.pywebview.api.update_settings({
+                accentHue: hue,
+                themeLuminance: bgLum,
+                inkLuminance: inkLum,
+                theme: bgLum >= 50 ? 'dark' : 'light'
+            });
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'interface_settings_saved', { theme: bgLum >= 50 ? 'dark' : 'light', accentHue: hue }).catch(() => {});
+        } catch (e) { console.error('[SETTINGS] interface save error', e); }
+    },
+
+    async loadSoundView() {
+        try {
+            const res = await window.pywebview.api.get_settings();
+            if (!res || !res.ok || !res.settings || !res.settings.sound) {
+                this.updateSoundSlider('bg', 15);
+                this.updateSoundSlider('ui', 75);
+                return;
+            }
+            const s = res.settings.sound;
+            const toPct = (v, fallback) => Math.min(100, Math.max(0, Math.round((v != null ? v : fallback) * 100)));
+            const bgPct = toPct(s.volume, 0.15);
+            const uiPct = toPct(s.uiVolume, 0.75);
+            this.updateSoundSlider('bg', bgPct);
+            this.updateSoundSlider('ui', uiPct);
+        } catch (e) {
+            this.updateSoundSlider('bg', 15);
+            this.updateSoundSlider('ui', 75);
+        }
+    },
+
+    updateSoundSlider(which, pct) {
+        pct = Math.min(100, Math.max(0, Math.round(pct)));
+        const fill = document.getElementById(`sound-${which}-fill`);
+        const thumb = document.getElementById(`sound-${which}-thumb`);
+        const valueEl = document.getElementById(`sound-${which}-value`);
+        const input = document.getElementById(`sound-${which}-input`);
+        if (fill) fill.style.width = pct + '%';
+        if (thumb) thumb.style.left = pct + '%';
+        if (valueEl) valueEl.textContent = pct + '%';
+        if (input) input.value = pct;
+        const vol = pct / 100;
+        if (which === 'bg') window.setBgLoopVolume?.(vol);
+        else window.setUiSoundVolume?.(vol);
+    },
+
+    initSoundSliders() {
+        const self = this;
+        const setPct = (which, pct) => {
+            pct = Math.max(0, Math.min(100, Math.round(pct)));
+            self.updateSoundSlider(which, pct);
+        };
+        ['bg', 'ui'].forEach(which => {
+            const track = document.getElementById(`sound-${which}-track`);
+            const thumb = document.getElementById(`sound-${which}-thumb`);
+            const input = document.getElementById(`sound-${which}-input`);
+            if (!track || !thumb) return;
+
+            const pctFromEvent = (e) => {
+                const rect = track.getBoundingClientRect();
+                const x = e.touches ? e.touches[0].clientX : e.clientX;
+                const pct = ((x - rect.left) / rect.width) * 100;
+                return pct;
+            };
+
+            track.addEventListener('click', (e) => {
+                if (e.target === thumb || thumb.contains(e.target)) return;
+                const pct = pctFromEvent(e);
+                setPct(which, pct);
+            });
+
+            const onMove = (e) => {
+                setPct(which, pctFromEvent(e));
+            };
+            const onEnd = () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onEnd);
+                document.removeEventListener('touchmove', onMove, { passive: false });
+                document.removeEventListener('touchend', onEnd);
+            };
+            thumb.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onEnd);
+            });
+            thumb.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                document.addEventListener('touchmove', onMove, { passive: false });
+                document.addEventListener('touchend', onEnd);
+            });
+        });
+        // Real-time save when sliders change (debounced)
+        ['bg', 'ui'].forEach(which => {
+            const input = document.getElementById(`sound-${which}-input`);
+            if (input && !input._soundSaveBound) {
+                input._soundSaveBound = true;
+                input.addEventListener('input', () => self._scheduleSoundSave());
+            }
+        });
+    },
+
+    _scheduleSoundSave() {
+        if (this._soundSaveTimer) clearTimeout(this._soundSaveTimer);
+        this._soundSaveTimer = setTimeout(() => {
+            this._soundSaveTimer = null;
+            this._saveSoundSettings();
+        }, 400);
+    },
+
+    async _saveSoundSettings() {
+        const bgInput = document.getElementById('sound-bg-input');
+        const uiInput = document.getElementById('sound-ui-input');
+        if (!bgInput || !uiInput) return;
+        const volume = parseInt(bgInput.value, 10) / 100;
+        const uiVolume = parseInt(uiInput.value, 10) / 100;
+        try {
+            await window.pywebview.api.update_sound_settings({ volume, uiVolume });
+        } catch (e) { console.error('[SETTINGS] sound update error', e); }
+    },
+
+    async toggleTheme() {
+        window.toggleTheme?.();
+        const newTheme = document.body.getAttribute('data-theme') || 'light';
+        try {
+            await window.pywebview.api.set_theme(newTheme);
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'theme_applied', { theme: newTheme }).catch(() => {});
+        } catch (e) { console.error('[SETTINGS] theme save error', e); }
+        this.updateThemeIcon();
+    },
+
+    async toggleFullscreen() {
+        try {
+            const res = await window.pywebview.api.toggle_fullscreen();
+            if (res && res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'fullscreen_toggled', { fullscreen: res.fullscreen }).catch(() => {});
+                this.updateFullscreenIcon(res.fullscreen);
+            }
+        } catch(e) {
+            console.error('[SETTINGS] Fullscreen error:', e);
+        }
+    },
+
+    updateFullscreenIcon(isFullscreen) {
+        const btn = document.querySelector('[data-action="toggle-fullscreen"]');
+        if (btn) {
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = isFullscreen ? 'fa-solid fa-compress' : 'fa-solid fa-expand';
+            }
+            // Update button text
+            const text = isFullscreen ? (typeof window.t === 'function' ? ' ' + window.t('settings.btn_windowed') : ' WINDOWED') : (typeof window.t === 'function' ? ' ' + window.t('settings.btn_fullscreen') : ' FULLSCREEN');
+            btn.innerHTML = `<i class="${icon?.className || 'fa-solid fa-expand'}"></i>${text}`;
+        }
+    },
+
+    async initFullscreenState() {
+        try {
+            const res = await window.pywebview.api.get_fullscreen_state();
+            if (res && res.ok) {
+                this.updateFullscreenIcon(res.fullscreen);
+            }
+        } catch(e) {}
+    },
+
+    updateThemeIcon() {
+        const btn = document.querySelector('[data-action="toggle-theme"]');
+        if (btn) {
+            const icon = btn.querySelector('i');
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            if (icon) {
+                icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            }
+        }
+    },
+
+    // ========================================
+    // STATISTICS
+    // ========================================
+    async loadStatsView() {
+        const select = document.getElementById('stats-select');
+        const title = document.getElementById('stats-title');
+        if (!select) return;
+
+        // Populate event dropdown
+        try {
+            const events = await window.pywebview.api.get_events();
+            select.innerHTML = '<option value="">' + (typeof window.t === 'function' ? window.t('settings.stats_global') : 'GLOBAL') + '</option>';
+            if (Array.isArray(events)) {
+                events.forEach(ev => {
+                    const opt = document.createElement('option');
+                    opt.value = ev.id;
+                    opt.textContent = ev.name || ev.id;
+                    select.appendChild(opt);
+                });
+            }
+        } catch(e) {}
+
+        // Bind change handler
+        const self = this;
+        select.onchange = () => {
+            const val = select.value;
+            if (val) {
+                const opt = select.options[select.selectedIndex];
+                title.innerHTML = (opt.textContent || val) + '<br>' + (typeof window.t === 'function' ? window.t('settings.stats_statistics') : 'STATISTICS');
+            } else {
+                title.innerHTML = (typeof window.t === 'function' ? window.t('settings.stats_global') : 'GLOBAL') + '<br>' + (typeof window.t === 'function' ? window.t('settings.stats_statistics') : 'STATISTICS');
+            }
+            self.loadStats(val || null);
+        };
+
+        // Load global stats + prompt lab stats
+        title.innerHTML = (typeof window.t === 'function' ? window.t('settings.stats_global') : 'GLOBAL') + '<br>' + (typeof window.t === 'function' ? window.t('settings.stats_statistics') : 'STATISTICS');
+        select.value = '';
+        this.loadStats(null);
+        this.loadPromptLabStats();
+    },
+
+    async loadStats(eventId) {
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+        // Reset event mode stats
+        set('stats-photos-taken', '0');
+        set('stats-photos-successful', '0');
+        set('stats-photos-failed', '0');
+        set('stats-photos-rate', '0%');
+        set('stats-prints-sent', '0');
+        set('stats-prints-successful', '0');
+        set('stats-prints-failed', '0');
+        set('stats-prints-rate', '0%');
+        set('stats-avg-time', '-');
+        set('stats-emails', '0');
+
+        try {
+            const res = await window.pywebview.api.get_statistics(eventId || '__global__');
+            if (!res || !res.ok || !res.stats) return;
+            const s = res.stats;
+
+            set('stats-photos-taken', s.generationAttempts || 0);
+            set('stats-photos-successful', s.photosGenerated || 0);
+            set('stats-photos-failed', s.generationFailed || 0);
+            set('stats-photos-rate', (s.successRate != null ? s.successRate + '%' : '0%'));
+            set('stats-prints-sent', s.printsSent || 0);
+            set('stats-prints-successful', s.printsSuccessful || 0);
+            set('stats-prints-failed', s.printsFailed || 0);
+            set('stats-prints-rate', (s.printSuccessRate != null ? s.printSuccessRate + '%' : '0%'));
+            set('stats-emails', s.emailsCount || 0);
+            set('stats-avg-time', s.avgTimeSeconds != null ? Math.round(s.avgTimeSeconds) + 's' : '-');
+        } catch(e) {
+            console.error('Failed to load stats:', e);
+        }
+    },
+
+    async loadPromptLabStats() {
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+        // Reset prompt lab stats
+        set('stats-pl-total', '0');
+        set('stats-pl-successful', '0');
+        set('stats-pl-failed', '0');
+        set('stats-pl-rate', '0%');
+        set('stats-pl-avg-time', '-');
+
+        try {
+            const s = await window.pywebview.api.get_promptlab_stats();
+            if (!s) return;
+
+            set('stats-pl-total', s.total || 0);
+            set('stats-pl-successful', s.success || 0);
+            set('stats-pl-failed', s.failed || 0);
+            set('stats-pl-rate', (s.successRate != null ? s.successRate + '%' : '0%'));
+            set('stats-pl-avg-time', s.avgTimeSeconds != null ? Math.round(s.avgTimeSeconds) + 's' : '-');
+        } catch(e) {
+            console.error('Failed to load promptlab stats:', e);
+        }
+    },
+
+    async exportEmails() {
+        const select = document.getElementById('stats-select');
+        const eventId = select ? select.value : '';
+        const isGlobal = !eventId;
+
+        try {
+            const res = await window.pywebview.api.get_event_emails(isGlobal ? '__global__' : eventId);
+            const emails = (res && res.emails) ? res.emails : [];
+            const eventName = (res && res.eventName) ? res.eventName : (isGlobal ? 'all_events' : 'event');
+
+            if (emails.length === 0) {
+                this.showAlert(window.t ? window.t('settings.error_no_emails') : 'NO EMAILS TO EXPORT');
+                return;
+            }
+
+            const saved = await window.pywebview.api.save_emails_dialog(eventName, emails);
+            if (saved) {
+                this.showAlert(window.t ? window.t('settings.success_emails_exported') : 'EMAILS EXPORTED SUCCESSFULLY');
+            }
+        } catch(e) {
+            this.showAlert((window.t ? window.t('settings.error_export_failed') : 'EXPORT FAILED') + ': ' + (e.message || ''));
+        }
+    },
+
+    // Helpers
+    openModal(id, focusInputId) { window.openModal(id, focusInputId); },
+    showModal(id) { window.showModal(id); },
+    hideModal(id) { window.hideModal(id); },
+    showAlert(msg) { window.showAlert(msg); },
+    setLoading(btn, loading, text) { window.setLoading(btn, loading, text); }
+};
+
+window.SettingsModule.init();
+</script>

@@ -1,0 +1,1468 @@
+<!-- ========================================
+     PROMPTLAB MODULE - HTML
+     ======================================== -->
+
+<!-- Library View -->
+<section id="view-prompt-lab" class="view-section">
+    <button class="btn-back" data-action="goto-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="top-right-actions">
+        <button class="btn-main btn-primary" data-action="update-prompts">
+            <i class="fa-solid fa-cloud-arrow-down"></i> <span data-i18n="promptlab.btn_update">UPDATE PROMPTS</span>
+        </button>
+        <button class="btn-main" data-action="open-import-export-all">
+            <i class="fa-solid fa-right-left"></i> <span data-i18n="promptlab.btn_import_export">IMPORT / EXPORT ALL</span>
+        </button>
+    </div>
+    <div class="content-wrapper">
+        <h1 data-i18n="promptlab.title">PROMPT LAB</h1>
+        <div id="prompt-library-grid" class="events-grid"></div>
+    </div>
+</section>
+
+<!-- Category Details View -->
+<section id="view-category-details" class="view-section hidden">
+    <button class="btn-back prompt-drag-back-target" data-action="back-to-lab"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <div class="title-with-edit">
+            <h1 id="category-details-title">CATEGORY NAME</h1>
+            <button class="btn-edit-icon" data-action="rename-category"><i class="fa-solid fa-pen"></i></button>
+        </div>
+        <div id="category-details-grid" class="prompt-library-grid"></div>
+    </div>
+</section>
+
+<div class="prompt-drag-actions" aria-hidden="true">
+    <div id="prompt-drag-newcat" class="prompt-drag-icon prompt-drag-icon--newcat"><i class="fa-solid fa-plus"></i></div>
+    <div id="prompt-drag-trash" class="prompt-drag-icon prompt-drag-icon--trash"><i class="fa-solid fa-trash"></i></div>
+</div>
+
+<!-- Review Prompt View -->
+<section id="view-edit-prompt" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-category"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <div class="title-with-edit">
+            <h1 id="ep-title">PROMPT NAME</h1>
+            <button class="btn-edit-icon" data-action="rename-prompt"><i class="fa-solid fa-pen"></i></button>
+        </div>
+
+        <div class="edit-layout">
+            <div class="edit-col-left">
+                <div class="prompt-desc-wrap">
+                    <textarea id="ep-desc" placeholder="PROMPT DESCRIPTION" readonly></textarea>
+                    <button type="button" class="prompt-desc-action" data-action="copy-ep-desc" title="Copy"><i class="fa-solid fa-copy"></i></button>
+                </div>
+            </div>
+
+            <div class="edit-col-right">
+                <div class="edit-img-preview">
+                    <img id="ep-image-display" src="" data-action="view-ep-image">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Generate Prompt View -->
+<section id="view-generate-prompt" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-library"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="promptlab.btn_generate">GENERATE PROMPT</h1>
+        <div class="wide-layout">
+            <input type="text" id="gp-name" placeholder="PROMPT NAME" data-i18n="promptlab.prompt_name" data-i18n-attr="placeholder">
+            <select id="gp-category">
+                <option value="" disabled selected data-i18n="promptlab.select_category">SELECT CATEGORY</option>
+                <option value="create_new" data-i18n="promptlab.create_category">+ CREATE NEW CATEGORY</option>
+            </select>
+            <input type="text" id="gp-new-cat" placeholder="NEW CATEGORY NAME" data-i18n="promptlab.placeholder_new_cat" data-i18n-attr="placeholder" disabled>
+            <div class="prompt-desc-wrap">
+                <textarea id="gp-desc" placeholder="PROMPT DESCRIPTION" data-i18n="promptlab.placeholder_desc" data-i18n-attr="placeholder"></textarea>
+                <button type="button" class="prompt-desc-action" id="gp-btn-paste" data-action="paste-prompt-desc" title="Paste"><i class="fa-solid fa-paste"></i></button>
+            </div>
+            <input type="file" id="gp-file-input" accept="image/*" class="hidden">
+            <div class="row-grid">
+                <div id="gp-ref-img-box" class="img-placeholder-box clickable-box" data-action="trigger-file-upload" data-i18n="promptlab.ref_image_hint">
+                    PRESS TO SELECT REFERENCE IMAGE
+                </div>
+                <div id="gp-res-img-box" class="img-placeholder-box" data-action="view-gp-result-image" data-i18n="promptlab.result_image">RESULT IMAGE</div>
+            </div>
+            <button class="btn-main btn-primary" data-action="gp-generate" data-i18n="promptlab.btn_generate_credit">GENERATE (1 CREDIT)</button>
+        </div>
+    </div>
+</section>
+
+<!-- Delete Prompt Modal -->
+<div id="import-export-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" id="import-export-text" data-i18n="promptlab.modal_import_export">IMPORT / EXPORT PROMPTS</div>
+        <div class="modal-actions">
+            <button data-action="import-prompts-action" class="btn-main"><i class="fa-solid fa-file-import"></i> <span data-i18n="promptlab.btn_import">IMPORT</span></button>
+            <button data-action="export-prompts-action" class="btn-main"><i class="fa-solid fa-file-export"></i> <span data-i18n="promptlab.btn_export">EXPORT</span></button>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="import-export-cancel" class="btn-main btn-primary" data-i18n="common.cancel">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<div id="delete-cat-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="promptlab.modal_delete_cat">DELETE THIS CATEGORY AND ALL ITS PROMPTS? THIS ACTION IS IRREVERSIBLE.</div>
+        <div class="modal-actions">
+            <button data-action="delete-cat-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="delete-cat-confirm" class="btn-main" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<div id="delete-prompt-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="promptlab.modal_delete_prompt">DELETE THIS PROMPT? THIS ACTION IS IRREVERSIBLE.</div>
+        <div class="modal-actions">
+            <button data-action="delete-prompt-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="delete-prompt-confirm" class="btn-main" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Rename Category Modal -->
+<div id="rename-cat-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box-keyboard">
+        <div class="modal-text" data-i18n="promptlab.modal_rename_cat">RENAME CATEGORY</div>
+        <div class="keyboard-input-display">
+            <input type="text" id="rename-cat-name" class="keyboard-real-input" placeholder="CATEGORY NAME" data-i18n="promptlab.placeholder_cat_name" data-i18n-attr="placeholder" autocomplete="off" inputmode="none">
+            <button type="button" id="btn-clear-rename-cat" class="input-clear-btn">X</button>
+        </div>
+        <div id="rename-cat-error" class="text-error hidden u-mb-sm"></div>
+        <div class="kb-row">
+            <button class="kb-key" data-key="1">1</button>
+            <button class="kb-key" data-key="2">2</button>
+            <button class="kb-key" data-key="3">3</button>
+            <button class="kb-key" data-key="4">4</button>
+            <button class="kb-key" data-key="5">5</button>
+            <button class="kb-key" data-key="6">6</button>
+            <button class="kb-key" data-key="7">7</button>
+            <button class="kb-key" data-key="8">8</button>
+            <button class="kb-key" data-key="9">9</button>
+            <button class="kb-key" data-key="0">0</button>
+            <button class="kb-key kb-key--action kb-key--wide" data-key="BACKSPACE">DEL</button>
+        </div>
+        <div class="kb-row">
+            <button class="kb-key" data-key="Q">q</button>
+            <button class="kb-key" data-key="W">w</button>
+            <button class="kb-key" data-key="E">e</button>
+            <button class="kb-key" data-key="R">r</button>
+            <button class="kb-key" data-key="T">t</button>
+            <button class="kb-key" data-key="Y">y</button>
+            <button class="kb-key" data-key="U">u</button>
+            <button class="kb-key" data-key="I">i</button>
+            <button class="kb-key" data-key="O">o</button>
+            <button class="kb-key" data-key="P">p</button>
+        </div>
+        <div class="kb-row kb-row--shift">
+            <button class="kb-key" data-key="A">a</button>
+            <button class="kb-key" data-key="S">s</button>
+            <button class="kb-key" data-key="D">d</button>
+            <button class="kb-key" data-key="F">f</button>
+            <button class="kb-key" data-key="G">g</button>
+            <button class="kb-key" data-key="H">h</button>
+            <button class="kb-key" data-key="J">j</button>
+            <button class="kb-key" data-key="K">k</button>
+            <button class="kb-key" data-key="L">l</button>
+            <button class="kb-key" data-key="@">@</button>
+        </div>
+        <div class="kb-row">
+            <button class="kb-key kb-key--action kb-key--wide" data-key="SHIFT">SHIFT</button>
+            <button class="kb-key" data-key="Z">z</button>
+            <button class="kb-key" data-key="X">x</button>
+            <button class="kb-key" data-key="C">c</button>
+            <button class="kb-key" data-key="V">v</button>
+            <button class="kb-key" data-key="B">b</button>
+            <button class="kb-key" data-key="N">n</button>
+            <button class="kb-key" data-key="M">m</button>
+            <button class="kb-key" data-key=".">.</button>
+            <button class="kb-key" data-key="-">-</button>
+            <button class="kb-key kb-key--action kb-key--wide" data-key=".COM">.COM</button>
+        </div>
+        <div class="kb-row">
+            <button class="kb-key kb-key--space" data-key="SPACE"></button>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="rename-cat-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="rename-cat-confirm" class="btn-main" id="btn-rename-cat-continue" disabled data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Rename Prompt Modal -->
+<div id="rename-prompt-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box-keyboard">
+        <div class="modal-text" data-i18n="promptlab.modal_rename_prompt">RENAME PROMPT</div>
+        <div class="keyboard-input-display">
+            <input type="text" id="rename-prompt-name" class="keyboard-real-input" placeholder="PROMPT NAME" data-i18n="promptlab.prompt_name" data-i18n-attr="placeholder" autocomplete="off" inputmode="none">
+            <button type="button" id="btn-clear-rename-prompt" class="input-clear-btn">X</button>
+        </div>
+        <div id="rename-prompt-error" class="text-error hidden u-mb-sm"></div>
+        <div class="kb-row">
+            <button class="kb-key" data-key="1">1</button>
+            <button class="kb-key" data-key="2">2</button>
+            <button class="kb-key" data-key="3">3</button>
+            <button class="kb-key" data-key="4">4</button>
+            <button class="kb-key" data-key="5">5</button>
+            <button class="kb-key" data-key="6">6</button>
+            <button class="kb-key" data-key="7">7</button>
+            <button class="kb-key" data-key="8">8</button>
+            <button class="kb-key" data-key="9">9</button>
+            <button class="kb-key" data-key="0">0</button>
+            <button class="kb-key kb-key--action kb-key--wide" data-key="BACKSPACE">DEL</button>
+        </div>
+        <div class="kb-row">
+            <button class="kb-key" data-key="Q">q</button>
+            <button class="kb-key" data-key="W">w</button>
+            <button class="kb-key" data-key="E">e</button>
+            <button class="kb-key" data-key="R">r</button>
+            <button class="kb-key" data-key="T">t</button>
+            <button class="kb-key" data-key="Y">y</button>
+            <button class="kb-key" data-key="U">u</button>
+            <button class="kb-key" data-key="I">i</button>
+            <button class="kb-key" data-key="O">o</button>
+            <button class="kb-key" data-key="P">p</button>
+        </div>
+        <div class="kb-row kb-row--shift">
+            <button class="kb-key" data-key="A">a</button>
+            <button class="kb-key" data-key="S">s</button>
+            <button class="kb-key" data-key="D">d</button>
+            <button class="kb-key" data-key="F">f</button>
+            <button class="kb-key" data-key="G">g</button>
+            <button class="kb-key" data-key="H">h</button>
+            <button class="kb-key" data-key="J">j</button>
+            <button class="kb-key" data-key="K">k</button>
+            <button class="kb-key" data-key="L">l</button>
+            <button class="kb-key" data-key="@">@</button>
+        </div>
+        <div class="kb-row">
+            <button class="kb-key kb-key--action kb-key--wide" data-key="SHIFT">SHIFT</button>
+            <button class="kb-key" data-key="Z">z</button>
+            <button class="kb-key" data-key="X">x</button>
+            <button class="kb-key" data-key="C">c</button>
+            <button class="kb-key" data-key="V">v</button>
+            <button class="kb-key" data-key="B">b</button>
+            <button class="kb-key" data-key="N">n</button>
+            <button class="kb-key" data-key="M">m</button>
+            <button class="kb-key" data-key=".">.</button>
+            <button class="kb-key" data-key="-">-</button>
+            <button class="kb-key kb-key--action kb-key--wide" data-key=".COM">.COM</button>
+        </div>
+        <div class="kb-row">
+            <button class="kb-key kb-key--space" data-key="SPACE"></button>
+        </div>
+        <div class="modal-actions mt-15">
+            <button data-action="rename-prompt-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="rename-prompt-confirm" class="btn-main" id="btn-rename-prompt-continue" disabled data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- Full Image Viewer -->
+<section id="view-full-image" class="view-section hidden">
+    <button class="btn-back" data-action="close-full-image"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <div class="full-view-frame">
+            <img id="full-image-display" class="preview-image" src="">
+        </div>
+    </div>
+</section>
+
+<!-- ========================================
+     PROMPTLAB MODULE - JAVASCRIPT
+     ======================================== -->
+<script>
+window.PromptLabModule = {
+    state: {
+        exportContext: 'all',
+        currentView: 'prompt-lab',
+        returnView: 'prompt-lab',
+        currentCategoryId: null,
+        currentPromptId: null,
+        newcatPromptId: null,
+        imgUrl: `${window.location.origin}/local-data/images`,
+        generation: {
+            active: false,
+            startTime: 0,
+            completed: false,
+            resultUrl: null,
+            timeTaken: 0,
+            timerId: null
+        },
+        form: { name: '', cat: '', newCat: '', desc: '', refImgSrc: null },
+        drag: {
+            el: null,
+            ghost: null,
+            startX: 0,
+            startY: 0,
+            isDragging: false,
+            preventClick: false,
+            mode: 'reorder',
+            promptId: null,
+            sourceCategoryId: null,
+            sourceCategoryName: null,
+            hasNavigatedToLab: false
+        }
+    },
+
+    init() {
+        console.debug('[PROMPTLAB] Module initialized');
+        if (window.AppState.promptLabState) {
+            this.state = window.AppState.promptLabState;
+        } else {
+            window.AppState.promptLabState = this.state;
+        }
+        this.bindEvents();
+        this.initRenameCatKeyboard();
+        this.initRenamePromptKeyboard();
+        this.renderLibrary();
+        setTimeout(() => this.restoreGenerateForm(), 100);
+    },
+
+    initRenameCatKeyboard() {
+        window.initKeyboard({
+            container: '#rename-cat-modal',
+            inputId: 'rename-cat-name',
+            confirmBtnId: 'btn-rename-cat-continue',
+            clearBtnId: 'btn-clear-rename-cat'
+        });
+    },
+
+    initRenamePromptKeyboard() {
+        window.initKeyboard({
+            container: '#rename-prompt-modal',
+            inputId: 'rename-prompt-name',
+            confirmBtnId: 'btn-rename-prompt-continue',
+            clearBtnId: 'btn-clear-rename-prompt'
+        });
+    },
+
+    bindEvents() {
+        const self = this;
+        
+        window.moduleHandlers.click = (e) => {
+            // Ignore clicks on toggle switches to prevent opening edit view
+            if (e.target.closest('.switch')) return;
+
+            const action = e.target.closest('[data-action]');
+            if (action) {
+                if (!action.classList.contains('btn-back')) window.playButtonSound?.();
+                self.handleAction(action.dataset.action, action.dataset);
+            }
+        };
+
+        window.moduleHandlers.change = (e) => {
+            if (e.target.id === 'gp-name') self.state.form.name = e.target.value;
+            if (e.target.id === 'gp-category') self.state.form.cat = e.target.value;
+            if (e.target.id === 'gp-new-cat') self.state.form.newCat = e.target.value;
+            if (e.target.id === 'gp-desc') self.state.form.desc = e.target.value;
+
+            // Category select toggle
+            if (e.target.id === 'gp-category') {
+                const newCatInput = document.getElementById('gp-new-cat');
+                if (newCatInput) {
+                    newCatInput.disabled = e.target.value !== 'create_new';
+                    if (!newCatInput.disabled) newCatInput.focus();
+                }
+            }
+
+            // File input preview
+            if (e.target.id === 'gp-file-input') {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        self.state.form.refImgSrc = ev.target.result;
+                        const box = document.getElementById('gp-ref-img-box');
+                        box.innerHTML = `<img src="${ev.target.result}" class="img-preview-fill">`;
+                        box.classList.add('filled');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            // Toggle switches
+            if (e.target.matches('[data-toggle="category"]')) {
+                window.pywebview.api.toggle_category(e.target.dataset.id, e.target.checked);
+            }
+            if (e.target.matches('[data-toggle="prompt"]')) {
+                window.pywebview.api.toggle_prompt(e.target.dataset.id, e.target.checked);
+            }
+        };
+
+        window.moduleHandlers.keydown = (e) => {
+            if (e.key === 'Escape') {
+                // If in image viewer, go back
+                if (self.state.currentView === 'full-image') {
+                    self.showView(self.state.returnView || 'edit-prompt');
+                    return;
+                }
+                self.hideModal('delete-prompt-modal');
+                self.hideModal('delete-cat-modal');
+                self.hideModal('rename-cat-modal');
+                self.hideModal('rename-prompt-modal');
+                self.hideModal('alert-modal');
+                if (self.state.newcatPromptId) {
+                    self.state.newcatPromptId = null;
+                    const modalTitle = document.querySelector('#rename-cat-modal .modal-text');
+                    if (modalTitle) modalTitle.textContent = typeof window.t === 'function' ? window.t('promptlab.modal_rename_cat') : 'RENAME CATEGORY';
+                }
+            }
+        };
+    },
+
+    handleAction(action, data = {}) {
+        switch(action) {
+            case 'goto-dashboard':
+            case 'go-home': 
+                window.navigateTo('dashboard'); 
+                break;
+            case 'back-to-lab':
+            case 'back-to-library': 
+                this.showView('prompt-lab'); 
+                this.renderLibrary(); 
+                break;
+            case 'back-to-category': 
+                if (this.state.currentCategoryId) {
+                    const title = document.getElementById('category-details-title').textContent;
+                    this.openCategory(this.state.currentCategoryId, title);
+                } else {
+                    this.showView('prompt-lab');
+                }
+                break;
+
+            case 'nav-generate-prompt': this.openGeneratePrompt(); break;
+            case 'trigger-file-upload': document.getElementById('gp-file-input').click(); break;
+            case 'gp-generate': this.generateAndSavePrompt(); break;
+
+            case 'open-category': this.openCategory(data.id, data.name); break;
+            case 'edit-prompt': this.openEditPrompt(data.id); break;
+            case 'copy-ep-desc': this.copyDescription(); break;
+            case 'paste-prompt-desc': this.pastePromptDesc(); break;
+            case 'delete-prompt-cancel':
+                this.hideModal('delete-prompt-modal');
+                if (this.state.currentView === 'category-details' && this.state.currentCategoryId) {
+                    const title = document.getElementById('category-details-title')?.textContent || '';
+                    this.openCategory(this.state.currentCategoryId, title);
+                } else if (this.state.currentView === 'prompt-lab') {
+                    this.renderLibrary();
+                }
+                break;
+            case 'delete-prompt-confirm': this.deletePrompt(); break;
+
+            case 'open-delete-cat-modal':
+                if (this.state.generation && this.state.generation.active) {
+                    this.showAlert(typeof window.t === 'function' ? window.t('promptlab.error_generating_wait') : 'WAIT FOR GENERATION TO FINISH');
+                } else {
+                    this.showModal('delete-cat-modal');
+                }
+                break;
+            case 'delete-cat-cancel':
+                this.hideModal('delete-cat-modal');
+                if (this.state.currentView === 'prompt-lab') {
+                    this.renderLibrary();
+                }
+                break;
+            case 'delete-cat-confirm': this.deleteCategory(); break;
+
+            case 'rename-category':
+                this.openModal('rename-cat-modal', 'rename-cat-name');
+                const renameCatInput = document.getElementById('rename-cat-name');
+                if (renameCatInput) {
+                    renameCatInput.value = document.getElementById('category-details-title').textContent || '';
+                    renameCatInput.dispatchEvent(new Event('input'));
+                }
+                break;
+            case 'rename-cat-cancel':
+                this.hideModal('rename-cat-modal');
+                if (this.state.newcatPromptId) {
+                    this.state.newcatPromptId = null;
+                    const modalTitle = document.querySelector('#rename-cat-modal .modal-text');
+                    if (modalTitle) modalTitle.textContent = typeof window.t === 'function' ? window.t('promptlab.modal_rename_cat') : 'RENAME CATEGORY';
+                }
+                break;
+            case 'rename-cat-confirm': this.renameCategory(); break;
+            case 'rename-prompt':
+                this.openModal('rename-prompt-modal', 'rename-prompt-name');
+                const renamePromptInput = document.getElementById('rename-prompt-name');
+                const epTitleEl = document.getElementById('ep-title');
+                if (renamePromptInput && epTitleEl) {
+                    renamePromptInput.value = epTitleEl.textContent || '';
+                    renamePromptInput.dispatchEvent(new Event('input'));
+                }
+                break;
+            case 'rename-prompt-cancel': this.hideModal('rename-prompt-modal'); break;
+            case 'rename-prompt-confirm': this.renamePrompt(); break;
+
+            case 'close-alert': this.hideModal('alert-modal'); break;
+
+            case 'update-prompts':
+                this.updatePrompts(document.querySelector('[data-action="update-prompts"]'));
+                break;
+
+            case 'open-import-export-all':
+                this.state.exportContext = 'all';
+                document.getElementById('import-export-text').textContent = typeof window.t === 'function' ? window.t('promptlab.modal_import_export_all') : 'IMPORT / EXPORT ALL PROMPTS';
+                this.showModal('import-export-modal');
+                break;
+            case 'import-export-cancel':
+                this.hideModal('import-export-modal');
+                break;
+            case 'import-prompts-action':
+                this.importPrompts();
+                break;
+            case 'export-prompts-action':
+                this.exportPrompts();
+                break;
+            
+            // Image viewer
+            case 'view-ep-image':
+                this.viewImage(document.getElementById('ep-image-display').src);
+                break;
+            case 'view-gp-result-image': {
+                const resBox = document.getElementById('gp-res-img-box');
+                const resImg = resBox?.querySelector('img');
+                if (resImg && resImg.src) this.viewImage(resImg.src);
+                break;
+            }
+            case 'close-full-image':
+                this.showView(this.state.returnView || 'edit-prompt');
+                break;
+        }
+    },
+
+    viewImage(src) {
+        this.state.returnView = this.state.currentView;
+        
+        // Reset element to clear old handlers
+        const oldImg = document.getElementById('full-image-display');
+        if (!oldImg) return;
+        
+        const img = oldImg.cloneNode(true);
+        oldImg.parentNode.replaceChild(img, oldImg);
+        img.src = src;
+        
+        // Enable zoom/pan (shared global function)
+        window.enableZoom(img);
+
+        this.showView('full-image');
+    },
+
+    showView(viewId) {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+        document.getElementById(`view-${viewId}`)?.classList.remove('hidden');
+        this.state.currentView = viewId;
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'promptlab_view', { view: viewId, categoryId: this.state.currentCategoryId || null, promptId: this.state.currentPromptId || null }).catch(() => {});
+    },
+
+    async renderLibrary() {
+        const container = document.getElementById('prompt-library-grid');
+        container.innerHTML = '<div class="spinner"></div>';
+
+        try {
+            const lib = await window.pywebview.api.get_prompt_library();
+            container.innerHTML = '';
+
+            // Generate button
+            const btnGen = document.createElement('button');
+            btnGen.className = 'btn-main btn-primary';
+            btnGen.dataset.action = 'nav-generate-prompt';
+            btnGen.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> ' + (typeof window.t === 'function' ? window.t('promptlab.btn_generate') : 'GENERATE PROMPT');
+            container.appendChild(btnGen);
+
+            // Categories
+            lib.forEach(cat => {
+                let imagesHtml = '';
+                for (let i = 0; i < 4; i++) {
+                    imagesHtml += cat.images[i] 
+                        ? `<img src="${this.state.imgUrl}/${cat.images[i]}" class="mini-img">`
+                        : `<div class="mini-img"></div>`;
+                }
+                
+                const isChecked = cat.enabled !== false ? 'checked' : '';
+                
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.dataset.action = 'open-category';
+                card.dataset.id = cat.id;
+                card.dataset.name = cat.name;
+
+                card.innerHTML = `
+                    <div class="card-toggle-wrapper">
+                        <label class="switch">
+                            <input type="checkbox" ${isChecked} data-toggle="category" data-id="${cat.id}">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="category-preview-grid">${imagesHtml}</div>
+                    <div class="category-header">${cat.name}</div>
+                `;
+                container.appendChild(card);
+            });
+        } catch(e) {
+            container.innerHTML = '<div class="text-placeholder">ERROR LOADING LIBRARY</div>';
+        }
+    },
+
+    async openCategory(catId, catName) {
+        this.state.currentCategoryId = catId;
+        document.getElementById('category-details-title').textContent = catName;
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'category_opened', { categoryId: catId, name: (catName || '').substring(0, 80) }).catch(() => {});
+        
+        const container = document.getElementById('category-details-grid');
+        container.innerHTML = '<div class="spinner"></div>';
+        
+        this.showView('category-details');
+
+        try {
+            const prompts = await window.pywebview.api.get_prompts_by_category(catId);
+            container.innerHTML = '';
+
+            prompts.forEach(p => {
+                const isChecked = p.enabled !== false ? 'checked' : '';
+                const card = document.createElement('div');
+                card.className = 'prompt-card';
+                card.dataset.action = 'edit-prompt';
+                card.dataset.id = p.id;
+
+                card.innerHTML = `
+                    <div class="card-toggle-wrapper">
+                        <label class="switch">
+                            <input type="checkbox" ${isChecked} data-toggle="prompt" data-id="${p.id}">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <img src="${this.state.imgUrl}/${p.image}" class="prompt-full-img">
+                    <div class="category-header">${p.name}</div>
+                `;
+                container.appendChild(card);
+            });
+
+            if (prompts.length === 0) {
+                container.innerHTML = '<div class="text-placeholder">NO PROMPTS IN THIS CATEGORY</div>';
+            }
+        } catch(e) {
+            container.innerHTML = '<div class="text-placeholder">ERROR LOADING PROMPTS</div>';
+        }
+    },
+
+    async openEditPrompt(promptId) {
+        this.state.currentPromptId = promptId;
+
+        try {
+            const prompt = await window.pywebview.api.get_prompt_details(promptId);
+            if (!prompt) return;
+
+            const epTitle = document.getElementById('ep-title');
+            const epDesc = document.getElementById('ep-desc');
+            const epImage = document.getElementById('ep-image-display');
+            if (epTitle) epTitle.textContent = prompt.name || 'PROMPT NAME';
+            if (epDesc) epDesc.value = prompt.text || '';
+            if (epImage && prompt.image) epImage.src = `${this.state.imgUrl}/${prompt.image}`;
+
+            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'prompt_opened', { promptId, name: (prompt.name || '').substring(0, 80) }).catch(() => {});
+            this.showView('edit-prompt');
+        } catch (e) {
+            this.showAlert('ERROR LOADING PROMPT');
+        }
+    },
+
+    openGeneratePrompt() {
+        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'generate_prompt_view_opened', {}).catch(() => {});
+        this.loadCategories('gp-category');
+        this.showView('generate-prompt');
+    },
+
+    restoreGenerateForm() {
+        if (this.state.form.name) { const el = document.getElementById('gp-name'); if(el) el.value = this.state.form.name; }
+        if (this.state.form.cat) { const el = document.getElementById('gp-category'); if(el) el.value = this.state.form.cat; }
+        if (this.state.form.newCat) {
+            const newCatEl = document.getElementById('gp-new-cat');
+            if(newCatEl) {
+                newCatEl.value = this.state.form.newCat;
+                newCatEl.disabled = this.state.form.cat !== 'create_new';
+            }
+        }
+        if (this.state.form.desc) { const el = document.getElementById('gp-desc'); if(el) el.value = this.state.form.desc; }
+        if (this.state.form.refImgSrc) {
+            const refBox = document.getElementById('gp-ref-img-box');
+            if(refBox) {
+                refBox.innerHTML = `<img src="${this.state.form.refImgSrc}" class="img-preview-fill">`;
+                refBox.classList.add('filled');
+            }
+        }
+
+        if (this.state.generation.active || this.state.generation.completed) {
+            const btn = document.querySelector('[data-action="gp-generate"]');
+            const refBox = document.getElementById('gp-ref-img-box');
+            const resBox = document.getElementById('gp-res-img-box');
+
+            if (refBox) refBox.classList.add('btn-disabled');
+
+            if (this.state.generation.completed) {
+                if (resBox) {
+                    resBox.innerHTML = `<img src="${this.state.generation.resultUrl}?t=${Date.now()}" class="img-preview-fill">`;
+                    resBox.classList.add('filled');
+                }
+                if (btn) {
+                    btn.classList.remove('btn-disabled');
+                    btn.classList.add('btn-success');
+                    btn.innerHTML = `<i class="fa-solid fa-check"></i> SAVED - ${this.state.generation.timeTaken}s - CLICK TO RESTART`;
+                }
+            } else if (this.state.generation.active) {
+                if (resBox) {
+                    resBox.innerHTML = '<div class="spinner"></div>';
+                    resBox.classList.add('filled');
+                }
+                if (btn) btn.classList.add('btn-disabled');
+
+                if (this.state.generation.timerId) clearInterval(this.state.generation.timerId);
+                this.state.generation.timerId = setInterval(() => {
+                    if (!this.state.generation.active) return;
+                    const elapsed = Math.floor((Date.now() - this.state.generation.startTime) / 1000);
+                    const b = document.querySelector('[data-action="gp-generate"]');
+                    if (b) b.innerHTML = `GENERATING... ${elapsed}s`;
+                }, 1000);
+            }
+        }
+    },
+
+    resetGenerateForm() {
+        this.state.form = { name: '', cat: '', newCat: '', desc: '', refImgSrc: null };
+        const fileInput = document.getElementById('gp-file-input');
+        if (fileInput) fileInput.value = '';
+        const nameInput = document.getElementById('gp-name');
+        if (nameInput) nameInput.value = '';
+        const catInput = document.getElementById('gp-category');
+        if (catInput) catInput.selectedIndex = 0;
+        const newCatInput = document.getElementById('gp-new-cat');
+        if (newCatInput) { newCatInput.value = ''; newCatInput.disabled = true; }
+        const descInput = document.getElementById('gp-desc');
+        if (descInput) descInput.value = '';
+
+        const refBox = document.getElementById('gp-ref-img-box');
+        if (refBox) {
+            refBox.innerHTML = window.t ? window.t('promptlab.ref_image_hint') : 'PRESS TO SELECT REFERENCE IMAGE';
+            refBox.classList.remove('filled', 'btn-disabled');
+        }
+
+        const resBox = document.getElementById('gp-res-img-box');
+        if (resBox) {
+            resBox.innerHTML = window.t ? window.t('promptlab.result_image') : 'RESULT IMAGE';
+            resBox.classList.remove('filled');
+        }
+
+        const btn = document.querySelector('[data-action="gp-generate"]');
+        if (btn) {
+            btn.className = 'btn-main';
+            btn.innerHTML = window.t ? window.t('promptlab.btn_generate_credit') : 'GENERATE (1 CREDIT)';
+        }
+
+        this.state.generation = { active: false, startTime: 0, completed: false, resultUrl: null, timeTaken: 0, timerId: null };
+    },
+
+    async loadCategories(selectId) {
+        try {
+            const cats = await window.pywebview.api.get_categories();
+            const select = document.getElementById(selectId);
+            const currentVal = select.value;
+            
+            while (select.options.length > 2) select.remove(2);
+            
+            cats.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.text = c.name;
+                select.add(opt);
+            });
+
+            if (currentVal) select.value = currentVal;
+        } catch(e) {}
+    },
+
+    async generateAndSavePrompt() {
+        if (this.state.generation.completed) {
+            this.resetGenerateForm();
+            return;
+        }
+
+        const name = document.getElementById('gp-name').value.trim();
+        const cat = document.getElementById('gp-category').value;
+        const newCat = document.getElementById('gp-new-cat').value.trim();
+        const desc = document.getElementById('gp-desc').value.trim();
+        const refImg = document.querySelector('#gp-ref-img-box img');
+
+        if (!name) return this.showAlert(window.t ? window.t('promptlab.error_enter_name') : 'ENTER PROMPT NAME');
+        if (!cat || (cat === 'create_new' && !newCat)) return this.showAlert(window.t ? window.t('promptlab.error_select_category') : 'SELECT OR CREATE CATEGORY');
+        if (!desc) return this.showAlert(window.t ? window.t('promptlab.error_enter_desc') : 'ENTER PROMPT DESCRIPTION');
+        if (!refImg) return this.showAlert(window.t ? window.t('promptlab.error_select_ref') : 'SELECT REFERENCE IMAGE');
+
+        this.state.form = { name, cat, newCat, desc, refImgSrc: refImg.src };
+
+        let btn = document.querySelector('[data-action="gp-generate"]');
+        let resBox = document.getElementById('gp-res-img-box');
+        let refBox = document.getElementById('gp-ref-img-box');
+
+        this.state.generation.active = true;
+        this.state.generation.startTime = Date.now();
+
+        if (btn) btn.classList.add('btn-disabled');
+        if (refBox) refBox.classList.add('btn-disabled');
+
+        if (resBox) {
+            resBox.innerHTML = '<div class="spinner"></div>';
+            resBox.classList.add('filled');
+        }
+
+        if (this.state.generation.timerId) clearInterval(this.state.generation.timerId);
+        this.state.generation.timerId = setInterval(() => {
+            if (!this.state.generation.active) return;
+            const elapsed = Math.floor((Date.now() - this.state.generation.startTime) / 1000);
+            const b = document.querySelector('[data-action="gp-generate"]');
+            if (b) b.innerHTML = `GENERATING... ${elapsed}s`;
+        }, 1000);
+
+        try {
+            const token = window.AppState?.session?.token || '';
+            const catName = cat === 'create_new' ? newCat : '';
+            
+            const res = await window.pywebview.api.generate_and_save_prompt(
+                token, refImg.src, name, catName, cat, desc
+            );
+
+            clearInterval(this.state.generation.timerId);
+            const finalTime = Math.floor((Date.now() - this.state.generation.startTime) / 1000);
+
+            btn = document.querySelector('[data-action="gp-generate"]');
+            resBox = document.getElementById('gp-res-img-box');
+            refBox = document.getElementById('gp-ref-img-box');
+
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'promptlab_generate_ok', { duration_sec: finalTime, credits: res.credits }).catch(() => {});
+                this.state.generation.active = false;
+                this.state.generation.completed = true;
+                this.state.generation.resultUrl = res.localUrl;
+                this.state.generation.timeTaken = finalTime;
+
+                if (resBox) {
+                    resBox.innerHTML = `<img src="${res.localUrl}?t=${Date.now()}" class="img-preview-fill">`;
+                    resBox.classList.add('filled');
+                }
+                if (btn) {
+                    btn.classList.remove('btn-disabled');
+                    btn.classList.add('btn-success');
+                    btn.innerHTML = `<i class="fa-solid fa-check"></i> SAVED - ${finalTime}s - CLICK TO RESTART`;
+                }
+
+                if (res.credits !== undefined) {
+                    if (window.AppState && window.AppState.session && window.AppState.session.account) {
+                        window.AppState.session.account.credits = res.credits;
+                    }
+                    const h1 = document.getElementById('home-credits');
+                    if (h1) h1.textContent = `${res.credits} CREDITS`;
+                }
+            } else {
+                this.state.generation.active = false;
+                if (resBox) {
+                    resBox.innerHTML = `<div class="text-error-inline">GENERATION FAILED</div>`;
+                    resBox.classList.remove('filled');
+                }
+                if (btn) {
+                    btn.classList.remove('btn-disabled');
+                    btn.innerHTML = 'GENERATE (1 CREDIT)';
+                }
+                if (refBox) refBox.classList.remove('btn-disabled');
+                this.showAlert(res.error || 'GENERATION FAILED');
+            }
+        } catch(e) {
+            clearInterval(this.state.generation.timerId);
+            this.state.generation.active = false;
+            
+            btn = document.querySelector('[data-action="gp-generate"]');
+            resBox = document.getElementById('gp-res-img-box');
+            refBox = document.getElementById('gp-ref-img-box');
+
+            if (resBox) {
+                resBox.innerHTML = window.t ? window.t('promptlab.result_image') : 'RESULT IMAGE';
+                resBox.classList.remove('filled');
+            }
+            if (btn) {
+                btn.classList.remove('btn-disabled');
+                btn.innerHTML = window.t ? window.t('promptlab.btn_generate_credit') : 'GENERATE (1 CREDIT)';
+            }
+            if (refBox) refBox.classList.remove('btn-disabled');
+            this.showAlert(window.t ? window.t('promptlab.error_system') : 'SYSTEM ERROR');
+        }
+    },
+
+    copyDescription() {
+        const txt = document.getElementById('ep-desc')?.value || '';
+        if (!txt) return;
+        const btn = document.querySelector('[data-action="copy-ep-desc"]');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(txt).then(() => {
+                this.showCopyFeedback(btn);
+            }).catch(() => {});
+        } else {
+            this.showCopyFeedback(btn);
+        }
+    },
+
+    showCopyFeedback(btn) {
+        if (!btn) return;
+        const html = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+        btn.disabled = true;
+        setTimeout(() => {
+            btn.innerHTML = html;
+            btn.disabled = false;
+        }, 2000);
+    },
+
+    pastePromptDesc() {
+        if (this.state.generation.active) return;
+        const target = document.getElementById('gp-desc');
+        if (!target) return;
+        if (navigator.clipboard && navigator.clipboard.readText) {
+            navigator.clipboard.readText().then((text) => {
+                target.value = (target.value || '') + (target.value && !target.value.endsWith('\n') ? '\n' : '') + text;
+                this.state.form.desc = target.value;
+            }).catch(() => {});
+        }
+    },
+
+    async deleteCategory() {
+        if (this.state.generation && this.state.generation.active) {
+            this.showAlert(typeof window.t === 'function' ? window.t('promptlab.error_generating_wait') : 'WAIT FOR GENERATION TO FINISH');
+            return;
+        }
+        const id = this.state.currentCategoryId;
+        const btn = document.querySelector('[data-action="delete-cat-confirm"]');
+        this.setLoading(btn, true, typeof window.t === 'function' ? window.t('common.loading_deleting') : 'DELETING...');
+
+        try {
+            const res = await window.pywebview.api.delete_category(id);
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'category_deleted', { categoryId: id }).catch(() => {});
+                this.hideModal('delete-cat-modal');
+                this.showView('prompt-lab');
+                this.renderLibrary();
+            } else {
+                this.showAlert(res.error || (window.t ? window.t('promptlab.error_delete_cat') : 'ERROR DELETING CATEGORY'));
+            }
+        } catch(e) {
+            this.showAlert(window.t ? window.t('promptlab.error_delete_cat') : 'ERROR DELETING CATEGORY');
+        } finally {
+            this.setLoading(btn, false);
+        }
+    },
+
+    async deletePrompt() {
+        if (this.state.generation && this.state.generation.active) {
+            this.showAlert(typeof window.t === 'function' ? window.t('promptlab.error_generating_wait') : 'WAIT FOR GENERATION TO FINISH');
+            return;
+        }
+        const id = this.state.currentPromptId;
+        const btn = document.querySelector('[data-action="delete-prompt-confirm"]');
+        this.setLoading(btn, true, typeof window.t === 'function' ? window.t('common.loading_deleting') : 'DELETING...');
+
+        try {
+            const res = await window.pywebview.api.delete_prompt(id);
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'prompt_deleted', { promptId: id }).catch(() => {});
+                this.hideModal('delete-prompt-modal');
+                if (this.state.currentCategoryId) {
+                    const catName = document.getElementById('category-details-title').textContent;
+                    this.openCategory(this.state.currentCategoryId, catName);
+                } else {
+                    this.showView('prompt-lab');
+                    this.renderLibrary();
+                }
+            } else {
+                this.showAlert(res.error || (window.t ? window.t('promptlab.error_deleting') : 'ERROR DELETING'));
+            }
+        } catch(e) {
+            this.showAlert(window.t ? window.t('promptlab.error_deleting') : 'ERROR DELETING');
+        } finally {
+            this.setLoading(btn, false);
+        }
+    },
+
+    async updatePrompts(btn) {
+        if (!btn) return;
+        const origHTML = btn.innerHTML;
+        this.setLoading(btn, true, typeof window.t === 'function' ? window.t('promptlab.loading_updating') : 'UPDATING...');
+
+        try {
+            const token = window.AppState?.session?.token || '';
+            const res = await window.pywebview.api.update_prompts(token);
+
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'prompts_updated', {}).catch(() => {});
+                this.showAlert(typeof window.t === 'function' ? window.t('promptlab.success_updated') : 'PROMPTS UPDATED');
+                this.state.currentCategoryId = null;
+                this.showView('prompt-lab');
+                this.renderLibrary();
+            } else {
+                this.showAlert(res.error || (window.t ? window.t('promptlab.error_update') : 'UPDATE FAILED'));
+            }
+        } catch(e) {
+            this.showAlert(window.t ? window.t('promptlab.error_update_retry') : 'UPDATE FAILED, TRY AGAIN');
+        } finally {
+            this.setLoading(btn, false);
+            btn.innerHTML = origHTML;
+        }
+    },
+
+    async importPrompts() {
+        const btn = document.querySelector('[data-action="import-prompts-action"]');
+        const origHTML = btn.innerHTML;
+        this.setLoading(btn, true, typeof window.t === 'function' ? window.t('promptlab.loading_importing') : 'IMPORTING...');
+
+        try {
+            const res = await window.pywebview.api.import_prompts();
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'prompts_imported', {}).catch(() => {});
+                this.hideModal('import-export-modal');
+                this.state.currentCategoryId = null;
+                this.showView('prompt-lab');
+                this.renderLibrary();
+                this.showAlert(typeof window.t === 'function' ? window.t('promptlab.success_imported') : 'PROMPTS IMPORTED SUCCESSFULLY');
+            } else if (!res.cancelled) {
+                this.showAlert(res.error || (window.t ? window.t('promptlab.error_importing') : 'ERROR IMPORTING'));
+            }
+        } catch(e) {
+            this.showAlert(window.t ? window.t('promptlab.error_importing') : 'ERROR IMPORTING');
+        } finally {
+            this.setLoading(btn, false);
+            btn.innerHTML = origHTML;
+        }
+    },
+
+    async exportPrompts() {
+        const btn = document.querySelector('[data-action="export-prompts-action"]');
+        const origHTML = btn.innerHTML;
+        this.setLoading(btn, true, typeof window.t === 'function' ? window.t('promptlab.loading_exporting') : 'EXPORTING...');
+
+        try {
+            const res = await window.pywebview.api.export_prompts();
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'prompts_exported', {}).catch(() => {});
+                this.hideModal('import-export-modal');
+                this.showAlert(typeof window.t === 'function' ? window.t('promptlab.success_exported') : 'PROMPTS EXPORTED SUCCESSFULLY');
+            } else if (!res.cancelled) {
+                this.showAlert(res.error || (window.t ? window.t('promptlab.error_exporting') : 'ERROR EXPORTING'));
+            }
+        } catch(e) {
+            this.showAlert(window.t ? window.t('promptlab.error_exporting') : 'ERROR EXPORTING');
+        } finally {
+            this.setLoading(btn, false);
+            btn.innerHTML = origHTML;
+        }
+    },
+
+    async renameCategory() {
+        const name = document.getElementById('rename-cat-name').value.trim();
+        const err = document.getElementById('rename-cat-error');
+        if (!name) {
+            err.textContent = window.t ? window.t('promptlab.error_name_empty') : 'NAME CANNOT BE EMPTY';
+            err.classList.remove('hidden');
+            return;
+        }
+        err.classList.add('hidden');
+
+        // If newcatPromptId is set, we're creating a new category and moving a prompt
+        if (this.state.newcatPromptId) {
+            try {
+                const res = await window.pywebview.api.create_category_and_move_prompt(name, this.state.newcatPromptId);
+                if (res.ok) {
+                    if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'category_created', { name }).catch(() => {});
+                    this.hideModal('rename-cat-modal');
+                    const modalTitle = document.querySelector('#rename-cat-modal .modal-text');
+                    if (modalTitle) modalTitle.textContent = typeof window.t === 'function' ? window.t('promptlab.modal_rename_cat') : 'RENAME CATEGORY';
+                    this.state.newcatPromptId = null;
+                    this.showView('prompt-lab');
+                    this.renderLibrary();
+                } else {
+                    err.textContent = res.error || (window.t ? window.t('events.error_generic') : 'ERROR');
+                    err.classList.remove('hidden');
+                }
+            } catch (e) {
+                err.textContent = (window.t ? window.t('events.error_generic') : 'ERROR') + ': ' + e.message;
+                err.classList.remove('hidden');
+            }
+            return;
+        }
+
+        // Normal rename flow
+        try {
+            const res = await window.pywebview.api.rename_category(this.state.currentCategoryId, name);
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'category_renamed', { categoryId: this.state.currentCategoryId, new_name: name }).catch(() => {});
+                document.getElementById('category-details-title').textContent = res.name;
+                this.hideModal('rename-cat-modal');
+            } else {
+                err.textContent = res.error || (window.t ? window.t('events.error_generic') : 'ERROR');
+                err.classList.remove('hidden');
+            }
+        } catch (e) {
+            err.textContent = (window.t ? window.t('events.error_generic') : 'ERROR') + ': ' + e.message;
+            err.classList.remove('hidden');
+        }
+    },
+
+    async renamePrompt() {
+        const name = document.getElementById('rename-prompt-name').value.trim();
+        const err = document.getElementById('rename-prompt-error');
+        if (!name) {
+            err.textContent = window.t ? window.t('promptlab.error_name_empty') : 'NAME CANNOT BE EMPTY';
+            err.classList.remove('hidden');
+            return;
+        }
+        err.classList.add('hidden');
+        try {
+            const prompt = await window.pywebview.api.get_prompt_details(this.state.currentPromptId);
+            if (!prompt) {
+                err.textContent = window.t ? window.t('promptlab.error_prompt_not_found') : 'PROMPT NOT FOUND';
+                err.classList.remove('hidden');
+                return;
+            }
+            const res = await window.pywebview.api.update_prompt(
+                this.state.currentPromptId,
+                name,
+                prompt.categoryId,
+                '',
+                prompt.text,
+                null
+            );
+            if (res.ok) {
+                if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'prompt_updated', { promptId: this.state.currentPromptId, name }).catch(() => {});
+                const epTitle = document.getElementById('ep-title');
+                if (epTitle) epTitle.textContent = name;
+                this.hideModal('rename-prompt-modal');
+            } else {
+                err.textContent = res.error || (window.t ? window.t('events.error_generic') : 'ERROR');
+                err.classList.remove('hidden');
+            }
+        } catch (e) {
+            err.textContent = (window.t ? window.t('events.error_generic') : 'ERROR') + ': ' + (e.message || 'UNKNOWN');
+            err.classList.remove('hidden');
+        }
+    },
+
+    // Helpers
+    openModal(id, focusInputId) { window.openModal(id, focusInputId); },
+    showModal(id) { window.showModal(id); },
+    hideModal(id) { window.hideModal(id); },
+    showAlert(msg) { window.showAlert(msg); },
+    setLoading(btn, loading, text) { window.setLoading(btn, loading, text); }
+};
+
+// --- LOGICA DE DRAG & DROP ---
+window.PromptLabModule._initDragAndDrop = function() {
+    const self = this;
+    const state = this.state;
+
+    const onPointerDown = (e) => {
+        if (state.generation && state.generation.active) return;
+        if (e.target.closest('.switch') || e.target.closest('button')) return;
+        if (e.target.closest('#event-gallery-grid')) return;
+
+        const card = e.target.closest('.category-card, .prompt-card');
+        if (card) {
+            if (card.closest('#event-categories-grid') || card.closest('#event-styles-grid')) return;
+            // DOM-based guard: only capture cards inside PromptLab views
+            if (!card.closest('#view-prompt-lab') && !card.closest('#view-category-details')) return;
+            e.preventDefault();
+            state.drag.el = card;
+            state.drag.startX = e.clientX;
+            state.drag.startY = e.clientY;
+            state.drag.isDragging = false;
+            try { card.setPointerCapture(e.pointerId); } catch(err) {}
+        }
+    };
+
+    const onPointerMove = (e) => {
+        const drag = state.drag;
+        if (!drag.el) return;
+
+        if (!drag.isDragging) {
+            if (Math.abs(e.clientX - drag.startX) > 10 || Math.abs(e.clientY - drag.startY) > 10) {
+                drag.isDragging = true;
+                drag.preventClick = true;
+                drag.mode = 'reorder';
+                drag.promptId = null;
+                drag.sourceCategoryId = null;
+                drag.sourceCategoryName = null;
+                drag.hasNavigatedToLab = false;
+
+                const rect = drag.el.getBoundingClientRect();
+                drag.ghost = drag.el.cloneNode(true);
+                drag.ghost.classList.add('draggable-ghost');
+                drag.ghost.style.position = 'fixed';
+                drag.ghost.style.top = rect.top + 'px';
+                drag.ghost.style.left = rect.left + 'px';
+                drag.ghost.style.width = rect.width + 'px';
+                drag.ghost.style.height = rect.height + 'px';
+                drag.ghost.style.margin = '0';
+                document.body.appendChild(drag.ghost);
+
+                drag.el.style.opacity = '0.3';
+                const dragActions = document.getElementById('prompt-drag-trash')?.closest('.prompt-drag-actions');
+                if (dragActions) dragActions.classList.add('visible');
+            }
+        }
+
+        if (drag.isDragging) {
+            e.preventDefault();
+            drag.ghost.style.left = (e.clientX - drag.ghost.offsetWidth / 2) + 'px';
+            drag.ghost.style.top = (e.clientY - drag.ghost.offsetHeight / 2) + 'px';
+
+            // Hover detection for drag icons
+            const trashIcon = document.getElementById('prompt-drag-trash');
+            const newcatIcon = document.getElementById('prompt-drag-newcat');
+            if (trashIcon) {
+                const tr = trashIcon.getBoundingClientRect();
+                trashIcon.classList.toggle('is-over', e.clientX >= tr.left && e.clientX <= tr.right && e.clientY >= tr.top && e.clientY <= tr.bottom);
+            }
+            if (newcatIcon) {
+                const nr = newcatIcon.getBoundingClientRect();
+                newcatIcon.classList.toggle('is-over', e.clientX >= nr.left && e.clientX <= nr.right && e.clientY >= nr.top && e.clientY <= nr.bottom);
+            }
+
+            if (drag.mode === 'move-to-category') {
+                document.querySelectorAll('.category-card.drag-drop-target').forEach(c => c.classList.remove('drag-drop-target'));
+                const catCards = document.querySelectorAll('#prompt-library-grid .category-card');
+                let overCard = null;
+                catCards.forEach(card => {
+                    const r = card.getBoundingClientRect();
+                    if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+                        overCard = card;
+                    }
+                });
+                if (overCard && overCard.dataset.id) {
+                    overCard.classList.add('drag-drop-target');
+                }
+                return;
+            }
+
+            if (state.currentView === 'category-details' && drag.el.classList.contains('prompt-card')) {
+                const backBtn = document.querySelector('#view-category-details .prompt-drag-back-target');
+                const inBack = backBtn && (() => {
+                    const r = backBtn.getBoundingClientRect();
+                    return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+                })();
+                if (inBack) {
+                    drag.mode = 'move-to-category';
+                    drag.promptId = drag.el.dataset.id;
+                    drag.sourceCategoryId = state.currentCategoryId;
+                    drag.sourceCategoryName = document.getElementById('category-details-title')?.textContent || '';
+                    if (!drag.hasNavigatedToLab) {
+                        drag.hasNavigatedToLab = true;
+                        state.currentView = 'prompt-lab';
+                        self.showView('prompt-lab');
+                        self.renderLibrary();
+                    }
+                    return;
+                }
+            }
+
+            const container = drag.el.parentNode;
+            if (!container) return;
+            const elements = Array.from(container.children).filter(el => el !== drag.el && (el.classList.contains('category-card') || el.classList.contains('prompt-card')));
+
+            let closest = null;
+            let closestDist = Infinity;
+
+            elements.forEach(el => {
+                const box = el.getBoundingClientRect();
+                const boxCenter = { x: box.left + box.width/2, y: box.top + box.height/2 };
+                const dist = Math.hypot(e.clientX - boxCenter.x, e.clientY - boxCenter.y);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = el;
+                }
+            });
+
+            if (closest) {
+                const box = closest.getBoundingClientRect();
+                if (e.clientX < box.left + box.width / 2) {
+                    container.insertBefore(drag.el, closest);
+                } else {
+                    container.insertBefore(drag.el, closest.nextSibling);
+                }
+            }
+        }
+    };
+
+    const endDrag = async (e) => {
+        const drag = state.drag;
+        if (!drag.el) return;
+
+        document.querySelectorAll('.category-card.drag-drop-target').forEach(c => c.classList.remove('drag-drop-target'));
+        const dragActions = document.getElementById('prompt-drag-trash')?.closest('.prompt-drag-actions');
+        const trashEl = document.getElementById('prompt-drag-trash');
+        const newcatEl = document.getElementById('prompt-drag-newcat');
+
+        if (drag.isDragging) {
+            // Detect drops BEFORE hiding icons (hidden elements have zero bounding box)
+            let droppedOnTrash = false;
+            let droppedOnNewcat = false;
+            if (trashEl) {
+                const r = trashEl.getBoundingClientRect();
+                droppedOnTrash = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+            }
+            if (newcatEl) {
+                const r = newcatEl.getBoundingClientRect();
+                droppedOnNewcat = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+            }
+
+            // Now hide icons and clean up
+            if (dragActions) dragActions.classList.remove('visible');
+            if (trashEl) trashEl.classList.remove('is-over');
+            if (newcatEl) newcatEl.classList.remove('is-over');
+
+            drag.el.style.opacity = '1';
+            if (drag.ghost && drag.ghost.parentNode) {
+                drag.ghost.parentNode.removeChild(drag.ghost);
+            }
+
+            if (droppedOnTrash) {
+                const id = drag.el.dataset.id;
+                const isCategory = drag.el.classList.contains('category-card');
+                if (isCategory) {
+                    state.currentCategoryId = id;
+                    self.showModal('delete-cat-modal');
+                } else {
+                    state.currentPromptId = id;
+                    self.showModal('delete-prompt-modal');
+                }
+            } else if (droppedOnNewcat) {
+                const promptId = drag.el.dataset.id;
+                if (promptId && drag.el.classList.contains('prompt-card')) {
+                    state.newcatPromptId = promptId;
+                    self.openModal('rename-cat-modal', 'rename-cat-name');
+                    const renameInput = document.getElementById('rename-cat-name');
+                    if (renameInput) {
+                        renameInput.value = '';
+                        renameInput.dispatchEvent(new Event('input'));
+                    }
+                    const modalTitle = document.querySelector('#rename-cat-modal .modal-text');
+                    if (modalTitle) modalTitle.textContent = typeof window.t === 'function' ? window.t('promptlab.modal_new_category') : 'NEW CATEGORY';
+                }
+            } else if (drag.mode === 'move-to-category') {
+                let targetCatId = null;
+                let targetCatName = '';
+                document.querySelectorAll('#prompt-library-grid .category-card').forEach(card => {
+                    const r = card.getBoundingClientRect();
+                    if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+                        targetCatId = card.dataset.id;
+                        targetCatName = card.dataset.name || '';
+                    }
+                });
+
+                if (targetCatId && drag.promptId) {
+                    try {
+                        const res = await window.pywebview.api.move_prompt_to_category(drag.promptId, targetCatId);
+                        if (res.ok) {
+                            if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'prompt_moved', { promptId: drag.promptId, targetCategoryId: targetCatId }).catch(() => {});
+                            await self.openCategory(targetCatId, targetCatName);
+                        } else {
+                            self.showAlert(res.error || 'ERROR MOVING PROMPT');
+                            if (drag.sourceCategoryId) {
+                                await self.openCategory(drag.sourceCategoryId, drag.sourceCategoryName || '');
+                            } else {
+                                await self.renderLibrary();
+                            }
+                        }
+                    } catch (err) {
+                        self.showAlert('ERROR: ' + (err.message || String(err)));
+                        if (drag.sourceCategoryId) {
+                            await self.openCategory(drag.sourceCategoryId, drag.sourceCategoryName || '');
+                        } else {
+                            await self.renderLibrary();
+                        }
+                    }
+                } else if (drag.sourceCategoryId) {
+                    await self.openCategory(drag.sourceCategoryId, drag.sourceCategoryName || '');
+                } else {
+                    await self.renderLibrary();
+                }
+            } else {
+                const container = drag.el.parentNode;
+                if (container) {
+                    const newOrder = Array.from(container.children)
+                                          .map(el => el.dataset.id)
+                                          .filter(id => id);
+                    const isCategory = drag.el.classList.contains('category-card');
+                    if (isCategory) {
+                        await window.pywebview.api.reorder_categories(newOrder);
+                        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'categories_reordered', { count: newOrder.length }).catch(() => {});
+                    } else {
+                        await window.pywebview.api.reorder_prompts(newOrder);
+                        if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'prompts_reordered', { count: newOrder.length }).catch(() => {});
+                    }
+                }
+            }
+
+            setTimeout(() => { drag.preventClick = false; }, 100);
+        } else {
+            // Not dragging — still hide icons if visible
+            if (dragActions) dragActions.classList.remove('visible');
+        }
+
+        try {
+            if (drag.el && e.pointerId && drag.el.hasPointerCapture(e.pointerId)) {
+                drag.el.releasePointerCapture(e.pointerId);
+            }
+        } catch (err) {}
+
+        drag.el = null;
+        drag.isDragging = false;
+        drag.ghost = null;
+        drag.mode = 'reorder';
+        drag.promptId = null;
+        drag.sourceCategoryId = null;
+        drag.sourceCategoryName = null;
+        drag.hasNavigatedToLab = false;
+    };
+
+    // Scoped capture handler: only block clicks inside PromptLab views
+    const onClickCapture = (e) => {
+        if (state.drag.preventClick && (e.target.closest('#view-prompt-lab') || e.target.closest('#view-category-details'))) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', endDrag);
+    document.addEventListener('pointercancel', endDrag);
+    document.addEventListener('click', onClickCapture, true);
+
+    // Register cleanup so loadModule can remove these listeners
+    window._dragCleanup = function() {
+        document.removeEventListener('pointerdown', onPointerDown);
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', endDrag);
+        document.removeEventListener('pointercancel', endDrag);
+        document.removeEventListener('click', onClickCapture, true);
+        state.drag.preventClick = false;
+        state.drag.el = null;
+        state.drag.isDragging = false;
+        if (state.drag.ghost && state.drag.ghost.parentNode) {
+            state.drag.ghost.parentNode.removeChild(state.drag.ghost);
+        }
+        state.drag.ghost = null;
+    };
+};
+
+window.PromptLabModule.init();
+window.PromptLabModule._initDragAndDrop();
+</script>

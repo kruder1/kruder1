@@ -1,0 +1,137 @@
+<!-- ========================================
+     AUTH MODULE - HTML
+     ======================================== -->
+<section id="view-login" class="view-section">
+    <div class="content-wrapper">
+        <h1 data-i18n="auth.login_title">LOGIN</h1>
+        <div class="input-group">
+            <div class="input-wrapper">
+                <input id="login-email" type="email" name="email" autocomplete="username" placeholder="EMAIL ADDRESS" data-i18n="auth.placeholder_email" data-i18n-attr="placeholder">
+            </div>
+            <div class="input-wrapper">
+                <input id="login-password" type="password" name="password" autocomplete="current-password" placeholder="PASSWORD" data-i18n="auth.placeholder_password" data-i18n-attr="placeholder">
+            </div>
+            <button class="btn-main btn-primary" data-action="auth-login">
+                <i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="auth.btn_login">LOG IN</span>
+            </button>
+            <button class="btn-main" data-action="quit">
+                <i class="fa-solid fa-power-off"></i> <span data-i18n="auth.btn_quit">QUIT</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Quit Modal -->
+<div id="quit-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="auth.modal_exit">EXIT SYSTEM?</div>
+        <div class="modal-actions">
+            <button data-action="quit-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="quit-confirm" class="btn-main" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================
+     AUTH MODULE - JAVASCRIPT
+     ======================================== -->
+<script>
+window.AuthModule = {
+    
+    init() {
+        console.debug('[AUTH] Module initialized');
+        this.bindEvents();
+        window.initPasswordToggles?.();
+        setTimeout(() => document.getElementById('login-email')?.focus(), 100);
+    },
+
+    bindEvents() {
+        const self = this;
+        
+        window.moduleHandlers.click = (e) => {
+            const action = e.target.closest('[data-action]');
+            if (action) {
+                var a = action.dataset.action;
+                if (a !== 'quit') {
+                    window.playButtonSound?.();
+                }
+                self.handleAction(a);
+            }
+        };
+
+        window.moduleHandlers.keydown = (e) => {
+            if (e.key === 'Enter') {
+                const active = document.activeElement;
+                if (active.id === 'login-email') {
+                    window.playButtonSound?.();
+                    document.getElementById('login-password').focus();
+                } else if (active.id === 'login-password') {
+                    window.playButtonSound?.();
+                    self.login();
+                }
+            }
+            if (e.key === 'Escape') {
+                self.hideModal('quit-modal');
+                self.hideModal('alert-modal');
+            }
+        };
+    },
+
+    handleAction(action) {
+        switch(action) {
+            case 'auth-login': this.login(); break;
+            case 'quit': this.showModal('quit-modal'); break;
+            case 'quit-cancel': this.hideModal('quit-modal'); break;
+            case 'quit-confirm': this.quitApp(); break;
+            case 'close-alert': this.hideModal('alert-modal'); break;
+        }
+    },
+
+    async login() {
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+
+        if (!email || !password) {
+            this.showAlert(typeof window.t === 'function' ? window.t('auth.error_fill_all') : 'FILL ALL FIELDS');
+            return;
+        }
+
+        const btn = document.querySelector('[data-action="auth-login"]');
+        this.setLoading(btn, true, typeof window.t === 'function' ? window.t('auth.loading_login') : 'LOGGING IN...');
+
+        try {
+            const result = await window.pywebview.api.login(email, password);
+            
+            if (result.error) {
+                if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.log_event === 'function') {
+                    window.pywebview.api.log_event('WARNING', 'login_rejected', { error: (result.error || '').substring(0, 100) }).catch(function() {});
+                }
+                this.showAlert(result.error.toUpperCase());
+                this.setLoading(btn, false);
+                return;
+            }
+
+            window.AppState.session = result;
+            window.navigateTo('dashboard');
+            
+        } catch (error) {
+            if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.log_event === 'function') {
+                window.pywebview.api.log_event('ERROR', 'login_request_failed', { error: (error && error.message) ? error.message : String(error) }).catch(function() {});
+            }
+            this.showAlert(typeof window.t === 'function' ? window.t('auth.error_connection') : 'CONNECTION ERROR');
+            this.setLoading(btn, false);
+        }
+    },
+
+    quitApp() {
+        try { window.pywebview.api.close_app(); } catch { window.close(); }
+    },
+
+    showModal(id) { window.showModal(id); },
+    hideModal(id) { window.hideModal(id); },
+    showAlert(msg) { window.showAlert(msg); },
+    setLoading(btn, loading, text) { window.setLoading(btn, loading, text); }
+};
+
+window.AuthModule.init();
+</script>
