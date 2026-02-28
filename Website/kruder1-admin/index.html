@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kruder 1 — Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<style>
+/* ── Design Tokens ───────────────────────────────────────── */
+:root {
+    --z-particles: 0;
+    --z-content: 10;
+    --z-header: 1200;
+    --z-scanlines: 9999;
+
+    --font-base: 'Barlow', sans-serif;
+    --font-input: 'Inter', sans-serif;
+
+    --ls-base: 0.01em;
+    --ls-condensed: -0.02em;
+    --ls-wide: 0.05em;
+
+    --text-title: clamp(2.5rem, 5vw, 3.5rem);
+    --text-btn: clamp(1rem, 2vw, 1.2rem);
+    --fs-body: 1rem;
+    --fs-small: 0.85rem;
+
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 4rem;
+
+    --nav-height: 70px;
+    --dim-logo: 80px;
+    --border-width: 2px;
+    --radius-main: 0.5rem;
+
+    --theme-paper: rgb(217, 217, 217);
+    --theme-ink: rgb(64, 64, 64);
+    --theme-accent: hsl(20, 70%, 50%);
+    --theme-accent-dark: hsl(20, 70%, 35%);
+    --theme-border: rgba(64, 64, 64, 0.2);
+    --theme-scanline: rgba(64, 64, 64, 0.0725);
+    --theme-focus: rgba(64, 64, 64, 0.0725);
+    --theme-input-bg: rgb(217, 217, 217);
+    --theme-white: #FFFFFF;
+    --color-muted: rgba(64, 64, 64, 0.5);
+    --color-error: #ff3333;
+    --color-success: #2ecc40;
+    --shadow-btn: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] {
+    --theme-paper: rgb(26, 26, 26);
+    --theme-ink: rgb(230, 230, 230);
+    --theme-border: rgba(230, 230, 230, 0.2);
+    --theme-scanline: rgba(230, 230, 230, 0.053);
+    --theme-focus: rgba(230, 230, 230, 0.053);
+    --theme-input-bg: rgb(26, 26, 26);
+    --color-muted: rgba(230, 230, 230, 0.5);
+    --shadow-btn: rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+}
+
+/* ── Reset & Base ────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+*::-webkit-scrollbar { display: none; }
+
+html { height: 100%; scroll-behavior: smooth; }
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--theme-paper);
+    color: var(--theme-ink);
+    font-family: var(--font-base);
+    font-size: var(--fs-body);
+    line-height: 1.5;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ── Scanlines & Particles ───────────────────────────────── */
+#particles-js {
+    position: fixed; inset: 0;
+    z-index: var(--z-particles);
+    pointer-events: none;
+}
+
+#scanlines {
+    position: fixed; inset: 0;
+    z-index: var(--z-scanlines);
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, var(--theme-scanline), var(--theme-scanline) 1px, transparent 1px, transparent 3px);
+}
+
+/* ── Nav ─────────────────────────────────────────────────── */
+.nav-sticky {
+    position: sticky; top: 0;
+    z-index: var(--z-header);
+    display: flex; align-items: center; justify-content: space-between;
+    height: var(--nav-height);
+    padding: 0 var(--space-lg);
+    background-color: color-mix(in srgb, var(--theme-paper) 85%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: background-color 0.3s ease;
+}
+
+.brand-logo { display: flex; align-items: center; }
+.brand-logo img { width: var(--dim-logo); height: auto; transition: filter 0.3s ease; }
+[data-theme="dark"] .brand-logo img { filter: invert(1); }
+
+.nav-actions { display: flex; align-items: center; gap: var(--space-sm); }
+
+.nav-action-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px;
+    font-family: var(--font-base); font-size: 1.1rem; font-weight: 700;
+    color: var(--theme-ink); background: transparent;
+    border: var(--border-width) solid var(--theme-ink);
+    border-radius: var(--radius-main);
+    cursor: pointer; transition: all 0.15s ease;
+}
+.nav-action-btn:hover { background: var(--theme-focus); }
+.nav-action-btn:active { transform: scale(0.95); }
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-accent {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.8rem 2rem;
+    font-family: var(--font-base); font-size: var(--text-btn); font-weight: 700;
+    color: var(--theme-white); background: var(--theme-accent);
+    border: var(--border-width) solid var(--theme-accent);
+    border-radius: var(--radius-main);
+    cursor: pointer; text-transform: uppercase; letter-spacing: var(--ls-wide);
+    box-shadow: 0 4px 0 var(--theme-accent-dark);
+    transition: all 0.15s ease; text-decoration: none;
+}
+.btn-accent:hover { background: var(--theme-accent-dark); border-color: var(--theme-accent-dark); }
+.btn-accent:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--theme-accent-dark); }
+.btn-accent.is-full { width: 100%; }
+.btn-accent.is-disabled { opacity: 0.4; pointer-events: none; }
+.btn-accent.is-loading { pointer-events: none; opacity: 0.7; }
+
+.btn-secondary {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.8rem 2rem;
+    font-family: var(--font-base); font-size: var(--text-btn); font-weight: 700;
+    color: var(--theme-ink); background: transparent;
+    border: var(--border-width) solid var(--theme-ink);
+    border-radius: var(--radius-main);
+    cursor: pointer; text-transform: uppercase; letter-spacing: var(--ls-wide);
+    box-shadow: 0 4px 0 var(--shadow-btn);
+    transition: all 0.15s ease; text-decoration: none;
+}
+.btn-secondary:hover { background: var(--theme-focus); }
+.btn-secondary:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--shadow-btn); }
+
+.btn-sm { padding: 0.5rem 1.2rem; font-size: 0.9rem; }
+
+/* ── Forms ───────────────────────────────────────────────── */
+.input-field {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    font-family: var(--font-input); font-size: var(--fs-body);
+    color: var(--theme-ink); background: var(--theme-input-bg);
+    border: var(--border-width) solid var(--theme-ink);
+    border-radius: var(--radius-main);
+    outline: none; transition: border-color 0.15s ease;
+}
+.input-field:focus { border-color: var(--theme-accent); }
+.input-field::placeholder { color: var(--color-muted); }
+
+/* ── Sections ────────────────────────────────────────────── */
+.section {
+    position: relative; z-index: var(--z-content);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: calc(100vh - var(--nav-height));
+    padding: var(--space-xl) var(--space-lg);
+    text-align: center;
+}
+
+/* ── Login Screen ────────────────────────────────────────── */
+.login-container {
+    width: 100%; max-width: 400px;
+    display: flex; flex-direction: column; gap: var(--space-sm);
+}
+
+.login-title {
+    font-size: var(--text-title); font-weight: 900;
+    text-transform: uppercase; letter-spacing: var(--ls-condensed);
+    margin-bottom: var(--space-lg);
+}
+
+.login-error {
+    color: var(--color-error); font-size: var(--fs-small);
+    font-weight: 700; text-transform: uppercase;
+    min-height: 1.5em;
+}
+
+/* ── Admin Screen ────────────────────────────────────────── */
+.admin-content {
+    position: relative; z-index: var(--z-content);
+    width: 100%; max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+}
+
+.admin-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: var(--space-xl);
+}
+
+.admin-title {
+    font-size: var(--text-title); font-weight: 900;
+    text-transform: uppercase; letter-spacing: var(--ls-condensed);
+}
+
+/* ── Stats Grid (card-panel pattern from software) ───────── */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.stat-card {
+    background: var(--theme-paper);
+    border: 2px solid var(--theme-border);
+    border-radius: var(--radius-main);
+    padding: var(--space-lg);
+    text-align: center;
+    transition: border-color 0.15s ease;
+}
+.stat-card:hover { border-color: var(--theme-ink); }
+
+.stat-icon {
+    font-size: 2rem;
+    color: var(--theme-accent);
+    margin-bottom: var(--space-xs);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+    font-size: var(--fs-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    opacity: 0.6;
+}
+
+/* ── Users Section ───────────────────────────────────────── */
+.users-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.users-title {
+    font-size: 1.5rem; font-weight: 900;
+    text-transform: uppercase; letter-spacing: var(--ls-condensed);
+}
+
+.search-wrap {
+    position: relative;
+    width: 100%; max-width: 350px;
+}
+
+.search-wrap i {
+    position: absolute; left: 1rem; top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-muted); font-size: 0.9rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.7rem 1rem 0.7rem 2.5rem;
+    font-family: var(--font-input); font-size: var(--fs-body);
+    color: var(--theme-ink); background: var(--theme-input-bg);
+    border: var(--border-width) solid var(--theme-ink);
+    border-radius: var(--radius-main);
+    outline: none; transition: border-color 0.15s ease;
+}
+.search-input:focus { border-color: var(--theme-accent); }
+.search-input::placeholder { color: var(--color-muted); }
+
+/* ── Users Table ─────────────────────────────────────────── */
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-body);
+}
+
+.users-table th,
+.users-table td {
+    padding: 12px 16px;
+    border: 1px solid var(--theme-border);
+    text-align: left;
+}
+
+.users-table th {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: var(--fs-small);
+    letter-spacing: var(--ls-wide);
+}
+
+.users-table tbody tr {
+    cursor: pointer;
+    transition: background 0.1s ease;
+}
+.users-table tbody tr:hover { background: var(--theme-focus); }
+
+.badge-verified {
+    color: var(--color-success);
+    font-weight: 700;
+}
+.badge-unverified {
+    color: var(--color-error);
+    opacity: 0.5;
+}
+
+/* ── User Detail Row ─────────────────────────────────────── */
+.detail-row td {
+    padding: 0 !important;
+    border-top: none !important;
+    cursor: default !important;
+}
+.detail-row:hover { background: transparent !important; }
+
+.detail-panel {
+    padding: var(--space-lg);
+    border-top: 2px solid var(--theme-accent);
+    text-align: left;
+}
+
+.detail-section {
+    margin-bottom: var(--space-lg);
+}
+.detail-section:last-child { margin-bottom: 0; }
+
+.detail-section-title {
+    font-size: 1.1rem; font-weight: 900;
+    text-transform: uppercase; letter-spacing: var(--ls-wide);
+    margin-bottom: var(--space-sm);
+    display: flex; align-items: center; gap: var(--space-xs);
+}
+.detail-section-title i { color: var(--theme-accent); }
+
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-small);
+}
+
+.detail-table th,
+.detail-table td {
+    padding: 8px 12px;
+    border: 1px solid var(--theme-border);
+    text-align: left;
+}
+
+.detail-table th {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: var(--ls-wide);
+}
+
+.demo-badge {
+    display: inline-flex; align-items: center; gap: var(--space-xs);
+    padding: 0.4rem 1rem;
+    font-weight: 700; font-size: var(--fs-small);
+    text-transform: uppercase;
+    border: var(--border-width) solid var(--theme-border);
+    border-radius: var(--radius-main);
+}
+
+/* ── Device Management ──────────────────────────────────── */
+.badge-active {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: var(--ls-wide);
+    color: var(--color-success);
+}
+.badge-inactive {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: var(--ls-wide);
+    opacity: 0.4;
+}
+.badge-demo-hw {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.7rem; font-weight: 700;
+    text-transform: uppercase;
+    color: var(--theme-accent);
+}
+.btn-release {
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    padding: 0.3rem 0.7rem;
+    font-family: var(--font-base); font-size: 0.7rem; font-weight: 700;
+    color: var(--color-error); background: transparent;
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-main);
+    cursor: pointer; text-transform: uppercase; letter-spacing: var(--ls-wide);
+    transition: all 0.15s ease;
+}
+.btn-release:hover { background: var(--color-error); color: var(--theme-white); }
+.btn-release.is-loading { opacity: 0.5; pointer-events: none; }
+
+.btn-reset-demo {
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    padding: 0.3rem 0.7rem;
+    font-family: var(--font-base); font-size: 0.7rem; font-weight: 700;
+    color: var(--theme-accent); background: transparent;
+    border: 1px solid var(--theme-accent);
+    border-radius: var(--radius-main);
+    cursor: pointer; text-transform: uppercase; letter-spacing: var(--ls-wide);
+    transition: all 0.15s ease;
+}
+.btn-reset-demo:hover { background: var(--theme-accent); color: var(--theme-white); }
+.btn-reset-demo.is-loading { opacity: 0.5; pointer-events: none; }
+
+/* ── Credit Adjustment ───────────────────────────────────── */
+.credit-form {
+    display: flex; align-items: flex-end; gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.credit-form-group {
+    display: flex; flex-direction: column; gap: 4px;
+}
+
+.credit-form-group label {
+    font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: var(--ls-wide);
+    opacity: 0.6;
+}
+
+.credit-form-group input {
+    padding: 0.5rem 0.8rem;
+    font-family: var(--font-input); font-size: var(--fs-body);
+    color: var(--theme-ink); background: var(--theme-input-bg);
+    border: var(--border-width) solid var(--theme-ink);
+    border-radius: var(--radius-main);
+    outline: none; width: 100px;
+}
+
+.credit-form-group input.reason-input { width: 200px; }
+
+.credit-form-group input:focus { border-color: var(--theme-accent); }
+
+.credit-msg {
+    font-size: var(--fs-small); font-weight: 700;
+    text-transform: uppercase;
+    min-height: 1.2em; margin-top: var(--space-xs);
+}
+.credit-msg.is-success { color: var(--color-success); }
+.credit-msg.is-error { color: var(--color-error); }
+
+/* ── Pagination ──────────────────────────────────────────── */
+.pagination {
+    display: flex; align-items: center; justify-content: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+}
+
+.pagination-info {
+    font-size: var(--fs-small); font-weight: 700;
+    text-transform: uppercase; opacity: 0.6;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.site-footer {
+    position: relative; z-index: var(--z-content);
+    text-align: center;
+    padding: var(--space-lg) var(--space-md);
+    margin-top: auto;
+}
+.footer-copyright {
+    font-size: var(--fs-small); opacity: 0.4;
+}
+
+/* ── Utilities ───────────────────────────────────────────── */
+.hidden { display: none !important; }
+.text-accent { color: var(--theme-accent); }
+.text-muted { color: var(--color-muted); }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 960px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .admin-content { padding: var(--space-md); }
+    .users-table th:nth-child(4),
+    .users-table td:nth-child(4) { display: none; }
+}
+
+@media (max-width: 600px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .nav-sticky { padding: 0 var(--space-sm); }
+    .users-header { flex-direction: column; align-items: stretch; }
+    .search-wrap { max-width: 100%; }
+    .credit-form { flex-direction: column; align-items: stretch; }
+    .credit-form-group input,
+    .credit-form-group input.reason-input { width: 100%; }
+    .admin-header { flex-direction: column; gap: var(--space-sm); text-align: center; }
+}
+</style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div id="scanlines"></div>
+
+    <!-- ── Login Screen ──────────────────────────────────── -->
+    <div id="screen-login">
+        <nav class="nav-sticky">
+            <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
+            <div class="nav-actions">
+                <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+            </div>
+        </nav>
+        <section class="section">
+            <div class="login-container">
+                <h1 class="login-title">Admin</h1>
+                <input type="password" id="login-password" class="input-field" placeholder="Password" autocomplete="current-password">
+                <div id="login-error" class="login-error"></div>
+                <button id="btn-login" class="btn-accent is-full is-disabled">LOGIN</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ── Admin Screen ──────────────────────────────────── -->
+    <div id="screen-admin" class="hidden">
+        <nav class="nav-sticky">
+            <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
+            <div class="nav-actions">
+                <button id="btn-theme-admin" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+                <button id="btn-refresh" class="nav-action-btn" aria-label="Refresh"><i class="fa-solid fa-rotate-right"></i></button>
+                <button id="btn-logout" class="nav-action-btn" aria-label="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </div>
+        </nav>
+
+        <main class="admin-content">
+            <div class="admin-header">
+                <h1 class="admin-title">Dashboard</h1>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                    <div class="stat-value" id="stat-users">—</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="stat-value" id="stat-verified">—</div>
+                    <div class="stat-label">Verified</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-dollar-sign"></i></div>
+                    <div class="stat-value" id="stat-revenue">—</div>
+                    <div class="stat-label">Revenue (USD)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-coins"></i></div>
+                    <div class="stat-value" id="stat-sold">—</div>
+                    <div class="stat-label">Credits Sold</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-wallet"></i></div>
+                    <div class="stat-value" id="stat-active">—</div>
+                    <div class="stat-label">Credits Active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-user-plus"></i></div>
+                    <div class="stat-value" id="stat-new">—</div>
+                    <div class="stat-label">New (30d)</div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div class="users-header">
+                <h2 class="users-title">Users</h2>
+                <div class="search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-input" class="search-input" placeholder="Search by email...">
+                </div>
+            </div>
+
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Credits</th>
+                        <th>Status</th>
+                        <th>Registered</th>
+                    </tr>
+                </thead>
+                <tbody id="users-body">
+                    <tr><td colspan="4" style="text-align:center; opacity:0.5;">Loading...</td></tr>
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <button id="btn-prev" class="btn-secondary btn-sm" disabled>Prev</button>
+                <span class="pagination-info" id="page-info">Page 1</span>
+                <button id="btn-next" class="btn-secondary btn-sm" disabled>Next</button>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-copyright">Kruder 1 Admin — Internal Use Only</div>
+        </footer>
+    </div>
+
+<script>
+(() => {
+    // ── Config ──────────────────────────────────────────
+    const API = 'https://kruder1-admin.kruder1-master.workers.dev';
+    const TOKEN_KEY = 'KRUDER1_admin_token';
+
+    // ── State ───────────────────────────────────────────
+    let state = {
+        token: sessionStorage.getItem(TOKEN_KEY) || null,
+        page: 1,
+        search: '',
+        totalPages: 1,
+        openDetailId: null,
+        refreshTimer: null,
+        theme: localStorage.getItem('KRUDER1-admin-theme') || 'light'
+    };
+
+    // ── DOM ─────────────────────────────────────────────
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => document.querySelectorAll(s);
+
+    // ── Theme ───────────────────────────────────────────
+    function setTheme(t) {
+        state.theme = t;
+        localStorage.setItem('KRUDER1-admin-theme', t);
+        if (t === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            $$('.nav-action-btn[aria-label="Toggle theme"]').forEach(b => b.innerHTML = '<i class="fa-solid fa-sun"></i>');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            $$('.nav-action-btn[aria-label="Toggle theme"]').forEach(b => b.innerHTML = '<i class="fa-solid fa-moon"></i>');
+        }
+        initParticles();
+    }
+
+    function initParticles() {
+        if (!window.particlesJS) return;
+        const c = state.theme === 'dark' ? '#E6E6E6' : '#404040';
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 200, density: { enable: true, value_area: 800 } },
+                color: { value: c }, shape: { type: 'circle' },
+                opacity: { value: 0.25, random: true },
+                size: { value: 2, random: true },
+                line_linked: { enable: true, distance: 150, color: c, opacity: 0.2, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', out_mode: 'out' }
+            },
+            interactivity: { detect_on: 'canvas', events: { onhover: { enable: false }, onclick: { enable: false } } },
+            retina_detect: true
+        });
+    }
+
+    // ── API ─────────────────────────────────────────────
+    async function api(path, opts = {}) {
+        const headers = { 'Content-Type': 'application/json' };
+        if (state.token) headers['Authorization'] = `Bearer ${state.token}`;
+        const res = await fetch(`${API}/${path}`, { ...opts, headers: { ...headers, ...opts.headers } });
+        const data = await res.json();
+        if (res.status === 401) { logout(); throw new Error('Session expired'); }
+        if (!res.ok) throw new Error(data.error || 'Request failed');
+        return data;
+    }
+
+    // ── Auth ────────────────────────────────────────────
+    async function login() {
+        const password = $('#login-password').value;
+        const errEl = $('#login-error');
+        const btn = $('#btn-login');
+
+        if (!password) return;
+
+        btn.classList.add('is-loading');
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        errEl.textContent = '';
+
+        try {
+            const data = await api('login', {
+                method: 'POST',
+                body: JSON.stringify({ password })
+            });
+            state.token = data.token;
+            sessionStorage.setItem(TOKEN_KEY, data.token);
+            showAdmin();
+        } catch (e) {
+            errEl.textContent = e.message || 'Login failed';
+            btn.classList.remove('is-loading');
+            btn.textContent = 'LOGIN';
+        }
+    }
+
+    function logout() {
+        state.token = null;
+        sessionStorage.removeItem(TOKEN_KEY);
+        if (state.refreshTimer) clearInterval(state.refreshTimer);
+        $('#screen-admin').classList.add('hidden');
+        $('#screen-login').classList.remove('hidden');
+        $('#login-password').value = '';
+        $('#login-error').textContent = '';
+        $('#btn-login').textContent = 'LOGIN';
+        $('#btn-login').classList.add('is-disabled');
+        $('#btn-login').classList.remove('is-loading');
+    }
+
+    // ── Admin View ──────────────────────────────────────
+    function showAdmin() {
+        $('#screen-login').classList.add('hidden');
+        $('#screen-admin').classList.remove('hidden');
+        loadStats();
+        loadUsers();
+        state.refreshTimer = setInterval(loadStats, 60000);
+    }
+
+    // ── Stats ───────────────────────────────────────────
+    async function loadStats() {
+        try {
+            const d = await api('stats');
+            $('#stat-users').textContent = d.totalUsers.toLocaleString();
+            $('#stat-verified').textContent = d.verifiedUsers.toLocaleString();
+            $('#stat-revenue').textContent = `$${d.totalRevenue.toLocaleString()}`;
+            $('#stat-sold').textContent = d.totalCreditsSold.toLocaleString();
+            $('#stat-active').textContent = d.creditsInAccounts.toLocaleString();
+            $('#stat-new').textContent = d.registrations.month.toLocaleString();
+        } catch (e) {
+            console.error('Stats error:', e);
+        }
+    }
+
+    // ── Users ───────────────────────────────────────────
+    async function loadUsers() {
+        const tbody = $('#users-body');
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;opacity:0.5">Loading...</td></tr>';
+
+        try {
+            const d = await api(`users?page=${state.page}&limit=25&search=${encodeURIComponent(state.search)}`);
+            state.totalPages = d.pages;
+
+            if (!d.users.length) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;opacity:0.5">No users found</td></tr>';
+            } else {
+                tbody.innerHTML = d.users.map(u => `
+                    <tr data-uid="${u.id}">
+                        <td>${esc(u.email)}</td>
+                        <td><strong>${u.credits}</strong></td>
+                        <td>${u.email_verified
+                            ? '<span class="badge-verified"><i class="fa-solid fa-circle-check"></i> Verified</span>'
+                            : '<span class="badge-unverified"><i class="fa-solid fa-circle-xmark"></i> Pending</span>'
+                        }</td>
+                        <td>${formatDate(u.created_at)}</td>
+                    </tr>
+                `).join('');
+            }
+
+            updatePagination();
+        } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--color-error)">${esc(e.message)}</td></tr>`;
+        }
+    }
+
+    function updatePagination() {
+        $('#page-info').textContent = `Page ${state.page} of ${state.totalPages}`;
+        $('#btn-prev').disabled = state.page <= 1;
+        $('#btn-next').disabled = state.page >= state.totalPages;
+    }
+
+    // ── User Detail ─────────────────────────────────────
+    async function toggleDetail(userId) {
+        const existing = document.querySelector(`.detail-row[data-detail="${userId}"]`);
+        if (existing) {
+            existing.remove();
+            state.openDetailId = null;
+            return;
+        }
+
+        // Close any other open detail
+        document.querySelectorAll('.detail-row').forEach(r => r.remove());
+        state.openDetailId = userId;
+
+        const userRow = document.querySelector(`tr[data-uid="${userId}"]`);
+        if (!userRow) return;
+
+        const loadingRow = document.createElement('tr');
+        loadingRow.className = 'detail-row';
+        loadingRow.setAttribute('data-detail', userId);
+        loadingRow.innerHTML = '<td colspan="4"><div class="detail-panel" style="text-align:center;opacity:0.5"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div></td>';
+        userRow.after(loadingRow);
+
+        try {
+            const d = await api(`user-details?id=${encodeURIComponent(userId)}`);
+
+            let html = '<div class="detail-panel">';
+
+            // Devices
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title"><i class="fa-solid fa-desktop"></i> Devices</div>';
+            if (d.devices.length) {
+                html += '<table class="detail-table"><thead><tr><th>HWID</th><th>First Seen</th><th>Last Seen</th><th>Status</th><th>Demo</th><th>Actions</th></tr></thead><tbody>';
+                html += d.devices.map(dev => {
+                    const lastSeen = dev.last_seen_at ? new Date(dev.last_seen_at) : null;
+                    const isActive = lastSeen && (Date.now() - lastSeen.getTime()) < 30 * 86400000;
+                    const demoClaimed = d.demoHwids && d.demoHwids[dev.hwid];
+                    const hwidShort = dev.hwid.length > 16 ? dev.hwid.slice(0, 8) + '…' + dev.hwid.slice(-8) : dev.hwid;
+                    return `<tr>
+                        <td style="font-family:var(--font-input);font-size:0.75rem" title="${esc(dev.hwid)}">${esc(hwidShort)}</td>
+                        <td>${formatDate(dev.first_seen_at)}</td>
+                        <td>${formatDate(dev.last_seen_at)}</td>
+                        <td>${isActive
+                            ? '<span class="badge-active"><i class="fa-solid fa-circle" style="font-size:0.5rem"></i> Active</span>'
+                            : '<span class="badge-inactive"><i class="fa-solid fa-circle" style="font-size:0.5rem"></i> Inactive</span>'
+                        }</td>
+                        <td>${demoClaimed
+                            ? '<span class="badge-demo-hw"><i class="fa-solid fa-gift"></i> Claimed</span>'
+                            : '<span style="opacity:0.3;font-size:0.75rem">—</span>'
+                        }</td>
+                        <td>
+                            <button class="btn-release" data-release-uid="${userId}" data-release-hwid="${esc(dev.hwid)}"><i class="fa-solid fa-trash-can"></i> Release</button>
+                            ${demoClaimed ? `<button class="btn-reset-demo" data-demo-hwid="${esc(dev.hwid)}" data-demo-uid="${userId}"><i class="fa-solid fa-rotate-left"></i> Reset Demo</button>` : ''}
+                        </td>
+                    </tr>`;
+                }).join('');
+                html += '</tbody></table>';
+            } else {
+                html += '<div style="opacity:0.5;font-size:var(--fs-small)">No devices registered</div>';
+            }
+            html += '</div>';
+
+            // Purchases
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title"><i class="fa-solid fa-receipt"></i> Purchases</div>';
+            if (d.purchases.length) {
+                html += '<table class="detail-table"><thead><tr><th>Date</th><th>Credits</th><th>Amount</th><th>Stripe ID</th></tr></thead><tbody>';
+                html += d.purchases.map(p => `<tr><td>${formatDate(p.created_at)}</td><td>${p.credits_added}</td><td>$${(p.amount_paid / 100).toFixed(2)} ${p.currency.toUpperCase()}</td><td style="font-family:var(--font-input);font-size:0.7rem">${esc(p.stripe_payment_id || '—')}</td></tr>`).join('');
+                html += '</tbody></table>';
+            } else {
+                html += '<div style="opacity:0.5;font-size:var(--fs-small)">No purchases</div>';
+            }
+            html += '</div>';
+
+            // Demo Status
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title"><i class="fa-solid fa-gift"></i> Demo</div>';
+            const demoCount = d.demoHwids ? Object.keys(d.demoHwids).length : 0;
+            html += `<div class="demo-badge">${d.demoClaimed
+                ? `<i class="fa-solid fa-circle-check" style="color:var(--color-success)"></i> Demo claimed (${demoCount} device${demoCount !== 1 ? 's' : ''})`
+                : '<i class="fa-solid fa-circle-xmark" style="opacity:0.4"></i> Not claimed'
+            }</div>`;
+            html += '</div>';
+
+            // Credit Adjustment
+            html += '<div class="detail-section">';
+            html += '<div class="detail-section-title"><i class="fa-solid fa-sliders"></i> Adjust Credits</div>';
+            html += `<div class="credit-form" data-adjust-uid="${userId}">
+                <div class="credit-form-group">
+                    <label>Amount (+/-)</label>
+                    <input type="number" class="adjust-amount" placeholder="e.g. 50">
+                </div>
+                <div class="credit-form-group">
+                    <label>Reason</label>
+                    <input type="text" class="adjust-reason reason-input" placeholder="e.g. support">
+                </div>
+                <button class="btn-accent btn-sm btn-adjust">Apply</button>
+            </div>
+            <div class="credit-msg" data-msg-uid="${userId}"></div>`;
+            html += '</div>';
+
+            html += '</div>';
+
+            loadingRow.innerHTML = `<td colspan="4">${html}</td>`;
+        } catch (e) {
+            loadingRow.innerHTML = `<td colspan="4"><div class="detail-panel" style="color:var(--color-error)">${esc(e.message)}</div></td>`;
+        }
+    }
+
+    // ── Adjust Credits ──────────────────────────────────
+    async function adjustCredits(userId) {
+        const form = document.querySelector(`.credit-form[data-adjust-uid="${userId}"]`);
+        const msgEl = document.querySelector(`.credit-msg[data-msg-uid="${userId}"]`);
+        if (!form || !msgEl) return;
+
+        const amountInput = form.querySelector('.adjust-amount');
+        const reasonInput = form.querySelector('.adjust-reason');
+        const btn = form.querySelector('.btn-adjust');
+        const amount = parseInt(amountInput.value, 10);
+        const reason = reasonInput.value.trim();
+
+        if (!amount || isNaN(amount)) { msgEl.className = 'credit-msg is-error'; msgEl.textContent = 'Enter a valid amount'; return; }
+        if (!reason) { msgEl.className = 'credit-msg is-error'; msgEl.textContent = 'Reason required'; return; }
+
+        btn.classList.add('is-loading');
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        msgEl.textContent = '';
+
+        try {
+            const d = await api('adjust-credits', {
+                method: 'POST',
+                body: JSON.stringify({ accountId: userId, amount, reason })
+            });
+            msgEl.className = 'credit-msg is-success';
+            msgEl.textContent = `Credits updated → ${d.newCredits}`;
+            amountInput.value = '';
+            reasonInput.value = '';
+
+            // Update the credits in the parent row
+            const userRow = document.querySelector(`tr[data-uid="${userId}"] td:nth-child(2) strong`);
+            if (userRow) userRow.textContent = d.newCredits;
+        } catch (e) {
+            msgEl.className = 'credit-msg is-error';
+            msgEl.textContent = e.message;
+        } finally {
+            btn.classList.remove('is-loading');
+            btn.textContent = 'Apply';
+        }
+    }
+
+    // ── Delete Device ─────────────────────────────────────
+    async function deleteDevice(accountId, hwid, btn) {
+        if (!confirm(`Release device?\n\nHWID: ${hwid.slice(0, 16)}…\n\nThis will unlink this device from the account. The user will need to log in again from this device.`)) return;
+
+        btn.classList.add('is-loading');
+        try {
+            await api('delete-device', {
+                method: 'POST',
+                body: JSON.stringify({ accountId, hwid })
+            });
+            // Re-open the detail to refresh
+            state.openDetailId = null;
+            document.querySelectorAll('.detail-row').forEach(r => r.remove());
+            toggleDetail(accountId);
+        } catch (e) {
+            alert('Failed to release device: ' + e.message);
+            btn.classList.remove('is-loading');
+        }
+    }
+
+    // ── Reset Demo ──────────────────────────────────────
+    async function resetDemo(hwid, accountId, btn) {
+        if (!confirm(`Reset demo for this device?\n\nHWID: ${hwid.slice(0, 16)}…\n\nThis will allow this device to claim demo credits again.`)) return;
+
+        btn.classList.add('is-loading');
+        try {
+            await api('reset-demo', {
+                method: 'POST',
+                body: JSON.stringify({ hwid })
+            });
+            // Re-open the detail to refresh
+            state.openDetailId = null;
+            document.querySelectorAll('.detail-row').forEach(r => r.remove());
+            toggleDetail(accountId);
+        } catch (e) {
+            alert('Failed to reset demo: ' + e.message);
+            btn.classList.remove('is-loading');
+        }
+    }
+
+    // ── Helpers ──────────────────────────────────────────
+    function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s || '';
+        return d.innerHTML;
+    }
+
+    function formatDate(iso) {
+        if (!iso) return '—';
+        const d = new Date(iso);
+        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    // ── Search (debounced) ──────────────────────────────
+    let searchTimer = null;
+    function onSearch(e) {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            state.search = e.target.value.trim();
+            state.page = 1;
+            loadUsers();
+        }, 400);
+    }
+
+    // ── Event Bindings ──────────────────────────────────
+    function bindEvents() {
+        // Login
+        $('#btn-login').addEventListener('click', login);
+        $('#login-password').addEventListener('input', () => {
+            $('#btn-login').classList.toggle('is-disabled', !$('#login-password').value);
+        });
+        $('#login-password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !$('#btn-login').classList.contains('is-disabled')) login();
+        });
+
+        // Theme
+        $('#btn-theme').addEventListener('click', () => setTheme(state.theme === 'light' ? 'dark' : 'light'));
+        $('#btn-theme-admin').addEventListener('click', () => setTheme(state.theme === 'light' ? 'dark' : 'light'));
+
+        // Admin actions
+        $('#btn-logout').addEventListener('click', logout);
+        $('#btn-refresh').addEventListener('click', () => { loadStats(); loadUsers(); });
+
+        // Search
+        $('#search-input').addEventListener('input', onSearch);
+
+        // Pagination
+        $('#btn-prev').addEventListener('click', () => { if (state.page > 1) { state.page--; loadUsers(); } });
+        $('#btn-next').addEventListener('click', () => { if (state.page < state.totalPages) { state.page++; loadUsers(); } });
+
+        // Delegated clicks for user rows and adjust buttons
+        document.addEventListener('click', (e) => {
+            // User row click
+            const row = e.target.closest('tr[data-uid]');
+            if (row && !e.target.closest('.detail-row')) {
+                toggleDetail(row.dataset.uid);
+                return;
+            }
+
+            // Adjust credits button
+            const adjustBtn = e.target.closest('.btn-adjust');
+            if (adjustBtn) {
+                const form = adjustBtn.closest('.credit-form');
+                if (form) adjustCredits(form.dataset.adjustUid);
+                return;
+            }
+
+            // Release device button
+            const releaseBtn = e.target.closest('.btn-release');
+            if (releaseBtn) {
+                deleteDevice(releaseBtn.dataset.releaseUid, releaseBtn.dataset.releaseHwid, releaseBtn);
+                return;
+            }
+
+            // Reset demo button
+            const resetBtn = e.target.closest('.btn-reset-demo');
+            if (resetBtn) {
+                resetDemo(resetBtn.dataset.demoHwid, resetBtn.dataset.demoUid, resetBtn);
+                return;
+            }
+        });
+    }
+
+    // ── Init ────────────────────────────────────────────
+    function init() {
+        setTheme(state.theme);
+        bindEvents();
+
+        if (state.token) {
+            showAdmin();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
