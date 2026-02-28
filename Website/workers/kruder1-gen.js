@@ -23,16 +23,30 @@ const SEGMIND_ENDPOINT = "https://api.segmind.com/v1/seedream-4.5";
 // CORS & Response Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-HWID",
-};
+const ALLOWED_ORIGINS = [
+  "https://kruder1.com",
+  "https://www.kruder1.com",
+  "http://127.0.0.1",
+  "http://localhost",
+];
+
+function getCorsHeaders(request) {
+  const origin = request.headers.get("Origin") || "";
+  const allowed = ALLOWED_ORIGINS.some((o) => origin === o || origin.startsWith(o + ":"));
+  return {
+    "Access-Control-Allow-Origin": allowed ? origin : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-HWID",
+    ...(allowed ? { "Vary": "Origin" } : {}),
+  };
+}
+
+let _corsHeaders = {};
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+    headers: { "Content-Type": "application/json", ..._corsHeaders },
   });
 }
 
@@ -350,8 +364,9 @@ async function callSegmindWithRetry(env, imageUrl, promptText, aspectRatio = "2:
 
 export default {
   async fetch(request, env, ctx) {
+    _corsHeaders = getCorsHeaders(request);
     if (request.method === "OPTIONS") {
-      return new Response(null, { headers: CORS_HEADERS });
+      return new Response(null, { headers: _corsHeaders });
     }
 
     const url = new URL(request.url);
@@ -611,7 +626,7 @@ export default {
             "Content-Type": "application/octet-stream",
             "Content-Disposition": 'attachment; filename="prompts-latest.kruder1"',
             "X-Prompts-Hash": obj.httpEtag || obj.etag || "",
-            ...CORS_HEADERS,
+            ..._corsHeaders,
           },
         });
       }
