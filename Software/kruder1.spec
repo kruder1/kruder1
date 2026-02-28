@@ -15,7 +15,6 @@ a = Analysis(
     binaries=[],
     datas=[
         ('index.html', '.'),
-        ('config.json', '.') if os.path.isfile('config.json') else (None, None),
         ('static/css', 'static/css'),
         ('static/js', 'static/js'),
         ('static/fonts', 'static/fonts'),
@@ -26,7 +25,8 @@ a = Analysis(
         ('modules/*.html', 'modules'),
         ('modules/*.py', 'modules'),
         ('modules/__init__.py', 'modules'),
-    ],
+    ]
+    + ([('config.json', '.')] if os.path.isfile('config.json') else []),
     hiddenimports=[
         'webview',
         'PIL',
@@ -36,11 +36,8 @@ a = Analysis(
         'qrcode',
         'qrcode.image.pil',
         'requests',
-        'clr',              # pywebview .NET backend on Windows
         'pythonnet',
-        'System',
-        'System.Windows.Forms',
-        'System.Drawing',
+        'clr_loader',
     ],
     hookspath=[],
     hooksconfig={},
@@ -51,9 +48,6 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
-
-# Filter out None entries (e.g. config.json when it doesn't exist)
-a.datas = [d for d in a.datas if d[0] is not None]
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
@@ -68,7 +62,7 @@ exe = EXE(
     strip=False,
     upx=True,
     console=False,              # windowed mode — no terminal
-    icon='static/img/icon.png', # PyInstaller accepts .png on newer versions
+    icon='static/img/icon.ico',
 )
 
 coll = COLLECT(
