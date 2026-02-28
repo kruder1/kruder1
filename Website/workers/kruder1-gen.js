@@ -646,14 +646,15 @@ export default {
         try {
           const manifest = JSON.parse(await obj.text());
           const R2_PUBLIC = env.R2_PUBLIC_URL || "https://media.kruder1.com";
+          const downloadUrl = manifest.url.startsWith("http")
+            ? manifest.url
+            : `${R2_PUBLIC}/${manifest.url}`;
           return json({
             ok: true,
             version: manifest.version,
-            url: `${R2_PUBLIC}/releases/${manifest.filename}`,
-            size: manifest.size || 0,
-            hash: manifest.hash || "",
+            url: downloadUrl,
             notes: manifest.notes || "",
-            date: manifest.date || "",
+            date: manifest.releaseDate || manifest.date || "",
           });
         } catch (e) {
           return err("Invalid release manifest", 500);
