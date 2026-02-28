@@ -5,9 +5,12 @@
 
 import os
 import json
+import hashlib
+import threading
+import requests
 
 from utils import APP_DATA, EVENTS_DIR, DataService
-from config import BASE_DIR
+from config import BASE_DIR, GEN_WORKER_BASE, APP_VERSION
 from log_service import append_log
 
 
@@ -546,3 +549,141 @@ class SettingsModule:
                 event_name = ed.get("name", "event")
 
         return {"ok": True, "emails": emails, "eventName": event_name}
+
+    # =========================================================================
+    # SOFTWARE UPDATE
+    # =========================================================================
+
+    def __init_update_state(self):
+        if not hasattr(self, '_update_available'):
+            self._update_available = None
+        if not hasattr(self, '_download_progress'):
+            self._download_progress = None
+
+    def check_for_update(self, token):
+        """Check the gen worker for a newer version."""
+        self.__init_update_state()
+        try:
+            resp = requests.get(
+                f"{GEN_WORKER_BASE}/check-software-update",
+                headers={"Authorization": f"Bearer {token}" if token else ""},
+                timeout=15,
+            )
+            if resp.status_code != 200:
+                return {"error": f"Server returned {resp.status_code}"}
+            data = resp.json()
+            if not data.get("ok"):
+                return {"error": data.get("error", "Unknown error")}
+            remote = data.get("version", "0.0.0")
+            update_available = self._compare_versions(remote, APP_VERSION) > 0
+            result = {
+                "ok": True,
+                "update_available": update_available,
+                "current": APP_VERSION,
+                "latest": remote,
+                "url": data.get("url", ""),
+                "size": data.get("size", 0),
+                "hash": data.get("hash", ""),
+                "notes": data.get("notes", ""),
+                "date": data.get("date", ""),
+            }
+            if update_available:
+                self._update_available = result
+            return result
+        except Exception as e:
+            append_log("ERROR", "check_for_update", {"error": str(e)[:200]})
+            return {"error": str(e)}
+
+    def get_pending_update(self):
+        """Return cached update info from auto-check (or None)."""
+        self.__init_update_state()
+        if self._update_available and self._update_available.get("update_available"):
+            return self._update_available
+        return {"ok": True, "update_available": False}
+
+    def download_update(self, download_url, expected_hash=""):
+        """Download installer to ~/Downloads in a background thread."""
+        self.__init_update_state()
+        self._download_progress = {"percent": 0, "downloaded_mb": 0, "total_mb": 0, "status": "downloading", "path": ""}
+        thread = threading.Thread(target=self._download_thread, args=(download_url, expected_hash), daemon=True)
+        thread.start()
+        return {"ok": True}
+
+    def _download_thread(self, url, expected_hash):
+        try:
+            resp = requests.get(url, stream=True, timeout=300)
+            if resp.status_code != 200:
+                self._download_progress["status"] = "error"
+                self._download_progress["error"] = f"HTTP {resp.status_code}"
+                return
+            total = int(resp.headers.get("content-length", 0))
+            total_mb = round(total / 1048576, 1) if total else 0
+            self._download_progress["total_mb"] = total_mb
+
+            downloads = os.path.join(os.path.expanduser("~"), "Downloads")
+            os.makedirs(downloads, exist_ok=True)
+            filename = url.rsplit("/", 1)[-1] if "/" in url else "Kruder1-Setup.exe"
+            dest = os.path.join(downloads, filename)
+
+            sha = hashlib.sha256()
+            downloaded = 0
+            with open(dest, "wb") as f:
+                for chunk in resp.iter_content(chunk_size=65536):
+                    f.write(chunk)
+                    sha.update(chunk)
+                    downloaded += len(chunk)
+                    self._download_progress["downloaded_mb"] = round(downloaded / 1048576, 1)
+                    self._download_progress["percent"] = int(downloaded / total * 100) if total else 0
+
+            # Validate hash if provided
+            if expected_hash:
+                h = expected_hash.replace("sha256:", "")
+                if sha.hexdigest() != h:
+                    self._download_progress["status"] = "error"
+                    self._download_progress["error"] = "Hash mismatch"
+                    try:
+                        os.remove(dest)
+                    except Exception:
+                        pass
+                    return
+
+            self._download_progress["status"] = "complete"
+            self._download_progress["percent"] = 100
+            self._download_progress["path"] = dest
+            append_log("INFO", "update_downloaded", {"path": dest})
+        except Exception as e:
+            self._download_progress["status"] = "error"
+            self._download_progress["error"] = str(e)[:200]
+            append_log("ERROR", "update_download_error", {"error": str(e)[:200]})
+
+    def get_download_progress(self):
+        """Return current download progress."""
+        self.__init_update_state()
+        if not self._download_progress:
+            return {"ok": True, "status": "idle"}
+        return {"ok": True, **self._download_progress}
+
+    def install_update(self, installer_path):
+        """Launch the installer and signal the frontend to close."""
+        path = os.path.abspath(installer_path)
+        if not os.path.isfile(path) or not path.lower().endswith(".exe"):
+            return {"error": "Invalid installer path"}
+        try:
+            os.startfile(path)
+            append_log("INFO", "update_install_launched", {"path": path})
+            return {"ok": True}
+        except Exception as e:
+            return {"error": str(e)}
+
+    @staticmethod
+    def _compare_versions(a, b):
+        """Compare semver strings. Returns >0 if a > b, 0 if equal, <0 if a < b."""
+        def parts(v):
+            return tuple(int(x) for x in v.split(".") if x.isdigit())
+        pa, pb = parts(a), parts(b)
+        for i in range(max(len(pa), len(pb))):
+            va = pa[i] if i < len(pa) else 0
+            vb = pb[i] if i < len(pb) else 0
+            if va != vb:
+                return va - vb
+        return 0

@@ -595,6 +595,35 @@ export default {
       }
 
       // ─────────────────────────────────────────────────────────────────────
+      // GET /check-software-update - Check if a new app version is available
+      // ─────────────────────────────────────────────────────────────────────
+      if (path === "check-software-update" && request.method === "GET") {
+        const auth = request.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
+        if (!auth) return err("Unauthorized", 401);
+        const payload = await verifyJwt(auth, env.JWT_SECRET);
+        if (!payload) return err("Invalid token", 401);
+
+        const obj = await env.BUCKET.get("releases/latest.json");
+        if (!obj) return err("No release info available", 404);
+
+        try {
+          const manifest = JSON.parse(await obj.text());
+          const R2_PUBLIC = env.R2_PUBLIC_URL || "https://media.kruder1.com";
+          return json({
+            ok: true,
+            version: manifest.version,
+            url: `${R2_PUBLIC}/releases/${manifest.filename}`,
+            size: manifest.size || 0,
+            hash: manifest.hash || "",
+            notes: manifest.notes || "",
+            date: manifest.date || "",
+          });
+        } catch (e) {
+          return err("Invalid release manifest", 500);
+        }
+      }
+
+      // ─────────────────────────────────────────────────────────────────────
       // POST /upload-framed-result - Replace R2 image with framed version
       // ─────────────────────────────────────────────────────────────────────
       if (path === "upload-framed-result" && request.method === "POST") {

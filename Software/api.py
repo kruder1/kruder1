@@ -9,7 +9,7 @@ import re
 import webview
 import requests
 
-from config import GEN_WORKER_BASE
+from config import GEN_WORKER_BASE, APP_VERSION
 from utils import EVENTS_DIR, DataService, SecurityService, SESSION_FILE
 from log_service import append_log, get_log_path_for_today
 from modules import AuthModule, SettingsModule
@@ -81,6 +81,10 @@ class NativeApi:
     # =========================================================================
     # SYSTEM
     # =========================================================================
+
+    def get_app_version(self):
+        """Return the current application version."""
+        return APP_VERSION
 
     def close_app(self):
         """Close the application."""
@@ -460,6 +464,27 @@ class NativeApi:
 
     def get_event_emails(self, event_id=None):
         return self._settings.get_event_emails(event_id)
+
+    # =========================================================================
+    # SOFTWARE UPDATE - Delegation
+    # =========================================================================
+
+    def check_for_update(self):
+        sess = DataService.load_json(SESSION_FILE)
+        token = (sess or {}).get("token", "")
+        return self._settings.check_for_update(token)
+
+    def download_update(self, url, expected_hash=""):
+        return self._settings.download_update(url, expected_hash)
+
+    def get_download_progress(self):
+        return self._settings.get_download_progress()
+
+    def install_update(self, path):
+        return self._settings.install_update(path)
+
+    def get_pending_update(self):
+        return self._settings.get_pending_update()
 
     def save_emails_dialog(self, event_name, emails):
         """Show native file-save dialog for email list. Returns True if saved."""

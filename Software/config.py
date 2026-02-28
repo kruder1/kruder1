@@ -35,6 +35,9 @@ GEN_WORKER_BASE = _cfg["GEN_WORKER_BASE"]
 PORT = _cfg["PORT"]
 APP_DATA = _cfg["APP_DATA"]
 
+# App version
+APP_VERSION = "1.0.0"
+
 # Image processing defaults
 IMAGE_SCALE_FACTOR = 0.75
 JPEG_QUALITY = 85

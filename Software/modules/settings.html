@@ -17,6 +17,7 @@
             <button class="btn-main" data-action="goto-pin"><i class="fa-solid fa-key"></i> <span data-i18n="settings.btn_pin">SECURITY PIN</span></button>
             <button class="btn-main" data-action="software-update"><i class="fa-solid fa-download"></i> <span data-i18n="settings.btn_update">UPDATE</span></button>
         </div>
+        <p id="settings-version" style="text-align:center; opacity:0.4; margin-top:1.2rem; font-size:0.85rem; letter-spacing:0.1em;"></p>
     </div>
 </section>
 
@@ -440,6 +441,69 @@
     </div>
 </section>
 
+<!-- Software Update View -->
+<section id="view-update" class="view-section hidden">
+    <button class="btn-back" data-action="back-to-settings"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="content-wrapper">
+        <h1 data-i18n="settings.title_update">SOFTWARE UPDATE</h1>
+
+        <!-- State: initial -->
+        <div id="update-state-initial">
+            <p id="update-current-version" style="text-align:center; margin-bottom:1.5rem; opacity:0.6;"></p>
+            <button class="btn-main btn-primary" data-action="check-update" id="btn-check-update">
+                <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="settings.update_btn_check">CHECK FOR UPDATES</span>
+            </button>
+        </div>
+
+        <!-- State: checking -->
+        <div id="update-state-checking" class="hidden" style="text-align:center;">
+            <div class="spinner" style="margin:2rem auto;"></div>
+            <p data-i18n="settings.update_checking">Checking...</p>
+        </div>
+
+        <!-- State: up to date -->
+        <div id="update-state-uptodate" class="hidden" style="text-align:center;">
+            <p style="font-size:1.3rem; margin:2rem 0;"><i class="fa-solid fa-circle-check" style="color:var(--theme-accent);"></i> <span data-i18n="settings.update_up_to_date">You're up to date</span></p>
+            <p id="update-uptodate-version" style="opacity:0.5;"></p>
+        </div>
+
+        <!-- State: update available -->
+        <div id="update-state-available" class="hidden" style="text-align:center;">
+            <p style="font-size:1.3rem; margin:1rem 0;"><i class="fa-solid fa-arrow-up-right-from-square" style="color:var(--theme-accent);"></i> <span id="update-new-version"></span></p>
+            <p id="update-notes" style="opacity:0.6; margin-bottom:0.5rem;"></p>
+            <p id="update-size" style="opacity:0.4; font-size:0.85rem; margin-bottom:1.5rem;"></p>
+            <button class="btn-main btn-primary" data-action="download-update" id="btn-download-update">
+                <i class="fa-solid fa-download"></i> <span data-i18n="settings.update_btn_download">DOWNLOAD</span>
+            </button>
+        </div>
+
+        <!-- State: downloading -->
+        <div id="update-state-downloading" class="hidden" style="text-align:center;">
+            <p data-i18n="settings.update_downloading">Downloading...</p>
+            <div style="width:100%; max-width:400px; height:8px; background:var(--theme-border); border-radius:4px; margin:1.5rem auto; overflow:hidden;">
+                <div id="update-progress-bar" style="height:100%; width:0%; background:var(--theme-accent); transition:width 0.3s;"></div>
+            </div>
+            <p id="update-progress-text" style="opacity:0.5; font-size:0.85rem;">0%</p>
+        </div>
+
+        <!-- State: download complete -->
+        <div id="update-state-complete" class="hidden" style="text-align:center;">
+            <p style="font-size:1.3rem; margin:2rem 0;"><i class="fa-solid fa-circle-check" style="color:var(--theme-accent);"></i> <span data-i18n="settings.update_ready">Download complete</span></p>
+            <button class="btn-main btn-primary" data-action="install-update" id="btn-install-update">
+                <i class="fa-solid fa-rocket"></i> <span data-i18n="settings.update_btn_install">INSTALL & RESTART</span>
+            </button>
+        </div>
+
+        <!-- State: error -->
+        <div id="update-state-error" class="hidden" style="text-align:center;">
+            <p style="font-size:1.1rem; margin:2rem 0; color:var(--theme-accent);"><i class="fa-solid fa-triangle-exclamation"></i> <span id="update-error-msg"></span></p>
+            <button class="btn-main btn-primary" data-action="check-update">
+                <i class="fa-solid fa-rotate-right"></i> <span data-i18n="settings.update_btn_retry">RETRY</span>
+            </button>
+        </div>
+    </div>
+</section>
+
 <!-- ========================================
      SETTINGS MODULE - JAVASCRIPT
      ======================================== -->
@@ -463,6 +527,7 @@ window.SettingsModule = {
         this.initThemeLuminanceSlider();
         this.initInkLuminanceSlider();
         this.initLocktextKeyboard();
+        this.loadVersion();
         if (window.AppState?.openView === 'stats') {
             this.state.statsFromDashboard = true;
             this.showView('stats');
@@ -542,7 +607,10 @@ window.SettingsModule = {
             
             // Actions
             case 'toggle-fullscreen': this.toggleFullscreen(); break;
-            case 'software-update': this.showAlert(typeof window.t === 'function' ? window.t('settings.alert_update_coming') : 'UPDATE CHECK COMING SOON'); break;
+            case 'software-update': this.showView('update'); this.initUpdateView(); break;
+            case 'check-update': this.checkForUpdate(); break;
+            case 'download-update': this.downloadUpdate(); break;
+            case 'install-update': this.installUpdate(); break;
             case 'close-alert': this.hideModal('alert-modal'); break;
             case 'camera-reset-settings': this.resetCameraSettings(); break;
             case 'printing-copies-minus': this.printingCopiesChange(-1); break;
@@ -1777,6 +1845,128 @@ window.SettingsModule = {
         } catch(e) {
             this.showAlert((window.t ? window.t('settings.error_export_failed') : 'EXPORT FAILED') + ': ' + (e.message || ''));
         }
+    },
+
+    // =====================================================================
+    // SOFTWARE UPDATE
+    // =====================================================================
+
+    _updateData: null,
+
+    initUpdateView() {
+        this._showUpdateState('initial');
+        window.pywebview.api.get_app_version().then(v => {
+            const el = document.getElementById('update-current-version');
+            if (el && v) el.textContent = 'v' + v;
+        }).catch(() => {});
+        // Check if there's a pending update from auto-check
+        window.pywebview.api.get_pending_update().then(r => {
+            if (r && r.update_available) {
+                this._updateData = r;
+                this._showAvailable(r);
+            }
+        }).catch(() => {});
+    },
+
+    async checkForUpdate() {
+        this._showUpdateState('checking');
+        try {
+            const r = await window.pywebview.api.check_for_update();
+            if (r.error) {
+                this._showUpdateError(r.error);
+                return;
+            }
+            if (r.update_available) {
+                this._updateData = r;
+                this._showAvailable(r);
+            } else {
+                this._showUpdateState('uptodate');
+                const el = document.getElementById('update-uptodate-version');
+                if (el) el.textContent = 'v' + (r.current || '');
+            }
+        } catch (e) {
+            this._showUpdateError(e.message || 'Connection error');
+        }
+    },
+
+    _showAvailable(r) {
+        this._showUpdateState('available');
+        const ver = document.getElementById('update-new-version');
+        const notes = document.getElementById('update-notes');
+        const size = document.getElementById('update-size');
+        if (ver) ver.textContent = 'v' + r.latest + ' ' + (window.t ? window.t('settings.update_available_label') : 'available');
+        if (notes && r.notes) notes.textContent = r.notes;
+        if (size && r.size) size.textContent = Math.round(r.size / 1048576) + ' MB';
+    },
+
+    async downloadUpdate() {
+        if (!this._updateData) return;
+        this._showUpdateState('downloading');
+        try {
+            const r = await window.pywebview.api.download_update(this._updateData.url, this._updateData.hash || '');
+            if (r.error) { this._showUpdateError(r.error); return; }
+            this._pollDownload();
+        } catch (e) {
+            this._showUpdateError(e.message || 'Download failed');
+        }
+    },
+
+    _pollDownload() {
+        this._downloadPollId = setInterval(async () => {
+            try {
+                const p = await window.pywebview.api.get_download_progress();
+                if (!p) return;
+                const bar = document.getElementById('update-progress-bar');
+                const txt = document.getElementById('update-progress-text');
+                if (bar) bar.style.width = p.percent + '%';
+                if (txt) txt.textContent = p.percent + '% — ' + p.downloaded_mb + ' / ' + p.total_mb + ' MB';
+                if (p.status === 'complete') {
+                    clearInterval(this._downloadPollId);
+                    this._installerPath = p.path;
+                    this._showUpdateState('complete');
+                } else if (p.status === 'error') {
+                    clearInterval(this._downloadPollId);
+                    this._showUpdateError(p.error || 'Download failed');
+                }
+            } catch (e) {
+                clearInterval(this._downloadPollId);
+                this._showUpdateError('Connection lost');
+            }
+        }, 500);
+    },
+
+    async installUpdate() {
+        if (!this._installerPath) return;
+        try {
+            const r = await window.pywebview.api.install_update(this._installerPath);
+            if (r.error) { this._showUpdateError(r.error); return; }
+            // Close the app so the installer can run
+            window.pywebview.api.close_app();
+        } catch (e) {
+            this._showUpdateError(e.message || 'Install failed');
+        }
+    },
+
+    _showUpdateState(state) {
+        ['initial', 'checking', 'uptodate', 'available', 'downloading', 'complete', 'error'].forEach(s => {
+            const el = document.getElementById('update-state-' + s);
+            if (el) el.classList.toggle('hidden', s !== state);
+        });
+    },
+
+    _showUpdateError(msg) {
+        this._showUpdateState('error');
+        const el = document.getElementById('update-error-msg');
+        if (el) el.textContent = msg;
+    },
+
+    // Version
+    async loadVersion() {
+        try {
+            const v = await window.pywebview.api.get_app_version();
+            const el = document.getElementById('settings-version');
+            if (el && v) el.textContent = 'v' + v;
+        } catch (e) {}
     },
 
     // Helpers

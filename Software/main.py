@@ -6,6 +6,7 @@
 import threading
 import webview
 
+from config import APP_VERSION
 from utils import PORT, init_environment
 from router import run_server
 from api import NativeApi
@@ -18,7 +19,7 @@ from log_service import append_log, cleanup_old_logs
 if __name__ == '__main__':
     init_environment()
     cleanup_old_logs()
-    append_log("INFO", "session_start", {"version": "1.0", "build": "production"})
+    append_log("INFO", "session_start", {"version": APP_VERSION, "build": "production"})
     append_log("INFO", "app_start")
 
     # 1. Start HTTP Server
