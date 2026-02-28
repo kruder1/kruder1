@@ -140,7 +140,7 @@ const KRUDER = (() => {
         const msgEl = document.getElementById('modal-message');
         const box = overlay?.querySelector('.modal-box');
         if (!overlay || !msgEl) return;
-        msgEl.textContent = t(msgKey);
+        msgEl.innerHTML = t(msgKey);
         overlay.classList.add('is-active');
         if (isError && box) { box.classList.add('shake'); setTimeout(() => box.classList.remove('shake'), 600); }
         overlay._callback = callback || null;

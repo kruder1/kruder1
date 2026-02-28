@@ -5,6 +5,7 @@
 
 import os
 import json
+import threading
 
 from utils import SESSION_FILE, NetworkService, DataService
 from log_service import append_log
@@ -25,6 +26,12 @@ class AuthModule:
                 data = json.loads(resp)
                 DataService.save_json(SESSION_FILE, data)
                 append_log("INFO", "login", {"ok": True})
+
+                # Auto-claim demo credits in background (silent, fire-and-forget)
+                token = data.get("token")
+                if token:
+                    threading.Thread(target=self._try_claim_demo, args=(token,), daemon=True).start()
+
                 return data
 
             try:
@@ -37,6 +44,26 @@ class AuthModule:
         except Exception as e:
             append_log("ERROR", "login", {"ok": False, "error": str(e)[:200]})
             return {"error": str(e)}
+
+    def _try_claim_demo(self, token: str):
+        """Silently attempt to claim demo credits after login."""
+        try:
+            status, resp = NetworkService.proxy_api(
+                "claim-demo", {}, auth=f"Bearer {token}"
+            )
+            if status == 200:
+                data = json.loads(resp)
+                # Update local session with new credit count
+                session = DataService.load_json(SESSION_FILE)
+                if session and "account" in session:
+                    session["account"]["credits"] = data.get("credits", session["account"].get("credits", 0))
+                    DataService.save_json(SESSION_FILE, session)
+                append_log("INFO", "claim_demo", {"ok": True, "credits": data.get("credits")})
+            else:
+                # Expected failures: already claimed, email not verified — silently ignore
+                append_log("DEBUG", "claim_demo_skip", {"status": status})
+        except Exception as e:
+            append_log("DEBUG", "claim_demo_error", {"error": str(e)[:200]})
 
     def get_session_data(self) -> dict:
         """Get locally stored session data."""
