@@ -14,7 +14,6 @@ venv/
 # PyInstaller build artifacts
 Software/build/
 Software/dist/
-Software/*.spec
 
 # Inno Setup output
 Software/Output/
