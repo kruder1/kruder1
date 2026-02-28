@@ -6,7 +6,7 @@
 import os
 import json
 import hashlib
-import uuid
+import subprocess
 import logging
 import tempfile
 
@@ -101,28 +101,51 @@ def send_to_recycle_bin(paths):
 
 class SecurityService:
     @staticmethod
-    def get_hwid() -> str:
-        """Generate a unique hardware identifier."""
-        parts = []
-        if winreg:
-            try:
-                key = winreg.OpenKey(
-                    winreg.HKEY_LOCAL_MACHINE,
-                    r"SOFTWARE\Microsoft\Cryptography",
-                    0,
-                    winreg.KEY_READ | winreg.KEY_WOW64_64KEY
-                )
-                val, _ = winreg.QueryValueEx(key, "MachineGuid")
-                winreg.CloseKey(key)
-                parts.append(str(val))
-            except Exception:
-                pass
+    def _wmi_value(wmic_args: str) -> str:
+        """Run a wmic command and return the first non-empty value line."""
         try:
-            parts.append(str(uuid.getnode()))
+            out = subprocess.check_output(
+                f"wmic {wmic_args}",
+                shell=True,
+                creationflags=0x08000000,  # CREATE_NO_WINDOW
+                stderr=subprocess.DEVNULL,
+                timeout=5
+            ).decode("utf-8", errors="ignore")
+            for line in out.strip().splitlines()[1:]:
+                val = line.strip()
+                if val and val.lower() not in ("", "to be filled by o.e.m.", "default string", "none"):
+                    return val
         except Exception:
             pass
+        return ""
+
+    @staticmethod
+    def get_hwid() -> str:
+        """Generate a hardware identifier from CPU, motherboard, and BIOS serials."""
+        cpu = SecurityService._wmi_value("cpu get processorid")
+        board = SecurityService._wmi_value("baseboard get serialnumber")
+        bios = SecurityService._wmi_value("bios get serialnumber")
+
+        parts = [v for v in (cpu, board, bios) if v]
+
         if not parts:
-            parts.append("fallback-hwid")
+            # Last resort: Windows MachineGuid (changes on reinstall but better than nothing)
+            if winreg:
+                try:
+                    key = winreg.OpenKey(
+                        winreg.HKEY_LOCAL_MACHINE,
+                        r"SOFTWARE\Microsoft\Cryptography",
+                        0,
+                        winreg.KEY_READ | winreg.KEY_WOW64_64KEY
+                    )
+                    val, _ = winreg.QueryValueEx(key, "MachineGuid")
+                    winreg.CloseKey(key)
+                    parts.append(str(val))
+                except Exception:
+                    pass
+            if not parts:
+                parts.append("fallback-hwid")
+
         return hashlib.sha256("|".join(parts).encode()).hexdigest()
 
     @staticmethod
