@@ -4,9 +4,9 @@
  */
 
 function getPriceToCredits(env) {
-  const basic = env.STRIPE_PRICE_ID_BASIC || "price_1SwcrIC1FI34uKMLaGO8Fxsh";
-  const plus = env.STRIPE_PRICE_ID_PLUS || "price_1SwcqbC1FI34uKMLDWbAblgV";
-  const pro = env.STRIPE_PRICE_ID_PRO || "price_1SwcqCC1FI34uKMLiUN0eOD6";
+  const basic = env.STRIPE_PRICE_ID_BASIC || "price_1T5mZSFshc6WkXRCERk4vp8O";
+  const plus = env.STRIPE_PRICE_ID_PLUS || "price_1T5mZmFshc6WkXRCKhi5bZ7B";
+  const pro = env.STRIPE_PRICE_ID_PRO || "price_1T5ma4Fshc6WkXRCKWvVBoQL";
   return { [basic]: 150, [plus]: 300, [pro]: 600 };
 }
 
