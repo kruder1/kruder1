@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kruder 1 - Login</title>
+    <title>Kruder 1 — Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,90 +17,67 @@
     <div id="particles-js"></div>
     <div id="scanlines"></div>
 
-    <nav class="nav-container">
-        <a href="index.html" class="brand-logo">
-            <img src="img/logo.png" alt="Kruder 1">
-        </a>
+    <nav class="nav-sticky">
+        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
         <div class="nav-actions">
-            <button id="btn-theme" class="nav-action-btn"><i class="fa-solid fa-moon"></i></button>
+            <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
             <button id="btn-lang" class="nav-action-btn">EN</button>
-            <button class="menu-btn" id="menu-toggle" aria-label="Menu">
-                <div class="menu-icon"></div>
-            </button>
+            <a href="login.html" class="btn-accent btn-sm" id="btn-access" data-i18n="nav_access">CLIENT ACCESS</a>
         </div>
     </nav>
 
-    <div class="menu-overlay" id="menu-overlay"></div>
-    <div class="side-menu" id="side-menu">
-        <nav class="menu-links">
-            <a href="index.html" class="menu-link" data-i18n="m_home"></a>
-            <a href="pricing.html" class="menu-link" data-i18n="m_pricing"></a>
-            <a href="faqs.html" class="menu-link" data-i18n="m_faqs"></a>
-            <a href="login.html" class="menu-link is-highlight" data-i18n="m_access" data-auth-guest></a>
-            <a href="dashboard.html" class="menu-link auth-hidden" data-i18n="m_dash" data-auth-user></a>
-            <a href="#" class="menu-link is-highlight auth-hidden" data-i18n="m_logout" data-auth-user id="link-logout"></a>
-        </nav>
-    </div>
-
     <main>
         <section class="section">
-            <div class="auth-screen" id="auth-create">
-                <h1 class="auth-title" data-i18n="auth_title_create"></h1>
-                <div class="auth-form">
-                    <div class="input-wrap">
-                        <input class="input-field" type="email" data-i18n-placeholder="auth_placeholder_email">
-                    </div>
-                    <div class="input-wrap">
-                        <input class="input-field" type="password" data-i18n-placeholder="auth_placeholder_password">
-                        <button type="button" class="password-toggle" tabindex="-1">
-                            <i class="fa-solid fa-eye"></i>
-                            <i class="fa-solid fa-eye-slash"></i>
-                        </button>
-                    </div>
-                    <div class="input-wrap">
-                        <input class="input-field" type="password" data-i18n-placeholder="auth_placeholder_confirm">
-                        <button type="button" class="password-toggle" tabindex="-1">
-                            <i class="fa-solid fa-eye"></i>
-                            <i class="fa-solid fa-eye-slash"></i>
-                        </button>
-                    </div>
-                    <button type="button" class="btn-accent is-full is-disabled" data-auth="create" data-i18n="auth_btn_create"></button>
-                    <div class="auth-actions">
-                        <button type="button" class="btn-link" data-auth-view="login" data-i18n="auth_link_back_login"></button>
+            <div class="auth-container">
+                <div class="auth-screen" id="auth-create">
+                    <h1 class="auth-title" data-i18n="auth_title_create"></h1>
+                    <div class="auth-form">
+                        <div class="input-wrap">
+                            <input class="input-field" type="email" data-i18n-placeholder="auth_placeholder_email">
+                        </div>
+                        <div class="input-wrap">
+                            <input class="input-field" type="password" data-i18n-placeholder="auth_placeholder_password">
+                            <button type="button" class="password-toggle" tabindex="-1"><i class="fa-solid fa-eye"></i><i class="fa-solid fa-eye-slash"></i></button>
+                        </div>
+                        <div class="input-wrap">
+                            <input class="input-field" type="password" data-i18n-placeholder="auth_placeholder_confirm">
+                            <button type="button" class="password-toggle" tabindex="-1"><i class="fa-solid fa-eye"></i><i class="fa-solid fa-eye-slash"></i></button>
+                        </div>
+                        <button type="button" class="btn-accent is-full is-disabled" data-auth="create" data-i18n="auth_btn_create"></button>
+                        <div class="auth-actions">
+                            <button type="button" class="btn-link" data-auth-view="login" data-i18n="auth_link_back_login"></button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="auth-screen is-active" id="auth-login">
-                <h1 class="auth-title" data-i18n="auth_title_login"></h1>
-                <div class="auth-form">
-                    <div class="input-wrap">
-                        <input class="input-field" type="email" data-i18n-placeholder="auth_placeholder_email">
-                    </div>
-                    <div class="input-wrap">
-                        <input class="input-field" type="password" data-i18n-placeholder="auth_placeholder_password">
-                        <button type="button" class="password-toggle" tabindex="-1">
-                            <i class="fa-solid fa-eye"></i>
-                            <i class="fa-solid fa-eye-slash"></i>
-                        </button>
-                    </div>
-                    <button type="button" class="btn-accent is-full is-disabled" data-auth="login" data-i18n="auth_btn_login"></button>
-                    <div class="auth-actions">
-                        <button type="button" class="btn-link" data-auth-view="create" data-i18n="auth_link_create"></button>
-                        <button type="button" class="btn-link" data-auth-view="forgot" data-i18n="auth_link_forgot"></button>
+                <div class="auth-screen is-active" id="auth-login">
+                    <h1 class="auth-title" data-i18n="auth_title_login"></h1>
+                    <div class="auth-form">
+                        <div class="input-wrap">
+                            <input class="input-field" type="email" data-i18n-placeholder="auth_placeholder_email">
+                        </div>
+                        <div class="input-wrap">
+                            <input class="input-field" type="password" data-i18n-placeholder="auth_placeholder_password">
+                            <button type="button" class="password-toggle" tabindex="-1"><i class="fa-solid fa-eye"></i><i class="fa-solid fa-eye-slash"></i></button>
+                        </div>
+                        <button type="button" class="btn-accent is-full is-disabled" data-auth="login" data-i18n="auth_btn_login"></button>
+                        <div class="auth-actions">
+                            <button type="button" class="btn-link" data-auth-view="create" data-i18n="auth_link_create"></button>
+                            <button type="button" class="btn-link" data-auth-view="forgot" data-i18n="auth_link_forgot"></button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="auth-screen" id="auth-forgot">
-                <h1 class="auth-title" data-i18n="auth_title_forgot"></h1>
-                <div class="auth-form">
-                    <div class="input-wrap">
-                        <input class="input-field" type="email" data-i18n-placeholder="auth_placeholder_email">
-                    </div>
-                    <button type="button" class="btn-accent is-full is-disabled" data-auth="reset" data-i18n="auth_btn_reset"></button>
-                    <div class="auth-actions">
-                        <button type="button" class="btn-link" data-auth-view="login" data-i18n="auth_link_back_login"></button>
+                <div class="auth-screen" id="auth-forgot">
+                    <h1 class="auth-title" data-i18n="auth_title_forgot"></h1>
+                    <div class="auth-form">
+                        <div class="input-wrap">
+                            <input class="input-field" type="email" data-i18n-placeholder="auth_placeholder_email">
+                        </div>
+                        <button type="button" class="btn-accent is-full is-disabled" data-auth="reset" data-i18n="auth_btn_reset"></button>
+                        <div class="auth-actions">
+                            <button type="button" class="btn-link" data-auth-view="login" data-i18n="auth_link_back_login"></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -110,7 +87,7 @@
     <div id="modal-overlay" class="modal-overlay">
         <div class="modal-box">
             <p id="modal-message" class="modal-message"></p>
-            <button type="button" id="modal-btn-ok" class="modal-btn" data-i18n="modal_btn_ok"></button>
+            <button type="button" id="modal-btn-ok" class="btn-accent" data-i18n="modal_btn_ok"></button>
         </div>
     </div>
 
@@ -128,11 +105,7 @@
     <script src="main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            /* --- 1. Page-specific i18n keys --- */
-
             KRUDER.init({
-                // Auth
                 auth_title_login: { en: 'Login', es: 'Iniciar sesión' },
                 auth_title_create: { en: 'Create Account', es: 'Crear cuenta' },
                 auth_title_forgot: { en: 'Reset Password', es: 'Restablecer contraseña' },
@@ -145,8 +118,6 @@
                 auth_link_create: { en: 'Create Account', es: 'Crear cuenta' },
                 auth_link_forgot: { en: 'Reset Password', es: 'Restablecer contraseña' },
                 auth_link_back_login: { en: 'Log in instead', es: 'Iniciar sesión' },
-
-                // Modals
                 modal_verification_sent: { en: 'Verification email sent,<br>please verify', es: 'Email de verificación enviado,<br>por favor verifique' },
                 modal_reset_sent: { en: 'Reset password link sent,<br>check your email', es: 'Enlace de restablecimiento enviado,<br>revise su correo' },
                 modal_pass_mismatch: { en: 'Passwords do not match', es: 'Las contraseñas no coinciden' },
@@ -159,19 +130,11 @@
                 modal_btn_ok: { en: 'OK', es: 'OK' }
             });
 
-            /* --- 2. Auth Logic --- */
-
             const authScreens = document.querySelectorAll('.auth-screen');
-
             const switchAuthView = (viewId) => {
-                authScreens.forEach(screen => {
-                    screen.classList.remove('is-active');
-                    screen.querySelectorAll('input').forEach(i => i.value = '');
-                    const btn = screen.querySelector('.btn-accent');
-                    if (btn) btn.classList.add('is-disabled');
-                });
-                const target = document.getElementById('auth-' + viewId);
-                if (target) target.classList.add('is-active');
+                authScreens.forEach(s => { s.classList.remove('is-active'); s.querySelectorAll('input').forEach(i => i.value = ''); const b = s.querySelector('.btn-accent'); if (b) b.classList.add('is-disabled'); });
+                const t = document.getElementById('auth-' + viewId);
+                if (t) t.classList.add('is-active');
             };
 
             const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -181,10 +144,7 @@
             const parseApiError = (errMsg) => {
                 if (!errMsg) return null;
                 let s = String(errMsg);
-                try {
-                    const parsed = JSON.parse(s);
-                    if (parsed.message) s = parsed.message;
-                } catch (_) {}
+                try { const p = JSON.parse(s); if (p.message) s = p.message; } catch (_) {}
                 const sl = s.toLowerCase();
                 if (sl.includes('email is not valid') || sl.includes('invalid_parameter') || sl.includes('invalid email') || sl.includes('valid in to')) return 'modal_email_invalid';
                 if (sl.includes('verify your email') || sl.includes('verify')) return 'modal_verify_first';
@@ -194,175 +154,80 @@
             };
 
             const validateInput = (e) => {
-                const container = e.target.closest('.auth-screen');
-                if (!container) return;
-                const btn = container.querySelector('.btn-accent');
-                const inputs = container.querySelectorAll('input');
-                if (!btn) return;
-
-                const isValid = Array.from(inputs).every(i => i.value.trim() !== '');
-                if (isValid) btn.classList.remove('is-disabled');
-                else btn.classList.add('is-disabled');
+                const c = e.target.closest('.auth-screen'); if (!c) return;
+                const btn = c.querySelector('.btn-accent'); const inputs = c.querySelectorAll('input'); if (!btn) return;
+                const valid = Array.from(inputs).every(i => i.value.trim() !== '');
+                btn.classList.toggle('is-disabled', !valid);
             };
 
             const handleAuthAction = async (btn) => {
                 const action = btn.getAttribute('data-auth');
                 btn.disabled = true;
                 KRUDER.setBtnLoading(btn, true);
-
                 try {
                     if (action === 'login') {
                         const form = document.getElementById('auth-login');
-                        const loginInputs = form.querySelectorAll('.auth-form input');
-                        const email = (loginInputs[0]?.value ?? '').trim();
-                        const password = loginInputs[1]?.value ?? '';
-                        if (!isValidEmail(email)) {
-                            KRUDER.showModal('modal_email_invalid', true);
-                            return;
-                        }
-                        if (!password) {
-                            KRUDER.showModal('modal_pass_empty', true);
-                            return;
-                        }
-                        const res = await fetch(KRUDER.CONFIG.apiBase + '/login', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email, password })
-                        });
+                        const inputs = form.querySelectorAll('.auth-form input');
+                        const email = (inputs[0]?.value ?? '').trim();
+                        const password = inputs[1]?.value ?? '';
+                        if (!isValidEmail(email)) { KRUDER.showModal('modal_email_invalid', true); return; }
+                        if (!password) { KRUDER.showModal('modal_pass_empty', true); return; }
+                        const res = await fetch(KRUDER.CONFIG.apiBase + '/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
                         const data = await res.json().catch(() => ({}));
-                        if (!res.ok) {
-                            const msg = data.error || 'Login failed';
-                            const key = parseApiError(msg);
-                            throw new Error(KRUDER.STATE.dict[key] ? key : msg);
-                        }
+                        if (!res.ok) { const msg = data.error || 'Login failed'; const key = parseApiError(msg); throw new Error(KRUDER.STATE.dict[key] ? key : msg); }
                         localStorage.setItem(KRUDER.CONFIG.keyToken, data.token);
                         window.location.href = 'dashboard.html';
                         return;
                     }
                     if (action === 'create') {
                         const form = document.getElementById('auth-create');
-                        const allInputs = form.querySelectorAll('.auth-form input');
-                        const email = (allInputs[0]?.value ?? '').trim();
-                        const p1 = allInputs[1]?.value ?? '';
-                        const p2 = allInputs[2]?.value ?? '';
-                        if (!isValidEmail(email)) {
-                            KRUDER.showModal('modal_email_invalid', true);
-                            return;
-                        }
-                        if (!p1 || !p2) {
-                            KRUDER.showModal('modal_pass_empty', true);
-                            return;
-                        }
-                        if (!isValidPassword(p1)) {
-                            KRUDER.showModal('modal_pass_weak', true);
-                            return;
-                        }
-                        if (p1 !== p2) {
-                            KRUDER.showModal('modal_pass_mismatch', true);
-                            return;
-                        }
-                        const res = await fetch(KRUDER.CONFIG.apiBase + '/register', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email, password: p1, lang: KRUDER.STATE.lang })
-                        });
+                        const inputs = form.querySelectorAll('.auth-form input');
+                        const email = (inputs[0]?.value ?? '').trim();
+                        const p1 = inputs[1]?.value ?? '';
+                        const p2 = inputs[2]?.value ?? '';
+                        if (!isValidEmail(email)) { KRUDER.showModal('modal_email_invalid', true); return; }
+                        if (!p1 || !p2) { KRUDER.showModal('modal_pass_empty', true); return; }
+                        if (!isValidPassword(p1)) { KRUDER.showModal('modal_pass_weak', true); return; }
+                        if (p1 !== p2) { KRUDER.showModal('modal_pass_mismatch', true); return; }
+                        const res = await fetch(KRUDER.CONFIG.apiBase + '/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: p1, lang: KRUDER.STATE.lang }) });
                         const data = await res.json().catch(() => ({}));
-                        if (!res.ok) {
-                            const msg = data.error || 'Registration failed';
-                            const key = parseApiError(msg);
-                            throw new Error(KRUDER.STATE.dict[key] ? key : msg);
-                        }
+                        if (!res.ok) { const msg = data.error || 'Registration failed'; const key = parseApiError(msg); throw new Error(KRUDER.STATE.dict[key] ? key : msg); }
                         KRUDER.showModal('modal_verification_sent', false, () => switchAuthView('login'));
                         return;
                     }
                     if (action === 'reset') {
                         const form = document.getElementById('auth-forgot');
                         const email = form.querySelector('input[type="email"]')?.value?.trim() ?? '';
-                        if (!isValidEmail(email)) {
-                            KRUDER.showModal('modal_email_invalid', true);
-                            return;
-                        }
-                        const res = await fetch(KRUDER.CONFIG.apiBase + '/forgot-password', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email, lang: KRUDER.STATE.lang })
-                        });
+                        if (!isValidEmail(email)) { KRUDER.showModal('modal_email_invalid', true); return; }
+                        const res = await fetch(KRUDER.CONFIG.apiBase + '/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, lang: KRUDER.STATE.lang }) });
                         const data = await res.json().catch(() => ({}));
-                        if (!res.ok) {
-                            const msg = data.error || 'Request failed';
-                            const key = parseApiError(msg);
-                            throw new Error(KRUDER.STATE.dict[key] ? key : msg);
-                        }
+                        if (!res.ok) { const msg = data.error || 'Request failed'; const key = parseApiError(msg); throw new Error(KRUDER.STATE.dict[key] ? key : msg); }
                         KRUDER.showModal('modal_reset_sent', false, () => switchAuthView('login'));
                         return;
                     }
                 } catch (err) {
                     const msg = err.message || 'Error';
-                    const key = msg.startsWith('modal_') ? msg : null;
-                    KRUDER.showModal(key || msg, true);
+                    KRUDER.showModal(msg.startsWith('modal_') ? msg : msg, true);
                 } finally {
                     KRUDER.setBtnLoading(btn, false);
                     btn.disabled = false;
                 }
             };
 
-            /* --- 3. Event Delegation --- */
-
             document.addEventListener('click', (e) => {
-                // View Switching
-                const viewTrigger = e.target.closest('[data-auth-view]');
-                if (viewTrigger) {
-                    e.preventDefault();
-                    switchAuthView(viewTrigger.getAttribute('data-auth-view'));
-                    return;
-                }
-
-                // Password Toggle
-                const passToggle = e.target.closest('.password-toggle');
-                if (passToggle) {
-                    e.preventDefault();
-                    const input = passToggle.parentElement.querySelector('input');
-                    if (input) {
-                        const isPass = input.type === 'password';
-                        input.type = isPass ? 'text' : 'password';
-                        passToggle.classList.toggle('is-visible', isPass);
-                    }
-                    return;
-                }
-
-                // Auth Actions
-                const authBtn = e.target.closest('[data-auth]');
-                if (authBtn) {
-                    e.preventDefault();
-                    if (!authBtn.classList.contains('is-disabled')) {
-                        handleAuthAction(authBtn);
-                    }
-                    return;
-                }
+                const vt = e.target.closest('[data-auth-view]');
+                if (vt) { e.preventDefault(); switchAuthView(vt.getAttribute('data-auth-view')); return; }
+                const pt = e.target.closest('.password-toggle');
+                if (pt) { e.preventDefault(); const inp = pt.parentElement.querySelector('input'); if (inp) { const isP = inp.type === 'password'; inp.type = isP ? 'text' : 'password'; pt.classList.toggle('is-visible', isP); } return; }
+                const ab = e.target.closest('[data-auth]');
+                if (ab && !ab.classList.contains('is-disabled')) { e.preventDefault(); handleAuthAction(ab); }
             });
 
-            // Redirect if already logged in
-            if (localStorage.getItem(KRUDER.CONFIG.keyToken)) {
-                window.location.href = 'dashboard.html';
-                return;
-            }
+            if (localStorage.getItem(KRUDER.CONFIG.keyToken)) { window.location.href = 'dashboard.html'; return; }
 
-            // Input Validation & Enter Key
             document.querySelectorAll('.auth-form input').forEach(input => {
                 input.addEventListener('input', validateInput);
-                input.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        const btn = e.target.closest('.auth-form').querySelector('.btn-accent');
-                        if (btn && !btn.classList.contains('is-disabled')) btn.click();
-                    }
-                });
-            });
-
-            // Apply placeholder translations
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (key) el.placeholder = KRUDER.t(key);
+                input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); const b = e.target.closest('.auth-form').querySelector('.btn-accent'); if (b && !b.classList.contains('is-disabled')) b.click(); } });
             });
         });
     </script>

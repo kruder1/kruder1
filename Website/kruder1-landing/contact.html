@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kruder 1 - Contact</title>
+    <title>Kruder 1 — Contact</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -13,33 +13,22 @@
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </head>
 <body>
+
     <div id="particles-js"></div>
     <div id="scanlines"></div>
 
-    <nav class="nav-container">
+    <nav class="nav-sticky">
         <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
         <div class="nav-actions">
-            <button id="btn-theme" class="nav-action-btn"><i class="fa-solid fa-moon"></i></button>
+            <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
             <button id="btn-lang" class="nav-action-btn">EN</button>
-            <button class="menu-btn" id="menu-toggle"><div class="menu-icon"></div></button>
+            <a href="login.html" class="btn-accent btn-sm" id="btn-access" data-i18n="nav_access">CLIENT ACCESS</a>
         </div>
     </nav>
 
-    <div class="menu-overlay" id="menu-overlay"></div>
-    <div class="side-menu" id="side-menu">
-        <nav class="menu-links">
-            <a href="index.html" class="menu-link" data-i18n="m_home"></a>
-            <a href="pricing.html" class="menu-link" data-i18n="m_pricing"></a>
-            <a href="faqs.html" class="menu-link" data-i18n="m_faqs"></a>
-            <a href="login.html" class="menu-link is-highlight" data-i18n="m_access" data-auth-guest></a>
-            <a href="dashboard.html" class="menu-link auth-hidden" data-i18n="m_dash" data-auth-user></a>
-            <a href="#" class="menu-link is-highlight auth-hidden" data-i18n="m_logout" data-auth-user id="link-logout"></a>
-        </nav>
-    </div>
-
     <main>
         <section class="section">
-            <h1 class="contact-title" data-i18n="c_title"></h1>
+            <h1 class="section-title is-accent" data-i18n="c_title"></h1>
             <p class="contact-location" data-i18n="c_location"></p>
             <p class="contact-text" data-i18n="c_text"></p>
             <a href="mailto:hola@kruder1.com" class="contact-email">hola@kruder1.com</a>
@@ -48,8 +37,10 @@
 
     <footer class="site-footer">
         <div class="footer-links">
-            <a href="privacy.html" data-i18n="footer_privacy"></a><span>·</span>
-            <a href="terms.html" data-i18n="footer_terms"></a><span>·</span>
+            <a href="privacy.html" data-i18n="footer_privacy"></a>
+            <span>·</span>
+            <a href="terms.html" data-i18n="footer_terms"></a>
+            <span>·</span>
             <a href="contact.html" data-i18n="footer_contact"></a>
         </div>
         <div class="footer-copyright">© 2026 Kruder 1. All rights reserved.</div>
@@ -58,8 +49,8 @@
     <script src="main.js"></script>
     <script>
         KRUDER.init({
-            c_title: { en: 'Contact', es: 'Contacto' },
-            c_location: { en: 'We are based in Mexico.', es: 'Estamos en México.' },
+            c_title: { en: 'Get in touch.', es: 'Contáctanos.' },
+            c_location: { en: 'Based in Mexico. Available worldwide.', es: 'Desde México. Disponibles en todo el mundo.' },
             c_text: { en: 'For account questions, credits, or technical support, contact us at:', es: 'Para dudas sobre cuentas, créditos o soporte técnico, escríbenos a:' }
         });
     </script>

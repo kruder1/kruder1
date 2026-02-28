@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kruder 1 - Dashboard</title>
+    <title>Kruder 1 — Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,28 +17,14 @@
     <div id="particles-js"></div>
     <div id="scanlines"></div>
 
-    <nav class="nav-container">
-        <a href="index.html" class="brand-logo">
-            <img src="img/logo.png" alt="Kruder 1">
-        </a>
+    <nav class="nav-sticky">
+        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
         <div class="nav-actions">
-            <button id="btn-theme" class="nav-action-btn"><i class="fa-solid fa-moon"></i></button>
+            <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
             <button id="btn-lang" class="nav-action-btn">EN</button>
-            <button class="menu-btn" id="menu-toggle" aria-label="Menu">
-                <div class="menu-icon"></div>
-            </button>
+            <a href="dashboard.html" class="btn-accent btn-sm" id="btn-access" data-i18n="nav_dashboard">DASHBOARD</a>
         </div>
     </nav>
-
-    <div class="menu-overlay" id="menu-overlay"></div>
-    <div class="side-menu" id="side-menu">
-        <nav class="menu-links">
-            <a href="index.html" class="menu-link" data-i18n="m_home"></a>
-            <a href="pricing.html" class="menu-link" data-i18n="m_pricing"></a>
-            <a href="dashboard.html" class="menu-link is-active" data-i18n="m_dash"></a>
-            <a href="#" id="link-logout" class="menu-link is-highlight" data-i18n="m_logout"></a>
-        </nav>
-    </div>
 
     <main>
         <section class="section">
@@ -53,7 +39,7 @@
 
                 <div class="dash-buttons">
                     <button type="button" id="btn-download" class="btn-accent" data-i18n="d_btn_download"></button>
-                    <a href="pricing.html" class="btn-secondary" data-i18n="d_btn_buy"></a>
+                    <a href="index.html#pricing" class="btn-secondary" data-i18n="d_btn_buy"></a>
                 </div>
 
                 <div class="history-section">
@@ -91,9 +77,6 @@
     <script src="main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            /* --- 1. Page-specific i18n keys --- */
-
             KRUDER.init({
                 d_welcome: { en: 'Welcome', es: 'Bienvenido' },
                 d_credits_label: { en: 'Credits Remaining', es: 'Créditos Restantes' },
@@ -107,8 +90,6 @@
                 d_btn_logout: { en: 'Logout', es: 'Cerrar Sesión' }
             });
 
-            /* --- 2. Auth & User Data --- */
-
             const DOM = {
                 userEmail: document.getElementById('user-email'),
                 creditsNumber: document.getElementById('credits-number'),
@@ -117,11 +98,7 @@
             };
 
             const checkAuth = () => {
-                const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
-                if (!token) {
-                    window.location.href = 'login.html';
-                    return false;
-                }
+                if (!localStorage.getItem(KRUDER.CONFIG.keyToken)) { window.location.href = 'login.html'; return false; }
                 return true;
             };
 
@@ -129,24 +106,14 @@
                 const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
                 if (!token) return;
                 try {
-                    const res = await fetch(KRUDER.CONFIG.apiBase + '/me', {
-                        headers: { 'Authorization': 'Bearer ' + token }
-                    });
-                    if (res.status === 401 || res.status === 403 || res.status === 404) {
-                        localStorage.removeItem(KRUDER.CONFIG.keyToken);
-                        window.location.href = 'login.html';
-                        return;
-                    }
+                    const res = await fetch(KRUDER.CONFIG.apiBase + '/me', { headers: { 'Authorization': 'Bearer ' + token } });
+                    if (res.status === 401 || res.status === 403 || res.status === 404) { localStorage.removeItem(KRUDER.CONFIG.keyToken); window.location.href = 'login.html'; return; }
                     if (!res.ok) throw new Error('Failed to load user');
                     const data = await res.json();
                     if (DOM.userEmail) DOM.userEmail.textContent = data.email || '—';
                     if (DOM.creditsNumber) DOM.creditsNumber.textContent = String(data.credits ?? 0);
                     loadPurchases();
-                } catch (e) {
-                    console.error(e);
-                    localStorage.removeItem(KRUDER.CONFIG.keyToken);
-                    window.location.href = 'login.html';
-                }
+                } catch (e) { console.error(e); localStorage.removeItem(KRUDER.CONFIG.keyToken); window.location.href = 'login.html'; }
             };
 
             const loadPurchases = async () => {
@@ -154,53 +121,33 @@
                 const tbody = document.getElementById('history-body');
                 if (!token || !tbody) return;
                 try {
-                    const res = await fetch(KRUDER.CONFIG.apiBase + '/purchases', {
-                        headers: { 'Authorization': 'Bearer ' + token }
-                    });
+                    const res = await fetch(KRUDER.CONFIG.apiBase + '/purchases', { headers: { 'Authorization': 'Bearer ' + token } });
                     if (!res.ok) return;
                     const { purchases } = await res.json();
-                    if (!purchases?.length) {
-                        tbody.innerHTML = '<tr><td colspan="3" data-i18n="d_no_purchases"></td></tr>';
-                        KRUDER.updateTexts();
-                        return;
-                    }
-                    const creditsToUsd = { 150: '$40.00 USD', 300: '$60.00 USD', 600: '$100.00 USD' };
+                    if (!purchases?.length) { tbody.innerHTML = '<tr><td colspan="3" data-i18n="d_no_purchases"></td></tr>'; KRUDER.updateTexts(); return; }
+                    const creditsToUsd = { 150: '$40.00 USD', 300: '$60.00 USD', 600: '$90.00 USD' };
                     tbody.innerHTML = purchases.map(p => {
                         const d = new Date(p.created_at);
-                        const dateStr = d.toLocaleDateString(KRUDER.STATE.lang === 'es' ? 'es-ES' : 'en-US', {
-                            year: 'numeric', month: 'short', day: 'numeric'
-                        });
-                        const totalUsd = creditsToUsd[p.credits_added] || '—';
-                        return `<tr><td>${dateStr}</td><td>${p.credits_added}</td><td>${totalUsd}</td></tr>`;
+                        const dateStr = d.toLocaleDateString(KRUDER.STATE.lang === 'es' ? 'es-ES' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                        return `<tr><td>${dateStr}</td><td>${p.credits_added}</td><td>${creditsToUsd[p.credits_added] || '—'}</td></tr>`;
                     }).join('');
-                } catch (e) {
-                    console.error(e);
-                }
+                } catch (e) { console.error(e); }
             };
 
             const simulateDownload = () => {
                 const blob = new Blob(['Kruder 1 - Placeholder executable'], { type: 'application/octet-stream' });
                 const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'kruder1.exe';
-                a.click();
+                const a = document.createElement('a'); a.href = url; a.download = 'kruder1.exe'; a.click();
                 URL.revokeObjectURL(url);
             };
-
-            /* --- 3. Events --- */
 
             if (DOM.btnDownload) DOM.btnDownload.addEventListener('click', simulateDownload);
             if (DOM.btnLogout) DOM.btnLogout.addEventListener('click', (e) => { e.preventDefault(); KRUDER.logout(); });
 
-            /* --- 4. Init --- */
-
             if (checkAuth()) {
                 loadUserData();
                 const params = new URLSearchParams(window.location.search);
-                if (params.get('success') === '1') {
-                    history.replaceState(null, '', window.location.pathname);
-                }
+                if (params.get('success') === '1') history.replaceState(null, '', window.location.pathname);
             }
         });
     </script>

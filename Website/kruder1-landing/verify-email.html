@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kruder 1 - Email Verification</title>
+    <title>Kruder 1 — Email Verification</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,62 +17,41 @@
     <div id="particles-js"></div>
     <div id="scanlines"></div>
 
-    <nav class="nav-container">
-        <a href="index.html" class="brand-logo">
-            <img src="img/logo.png" alt="Kruder 1">
-        </a>
+    <nav class="nav-sticky">
+        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
         <div class="nav-actions">
-            <button id="btn-theme" class="nav-action-btn"><i class="fa-solid fa-moon"></i></button>
+            <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
             <button id="btn-lang" class="nav-action-btn">EN</button>
-            <button class="menu-btn" id="menu-toggle" aria-label="Menu">
-                <div class="menu-icon"></div>
-            </button>
+            <a href="login.html" class="btn-accent btn-sm" id="btn-access" data-i18n="nav_access">CLIENT ACCESS</a>
         </div>
     </nav>
 
-    <div class="menu-overlay" id="menu-overlay"></div>
-    <div class="side-menu" id="side-menu">
-        <nav class="menu-links">
-            <a href="index.html" class="menu-link" data-i18n="m_home"></a>
-            <a href="pricing.html" class="menu-link" data-i18n="m_pricing"></a>
-            <a href="faqs.html" class="menu-link" data-i18n="m_faqs"></a>
-            <a href="login.html" class="menu-link is-highlight" data-i18n="m_access" data-auth-guest></a>
-            <a href="dashboard.html" class="menu-link auth-hidden" data-i18n="m_dash" data-auth-user></a>
-            <a href="#" class="menu-link is-highlight auth-hidden" data-i18n="m_logout" data-auth-user id="link-logout"></a>
-        </nav>
-    </div>
-
     <main>
         <section class="section">
-            <div class="verify-container">
-
+            <div style="max-width: 500px; width: 100%;">
                 <div id="state-loading" class="verify-state is-active">
                     <div class="verify-icon is-loading"><i class="fa-solid fa-circle-notch"></i></div>
                     <h1 class="verify-title" data-i18n="v_load_title"></h1>
                     <p class="verify-message" data-i18n="v_load_msg"></p>
                 </div>
-
                 <div id="state-success" class="verify-state">
                     <div class="verify-icon"><i class="fa-regular fa-circle-check"></i></div>
                     <h1 class="verify-title" data-i18n="v_success_title"></h1>
                     <p class="verify-message" data-i18n="v_success_msg"></p>
                     <button type="button" class="btn-accent" data-i18n="v_btn_close" data-goto-login></button>
                 </div>
-
                 <div id="state-exists" class="verify-state">
                     <div class="verify-icon"><i class="fa-solid fa-check-double"></i></div>
                     <h1 class="verify-title" data-i18n="v_exists_title"></h1>
                     <p class="verify-message" data-i18n="v_exists_msg"></p>
                     <button type="button" class="btn-accent" data-i18n="v_btn_close" data-goto-login></button>
                 </div>
-
                 <div id="state-error" class="verify-state">
                     <div class="verify-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
                     <h1 class="verify-title" data-i18n="v_error_title"></h1>
                     <p class="verify-message" id="error-message-text" data-i18n="v_error_msg_def"></p>
                     <p class="verify-message" data-i18n="v_error_help"></p>
-                    </div>
-
+                </div>
             </div>
         </section>
     </main>
@@ -91,83 +70,35 @@
     <script src="main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            /* --- Page i18n keys --- */
             KRUDER.init({
                 v_load_title:   { en: 'Verifying Email...', es: 'Verificando Email...' },
                 v_load_msg:     { en: 'Please wait while we verify your email address.', es: 'Por favor espera mientras verificamos tu dirección de email.' },
-                v_success_title:{ en: 'Email Verified Successfully!', es: '¡Email Verificado Exitosamente!' },
-                v_success_msg:  { en: 'Your email has been verified. Your account is now active. You can log in on the website or in the Kruder 1 software.', es: 'Tu email ha sido verificado. Tu cuenta está ahora activa. Puedes iniciar sesión en el sitio web o en el software Kruder 1.' },
-                v_exists_title: { en: 'Email Already Verified', es: 'Email Ya Verificado' },
-                v_exists_msg:   { en: 'Your email address has already been verified. You can log in on the website or in the Kruder 1 software anytime.', es: 'Tu dirección de email ya ha sido verificada. Puedes iniciar sesión en el sitio web o en el software Kruder 1 en cualquier momento.' },
+                v_success_title:{ en: 'Email Verified!', es: '¡Email Verificado!' },
+                v_success_msg:  { en: 'Your account is now active. You can log in on the website or in the Kruder 1 software.', es: 'Tu cuenta está activa. Puedes iniciar sesión en el sitio web o en el software Kruder 1.' },
+                v_exists_title: { en: 'Already Verified', es: 'Ya Verificado' },
+                v_exists_msg:   { en: 'Your email has already been verified. You can log in anytime.', es: 'Tu email ya ha sido verificado. Puedes iniciar sesión en cualquier momento.' },
                 v_error_title:  { en: 'Verification Failed', es: 'Verificación Fallida' },
-                v_error_msg_def:{ en: 'Unable to verify your email. The verification link may be invalid or expired.', es: 'No se pudo verificar tu email. El enlace de verificación puede ser inválido o haber expirado.' },
-                v_error_help:   { en: 'Please try registering again to receive a new verification email.', es: 'Por favor intenta registrarte nuevamente para recibir un nuevo email de verificación.' },
+                v_error_msg_def:{ en: 'Unable to verify your email. The link may be invalid or expired.', es: 'No se pudo verificar tu email. El enlace puede ser inválido o haber expirado.' },
+                v_error_help:   { en: 'Try registering again to receive a new verification email.', es: 'Intenta registrarte nuevamente para recibir un nuevo email de verificación.' },
                 v_btn_close:    { en: 'Go to Login', es: 'Ir a Iniciar sesión' }
             });
 
-            /* --- DOM refs --- */
-            const states = {
-                loading: document.getElementById('state-loading'),
-                success: document.getElementById('state-success'),
-                exists:  document.getElementById('state-exists'),
-                error:   document.getElementById('state-error')
-            };
+            const states = { loading: document.getElementById('state-loading'), success: document.getElementById('state-success'), exists: document.getElementById('state-exists'), error: document.getElementById('state-error') };
             const errorText = document.getElementById('error-message-text');
-
-            /* --- Verification Logic --- */
-
-            const showState = (stateName) => {
-                Object.values(states).forEach(el => el.classList.remove('is-active'));
-                if (states[stateName]) states[stateName].classList.add('is-active');
-            };
+            const showState = (name) => { Object.values(states).forEach(el => el.classList.remove('is-active')); if (states[name]) states[name].classList.add('is-active'); };
 
             const verifyEmail = async () => {
-                const urlParams = new URLSearchParams(window.location.search);
-                const token = urlParams.get('token');
-
-                if (!token) {
-                    errorText.textContent = KRUDER.STATE.lang === 'en'
-                        ? 'No verification token found in the URL.'
-                        : 'No se encontró el token de verificación en la URL.';
-                    showState('error');
-                    return;
-                }
-
+                const token = new URLSearchParams(window.location.search).get('token');
+                if (!token) { errorText.textContent = KRUDER.STATE.lang === 'en' ? 'No verification token found in the URL.' : 'No se encontró el token de verificación en la URL.'; showState('error'); return; }
                 try {
-                    const response = await fetch(KRUDER.CONFIG.apiBase + '/verify-email?token=' + encodeURIComponent(token));
-                    const data = await response.json().catch(() => ({}));
-
-                    if (response.ok) {
-                        if (data.message && data.message.toLowerCase().includes('already verified')) {
-                            showState('exists');
-                        } else {
-                            showState('success');
-                        }
-                    } else {
-                        const defMsg = KRUDER.STATE.lang === 'en' ? 'Unable to verify your email.' : 'No se pudo verificar tu email.';
-                        errorText.textContent = data.error || defMsg;
-                        showState('error');
-                    }
-                } catch (error) {
-                    console.error('Verification error:', error);
-                    errorText.textContent = KRUDER.STATE.lang === 'en'
-                        ? 'Unable to connect to the server. Please check your internet connection and try again.'
-                        : 'No se pudo conectar al servidor. Por favor verifica tu conexión a internet e intenta de nuevo.';
-                    showState('error');
-                }
+                    const res = await fetch(KRUDER.CONFIG.apiBase + '/verify-email?token=' + encodeURIComponent(token));
+                    const data = await res.json().catch(() => ({}));
+                    if (res.ok) { showState(data.message && data.message.toLowerCase().includes('already verified') ? 'exists' : 'success'); }
+                    else { errorText.textContent = data.error || (KRUDER.STATE.lang === 'en' ? 'Unable to verify your email.' : 'No se pudo verificar tu email.'); showState('error'); }
+                } catch (e) { console.error(e); errorText.textContent = KRUDER.STATE.lang === 'en' ? 'Unable to connect to the server.' : 'No se pudo conectar al servidor.'; showState('error'); }
             };
 
-            /* --- Go to Login handler --- */
-            document.addEventListener('click', (e) => {
-                if (e.target.closest('[data-goto-login]')) {
-                    e.preventDefault();
-                    localStorage.removeItem(KRUDER.CONFIG.keyToken);
-                    window.location.href = 'login.html';
-                }
-            });
-
-            /* --- Start Verification --- */
+            document.addEventListener('click', (e) => { if (e.target.closest('[data-goto-login]')) { e.preventDefault(); localStorage.removeItem(KRUDER.CONFIG.keyToken); window.location.href = 'login.html'; } });
             verifyEmail();
         });
     </script>

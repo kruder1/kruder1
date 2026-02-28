@@ -789,9 +789,13 @@ input::placeholder, textarea::placeholder { color: var(--theme-ink); opacity: 0.
     box-shadow: 0 0 0 0 var(--theme-accent-dark);
 }
 .modal-actions .btn-main i,
-.btn-main .fa-spin {
+.btn-main .fa-spin,
+#view-update .btn-main i {
     position: static;
     margin: 0;
+}
+#view-update .btn-main {
+    gap: 15px;
 }
 
 /* Import/Export: Import and Export without accent (Cancel is in .modal-actions.mt-15) */

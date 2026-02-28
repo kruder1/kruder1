@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kruder 1 - AI Photo Booth Software</title>
+    <title>Kruder 1 — AI Photo Booth Software</title>
+    <meta name="description" content="AI photo booth software. Ridiculously easy to use. Ridiculously easy to stand out with.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,40 +18,129 @@
     <div id="particles-js"></div>
     <div id="scanlines"></div>
 
-    <nav class="nav-container">
+    <!-- ── Sticky Nav ─────────────────────────────────── -->
+    <nav class="nav-sticky">
         <a href="index.html" class="brand-logo">
             <img src="img/logo.png" alt="Kruder 1">
         </a>
         <div class="nav-actions">
-            <button id="btn-theme" class="nav-action-btn"><i class="fa-solid fa-moon"></i></button>
+            <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
             <button id="btn-lang" class="nav-action-btn">EN</button>
-            <button class="menu-btn" id="menu-toggle" aria-label="Menu">
-                <div class="menu-icon"></div>
-            </button>
+            <a href="login.html" class="btn-accent btn-sm" id="btn-access" data-i18n="nav_access">CLIENT ACCESS</a>
         </div>
     </nav>
 
-    <div class="menu-overlay" id="menu-overlay"></div>
-    <div class="side-menu" id="side-menu">
-        <nav class="menu-links">
-            <a href="index.html" class="menu-link is-active" data-i18n="m_home"></a>
-            <a href="pricing.html" class="menu-link" data-i18n="m_pricing"></a>
-            <a href="faqs.html" class="menu-link" data-i18n="m_faqs"></a>
-            <a href="login.html" class="menu-link is-highlight" data-i18n="m_access" data-auth-guest></a>
-            <a href="dashboard.html" class="menu-link auth-hidden" data-i18n="m_dash" data-auth-user></a>
-            <a href="#" class="menu-link is-highlight auth-hidden" data-i18n="m_logout" data-auth-user id="link-logout"></a>
-        </nav>
-    </div>
-
     <main>
-        <section class="section">
-            <div class="hero-container">
-                <h1 class="hero-title" data-i18n="hero_line1"></h1>
+
+        <!-- ── HERO ───────────────────────────────────── -->
+        <section id="hero" class="section">
+            <div class="section-inner">
+                <h1 class="hero-title" data-i18n="hero_title"></h1>
                 <p class="hero-subtitle" data-i18n="hero_subtitle"></p>
                 <p class="hero-desc" data-i18n="hero_desc"></p>
-                <a href="pricing.html" class="btn-accent" data-i18n="hero_cta"></a>
+                <a href="#pricing" class="btn-accent" style="margin-top:2rem;" data-i18n="hero_cta"></a>
             </div>
         </section>
+
+        <!-- ── PRICING ────────────────────────────────── -->
+        <section id="pricing" class="section">
+            <div class="section-inner">
+                <h2 class="section-title" data-i18n="pricing_title"></h2>
+                <p class="section-subtitle" data-i18n="pricing_subtitle"></p>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="card-title" data-i18n="p_basic_title"></div>
+                        <div class="card-credits">150</div>
+                        <div class="card-label" data-i18n="p_credits_label"></div>
+                        <div class="card-price">$40 USD</div>
+                        <button type="button" class="btn-accent is-full btn-buy" data-i18n="btn_buy" data-price-id="price_1SwcrIC1FI34uKMLaGO8Fxsh"></button>
+                    </div>
+
+                    <div class="pricing-card">
+                        <div class="card-badge" data-i18n="p_popular"></div>
+                        <div class="card-title" data-i18n="p_plus_title"></div>
+                        <div class="card-credits">300</div>
+                        <div class="card-label" data-i18n="p_credits_label"></div>
+                        <div class="card-price">$60 USD</div>
+                        <button type="button" class="btn-accent is-full btn-buy" data-i18n="btn_buy" data-price-id="price_1SwcqbC1FI34uKMLDWbAblgV"></button>
+                    </div>
+
+                    <div class="pricing-card">
+                        <div class="card-title" data-i18n="p_pro_title"></div>
+                        <div class="card-credits">600</div>
+                        <div class="card-label" data-i18n="p_credits_label"></div>
+                        <div class="card-price">$90 USD</div>
+                        <button type="button" class="btn-accent is-full btn-buy" data-i18n="btn_buy" data-price-id="price_1SwcqCC1FI34uKMLiUN0eOD6"></button>
+                    </div>
+                </div>
+
+                <div style="margin-top:var(--space-lg);" data-auth-guest>
+                    <a href="login.html" class="btn-secondary" data-i18n="btn_start"></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FAQs ───────────────────────────────────── -->
+        <section id="faqs" class="section">
+            <div class="section-inner">
+                <h2 class="section-title" data-i18n="faq_title"></h2>
+
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span class="faq-q-text" data-i18n="q1"></span>
+                            <i class="fa-solid fa-plus faq-icon"></i>
+                        </button>
+                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a1"></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span class="faq-q-text" data-i18n="q2"></span>
+                            <i class="fa-solid fa-plus faq-icon"></i>
+                        </button>
+                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a2"></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span class="faq-q-text" data-i18n="q3"></span>
+                            <i class="fa-solid fa-plus faq-icon"></i>
+                        </button>
+                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a3"></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span class="faq-q-text" data-i18n="q4"></span>
+                            <i class="fa-solid fa-plus faq-icon"></i>
+                        </button>
+                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a4"></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span class="faq-q-text" data-i18n="q5"></span>
+                            <i class="fa-solid fa-plus faq-icon"></i>
+                        </button>
+                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a5"></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span class="faq-q-text" data-i18n="q6"></span>
+                            <i class="fa-solid fa-plus faq-icon"></i>
+                        </button>
+                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a6"></p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── CONTACT ────────────────────────────────── -->
+        <section id="contact" class="section">
+            <div class="section-inner">
+                <h2 class="section-title is-accent" data-i18n="c_title"></h2>
+                <p class="contact-location" data-i18n="c_location"></p>
+                <a href="mailto:hola@kruder1.com" class="contact-email">hola@kruder1.com</a>
+            </div>
+        </section>
+
     </main>
 
     <footer class="site-footer">
@@ -68,10 +158,91 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             KRUDER.init({
-                hero_line1: { en: 'The photo booth has evolved.', es: 'La cabina de fotos evolucionó.' },
-                hero_subtitle: { en: 'Kruder1 is AI portrait software for photo booths.', es: 'Kruder1 es un software de retratos con IA para cabinas de fotos.' },
-                hero_desc: { en: 'A new way to turn a photo into something people didn\'t expect \u2014 and won\'t forget.', es: 'Una nueva forma de convertir una foto en algo que nadie esperaba \u2014 y que nadie olvida.' },
-                hero_cta: { en: 'VIEW PRICING', es: 'VER PRECIOS' }
+                /* ── Hero ── */
+                hero_title:    { en: 'The photo booth evolved.', es: 'La cabina de fotos evolucionó.' },
+                hero_subtitle: { en: 'Has yours?', es: '¿Y la tuya?' },
+                hero_desc:     { en: 'AI photo booth software. Ridiculously easy to use. Ridiculously easy to stand out with. Your clients pay for the experience — make sure it\'s worth remembering.', es: 'Software de cabina de fotos con IA. Ridículamente fácil de usar. Ridículamente fácil de destacar. Tus clientes pagan por la experiencia — asegúrate de que valga la pena recordarla.' },
+                hero_cta:      { en: 'SEE PRICING', es: 'VER PRECIOS' },
+
+                /* ── Pricing ── */
+                pricing_title:    { en: 'One credit. One image.<br>No fine print.', es: 'Un crédito. Una imagen.<br>Sin letra chiquita.' },
+                pricing_subtitle: { en: 'No subscriptions. No expiration. Buy once, use whenever.', es: 'Sin suscripciones. Sin expiración. Compra una vez, usa cuando quieras.' },
+                pricing_features: { en: 'Free software. Free download. You only pay for credits.', es: 'Software gratis. Descarga gratis. Solo pagas por créditos.' },
+                p_basic_title:    { en: 'Basic', es: 'Basic' },
+                p_plus_title:     { en: 'Plus', es: 'Plus' },
+                p_pro_title:      { en: 'Pro', es: 'Pro' },
+                p_popular:        { en: 'Most Popular', es: 'Más Popular' },
+                p_credits_label:  { en: 'credits', es: 'créditos' },
+                btn_buy:          { en: 'Buy', es: 'Comprar' },
+                btn_start:        { en: 'Get Started', es: 'Comenzar' },
+
+                /* ── FAQs ── */
+                faq_title: { en: 'Questions? Good.', es: '¿Preguntas? Bien.' },
+
+                q1: { en: 'Do credits expire?', es: '¿Los créditos expiran?' },
+                a1: { en: 'No, never. Buy credits once and use them whenever you want. No expiration dates. No rush.', es: 'No, nunca. Compra créditos una vez y úsalos cuando quieras. Sin fecha de vencimiento. Sin prisa.' },
+
+                q2: { en: 'How many credits per image?', es: '¿Cuántos créditos por imagen?' },
+                a2: { en: 'One credit, one AI-generated image. That simple.', es: 'Un crédito, una imagen generada con IA. Así de simple.' },
+
+                q3: { en: 'Is there a monthly subscription?', es: '¿Hay suscripción mensual?' },
+                a3: { en: 'No. Pay once, use anytime. No monthly fees, no hidden costs, no surprises.', es: 'No. Paga una vez, usa cuando quieras. Sin cuotas mensuales, sin costos ocultos, sin sorpresas.' },
+
+                q4: { en: 'What equipment do I need?', es: '¿Qué equipo necesito?' },
+                a4: { en: 'A Windows PC and a webcam. That\'s it. No special lighting or extra hardware needed.', es: 'Una PC con Windows y una webcam. Eso es todo. Sin iluminación especial ni equipo adicional.' },
+
+                q5: { en: 'Can I use this on multiple computers?', es: '¿Puedo usarlo en varias computadoras?' },
+                a5: { en: 'Yes. Credits are tied to your account, not your machine. Use them on any Windows PC.', es: 'Sí. Los créditos están ligados a tu cuenta, no a tu máquina. Úsalos en cualquier PC con Windows.' },
+
+                q6: { en: 'What happens if I run out of credits?', es: '¿Qué pasa si me quedo sin créditos?' },
+                a6: { en: 'Buy more anytime. Credits don\'t expire, so stock up whenever it makes sense for you.', es: 'Compra más cuando quieras. Los créditos no expiran, así que abastécete cuando te convenga.' },
+
+                /* ── Contact ── */
+                c_title:    { en: 'Get in touch.', es: 'Contáctanos.' },
+                c_location: { en: 'Based in Mexico. Available worldwide.', es: 'Desde México. Disponibles en todo el mundo.' }
+            });
+
+            /* ── Stripe Checkout ── */
+
+            const startCheckout = async (priceId) => {
+                const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
+                if (!token) { window.location.href = 'login.html'; return; }
+                const btn = document.querySelector(`.btn-buy[data-price-id="${priceId}"]`);
+                KRUDER.setBtnLoading(btn, true);
+                try {
+                    const res = await fetch(`${KRUDER.CONFIG.apiBase}/create-checkout-session`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                        body: JSON.stringify({ priceId, lang: KRUDER.STATE.lang })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'Error');
+                    if (data.url) window.location.href = data.url;
+                    else throw new Error('No checkout URL');
+                } catch (e) {
+                    KRUDER.setBtnLoading(btn, false);
+                    alert(e.message || 'Could not start checkout');
+                }
+            };
+
+            document.querySelectorAll('.btn-buy').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
+                    const priceId = btn.dataset.priceId;
+                    if (!token) { window.location.href = 'login.html'; return; }
+                    if (priceId) startCheckout(priceId);
+                });
+            });
+
+            /* ── FAQ Accordion ── */
+
+            document.querySelectorAll('.faq-question').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const item = e.currentTarget.parentElement;
+                    const isActive = item.classList.contains('is-active');
+                    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('is-active'));
+                    if (!isActive) item.classList.add('is-active');
+                });
             });
         });
     </script>
