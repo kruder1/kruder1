@@ -22,7 +22,7 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
   <title>Your Photo - Kruder 1</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="https://kruder1.com/img/icon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"><\/script>
@@ -35,8 +35,8 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       --z-scanlines: 9999;
       
       /* Typography */
-      --font-main: 'Inter Tight', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --font-base: 'Barlow', sans-serif;
+      --font-input: 'Inter', sans-serif;
       
       /* Spacing */
       --space-xs: 0.5rem;
@@ -48,7 +48,9 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       --nav-height: 130px;
       --logo-width: 80px;
       --border-width: 2px;
-      --border-radius: 12px;
+      --radius-main: 0.5rem;
+      --color-accent: #F25606;
+      --color-accent-dark: #b33f04;
       
       /* Colors (Light Theme Default) */
       --color-bg: #ffffff;
@@ -78,7 +80,7 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       flex-direction: column;
       background-color: var(--color-bg);
       color: var(--color-text);
-      font-family: var(--font-main);
+      font-family: var(--font-base);
       font-size: 1rem;
       line-height: 1.5;
       overflow-x: hidden;
@@ -128,8 +130,8 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       gap: var(--space-md); 
     }
     
-    .nav-action-btn { 
-      font-family: var(--font-mono); 
+    .nav-action-btn {
+      font-family: var(--font-base);
       font-weight: 700; 
       font-size: 1.1rem; 
       text-transform: uppercase; 
@@ -164,7 +166,7 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
     .photo-wrap {
       width: 100%;
       margin-bottom: var(--space-lg);
-      border-radius: var(--border-radius);
+      border-radius: var(--radius-main);
       overflow: hidden;
       border: var(--border-width) solid var(--color-border);
       cursor: pointer;
@@ -193,35 +195,45 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       justify-content: center;
       width: 100%;
       padding: var(--space-sm) var(--space-lg);
-      font-family: var(--font-mono);
+      font-family: var(--font-base);
       font-size: 1.2rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.01em;
       text-align: center;
       text-decoration: none;
-      border: var(--border-width) solid var(--color-border);
-      border-radius: var(--border-radius);
+      border-radius: var(--radius-main);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
     }
-    
+
     .btn-primary {
-      background: var(--color-text);
-      color: var(--color-contrast);
+      background: var(--color-accent);
+      color: #ffffff;
+      border: var(--border-width) solid var(--color-accent);
+      box-shadow: 0 4px 0 rgba(0,0,0,0.2);
     }
     .btn-primary:hover {
-      background: var(--color-bg);
-      color: var(--color-text);
+      background: var(--color-accent-dark);
+      border-color: var(--color-accent-dark);
     }
-    
+    .btn-primary:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+    }
+
     .btn-secondary {
       background: transparent;
       color: var(--color-text);
+      border: var(--border-width) solid var(--color-border);
+      box-shadow: 0 4px 0 var(--shadow-strong, rgba(0,0,0,0.15));
     }
     .btn-secondary:hover {
-      background: var(--color-text);
-      color: var(--color-contrast);
+      background: var(--bg-overlay-light);
+    }
+    .btn-secondary:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--shadow-strong, rgba(0,0,0,0.15));
     }
     
     /* Footer - same as website */
@@ -233,7 +245,7 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       font-size: 0.8rem;
     }
     .footer-links a {
-      font-family: var(--font-mono);
+      font-family: var(--font-base);
       font-weight: 700;
       text-transform: uppercase;
       margin: 0 var(--space-sm);

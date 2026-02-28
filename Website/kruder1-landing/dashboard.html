@@ -6,349 +6,11 @@
     <title>Kruder 1 - Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="img/icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-    <style>
-        :root {
-            /* --- 1. Design Tokens --- */
-            
-            /* Layers (Z-Index System) */
-            --z-negative: -1;
-            --z-particles: 0;
-            --z-content: 10;
-            --z-overlay: 900;
-            --z-menu: 1000;
-            --z-header: 1200;
-            --z-button: 1300;
-            --z-modal: 2000;
-            --z-scanlines: 9999;
-
-            /* Typography */
-            --font-main: 'Inter Tight', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            
-            --ls-base: 0.01em;
-            --ls-condensed: -0.02em;
-            --ls-wide: 0.05em;
-            
-            --fs-hero: clamp(2rem, 6vw, 2.8rem);
-            --fs-title: 2.8rem;
-            --fs-subtitle: 1.5rem;
-            --fs-nav: 1.5rem;
-            --fs-btn: 1.2rem;
-            --fs-input: 1rem;
-            --fs-body: 1rem;
-            --fs-small: 0.8rem;
-
-            /* Spacing & Layout */
-            --space-xs: 0.5rem;
-            --space-sm: 1rem;
-            --space-md: 1.5rem;
-            --space-lg: 2rem;
-            --space-xl: 4rem;
-            
-            --nav-height: 130px;
-            --logo-width: 80px;
-            --container-max: 900px;
-            
-            --border-width: 2px;
-            --border-radius: 12px;
-
-            /* Colors (Light Theme Default) */
-            --color-bg: #ffffff;
-            --color-text: #000000;
-            --color-accent: #000000;
-            --color-contrast: #ffffff;
-            --color-border: #000000;
-            --color-muted: rgba(0, 0, 0, 0.5);
-            
-            --bg-overlay-light: rgba(0, 0, 0, 0.05);
-            --bg-overlay-focus: rgba(0, 0, 0, 0.06);
-            --bg-overlay-medium: rgba(0, 0, 0, 0.4);
-            --shadow-strong: rgba(0, 0, 0, 0.15);
-        }
-
-        [data-theme="dark"] {
-            --color-bg: #000000;
-            --color-text: #ffffff;
-            --color-accent: #ffffff;
-            --color-contrast: #000000;
-            --color-border: #ffffff;
-            --color-muted: rgba(255, 255, 255, 0.5);
-            
-            --bg-overlay-light: rgba(255, 255, 255, 0.05);
-            --bg-overlay-focus: rgba(255, 255, 255, 0.06);
-            --bg-overlay-medium: rgba(0, 0, 0, 0.8);
-            --shadow-strong: rgba(0, 0, 0, 0.5);
-            
-            color-scheme: dark;
-        }
-
-        /* --- 2. Global Reset & Base --- */
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        *::-webkit-scrollbar { display: none; }
-        
-        html, body { height: 100%; width: 100%; }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            background-color: var(--color-bg);
-            color: var(--color-text);
-            font-family: var(--font-main);
-            font-size: var(--fs-body);
-            line-height: 1.5;
-            overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        a { text-decoration: none !important; color: inherit; cursor: pointer; }
-        button { border: none; background: transparent; cursor: pointer; color: inherit; font-family: inherit; }
-        
-        [data-theme="dark"] .brand-logo img { filter: invert(1); }
-
-        /* --- 3. Global Effects --- */
-        
-        #scanlines {
-            position: fixed; inset: 0;
-            background: repeating-linear-gradient(0deg, var(--bg-overlay-light), var(--bg-overlay-light) 1px, transparent 1px, transparent 3px);
-            pointer-events: none; z-index: var(--z-scanlines);
-        }
-
-        #particles-js {
-            position: fixed; inset: 0;
-            z-index: var(--z-particles);
-            pointer-events: none;
-        }
-
-        /* --- 4. Navigation (Header) --- */
-        
-        .nav-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 var(--space-lg);
-            background: var(--color-bg);
-            border-bottom: 1px solid var(--bg-overlay-light);
-            z-index: var(--z-header);
-        }
-
-        .brand-logo img { display: block; width: var(--logo-width); height: auto; padding: var(--space-md) 0; }
-
-        .nav-actions { display: flex; align-items: center; gap: var(--space-md); }
-        
-        .nav-action-btn { 
-            font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; 
-            text-transform: uppercase; padding: 0; transition: opacity 0.2s;
-        }
-        .nav-action-btn:hover { opacity: 0.6; }
-
-        /* --- 5. Navigation (Drawer) --- */
-        
-        .menu-btn {
-            position: relative; z-index: var(--z-button);
-            width: 50px; height: 50px;
-            display: flex; justify-content: center; align-items: center;
-        }
-        
-        .menu-icon {
-            position: relative; width: 30px; height: 2px;
-            background: var(--color-text); transition: all 0.3s ease;
-        }
-        .menu-icon::before, .menu-icon::after {
-            content: ''; position: absolute; left: 0;
-            width: 30px; height: 2px; background: var(--color-text);
-            transition: all 0.3s ease;
-        }
-        .menu-icon::before { top: -8px; }
-        .menu-icon::after { top: 8px; }
-
-        .menu-btn.is-active .menu-icon { background: transparent; }
-        .menu-btn.is-active .menu-icon::before { top: 0; transform: rotate(45deg); }
-        .menu-btn.is-active .menu-icon::after { top: 0; transform: rotate(-45deg); }
-
-        .side-menu {
-            position: fixed; 
-            top: var(--nav-height);
-            right: -100%;
-            width: auto;
-            min-width: 250px;
-            height: calc(100vh - var(--nav-height));
-            background: var(--color-bg);
-            border-left: 1px solid var(--bg-overlay-light);
-            border-top: 1px solid var(--bg-overlay-light);
-            padding: var(--space-lg) var(--space-xl);
-            display: flex; flex-direction: column;
-            z-index: var(--z-menu);
-            
-            transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: -10px 10px 30px var(--shadow-strong);
-        }
-        .side-menu.is-open { right: 0; }
-
-        .menu-links { display: flex; flex-direction: column; gap: var(--space-md); flex: 1; }
-
-        .menu-link {
-            font-family: var(--font-main); font-size: var(--fs-nav); font-weight: 900;
-            text-transform: uppercase; letter-spacing: var(--ls-condensed);
-            color: var(--color-text); opacity: 1;
-            text-decoration: none;
-        }
-        .menu-link:hover, .menu-link.is-active { opacity: 1; }
-        .menu-link.is-highlight { opacity: 1; color: var(--color-text); } 
-
-        .menu-overlay {
-            position: fixed; inset: 0;
-            background: var(--bg-overlay-medium);
-            z-index: var(--z-overlay);
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        .menu-overlay.is-active { opacity: 1; pointer-events: all; }
-
-        /* --- 6. Main Layout --- */
-
-        main {
-            flex: 1; width: 100%; padding-top: var(--nav-height);
-            display: flex; flex-direction: column; align-items: center;
-            position: relative; z-index: var(--z-content);
-        }
-
-        .section {
-            flex: 1; width: 100%; max-width: var(--container-max);
-            display: flex; flex-direction: column; justify-content: center;
-            padding: var(--space-lg) var(--space-md); margin: 0 auto;
-        }
-
-        /* --- 7. UI Components: Buttons --- */
-
-        .btn-primary {
-            display: inline-flex; align-items: center; justify-content: center;
-            min-width: 200px; padding: var(--space-sm) var(--space-lg);
-            font-family: var(--font-mono); font-size: var(--fs-btn); font-weight: 700;
-            letter-spacing: var(--ls-base); text-transform: uppercase;
-            background: var(--color-text); color: var(--color-contrast);
-            border: var(--border-width) solid var(--color-text); 
-            border-radius: var(--border-radius);
-            transition: all 0.2s ease;
-        }
-        .btn-primary:hover { background: var(--color-bg); color: var(--color-text); }
-        .btn-primary.is-full { display: flex; width: 100%; margin-top: var(--space-md); }
-
-        .btn-secondary {
-            display: inline-flex; align-items: center; justify-content: center;
-            min-width: 200px; padding: var(--space-sm) var(--space-lg);
-            font-family: var(--font-mono); font-size: var(--fs-btn); font-weight: 700;
-            letter-spacing: var(--ls-base); text-transform: uppercase;
-            background: var(--color-text); color: var(--color-contrast);
-            border: var(--border-width) solid var(--color-text); 
-            border-radius: var(--border-radius);
-            transition: all 0.2s ease; margin-top: var(--space-lg);
-        }
-        .btn-secondary:hover { background: var(--color-bg); color: var(--color-text); }
-
-        /* --- 8. View: Dashboard Specifics --- */
-
-        .dash-container {
-            width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center;
-        }
-
-        .dash-welcome {
-            font-weight: 900; font-size: var(--fs-title); line-height: 1.1;
-            letter-spacing: var(--ls-condensed); text-transform: uppercase;
-            margin-bottom: var(--space-md);
-        }
-
-        .user-badge {
-            font-family: var(--font-mono); font-size: 1rem;
-            border: 1px solid var(--color-border); border-radius: 50px;
-            padding: 8px 16px; margin-bottom: var(--space-lg);
-            opacity: 0.7; letter-spacing: var(--ls-base);
-        }
-
-        .credits-display {
-            display: flex; flex-direction: column; align-items: center;
-            margin-bottom: var(--space-xl); width: 100%;
-        }
-
-        .credits-number {
-            font-size: clamp(4rem, 12vw, 8rem); font-weight: 900;
-            line-height: 1; letter-spacing: var(--ls-condensed);
-            margin-bottom: var(--space-xs);
-        }
-
-        .credits-label {
-            font-family: var(--font-mono); font-size: 1.2rem; font-weight: 700;
-            text-transform: uppercase; opacity: 0.6;
-        }
-
-        .dash-buttons {
-            display: flex; flex-direction: column; align-items: center; gap: var(--space-md);
-            width: 100%; max-width: 300px; margin-bottom: var(--space-lg);
-        }
-        .dash-buttons .btn-primary { width: 100%; margin: 0; }
-
-        .history-section {
-            width: 100%; margin-top: var(--space-xl);
-            display: flex; flex-direction: column; align-items: center;
-        }
-
-        .history-title {
-            font-family: var(--font-mono); font-size: 1.2rem; font-weight: 700;
-            text-transform: uppercase; margin-bottom: var(--space-md);
-            letter-spacing: var(--ls-wide);
-        }
-
-        /* --- TABLE ALIGNMENT FIXES --- */
-        .history-table {
-            width: 100%; border-collapse: collapse; font-family: var(--font-mono);
-            font-size: 0.9rem; text-transform: uppercase;
-        }
-
-        .history-table th, .history-table td {
-            padding: var(--space-sm);
-        }
-
-        .history-table th {
-            padding: var(--space-sm);
-            border-bottom: 2px solid var(--color-border);
-            opacity: 0.6; font-weight: 700;
-        }
-
-        .history-table td {
-            padding: var(--space-sm);
-            border-bottom: 1px solid var(--bg-overlay-light);
-        }
-
-        .history-table th:nth-child(1), .history-table td:nth-child(1) { text-align: left; }
-        .history-table th:nth-child(2), .history-table td:nth-child(2) { text-align: center; }
-        .history-table th:nth-child(3), .history-table td:nth-child(3) { text-align: right; }
-        .history-table td:last-child { font-weight: 700; }
-
-        /* --- 9. Footer --- */
-        
-        .site-footer {
-            position: relative; z-index: var(--z-content);
-            padding: var(--space-lg) 0; text-align: center; font-size: var(--fs-small);
-        }
-        .footer-links a { 
-            font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; 
-            margin: 0 var(--space-sm); transition: opacity 0.2s;
-        }
-        .footer-links a:hover { opacity: 0.7; }
-        .footer-copyright { opacity: 0.5; margin-top: var(--space-sm); }
-
-        /* --- 10. Responsive --- */
-        
-        @media (max-width: 900px) {
-            .dash-welcome { font-size: 2.2rem; }
-            .credits-number { font-size: 4rem; }
-            .section { padding-left: var(--space-md); padding-right: var(--space-md); }
-        }
-    </style>
 </head>
 <body>
 
@@ -390,8 +52,8 @@
                 </div>
 
                 <div class="dash-buttons">
-                    <button type="button" id="btn-download" class="btn-primary" data-i18n="d_btn_download"></button>
-                    <a href="pricing.html" class="btn-primary" data-i18n="d_btn_buy"></a>
+                    <button type="button" id="btn-download" class="btn-accent" data-i18n="d_btn_download"></button>
+                    <a href="pricing.html" class="btn-secondary" data-i18n="d_btn_buy"></a>
                 </div>
 
                 <div class="history-section">
@@ -410,7 +72,7 @@
                     </table>
                 </div>
 
-                <a href="#" id="btn-logout" class="btn-secondary" data-i18n="d_btn_logout"></a>
+                <a href="#" id="btn-logout" class="btn-secondary" data-i18n="d_btn_logout" style="margin-top: var(--space-lg);"></a>
             </div>
         </section>
     </main>
@@ -426,54 +88,13 @@
         <div class="footer-copyright">© 2026 Kruder 1. All rights reserved.</div>
     </footer>
 
+    <script src="main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            /* --- 1. Global Configuration & State --- */
+            /* --- 1. Page-specific i18n keys --- */
 
-            const CONFIG = {
-                keyLang: 'KRUDER1-concept-lang',
-                keyTheme: 'KRUDER1-concept-theme',
-                keyToken: 'KRUDER1_token',
-                apiBase: 'https://kruder1-auth.kruder1-master.workers.dev',
-                particlesColor: { light: '#000000', dark: '#ffffff' }
-            };
-
-            const detectSystemLang = () => {
-                const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
-                return lang.startsWith('es') ? 'es' : 'en';
-            };
-
-            const STATE = {
-                lang: localStorage.getItem(CONFIG.keyLang) || detectSystemLang(),
-                theme: localStorage.getItem(CONFIG.keyTheme) || 'light'
-            };
-
-            const DOM = {
-                root: document.documentElement,
-                btnLang: document.getElementById('btn-lang'),
-                btnTheme: document.getElementById('btn-theme'),
-                btnMenu: document.getElementById('menu-toggle'),
-                menuDrawer: document.getElementById('side-menu'),
-                menuOverlay: document.getElementById('menu-overlay'),
-                i18nElements: document.querySelectorAll('[data-i18n]'),
-                userEmail: document.getElementById('user-email'),
-                creditsNumber: document.getElementById('credits-number'),
-                btnDownload: document.getElementById('btn-download'),
-                linkLogout: document.getElementById('link-logout'),
-                btnLogout: document.getElementById('btn-logout')
-            };
-
-            /* --- 2. Localization Dictionary (I18N) --- */
-            
-            const DICTIONARY = {
-                // --- Navigation ---
-                m_home: { en: 'Home', es: 'Inicio' },
-                m_pricing: { en: 'Pricing', es: 'Precios' },
-                m_dash: { en: 'Dashboard', es: 'Panel' },
-                m_logout: { en: 'Logout', es: 'Salir' },
-
-                // --- View: Dashboard ---
+            KRUDER.init({
                 d_welcome: { en: 'Welcome', es: 'Bienvenido' },
                 d_credits_label: { en: 'Credits Remaining', es: 'Créditos Restantes' },
                 d_btn_download: { en: 'Download Software', es: 'Descargar Software' },
@@ -483,59 +104,20 @@
                 d_th_credits: { en: 'Credits', es: 'Créditos' },
                 d_th_total: { en: 'Total', es: 'Total' },
                 d_no_purchases: { en: 'No purchases yet', es: 'Aún no hay compras' },
-                d_btn_logout: { en: 'Logout', es: 'Cerrar Sesión' },
+                d_btn_logout: { en: 'Logout', es: 'Cerrar Sesión' }
+            });
 
-                // --- Footer ---
-                footer_privacy: { en: 'Privacy', es: 'Privacidad' },
-                footer_terms: { en: 'Terms', es: 'Términos' },
-                footer_contact: { en: 'Contact', es: 'Contacto' }
+            /* --- 2. Auth & User Data --- */
+
+            const DOM = {
+                userEmail: document.getElementById('user-email'),
+                creditsNumber: document.getElementById('credits-number'),
+                btnDownload: document.getElementById('btn-download'),
+                btnLogout: document.getElementById('btn-logout')
             };
-
-            /* --- 3. Core Functions --- */
-
-            const t = (key) => {
-                const entry = DICTIONARY[key];
-                return entry ? (entry[STATE.lang] || entry.en) : key;
-            };
-
-            const updateTexts = () => {
-                DOM.i18nElements.forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    if (key) el.innerHTML = t(key);
-                });
-            };
-
-            const setLang = (newLang) => {
-                STATE.lang = newLang;
-                localStorage.setItem(CONFIG.keyLang, newLang);
-                DOM.root.lang = newLang;
-                if (DOM.btnLang) DOM.btnLang.textContent = newLang.toUpperCase();
-                updateTexts();
-            };
-
-            const setTheme = (newTheme) => {
-                STATE.theme = newTheme;
-                localStorage.setItem(CONFIG.keyTheme, newTheme);
-                if (newTheme === 'dark') {
-                    DOM.root.setAttribute('data-theme', 'dark');
-                    if (DOM.btnTheme) DOM.btnTheme.innerHTML = '<i class="fa-solid fa-sun"></i>';
-                } else {
-                    DOM.root.removeAttribute('data-theme');
-                    if (DOM.btnTheme) DOM.btnTheme.innerHTML = '<i class="fa-solid fa-moon"></i>';
-                }
-                initParticles();
-            };
-
-            const toggleMenu = () => {
-                DOM.btnMenu.classList.toggle('is-active');
-                DOM.menuDrawer.classList.toggle('is-open');
-                DOM.menuOverlay.classList.toggle('is-active');
-            };
-
-            /* --- 4. Auth & User Data --- */
 
             const checkAuth = () => {
-                const token = localStorage.getItem(CONFIG.keyToken);
+                const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
                 if (!token) {
                     window.location.href = 'login.html';
                     return false;
@@ -544,14 +126,14 @@
             };
 
             const loadUserData = async () => {
-                const token = localStorage.getItem(CONFIG.keyToken);
+                const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
                 if (!token) return;
                 try {
-                    const res = await fetch(CONFIG.apiBase + '/me', {
+                    const res = await fetch(KRUDER.CONFIG.apiBase + '/me', {
                         headers: { 'Authorization': 'Bearer ' + token }
                     });
                     if (res.status === 401 || res.status === 403 || res.status === 404) {
-                        localStorage.removeItem(CONFIG.keyToken);
+                        localStorage.removeItem(KRUDER.CONFIG.keyToken);
                         window.location.href = 'login.html';
                         return;
                     }
@@ -562,30 +144,30 @@
                     loadPurchases();
                 } catch (e) {
                     console.error(e);
-                    localStorage.removeItem(CONFIG.keyToken);
+                    localStorage.removeItem(KRUDER.CONFIG.keyToken);
                     window.location.href = 'login.html';
                 }
             };
 
             const loadPurchases = async () => {
-                const token = localStorage.getItem(CONFIG.keyToken);
+                const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
                 const tbody = document.getElementById('history-body');
                 if (!token || !tbody) return;
                 try {
-                    const res = await fetch(CONFIG.apiBase + '/purchases', {
+                    const res = await fetch(KRUDER.CONFIG.apiBase + '/purchases', {
                         headers: { 'Authorization': 'Bearer ' + token }
                     });
                     if (!res.ok) return;
                     const { purchases } = await res.json();
                     if (!purchases?.length) {
                         tbody.innerHTML = '<tr><td colspan="3" data-i18n="d_no_purchases"></td></tr>';
-                        updateTexts();
+                        KRUDER.updateTexts();
                         return;
                     }
                     const creditsToUsd = { 150: '$40.00 USD', 300: '$60.00 USD', 600: '$100.00 USD' };
                     tbody.innerHTML = purchases.map(p => {
                         const d = new Date(p.created_at);
-                        const dateStr = d.toLocaleDateString(STATE.lang === 'es' ? 'es-ES' : 'en-US', {
+                        const dateStr = d.toLocaleDateString(KRUDER.STATE.lang === 'es' ? 'es-ES' : 'en-US', {
                             year: 'numeric', month: 'short', day: 'numeric'
                         });
                         const totalUsd = creditsToUsd[p.credits_added] || '—';
@@ -594,11 +176,6 @@
                 } catch (e) {
                     console.error(e);
                 }
-            };
-
-            const logout = () => {
-                localStorage.removeItem(CONFIG.keyToken);
-                window.location.href = 'login.html';
             };
 
             const simulateDownload = () => {
@@ -611,44 +188,12 @@
                 URL.revokeObjectURL(url);
             };
 
-            /* --- 5. Particles System --- */
+            /* --- 3. Events --- */
 
-            const initParticles = () => {
-                if (!window.particlesJS) return;
-                const color = STATE.theme === 'dark' ? CONFIG.particlesColor.dark : CONFIG.particlesColor.light;
-                particlesJS('particles-js', {
-                    particles: {
-                        number: { value: 200, density: { enable: true, value_area: 800 } },
-                        color: { value: color },
-                        shape: { type: 'circle' },
-                        opacity: { value: 0.1, random: true },
-                        size: { value: 2, random: true },
-                        line_linked: { 
-                            enable: true, 
-                            distance: 150, 
-                            color: color, 
-                            opacity: 0.1, 
-                            width: 1 
-                        },
-                        move: { enable: true, speed: 2, direction: 'none', out_mode: 'out' }
-                    },
-                    interactivity: { detect_on: 'canvas', events: { onhover: { enable: false }, onclick: { enable: false } } },
-                    retina_detect: true
-                });
-            };
-
-            /* --- 6. Initialization & Events --- */
-
-            if (DOM.btnLang) DOM.btnLang.addEventListener('click', () => setLang(STATE.lang === 'en' ? 'es' : 'en'));
-            if (DOM.btnTheme) DOM.btnTheme.addEventListener('click', () => setTheme(STATE.theme === 'light' ? 'dark' : 'light'));
-            if (DOM.btnMenu) DOM.btnMenu.addEventListener('click', toggleMenu);
-            if (DOM.menuOverlay) DOM.menuOverlay.addEventListener('click', toggleMenu);
             if (DOM.btnDownload) DOM.btnDownload.addEventListener('click', simulateDownload);
-            if (DOM.linkLogout) DOM.linkLogout.addEventListener('click', (e) => { e.preventDefault(); logout(); });
-            if (DOM.btnLogout) DOM.btnLogout.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+            if (DOM.btnLogout) DOM.btnLogout.addEventListener('click', (e) => { e.preventDefault(); KRUDER.logout(); });
 
-            setLang(STATE.lang);
-            setTheme(STATE.theme);
+            /* --- 4. Init --- */
 
             if (checkAuth()) {
                 loadUserData();

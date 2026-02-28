@@ -1,10 +1,25 @@
 # Reporte: Decisión de IA para Photo Booth
 
+## Final Decision (February 2026)
+
+| Decision | Value |
+|----------|-------|
+| **Active Provider** | **Segmind** |
+| **Model** | Seedream 4.5 (ByteDance) |
+| **Status** | Implemented and in production |
+| **Endpoint** | `https://api.segmind.com/v1/seedream-4.5` |
+| **Auth** | `x-api-key` header |
+| **Capacity** | 30+ concurrent per key, 60+ RPM per key |
+
+Segmind was chosen over fal.ai based on stress tests (Section 12) showing significantly higher capacity per API key, eliminating the need for multiple keys. fal.ai was evaluated and is a valid fallback but requires 5 keys to achieve similar throughput.
+
+---
+
 ## Resumen ejecutivo
 
 | Decisión | Opción elegida |
 |----------|----------------|
-| **Proveedor** | fal.ai |
+| **Proveedor** | Segmind |
 | **Modelo** | Seedream 4.5 (ByteDance) |
 | **Arquitectura** | Backend con cola + 5 API keys (round-robin) |
 | **Capacidad** | 50 generaciones simultáneas |
@@ -237,7 +252,7 @@ Los scripts utilizados son: `stress_test_segmind_burst.py` (burst) y `stress_tes
 
 - **Status:** 400 Bad Request (no 429).
 - **Cuerpo de error:** `"ByteDance image API error: The request failed because the output image may contain sensitive information."`
-- **Causa:** Moderación de contenido (el prompt asociado contenía escena “Dirty, blood-s…”). No es límite de tasa ni de concurrencia.
+- **Causa:** Moderación de contenido (el prompt asociado contenía escena "Dirty, blood-s…"). No es límite de tasa ni de concurrencia.
 - **Conclusión para la prueba:** La prueba de **60 RPM con 1 llave** no recibió ningún 429; el límite documentado (50 RPM) no se manifestó como rechazo por throttling en este caso. El único fallo es atribuible a política de contenido del modelo, no al proveedor Segmind como rate limit.
 
 ### 12.5 Dependencias y limitaciones del experimento

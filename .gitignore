@@ -33,9 +33,6 @@ stress tests/*.log
 Docs/stress tests/*.txt
 Docs/stress tests/*.log
 
-# Session plan file
-enumerated-riding-taco.md
-
 # Wrangler
 .wrangler/
 

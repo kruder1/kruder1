@@ -1,6 +1,6 @@
-# Kruder1 - Análisis Completo del Proyecto
+# KRUDER1 — Architecture
 
-> Documento generado el 4 de febrero de 2026
+> Documento generado en febrero de 2026 (actualizado)
 
 ---
 
@@ -54,7 +54,7 @@
         ┌───────────────┼───────────────┬────────────────┐
         ▼               ▼               ▼                ▼
    ┌─────────┐    ┌─────────┐    ┌─────────┐      ┌─────────┐
-   │ Supabase│    │ Stripe  │    │ fal.ai  │      │  Brevo  │
+   │ Supabase│    │ Stripe  │    │ Segmind │      │  Brevo  │
    │ (BD)    │    │ (Pagos) │    │ (IA)    │      │ (Email) │
    └─────────┘    └─────────┘    └─────────┘      └─────────┘
 ```
@@ -68,7 +68,7 @@
 | Backend API | Cloudflare Workers | Lógica de negocio serverless |
 | Base de datos | Supabase (PostgreSQL) | Almacenamiento de datos |
 | Pagos | Stripe | Procesamiento de pagos |
-| Generación IA | fal.ai (Seedream 4.5) | Transformación de imágenes |
+| Generación IA | Segmind (Seedream 4.5) | Transformación de imágenes |
 | Emails/SMS | Brevo | Comunicaciones transaccionales |
 | Almacenamiento | Cloudflare R2 | Imágenes temporales y resultados |
 
@@ -80,38 +80,77 @@
 
 ```
 Software/
-├── main.py                 # Backend Python (servidor HTTP + lógica)
+├── main.py                 # Entry point: PyWebview + servidor HTTP
+├── router.py               # Router HTTP (despacho de endpoints)
+├── api.py                  # NativeApi (puente JS↔Python, lazy-load de módulos)
+├── config.py               # Configuración (carga config.json opcional)
+├── utils.py                # DataService, SecurityService, NetworkService
+├── log_service.py          # Logging con rotación diaria (30 días)
+├── index.html              # Interfaz principal (SPA)
 ├── requirements.txt        # Dependencias Python
-├── templates/
-│   └── app.html           # Interfaz principal (SPA ~8200 líneas)
+├── modules/
+│   ├── __init__.py
+│   ├── auth.py             # Lógica de autenticación
+│   ├── auth.html           # UI de autenticación
+│   ├── dashboard.py        # Lógica del dashboard
+│   ├── dashboard.html      # UI del dashboard
+│   ├── events.py           # Gestión de eventos
+│   ├── events.html         # UI de eventos
+│   ├── eventmode.py        # Modo evento (captura + generación)
+│   ├── eventmode.html      # UI del modo evento
+│   ├── promptlab.py        # Gestión de prompts
+│   ├── promptlab.html      # UI de Prompt Lab
+│   ├── frames.py           # Marcos/overlays para fotos
+│   ├── frames.html         # UI de marcos
+│   ├── settings.py         # Configuración general
+│   └── settings.html       # UI de configuración
 └── static/
     ├── css/
-    │   └── fonts.css      # Definición de fuentes
+    │   ├── app.css          # Hoja de estilos principal (estética CRT/scanline)
+    │   ├── fonts.css        # Definición de fuentes
+    │   └── all.min.css      # Font Awesome (iconos)
+    ├── fonts/
+    │   ├── InterTight-Black.ttf
+    │   └── InterTight-Bold.ttf
     ├── img/
-    │   ├── icon.png       # Icono de la aplicación
-    │   ├── logo.png       # Logo de Kruder1
-    │   └── print_test.jpg # Imagen de prueba para impresión
+    │   ├── icon.ico         # Icono de la aplicación
+    │   ├── icon.png         # Icono PNG
+    │   ├── logo.png         # Logo de Kruder1
+    │   ├── print_test.jpg   # Imagen de prueba para impresión
+    │   ├── Kruder 1 Black Frame.png
+    │   └── Kruder 1 White Frame.png
     ├── js/
-    │   ├── jsQR.js        # Librería para escanear QR
-    │   ├── particles.min.js # Efectos de partículas
-    │   ├── qrcode.min.js  # Generación de códigos QR
-    │   └── tokens.js      # Design tokens (CSS variables)
+    │   ├── i18n.js          # Sistema de internacionalización
+    │   └── particles.min.js # Efectos de partículas
+    ├── locales/
+    │   ├── ar.json           # Árabe
+    │   ├── de.json           # Alemán
+    │   ├── en.json           # Inglés
+    │   ├── es.json           # Español
+    │   ├── fr.json           # Francés
+    │   ├── it.json           # Italiano
+    │   ├── ja.json           # Japonés
+    │   ├── pt.json           # Portugués
+    │   ├── ru.json           # Ruso
+    │   └── zh.json           # Chino
     ├── sounds/
-    │   ├── cancel.mp3     # Sonido de cancelar
-    │   ├── confirm.mp3    # Sonido de confirmar
-    │   ├── keyboard.mp3   # Sonido de teclado virtual
-    │   ├── lock.mp3       # Sonido de bloquear
-    │   ├── loop.mp3       # Música de fondo
-    │   ├── modal.mp3      # Sonido de modal
-    │   ├── pinpad.mp3     # Sonido de PIN
-    │   ├── toggle.mp3     # Sonido de toggle
-    │   └── unlock.mp3     # Sonido de desbloquear
+    │   ├── back.mp3          # Sonido de retroceso
+    │   ├── button.mp3        # Sonido de botón
+    │   ├── keyboard.mp3      # Sonido de teclado virtual
+    │   ├── lock.mp3          # Sonido de bloquear
+    │   ├── loop.mp3          # Música de fondo
+    │   ├── loop chill.mp3    # Música de fondo alternativa
+    │   ├── pinpad.mp3        # Sonido de PIN
+    │   ├── toggle.mp3        # Sonido de toggle
+    │   ├── unlock.mp3        # Sonido de desbloquear
+    │   └── warning.mp3       # Sonido de advertencia
     └── webfonts/
         ├── InterTight-Black.ttf
         ├── InterTight-Bold.ttf
-        ├── JetBrainsMono-Bold.ttf
-        ├── JetBrainsMono-Regular.ttf
-        └── Orbitron-Black.ttf
+        ├── fa-brands-400.woff2
+        ├── fa-regular-400.woff2
+        ├── fa-solid-900.woff2
+        └── fa-v4compatibility.woff2
 ```
 
 ### Dependencias Python
@@ -259,7 +298,7 @@ qrcode>=7.0         # Generación de códigos QR
 ### Estructura de Archivos
 
 ```
-website/
+Website/
 ├── kruder1-landing/
 │   ├── index.html         # Landing page
 │   ├── pricing.html       # Planes y precios
@@ -310,7 +349,7 @@ website/
 |------|----------|--------|-------------------|
 | Basic | 150 | $40 USD | `price_1SwcrIC1FI34uKMLaGO8Fxsh` |
 | Plus | 300 | $60 USD | `price_1SwcqbC1FI34uKMLDWbAblgV` |
-| Pro | 600 | $100 USD | `price_1SwcqCC1FI34uKMLiUN0eOD6` |
+| Pro | 600 | $90 USD | `price_1SwcqCC1FI34uKMLiUN0eOD6` |
 
 ### Características del Frontend
 
@@ -318,7 +357,7 @@ website/
 - **Temas**: Light y Dark con persistencia
 - **Responsive**: Diseño mobile-first
 - **Efectos**: Particles.js, scanlines overlay
-- **Tipografía**: Inter Tight (principal), JetBrains Mono (monospace)
+- **Tipografía**: Barlow (headings/buttons), Inter (inputs)
 
 ---
 
@@ -358,17 +397,16 @@ website/
 | POST | `/send-email` | Reenviar email con foto |
 
 #### Características
-- Round-robin de 4 API keys de fal.ai
+- API keys de Segmind (1-2 keys, 30+ concurrent por key)
 - Modelo: Seedream v4.5 (ByteDance)
 - Aspect ratio 2:3 (2048x3072) para fotos
 - Aspect ratio 1:1 (2048x2048) para thumbnails
-- Polling para resultados en cola
 - Tiempo estimado: ~35-40 segundos
 
 #### Flujo de Generación
 1. Recibe foto en base64
 2. Sube a R2 (bucket temporal)
-3. Llama a fal.ai con prompt
+3. Llama a Segmind con prompt
 4. Descarga resultado
 5. Sube a R2 (bucket permanente)
 6. Descuenta 1 crédito
@@ -462,19 +500,19 @@ created_at      TIMESTAMP DEFAULT NOW()
 - **Modo**: Checkout Sessions
 - **Webhook**: `checkout.session.completed`
 - **URL**: `https://kruder1-auth.kruder1-master.workers.dev/stripe-webhook`
-- **Flujo**: 
+- **Flujo**:
   1. Usuario selecciona plan
   2. Se crea Checkout Session
   3. Redirección a Stripe
   4. Webhook procesa pago
   5. Se añaden créditos
 
-### fal.ai (Generación IA)
+### Segmind (Generación IA)
 
-- **Modelo**: Seedream v4.5 Edit (ByteDance)
-- **Endpoint**: `fal.run/fal-ai/bytedance/seedream/v4.5/edit`
-- **Capacidad**: 50 generaciones simultáneas (10 por key × 5 keys)
-- **Arquitectura**: Cola central + round-robin de API keys
+- **Modelo**: Seedream v4.5 (ByteDance)
+- **Endpoint**: `https://api.segmind.com/v1/seedream-4.5`
+- **Auth**: `x-api-key` header
+- **Capacidad**: 30+ generaciones concurrentes por key (1-2 keys suficientes)
 
 ### Brevo (Comunicaciones)
 
@@ -564,7 +602,7 @@ created_at      TIMESTAMP DEFAULT NOW()
 4. Worker verifica créditos disponibles
 5. Si hay créditos:
    a. Sube foto temporal a R2
-   b. Llama a fal.ai
+   b. Llama a Segmind
    c. Descarga resultado
    d. Sube resultado a R2
    e. Descuenta 1 crédito
@@ -582,20 +620,21 @@ created_at      TIMESTAMP DEFAULT NOW()
 
 | Fase | Nombre | Estado |
 |------|--------|--------|
-| 0 | Decisiones cerradas | ✅ Completa |
-| 1 | Cuentas y esqueleto | ✅ Completa |
-| 2 | Auth completo | ✅ Completa |
-| 3 | Créditos y Stripe | ✅ Completa |
-| 4 | Generación de imágenes | ✅ Completa |
-| 5 | Entrega al invitado | ✅ Completa |
-| 6 | Sitio web | ✅ Completa |
+| 0 | Decisiones cerradas | Completa |
+| 1 | Cuentas y esqueleto | Completa |
+| 2 | Auth completo | Completa |
+| 3 | Créditos y Stripe | Completa |
+| 4 | Generación de imágenes | Completa |
+| 5 | Entrega al invitado | Completa |
+| 6 | Sitio web | Completa |
+| 6.5 | Build & Distribution (PyInstaller + Inno Setup + R2 updates) | Completa |
 
 ### Fases Pendientes
 
 | Fase | Nombre | Estado |
 |------|--------|--------|
-| 7 | Panel admin | 🔄 Pendiente |
-| 8 | Afinar y proteger | 🔄 Pendiente |
+| 7 | Panel admin | Pendiente |
+| 8 | Afinar y proteger | Pendiente |
 
 ### Panel Admin (Fase 7) - Por implementar
 - Lista de usuarios registrados
@@ -656,10 +695,7 @@ BREVO_API_KEY=
 # kruder1-gen
 SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
-FAL_KEY_1=
-FAL_KEY_2=
-FAL_KEY_3=
-FAL_KEY_4=
+SEGMIND_API_KEY=
 BREVO_API_KEY=
 R2_ACCESS_KEY_ID=
 R2_SECRET_ACCESS_KEY=
