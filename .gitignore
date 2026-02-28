@@ -36,5 +36,8 @@ Docs/stress tests/*.log
 # Session plan file
 enumerated-riding-taco.md
 
+# Wrangler
+.wrangler/
+
 # Claude Code
 .claude/
