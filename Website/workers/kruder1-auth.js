@@ -238,7 +238,7 @@ function isValidPassword(str) {
 
 // ── Rate Limiting (Cloudflare KV) ──────────────────────────
 async function isRateLimited(kv, ip, endpoint, maxReqs, windowMs) {
-  const key = `rl:${endpoint}:${ip}`;
+  const key = `r2:${endpoint}:${ip}`;
   try {
     const entry = await kv.get(key, { type: "json" });
     const now = Date.now();
@@ -394,9 +394,9 @@ export default {
         const clientIp = request.headers.get("CF-Connecting-IP") || "unknown";
         if (path === "login" && await isRateLimited(env.RATE_LIMIT, clientIp, "auth-login", 5, 60000))
           return err("Too many requests. Please try again later.", 429);
-        if (path === "register" && await isRateLimited(env.RATE_LIMIT, clientIp, "auth-register", 3, 3600000))
+        if (path === "register" && await isRateLimited(env.RATE_LIMIT, clientIp, "auth-register", 10, 3600000))
           return err("Too many requests. Please try again later.", 429);
-        if (path === "forgot-password" && await isRateLimited(env.RATE_LIMIT, clientIp, "auth-forgot", 3, 3600000))
+        if (path === "forgot-password" && await isRateLimited(env.RATE_LIMIT, clientIp, "auth-forgot", 5, 3600000))
           return err("Too many requests. Please try again later.", 429);
       }
 
