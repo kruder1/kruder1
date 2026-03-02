@@ -29,6 +29,7 @@ class KruderRouter(BaseHTTPRequestHandler):
         self.send_header("Content-Type", content_type)
         self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1")
         self.send_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         self.end_headers()
 
     def do_OPTIONS(self):
@@ -40,6 +41,9 @@ class KruderRouter(BaseHTTPRequestHandler):
         if self.path.startswith("/api/"):
             endpoint = self.path.replace("/api/", "")
             length = int(self.headers.get("Content-Length", 0))
+            if length > 50 * 1024 * 1024:  # 50 MB limit
+                self.send_error(413, "Payload too large")
+                return
             body = json.loads(self.rfile.read(length).decode("utf-8"))
             auth = self.headers.get("Authorization")
             
@@ -107,6 +111,9 @@ class KruderRouter(BaseHTTPRequestHandler):
         elif path.startswith("/local-data/app/"):
             rel_path = path.replace("/local-data/app/", "").replace("/", os.sep)
             fpath = SecurityService.validate_path(APP_DATA, rel_path)
+            # Block sensitive files from HTTP access
+            if fpath and os.path.basename(fpath).lower() in ("session.json", "settings.json"):
+                fpath = None
 
         # Route: Event images
         elif path.startswith("/event-data/"):

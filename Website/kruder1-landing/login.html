@@ -124,7 +124,7 @@
                 modal_pass_empty: { en: 'Please fill in all fields', es: 'Complete todos los campos' },
                 modal_email_invalid: { en: 'Please enter a valid email address', es: 'Ingresa una dirección de correo válida' },
                 modal_email_in_use: { en: 'This email is already registered', es: 'Este correo ya está registrado' },
-                modal_pass_weak: { en: 'Password must be at least 6 characters and contain a number', es: 'La contraseña debe tener al menos 6 caracteres y un número' },
+                modal_pass_weak: { en: 'Password must be at least 8 characters with uppercase, lowercase, and a number', es: 'La contraseña debe tener al menos 8 caracteres con mayúscula, minúscula y un número' },
                 modal_verify_first: { en: 'Please verify your email first. Check your inbox.', es: 'Verifica tu correo primero. Revisa tu bandeja de entrada.' },
                 modal_invalid_credentials: { en: 'Invalid credentials', es: 'Credenciales incorrectas' },
                 modal_btn_ok: { en: 'OK', es: 'OK' }
@@ -139,7 +139,7 @@
 
             const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const isValidEmail = (s) => typeof s === 'string' && s.trim().length > 0 && EMAIL_REGEX.test(s.trim());
-            const isValidPassword = (s) => typeof s === 'string' && s.length >= 6 && /\d/.test(s);
+            const isValidPassword = (s) => typeof s === 'string' && s.length >= 8 && /[a-z]/.test(s) && /[A-Z]/.test(s) && /\d/.test(s);
 
             const parseApiError = (errMsg) => {
                 if (!errMsg) return null;

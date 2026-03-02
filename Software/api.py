@@ -295,9 +295,6 @@ class NativeApi:
     def generate_and_save_prompt(self, token, ref_base64, prompt_name, category_name, category_id_or_new, prompt_desc):
         return self._promptlab.generate_and_save_prompt(token, ref_base64, prompt_name, category_name, category_id_or_new, prompt_desc)
 
-    def save_manual_prompt(self, img_base64, name, cat_id_or_new, new_cat_name, text):
-        return self._promptlab.save_manual_prompt(img_base64, name, cat_id_or_new, new_cat_name, text)
-
     def update_prompt(self, prompt_id, name, category_id_or_new, new_cat_name, text, new_img_base64=None):
         return self._promptlab.update_prompt(prompt_id, name, category_id_or_new, new_cat_name, text, new_img_base64)
 
@@ -486,8 +483,8 @@ class NativeApi:
     def get_pending_update(self):
         return self._settings.get_pending_update()
 
-    def save_emails_dialog(self, event_name, emails):
-        """Show native file-save dialog for email list. Returns True if saved."""
+    def save_emails_to_desktop(self, event_name, emails):
+        """Save email list as .txt to Desktop. Returns True if saved."""
         if not isinstance(emails, (list, tuple)):
             emails = []
         safe_name = re.sub(r'[<>:"/\\|?*]', '_', str(event_name or "event").strip())[:80]

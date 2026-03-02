@@ -4,16 +4,30 @@
  * Env: ADMIN_PASSWORD, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, JWT_SECRET
  */
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+const ALLOWED_ORIGINS = [
+  "https://kruder1.com",
+  "https://www.kruder1.com",
+  "http://127.0.0.1",
+  "http://localhost",
+];
+
+function getCorsHeaders(request) {
+  const origin = request.headers.get("Origin") || "";
+  const allowed = ALLOWED_ORIGINS.some((o) => origin === o || origin.startsWith(o + ":"));
+  return {
+    "Access-Control-Allow-Origin": allowed ? origin : ALLOWED_ORIGINS[0],
+    "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    ...(allowed ? { "Vary": "Origin" } : {}),
+  };
+}
+
+let _corsHeaders = {};
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+    headers: { "Content-Type": "application/json", ..._corsHeaders },
   });
 }
 
@@ -90,6 +104,25 @@ async function supabaseDelete(env, table, query) {
   return res;
 }
 
+// ── Rate Limiting (Cloudflare KV) ──────────────────────────
+async function isRateLimited(kv, ip, endpoint, maxReqs, windowMs) {
+  const key = `rl:${endpoint}:${ip}`;
+  try {
+    const entry = await kv.get(key, { type: "json" });
+    const now = Date.now();
+    const ttlSec = Math.max(60, Math.ceil(windowMs / 1000));
+    if (!entry || now - entry.s > windowMs) {
+      await kv.put(key, JSON.stringify({ s: now, c: 1 }), { expirationTtl: ttlSec });
+      return false;
+    }
+    entry.c++;
+    await kv.put(key, JSON.stringify(entry), { expirationTtl: ttlSec });
+    return entry.c > maxReqs;
+  } catch (_) {
+    return false;
+  }
+}
+
 // ── Admin Auth ──────────────────────────────────────────────
 
 async function requireAdmin(request, env) {
@@ -104,12 +137,20 @@ async function requireAdmin(request, env) {
 
 export default {
   async fetch(request, env) {
-    if (request.method === "OPTIONS") return new Response(null, { headers: CORS_HEADERS });
+    _corsHeaders = getCorsHeaders(request);
+    if (request.method === "OPTIONS") return new Response(null, { headers: _corsHeaders });
 
     const url = new URL(request.url);
     const path = url.pathname.replace(/^\/+/, "").replace(/\/+$/, "");
 
     try {
+      // ── Rate limiting ────────────────────────────────────
+      if (path === "login" && request.method === "POST" && env.RATE_LIMIT) {
+        const clientIp = request.headers.get("CF-Connecting-IP") || "unknown";
+        if (await isRateLimited(env.RATE_LIMIT, clientIp, "admin-login", 3, 60000))
+          return err("Too many requests. Please try again later.", 429);
+      }
+
       // ── POST /login ─────────────────────────────────────
       if (path === "login" && request.method === "POST") {
         const { password } = (await request.json()) || {};

@@ -650,6 +650,9 @@ class SettingsModule:
             self._download_progress["status"] = "complete"
             self._download_progress["percent"] = 100
             self._download_progress["path"] = dest
+            # Store verified hash for re-check before install
+            self._last_download_hash = sha.hexdigest()
+            self._last_download_path = dest
             append_log("INFO", "update_downloaded", {"path": dest})
         except Exception as e:
             self._download_progress["status"] = "error"
@@ -668,6 +671,17 @@ class SettingsModule:
         path = os.path.abspath(installer_path)
         if not os.path.isfile(path) or not path.lower().endswith(".exe"):
             return {"error": "Invalid installer path"}
+        # Re-verify file integrity before executing
+        self.__init_update_state()
+        if hasattr(self, '_last_download_hash') and self._last_download_hash:
+            if hasattr(self, '_last_download_path') and os.path.abspath(self._last_download_path) == path:
+                sha = hashlib.sha256()
+                with open(path, "rb") as f:
+                    for chunk in iter(lambda: f.read(65536), b""):
+                        sha.update(chunk)
+                if sha.hexdigest() != self._last_download_hash:
+                    append_log("ERROR", "install_update_hash_mismatch", {"path": path})
+                    return {"error": "File integrity check failed — file may have been tampered with"}
         try:
             os.startfile(path)
             append_log("INFO", "update_install_launched", {"path": path})

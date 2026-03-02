@@ -278,6 +278,28 @@ function isValidEmail(str) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Rate Limiting (Cloudflare KV)
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function isRateLimited(kv, ip, endpoint, maxReqs, windowMs) {
+  const key = `rl:${endpoint}:${ip}`;
+  try {
+    const entry = await kv.get(key, { type: "json" });
+    const now = Date.now();
+    const ttlSec = Math.max(60, Math.ceil(windowMs / 1000));
+    if (!entry || now - entry.s > windowMs) {
+      await kv.put(key, JSON.stringify({ s: now, c: 1 }), { expirationTtl: ttlSec });
+      return false;
+    }
+    entry.c++;
+    await kv.put(key, JSON.stringify(entry), { expirationTtl: ttlSec });
+    return entry.c > maxReqs;
+  } catch (_) {
+    return false;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Segmind Generation (Seedream 4.5, synchronous, returns binary image)
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -373,6 +395,13 @@ export default {
     const path = url.pathname.replace(/^\/+/, "").replace(/\/+$/, "") || "";
 
     try {
+      // ── Rate limiting (send-email only; no limit on generate) ──────────
+      if (path === "send-email" && request.method === "POST" && env.RATE_LIMIT) {
+        const clientIp = request.headers.get("CF-Connecting-IP") || "unknown";
+        if (await isRateLimited(env.RATE_LIMIT, clientIp, "gen-email", 10, 60000))
+          return err("Too many requests. Please try again later.", 429);
+      }
+
       // ─────────────────────────────────────────────────────────────────────
       // POST /generate - Generate an AI image
       // ─────────────────────────────────────────────────────────────────────

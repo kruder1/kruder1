@@ -22,8 +22,10 @@ def _load():
         try:
             with open(config_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
+            # Only allow overriding non-sensitive settings
+            SAFE_OVERRIDES = {"PORT", "APP_DATA"}
             for k, v in data.items():
-                if k in out and v is not None:
+                if k in SAFE_OVERRIDES and v is not None:
                     out[k] = v
         except Exception:
             pass

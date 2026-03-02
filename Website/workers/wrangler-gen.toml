@@ -2,6 +2,10 @@ name = "kruder1-gen"
 main = "kruder1-gen.js"
 compatibility_date = "2025-01-01"
 
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "429a2d9cae174b0e9e308e8ea6d41431"
+
 [[r2_buckets]]
 binding = "BUCKET"
 bucket_name = "kruder1-bucket"

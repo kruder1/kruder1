@@ -1837,7 +1837,7 @@ window.SettingsModule = {
                 return;
             }
 
-            const saved = await window.pywebview.api.save_emails_dialog(eventName, emails);
+            const saved = await window.pywebview.api.save_emails_to_desktop(eventName, emails);
             if (saved) {
                 this.showAlert(window.t ? window.t('settings.success_emails_exported') : 'EMAILS EXPORTED SUCCESSFULLY');
             }

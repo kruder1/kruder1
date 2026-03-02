@@ -190,10 +190,12 @@ class EventModeModule:
                 pass
 
     def _get_active_frame_path(self):
-        """Get active frame path from FramesModule."""
+        """Get active frame path from FramesModule (cached instance)."""
         try:
-            from modules.frames import FramesModule
-            return FramesModule().get_active_frame_path()
+            if not hasattr(self, '_frames_module'):
+                from modules.frames import FramesModule
+                self._frames_module = FramesModule()
+            return self._frames_module.get_active_frame_path()
         except Exception:
             return None
 

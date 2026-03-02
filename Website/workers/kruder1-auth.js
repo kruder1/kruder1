@@ -232,8 +232,27 @@ function isValidEmail(str) {
 }
 
 function isValidPassword(str) {
-  if (typeof str !== "string" || str.length < 6) return false;
-  return /\d/.test(str);
+  if (typeof str !== "string" || str.length < 8) return false;
+  return /[a-z]/.test(str) && /[A-Z]/.test(str) && /\d/.test(str);
+}
+
+// ── Rate Limiting (Cloudflare KV) ──────────────────────────
+async function isRateLimited(kv, ip, endpoint, maxReqs, windowMs) {
+  const key = `rl:${endpoint}:${ip}`;
+  try {
+    const entry = await kv.get(key, { type: "json" });
+    const now = Date.now();
+    const ttlSec = Math.max(60, Math.ceil(windowMs / 1000));
+    if (!entry || now - entry.s > windowMs) {
+      await kv.put(key, JSON.stringify({ s: now, c: 1 }), { expirationTtl: ttlSec });
+      return false;
+    }
+    entry.c++;
+    await kv.put(key, JSON.stringify(entry), { expirationTtl: ttlSec });
+    return entry.c > maxReqs;
+  } catch (_) {
+    return false; // fail open — don't block on KV errors
+  }
 }
 
 const EMAIL_TEXTS = {
@@ -267,6 +286,22 @@ const EMAIL_TEXTS = {
       body: "Haz clic en el botón para establecer una nueva contraseña. Este enlace expira en 1 hora.",
       cta: "Restablecer contraseña",
       footer: "Si no solicitaste esto, puedes ignorar este correo.",
+    },
+  },
+  already_registered: {
+    en: {
+      subject: "Sign-in attempt – Kruder1",
+      title: "Someone tried to create an account",
+      body: "Someone attempted to register a new Kruder1 account with your email address. If this was you, you can log in with your existing account instead.",
+      cta: "Log in",
+      footer: "If you didn't do this, no action is needed. Your account is safe.",
+    },
+    es: {
+      subject: "Intento de registro – Kruder1",
+      title: "Alguien intentó crear una cuenta",
+      body: "Alguien intentó registrar una nueva cuenta de Kruder1 con tu correo electrónico. Si fuiste tú, puedes iniciar sesión con tu cuenta existente.",
+      cta: "Iniciar sesión",
+      footer: "Si no fuiste tú, no necesitas hacer nada. Tu cuenta está segura.",
     },
   },
   purchase: {
@@ -354,26 +389,51 @@ export default {
     const path = url.pathname.replace(/^\/+/, "").replace(/\/+$/, "") || "";
 
     try {
+      // ── Rate limiting ────────────────────────────────────
+      if (request.method === "POST" && env.RATE_LIMIT) {
+        const clientIp = request.headers.get("CF-Connecting-IP") || "unknown";
+        if (path === "login" && await isRateLimited(env.RATE_LIMIT, clientIp, "auth-login", 5, 60000))
+          return err("Too many requests. Please try again later.", 429);
+        if (path === "register" && await isRateLimited(env.RATE_LIMIT, clientIp, "auth-register", 3, 3600000))
+          return err("Too many requests. Please try again later.", 429);
+        if (path === "forgot-password" && await isRateLimited(env.RATE_LIMIT, clientIp, "auth-forgot", 3, 3600000))
+          return err("Too many requests. Please try again later.", 429);
+      }
+
       if (path === "register" && request.method === "POST") {
         const { email, password, lang } = (await request.json()) || {};
         if (!email?.trim() || !password) return err("Email and password required");
         if (!isValidEmail(email)) return err("Invalid email format");
-        if (!isValidPassword(password)) return err("Password must be at least 6 characters and contain a number");
+        if (!isValidPassword(password)) return err("Password must be at least 8 characters with uppercase, lowercase, and a number");
         const pwHash = await hashPasswordForStorage(password);
         const rows = await supabaseSelect(
           env,
           "accounts",
           `email=eq.${encodeURIComponent(email.trim().toLowerCase())}`
         );
-        if (rows?.length) return err("Email already registered", 409);
+        if (rows?.length) {
+          // Don't reveal that the email exists — send informational email instead
+          const emailLang = (lang === "es" || lang === "en") ? lang : "en";
+          const base = env.AUTH_BASE_URL || url.origin;
+          const texts = EMAIL_TEXTS.already_registered;
+          try {
+            await sendBrevoEmail(env, {
+              to: email.trim(),
+              subject: texts[emailLang].subject,
+              htmlContent: emailTemplate(base, { type: "already_registered", lang: emailLang, link: `${base}/login.html`, texts }),
+            });
+          } catch (_) { /* ignore email errors for security */ }
+          return json({ ok: true, message: "Check your email to verify" });
+        }
         const [acc] = await supabaseInsert(env, "accounts", {
           email: email.trim().toLowerCase(),
           password_hash: pwHash,
         });
         const token = randomToken();
+        const tokenHash = await sha256Hex(token);
         await supabaseInsert(env, "verification_tokens", {
           account_id: acc.id,
-          token,
+          token: tokenHash,
           expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
         });
         const base = env.AUTH_BASE_URL || url.origin;
@@ -391,10 +451,11 @@ export default {
       if (path === "verify-email" && request.method === "GET") {
         const token = url.searchParams.get("token");
         if (!token) return err("Token required");
+        const tokenHash = await sha256Hex(token);
         const rows = await supabaseSelect(
           env,
           "verification_tokens",
-          `token=eq.${encodeURIComponent(token)}`
+          `token=eq.${encodeURIComponent(tokenHash)}`
         );
         if (!rows?.length) return err("Invalid or expired token", 404);
         const vt = rows[0];
@@ -420,8 +481,31 @@ export default {
         );
         if (!rows?.length) return err("Invalid email or password", 401);
         const acc = rows[0];
-        if (!(await verifyPassword(password, acc.password_hash)))
+
+        // Check account lockout
+        if (acc.locked_until && new Date(acc.locked_until) > new Date()) {
+          return err("Account temporarily locked. Try again later.", 429);
+        }
+
+        if (!(await verifyPassword(password, acc.password_hash))) {
+          // Increment failed login attempts
+          const attempts = (acc.failed_login_attempts || 0) + 1;
+          const updates = { failed_login_attempts: attempts };
+          if (attempts >= 10) {
+            updates.locked_until = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+          }
+          await supabaseUpdate(env, "accounts", "id", acc.id, updates);
           return err("Invalid email or password", 401);
+        }
+
+        // Reset failed attempts on successful login
+        if (acc.failed_login_attempts > 0) {
+          await supabaseUpdate(env, "accounts", "id", acc.id, {
+            failed_login_attempts: 0,
+            locked_until: null,
+          });
+        }
+
         if (!acc.email_verified) return err("Please verify your email first", 403);
         if (hwid?.trim()) {
           const now = new Date().toISOString();
@@ -488,7 +572,7 @@ export default {
       if (path === "reset-password" && request.method === "POST") {
         const { token, newPassword } = (await request.json()) || {};
         if (!token || !newPassword) return err("Token and new password required");
-        if (!isValidPassword(newPassword)) return err("Password must be at least 6 characters with a digit", 400);
+        if (!isValidPassword(newPassword)) return err("Password must be at least 8 characters with uppercase, lowercase, and a number", 400);
         const tokenHash = await sha256Hex(token);
         const rows = await supabaseSelect(
           env,

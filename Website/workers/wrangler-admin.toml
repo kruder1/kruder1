@@ -1,5 +1,5 @@
-name = "kruder1-auth"
-main = "kruder1-auth.js"
+name = "kruder1-admin"
+main = "kruder1-admin.js"
 compatibility_date = "2025-01-01"
 
 [[kv_namespaces]]
