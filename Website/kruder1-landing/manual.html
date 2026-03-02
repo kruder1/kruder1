@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kruder 1 — User Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="img/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        /* Bigger font sizes for manual readability */
+        .legal-container .legal-text,
+        .legal-container .legal-list,
+        .legal-container .manual-step,
+        .legal-container .manual-note,
+        .legal-container .history-table {
+            font-size: 1.15rem;
+        }
+        .legal-container .legal-subtitle {
+            font-size: 1.85rem;
+        }
+        .manual-toc {
+            margin-bottom: var(--space-lg);
+            font-size: 1.15rem;
+        }
+        .manual-toc a {
+            transition: color 0.15s ease;
+        }
+        .manual-toc a:hover {
+            color: var(--theme-accent);
+        }
+        .manual-kbd {
+            display: inline-block;
+            padding: 0.15em 0.5em;
+            font-family: var(--font-input);
+            font-size: 0.85em;
+            font-weight: 500;
+            line-height: 1.4;
+            color: var(--theme-ink);
+            background: var(--theme-focus);
+            border: 1px solid var(--theme-border);
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        .manual-note {
+            border-left: 4px solid var(--theme-accent);
+            padding: var(--space-sm) var(--space-md);
+            margin: var(--space-sm) 0 var(--space-md) 0;
+            opacity: 0.85;
+            line-height: 1.7;
+        }
+        .manual-step {
+            counter-reset: manual-steps;
+            list-style: none;
+            padding-left: 0;
+            opacity: 0.8;
+            line-height: 1.8;
+            margin-bottom: var(--space-sm);
+        }
+        .manual-step li {
+            counter-increment: manual-steps;
+            padding-left: 2rem;
+            position: relative;
+            margin-bottom: 0.4rem;
+        }
+        .manual-step li::before {
+            content: counter(manual-steps) ".";
+            position: absolute;
+            left: 0;
+            font-weight: 900;
+            color: var(--theme-accent);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div id="scanlines"></div>
+
+    <nav class="nav-sticky">
+        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
+        <div class="nav-actions">
+            <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+            <button id="btn-lang" class="nav-action-btn">EN</button>
+            <a href="login.html" class="btn-accent btn-sm" id="btn-access" data-i18n="nav_access">CLIENT ACCESS</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section">
+            <div class="legal-container">
+                <h1 class="legal-title" data-i18n="m_title"></h1>
+                <p class="legal-date" data-i18n="m_version"></p>
+                <p class="legal-text" data-i18n="m_intro"></p>
+
+                <!-- Table of Contents -->
+                <h2 class="legal-subtitle" data-i18n="m_toc_title"></h2>
+                <ol class="legal-list manual-toc" data-i18n="m_toc"></ol>
+
+                <!-- Section 1: Overview -->
+                <h2 class="legal-subtitle" id="overview" data-i18n="m_s1_title"></h2>
+                <p class="legal-text" data-i18n="m_s1_text"></p>
+                <ul class="legal-list" data-i18n="m_s1_features"></ul>
+                <p class="legal-text" data-i18n="m_s1_target_label"></p>
+                <ul class="legal-list" data-i18n="m_s1_target"></ul>
+
+                <!-- Section 2: Installation -->
+                <h2 class="legal-subtitle" id="installation" data-i18n="m_s2_title"></h2>
+                <p class="legal-text" data-i18n="m_s2_req_label"></p>
+                <ul class="legal-list" data-i18n="m_s2_req"></ul>
+                <p class="legal-text" data-i18n="m_s2_install_label"></p>
+                <ol class="manual-step" data-i18n="m_s2_install_steps"></ol>
+                <p class="legal-text" data-i18n="m_s2_data_label"></p>
+                <div class="manual-note" data-i18n="m_s2_data_note"></div>
+
+                <!-- Section 3: Getting Started -->
+                <h2 class="legal-subtitle" id="getting-started" data-i18n="m_s3_title"></h2>
+                <p class="legal-text" data-i18n="m_s3_reg_label"></p>
+                <ul class="legal-list" data-i18n="m_s3_reg"></ul>
+                <p class="legal-text" data-i18n="m_s3_demo_label"></p>
+                <div class="manual-note" data-i18n="m_s3_demo_note"></div>
+                <p class="legal-text" data-i18n="m_s3_login_label"></p>
+                <ol class="manual-step" data-i18n="m_s3_login_steps"></ol>
+                <p class="legal-text" data-i18n="m_s3_quit_label"></p>
+                <p class="legal-text" data-i18n="m_s3_shortcuts_label"></p>
+                <ul class="legal-list" data-i18n="m_s3_shortcuts"></ul>
+                <p class="legal-text" data-i18n="m_s3_session"></p>
+
+                <!-- Section 4: Dashboard -->
+                <h2 class="legal-subtitle" id="dashboard" data-i18n="m_s4_title"></h2>
+                <p class="legal-text" data-i18n="m_s4_text"></p>
+                <ul class="legal-list" data-i18n="m_s4_nav"></ul>
+                <p class="legal-text" data-i18n="m_s4_account_label"></p>
+                <ul class="legal-list" data-i18n="m_s4_account"></ul>
+                <p class="legal-text" data-i18n="m_s4_logout"></p>
+                <p class="legal-text" data-i18n="m_s4_lock"></p>
+                <div class="manual-note" data-i18n="m_s4_logo_note"></div>
+
+                <!-- Section 5: Event Manager -->
+                <h2 class="legal-subtitle" id="event-manager" data-i18n="m_s5_title"></h2>
+                <p class="legal-text" data-i18n="m_s5_text"></p>
+
+                <p class="legal-text" data-i18n="m_s5_create_label"></p>
+                <ol class="manual-step" data-i18n="m_s5_create_steps"></ol>
+
+                <p class="legal-text" data-i18n="m_s5_actions_label"></p>
+                <ul class="legal-list" data-i18n="m_s5_actions"></ul>
+
+                <p class="legal-text" data-i18n="m_s5_rename_label"></p>
+                <p class="legal-text" data-i18n="m_s5_delete_label"></p>
+
+                <p class="legal-text" data-i18n="m_s5_gallery_label"></p>
+                <ul class="legal-list" data-i18n="m_s5_gallery"></ul>
+
+                <p class="legal-text" data-i18n="m_s5_image_label"></p>
+                <ul class="legal-list" data-i18n="m_s5_image"></ul>
+
+                <p class="legal-text" data-i18n="m_s5_export_label"></p>
+                <ul class="legal-list" data-i18n="m_s5_export"></ul>
+
+                <p class="legal-text" data-i18n="m_s5_importexport_label"></p>
+
+                <!-- Section 6: Event Mode -->
+                <h2 class="legal-subtitle" id="event-mode" data-i18n="m_s6_title"></h2>
+                <p class="legal-text" data-i18n="m_s6_text"></p>
+
+                <p class="legal-text" data-i18n="m_s6_start_label"></p>
+                <ol class="manual-step" data-i18n="m_s6_start_steps"></ol>
+
+                <p class="legal-text" data-i18n="m_s6_controls_label"></p>
+                <ul class="legal-list" data-i18n="m_s6_controls"></ul>
+
+                <p class="legal-text" data-i18n="m_s6_flow_label"></p>
+                <ol class="manual-step" data-i18n="m_s6_flow_steps"></ol>
+
+                <p class="legal-text" data-i18n="m_s6_gen_label"></p>
+                <ul class="legal-list" data-i18n="m_s6_gen"></ul>
+
+                <p class="legal-text" data-i18n="m_s6_result_label"></p>
+                <ul class="legal-list" data-i18n="m_s6_result"></ul>
+
+                <p class="legal-text" data-i18n="m_s6_print_label"></p>
+                <ul class="legal-list" data-i18n="m_s6_print"></ul>
+
+                <div class="manual-note" data-i18n="m_s6_home_note"></div>
+
+                <!-- Section 7: Prompt Lab -->
+                <h2 class="legal-subtitle" id="prompt-lab" data-i18n="m_s7_title"></h2>
+                <p class="legal-text" data-i18n="m_s7_text"></p>
+
+                <p class="legal-text" data-i18n="m_s7_library_label"></p>
+                <ul class="legal-list" data-i18n="m_s7_library"></ul>
+
+                <p class="legal-text" data-i18n="m_s7_category_label"></p>
+                <ul class="legal-list" data-i18n="m_s7_category"></ul>
+
+                <p class="legal-text" data-i18n="m_s7_generate_label"></p>
+                <ol class="manual-step" data-i18n="m_s7_generate_steps"></ol>
+                <div class="manual-note" data-i18n="m_s7_generate_note"></div>
+
+                <p class="legal-text" data-i18n="m_s7_manual_label"></p>
+
+                <p class="legal-text" data-i18n="m_s7_view_label"></p>
+                <ul class="legal-list" data-i18n="m_s7_view"></ul>
+
+                <p class="legal-text" data-i18n="m_s7_drag_label"></p>
+                <ul class="legal-list" data-i18n="m_s7_drag"></ul>
+
+                <p class="legal-text" data-i18n="m_s7_toggle_label"></p>
+
+                <!-- Section 8: Frames -->
+                <h2 class="legal-subtitle" id="frames" data-i18n="m_s8_title"></h2>
+                <p class="legal-text" data-i18n="m_s8_text"></p>
+                <ul class="legal-list" data-i18n="m_s8_features"></ul>
+                <p class="legal-text" data-i18n="m_s8_actions_label"></p>
+                <ul class="legal-list" data-i18n="m_s8_actions"></ul>
+                <div class="manual-note" data-i18n="m_s8_note"></div>
+
+                <!-- Section 9: Settings -->
+                <h2 class="legal-subtitle" id="settings" data-i18n="m_s9_title"></h2>
+                <p class="legal-text" data-i18n="m_s9_text"></p>
+                <ul class="legal-list" data-i18n="m_s9_menu"></ul>
+
+                <p class="legal-text" data-i18n="m_s9_camera_label"></p>
+                <ul class="legal-list" data-i18n="m_s9_camera"></ul>
+
+                <p class="legal-text" data-i18n="m_s9_printing_label"></p>
+                <ul class="legal-list" data-i18n="m_s9_printing"></ul>
+
+                <p class="legal-text" data-i18n="m_s9_sound_label"></p>
+                <ul class="legal-list" data-i18n="m_s9_sound"></ul>
+
+                <p class="legal-text" data-i18n="m_s9_language_label"></p>
+                <ul class="legal-list" data-i18n="m_s9_language"></ul>
+
+                <p class="legal-text" data-i18n="m_s9_interface_label"></p>
+                <ul class="legal-list" data-i18n="m_s9_interface"></ul>
+
+                <p class="legal-text" data-i18n="m_s9_fullscreen_label"></p>
+
+                <p class="legal-text" data-i18n="m_s9_pin_label"></p>
+                <ul class="legal-list" data-i18n="m_s9_pin"></ul>
+
+                <p class="legal-text" data-i18n="m_s9_update_label"></p>
+                <ul class="legal-list" data-i18n="m_s9_update"></ul>
+
+                <!-- Section 10: Credit System -->
+                <h2 class="legal-subtitle" id="credits" data-i18n="m_s10_title"></h2>
+                <p class="legal-text" data-i18n="m_s10_text"></p>
+                <ul class="legal-list" data-i18n="m_s10_details"></ul>
+                <table class="history-table" style="margin-bottom: var(--space-sm);">
+                    <thead>
+                        <tr>
+                            <th data-i18n="m_s10_th_package"></th>
+                            <th data-i18n="m_s10_th_credits"></th>
+                            <th data-i18n="m_s10_th_price"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Basic</td><td>150</td><td>$40</td></tr>
+                        <tr><td>Plus</td><td>300</td><td>$60</td></tr>
+                        <tr><td>Pro</td><td>600</td><td>$90</td></tr>
+                    </tbody>
+                </table>
+                <p class="legal-text" data-i18n="m_s10_purchase"></p>
+
+                <!-- Section 11: Statistics -->
+                <h2 class="legal-subtitle" id="statistics" data-i18n="m_s11_title"></h2>
+                <p class="legal-text" data-i18n="m_s11_text"></p>
+                <p class="legal-text" data-i18n="m_s11_scope_label"></p>
+                <p class="legal-text" data-i18n="m_s11_event_label"></p>
+                <ul class="legal-list" data-i18n="m_s11_event_stats"></ul>
+                <p class="legal-text" data-i18n="m_s11_prompt_label"></p>
+                <ul class="legal-list" data-i18n="m_s11_prompt_stats"></ul>
+                <p class="legal-text" data-i18n="m_s11_export"></p>
+
+                <!-- Section 12: Troubleshooting -->
+                <h2 class="legal-subtitle" id="troubleshooting" data-i18n="m_s12_title"></h2>
+                <p class="legal-text" data-i18n="m_s12_text"></p>
+
+                <p class="legal-text" data-i18n="m_s12_debug_label"></p>
+                <ol class="manual-step" data-i18n="m_s12_debug_steps"></ol>
+
+                <p class="legal-text" data-i18n="m_s12_errors_label"></p>
+                <table class="history-table" style="margin-bottom: var(--space-md);">
+                    <thead>
+                        <tr>
+                            <th data-i18n="m_s12_th_error"></th>
+                            <th data-i18n="m_s12_th_solution"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td data-i18n="m_s12_e1_msg"></td><td data-i18n="m_s12_e1_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e2_msg"></td><td data-i18n="m_s12_e2_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e3_msg"></td><td data-i18n="m_s12_e3_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e4_msg"></td><td data-i18n="m_s12_e4_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e5_msg"></td><td data-i18n="m_s12_e5_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e6_msg"></td><td data-i18n="m_s12_e6_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e7_msg"></td><td data-i18n="m_s12_e7_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e8_msg"></td><td data-i18n="m_s12_e8_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e9_msg"></td><td data-i18n="m_s12_e9_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e10_msg"></td><td data-i18n="m_s12_e10_fix"></td></tr>
+                        <tr><td data-i18n="m_s12_e11_msg"></td><td data-i18n="m_s12_e11_fix"></td></tr>
+                    </tbody>
+                </table>
+
+                <p class="legal-text" data-i18n="m_s12_camera_label"></p>
+                <ul class="legal-list" data-i18n="m_s12_camera"></ul>
+
+                <p class="legal-text" data-i18n="m_s12_printer_label"></p>
+                <ul class="legal-list" data-i18n="m_s12_printer"></ul>
+
+                <p class="legal-text" data-i18n="m_s12_network_label"></p>
+                <ul class="legal-list" data-i18n="m_s12_network"></ul>
+
+                <p class="legal-text" data-i18n="m_s12_data_label"></p>
+                <ul class="legal-list" data-i18n="m_s12_data"></ul>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="privacy.html" data-i18n="footer_privacy"></a>
+            <span>·</span>
+            <a href="terms.html" data-i18n="footer_terms"></a>
+            <span>·</span>
+            <a href="contact.html" data-i18n="footer_contact"></a>
+        </div>
+        <div class="footer-copyright">&copy; 2026 Kruder 1. All rights reserved.</div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        KRUDER.init({
+
+            /* ── Title & Intro ──────────────────────────────────── */
+
+            m_title: { en: 'User Manual', es: 'Manual de Usuario' },
+            m_version: { en: 'Version 1.0 — February 2026', es: 'Version 1.0 — Febrero 2026' },
+            m_intro: {
+                en: 'Complete reference guide for installing, configuring, and operating the Kruder 1 AI photo booth software.',
+                es: 'Guia de referencia completa para instalar, configurar y operar el software de cabina de fotos con IA Kruder 1.'
+            },
+
+            /* ── Table of Contents ──────────────────────────────── */
+
+            m_toc_title: { en: 'Table of Contents', es: 'Tabla de Contenido' },
+            m_toc: {
+                en: '<li><a href="#overview">Overview</a></li><li><a href="#installation">Installation</a></li><li><a href="#getting-started">Getting Started</a></li><li><a href="#dashboard">Dashboard</a></li><li><a href="#event-manager">Event Manager</a></li><li><a href="#event-mode">Event Mode</a></li><li><a href="#prompt-lab">Prompt Lab</a></li><li><a href="#frames">Frames</a></li><li><a href="#settings">Settings</a></li><li><a href="#credits">Credit System</a></li><li><a href="#statistics">Statistics</a></li><li><a href="#troubleshooting">Troubleshooting</a></li>',
+                es: '<li><a href="#overview">Descripcion General</a></li><li><a href="#installation">Instalacion</a></li><li><a href="#getting-started">Primeros Pasos</a></li><li><a href="#dashboard">Dashboard</a></li><li><a href="#event-manager">Event Manager</a></li><li><a href="#event-mode">Event Mode</a></li><li><a href="#prompt-lab">Prompt Lab</a></li><li><a href="#frames">Frames</a></li><li><a href="#settings">Configuracion</a></li><li><a href="#credits">Sistema de Creditos</a></li><li><a href="#statistics">Estadisticas</a></li><li><a href="#troubleshooting">Solucion de Problemas</a></li>'
+            },
+
+            /* ── Section 1: Overview ────────────────────────────── */
+
+            m_s1_title: { en: '1. Overview', es: '1. Descripcion General' },
+            m_s1_text: {
+                en: 'Kruder 1 is an AI-powered photo booth desktop application designed for event operators, photographers, and entertainment professionals. Guests select an AI style, take a photo, and the software generates an AI-transformed image in real time.',
+                es: 'Kruder 1 es una aplicacion de escritorio para cabinas de fotos con inteligencia artificial, disenada para operadores de eventos, fotografos y profesionales del entretenimiento. Los invitados seleccionan un estilo de IA, se toman una foto y el software genera una imagen transformada con IA en tiempo real.'
+            },
+            m_s1_features: {
+                en: '<li>Each AI generation costs <strong>1 credit</strong>, purchased in packages</li><li>Generated images are uploaded to the cloud automatically</li><li>Guests access their images via <strong>QR code</strong> and a shareable web page</li><li>Optional <strong>PNG frame overlay</strong> for event branding</li><li>Works with any USB webcam and optional printer</li>',
+                es: '<li>Cada generacion de IA cuesta <strong>1 credito</strong>, adquirido en paquetes</li><li>Las imagenes generadas se suben a la nube automaticamente</li><li>Los invitados acceden a sus imagenes mediante <strong>codigo QR</strong> y una pagina web compartible</li><li>Marco <strong>PNG superpuesto</strong> opcional para la marca del evento</li><li>Funciona con cualquier webcam USB e impresora opcional</li>'
+            },
+            m_s1_target_label: {
+                en: '<strong>Target users:</strong>',
+                es: '<strong>Usuarios objetivo:</strong>'
+            },
+            m_s1_target: {
+                en: '<li>Event planners and coordinators</li><li>Wedding photographers</li><li>Corporate event organizers</li><li>Photo booth operators and rental businesses</li><li>Marketing teams and brand activations</li>',
+                es: '<li>Planificadores y coordinadores de eventos</li><li>Fotografos de bodas</li><li>Organizadores de eventos corporativos</li><li>Operadores de cabinas de fotos y negocios de renta</li><li>Equipos de marketing y activaciones de marca</li>'
+            },
+
+            /* ── Section 2: Installation ────────────────────────── */
+
+            m_s2_title: { en: '2. Installation', es: '2. Instalacion' },
+            m_s2_req_label: {
+                en: '<strong>System Requirements:</strong>',
+                es: '<strong>Requisitos del Sistema:</strong>'
+            },
+            m_s2_req: {
+                en: '<li>Windows 10 or later (64-bit)</li><li>Active internet connection (required for AI generation)</li><li>USB webcam</li><li>Printer (optional, for physical prints)</li>',
+                es: '<li>Windows 10 o posterior (64 bits)</li><li>Conexion a internet activa (requerida para la generacion con IA)</li><li>Webcam USB</li><li>Impresora (opcional, para impresiones fisicas)</li>'
+            },
+            m_s2_install_label: {
+                en: '<strong>Installation Steps:</strong>',
+                es: '<strong>Pasos de Instalacion:</strong>'
+            },
+            m_s2_install_steps: {
+                en: '<li>Download the installer from the Kruder 1 website</li><li>Run the installer and follow the on-screen instructions</li><li>Launch Kruder 1 from the desktop shortcut or Start menu</li>',
+                es: '<li>Descargue el instalador desde el sitio web de Kruder 1</li><li>Ejecute el instalador y siga las instrucciones en pantalla</li><li>Inicie Kruder 1 desde el acceso directo en el escritorio o el menu Inicio</li>'
+            },
+            m_s2_data_label: {
+                en: '<strong>Local Data Storage:</strong>',
+                es: '<strong>Almacenamiento Local de Datos:</strong>'
+            },
+            m_s2_data_note: {
+                en: 'All local data is stored in <span class="manual-kbd">%APPDATA%\\Kruder1\\</span><br>This includes session data, prompts, frames, events, and log files. Logs are automatically rotated every 30 days.',
+                es: 'Todos los datos locales se almacenan en <span class="manual-kbd">%APPDATA%\\Kruder1\\</span><br>Esto incluye datos de sesion, prompts, marcos, eventos y archivos de registro. Los registros se rotan automaticamente cada 30 dias.'
+            },
+
+            /* ── Section 3: Getting Started ─────────────────────── */
+
+            m_s3_title: { en: '3. Getting Started', es: '3. Primeros Pasos' },
+            m_s3_reg_label: {
+                en: '<strong>Registration:</strong>',
+                es: '<strong>Registro:</strong>'
+            },
+            m_s3_reg: {
+                en: '<li>Create an account through the Kruder 1 website</li><li>Enter your email address and choose a password</li><li>You must verify your email address before logging in</li>',
+                es: '<li>Cree una cuenta a traves del sitio web de Kruder 1</li><li>Ingrese su correo electronico y elija una contrasena</li><li>Debe verificar su correo electronico antes de iniciar sesion</li>'
+            },
+            m_s3_demo_label: {
+                en: '<strong>Demo Credits:</strong>',
+                es: '<strong>Creditos de Demostracion:</strong>'
+            },
+            m_s3_demo_note: {
+                en: 'Every verified account receives <strong>10 free demo credits</strong>, limited to one claim per hardware device (HWID). These credits are claimed through the website and allow you to test the full generation workflow before purchasing a package.',
+                es: 'Cada cuenta verificada recibe <strong>10 creditos de demostracion gratuitos</strong>, limitados a una reclamacion por dispositivo de hardware (HWID). Estos creditos se reclaman a traves del sitio web y le permiten probar el flujo completo de generacion antes de adquirir un paquete.'
+            },
+            m_s3_login_label: {
+                en: '<strong>First Login:</strong>',
+                es: '<strong>Primer Inicio de Sesion:</strong>'
+            },
+            m_s3_login_steps: {
+                en: '<li>Launch the application — a boot animation will play</li><li>The login screen appears — enter your email and password</li><li>Press the <strong>LOG IN</strong> button</li><li>You will be taken to the Dashboard</li>',
+                es: '<li>Inicie la aplicacion — se reproducira una animacion de arranque</li><li>Aparecera la pantalla de inicio de sesion — ingrese su correo y contrasena</li><li>Presione el boton <strong>LOG IN</strong></li><li>Sera dirigido al Dashboard</li>'
+            },
+            m_s3_quit_label: {
+                en: 'To exit the application, press the <strong>QUIT</strong> button. A confirmation dialog will appear before closing.',
+                es: 'Para salir de la aplicacion, presione el boton <strong>QUIT</strong>. Aparecera un dialogo de confirmacion antes de cerrar.'
+            },
+            m_s3_shortcuts_label: {
+                en: '<strong>Keyboard Shortcuts:</strong>',
+                es: '<strong>Atajos de Teclado:</strong>'
+            },
+            m_s3_shortcuts: {
+                en: '<li><span class="manual-kbd">Enter</span> on the email field moves focus to the password field</li><li><span class="manual-kbd">Enter</span> on the password field submits the login form</li><li><span class="manual-kbd">Escape</span> closes any open modal dialog</li>',
+                es: '<li><span class="manual-kbd">Enter</span> en el campo de correo mueve el enfoque al campo de contrasena</li><li><span class="manual-kbd">Enter</span> en el campo de contrasena envia el formulario de inicio de sesion</li><li><span class="manual-kbd">Escape</span> cierra cualquier dialogo modal abierto</li>'
+            },
+            m_s3_session: {
+                en: '<strong>Session Persistence:</strong> Your session is stored locally. After the first login, the application will auto-login on subsequent launches without requiring you to enter your credentials again.',
+                es: '<strong>Persistencia de Sesion:</strong> Su sesion se almacena localmente. Despues del primer inicio de sesion, la aplicacion iniciara sesion automaticamente en lanzamientos posteriores sin requerir que ingrese sus credenciales nuevamente.'
+            },
+
+            /* ── Section 4: Dashboard ───────────────────────────── */
+
+            m_s4_title: { en: '4. Dashboard', es: '4. Dashboard' },
+            m_s4_text: {
+                en: 'The Dashboard is the central hub of Kruder 1. From here you can access all major features through a navigation button grid.',
+                es: 'El Dashboard es el centro de control de Kruder 1. Desde aqui puede acceder a todas las funciones principales a traves de una cuadricula de botones de navegacion.'
+            },
+            m_s4_nav: {
+                en: '<li><strong>ACCOUNT</strong> — View account details and credits</li><li><strong>EVENT MANAGER</strong> — Create and manage events</li><li><strong>PROMPT LAB</strong> — Browse and manage AI styles</li><li><strong>FRAMES</strong> — Manage PNG frame overlays</li><li><strong>STATISTICS</strong> — View generation and print statistics</li><li><strong>SETTINGS</strong> — Configure camera, printer, interface, and more</li><li><strong>QUIT</strong> — Exit the application</li>',
+                es: '<li><strong>ACCOUNT</strong> — Ver detalles de la cuenta y creditos</li><li><strong>EVENT MANAGER</strong> — Crear y gestionar eventos</li><li><strong>PROMPT LAB</strong> — Explorar y gestionar estilos de IA</li><li><strong>FRAMES</strong> — Gestionar marcos PNG superpuestos</li><li><strong>STATISTICS</strong> — Ver estadisticas de generacion e impresion</li><li><strong>SETTINGS</strong> — Configurar camara, impresora, interfaz y mas</li><li><strong>QUIT</strong> — Salir de la aplicacion</li>'
+            },
+            m_s4_account_label: {
+                en: '<strong>Account Panel:</strong>',
+                es: '<strong>Panel de Cuenta:</strong>'
+            },
+            m_s4_account: {
+                en: '<li>Displays your registered email address</li><li>Shows your current credit balance</li><li><strong>LOGOUT</strong> — Sign out of your account</li><li><strong>REFRESH</strong> — Update your account data from the server</li>',
+                es: '<li>Muestra su correo electronico registrado</li><li>Muestra su saldo actual de creditos</li><li><strong>LOGOUT</strong> — Cerrar sesion de su cuenta</li><li><strong>REFRESH</strong> — Actualizar los datos de su cuenta desde el servidor</li>'
+            },
+            m_s4_logout: {
+                en: '<strong>Logout:</strong> Logging out requires password verification via the virtual keyboard to prevent unauthorized sign-outs during events.',
+                es: '<strong>Cerrar Sesion:</strong> Cerrar sesion requiere verificacion de contrasena mediante el teclado virtual para prevenir cierres de sesion no autorizados durante eventos.'
+            },
+            m_s4_lock: {
+                en: '<strong>Lock Screen:</strong> The Dashboard can be locked with a customizable message displayed on screen. If a Security PIN is configured, it is required to unlock. This is useful for leaving the software running between sessions.',
+                es: '<strong>Pantalla de Bloqueo:</strong> El Dashboard puede bloquearse con un mensaje personalizable que se muestra en pantalla. Si se ha configurado un PIN de seguridad, se requiere para desbloquear. Esto es util para dejar el software ejecutandose entre sesiones.'
+            },
+            m_s4_logo_note: {
+                en: '<strong>Navigation tip:</strong> Clicking the Kruder 1 logo at any time navigates back to the Dashboard. This shortcut is disabled during Event Mode to prevent accidental exits.',
+                es: '<strong>Consejo de navegacion:</strong> Hacer clic en el logo de Kruder 1 en cualquier momento lo lleva de regreso al Dashboard. Este atajo se deshabilita durante Event Mode para prevenir salidas accidentales.'
+            },
+
+            /* ── Section 5: Event Manager ───────────────────────── */
+
+            m_s5_title: { en: '5. Event Manager', es: '5. Event Manager' },
+            m_s5_text: {
+                en: 'The Event Manager displays all your events in a grid, sorted by creation date with the newest first. Each event contains its own gallery of generated images.',
+                es: 'El Event Manager muestra todos sus eventos en una cuadricula, ordenados por fecha de creacion con los mas recientes primero. Cada evento contiene su propia galeria de imagenes generadas.'
+            },
+            m_s5_create_label: {
+                en: '<strong>Creating an Event:</strong>',
+                es: '<strong>Crear un Evento:</strong>'
+            },
+            m_s5_create_steps: {
+                en: '<li>Press the <strong>CREATE EVENT</strong> button</li><li>A modal will appear with a virtual keyboard</li><li>Type the event name and press <strong>CONFIRM</strong></li>',
+                es: '<li>Presione el boton <strong>CREATE EVENT</strong></li><li>Aparecera un modal con un teclado virtual</li><li>Escriba el nombre del evento y presione <strong>CONFIRM</strong></li>'
+            },
+            m_s5_actions_label: {
+                en: '<strong>Event Actions:</strong> Each event card shows the event name and provides the following actions:',
+                es: '<strong>Acciones del Evento:</strong> Cada tarjeta de evento muestra el nombre del evento y ofrece las siguientes acciones:'
+            },
+            m_s5_actions: {
+                en: '<li><strong>START</strong> — Launch Event Mode for this event</li><li><strong>GALLERY</strong> — View the gallery of generated images</li><li><strong>Rename</strong> (pen icon) — Open a modal to rename the event</li>',
+                es: '<li><strong>START</strong> — Iniciar Event Mode para este evento</li><li><strong>GALLERY</strong> — Ver la galeria de imagenes generadas</li><li><strong>Renombrar</strong> (icono de lapiz) — Abrir un modal para renombrar el evento</li>'
+            },
+            m_s5_rename_label: {
+                en: '<strong>Renaming:</strong> Tap the pen icon next to the event name. A modal with a virtual keyboard will appear to enter the new name.',
+                es: '<strong>Renombrar:</strong> Toque el icono de lapiz junto al nombre del evento. Aparecera un modal con un teclado virtual para ingresar el nuevo nombre.'
+            },
+            m_s5_delete_label: {
+                en: '<strong>Deleting:</strong> Drag and drop the event card onto the trash icon. A confirmation dialog will appear. Deleted events are moved to the Recycle Bin.',
+                es: '<strong>Eliminar:</strong> Arrastre y suelte la tarjeta del evento sobre el icono de papelera. Aparecera un dialogo de confirmacion. Los eventos eliminados se mueven a la Papelera de Reciclaje.'
+            },
+            m_s5_gallery_label: {
+                en: '<strong>Gallery:</strong>',
+                es: '<strong>Galeria:</strong>'
+            },
+            m_s5_gallery: {
+                en: '<li><strong>SEARCH</strong> — Find images by email address or generation ID</li><li><strong>SHOW ALL GALLERY</strong> — Display all images (PIN required if configured)</li><li>Gallery displays image cards with thumbnails and associated email addresses</li>',
+                es: '<li><strong>SEARCH</strong> — Buscar imagenes por correo electronico o ID de generacion</li><li><strong>SHOW ALL GALLERY</strong> — Mostrar todas las imagenes (PIN requerido si esta configurado)</li><li>La galeria muestra tarjetas de imagen con miniaturas y correos electronicos asociados</li>'
+            },
+            m_s5_image_label: {
+                en: '<strong>Image Viewing:</strong>',
+                es: '<strong>Visualizacion de Imagenes:</strong>'
+            },
+            m_s5_image: {
+                en: '<li>Tap any image card to open a full-screen preview</li><li>Zoom from 1x to 2.5x with pan support for inspecting details</li><li>Drag an image card to the trash icon to delete it</li>',
+                es: '<li>Toque cualquier tarjeta de imagen para abrir una vista previa a pantalla completa</li><li>Zoom de 1x a 2.5x con soporte de desplazamiento para inspeccionar detalles</li><li>Arrastre una tarjeta de imagen al icono de papelera para eliminarla</li>'
+            },
+            m_s5_export_label: {
+                en: '<strong>Exporting Images:</strong>',
+                es: '<strong>Exportar Imagenes:</strong>'
+            },
+            m_s5_export: {
+                en: '<li><strong>IMAGES</strong> — Export all images to a folder on your computer</li><li><strong>ZIP</strong> — Export all images as a single compressed ZIP file</li>',
+                es: '<li><strong>IMAGES</strong> — Exportar todas las imagenes a una carpeta en su computadora</li><li><strong>ZIP</strong> — Exportar todas las imagenes como un archivo ZIP comprimido</li>'
+            },
+            m_s5_importexport_label: {
+                en: '<strong>Import/Export:</strong> Events can be transferred between installations using <span class="manual-kbd">.kruder1</span> files. These are ZIP archives containing a <span class="manual-kbd">data.json</span> file and an <span class="manual-kbd">images/</span> folder with all associated images.',
+                es: '<strong>Importar/Exportar:</strong> Los eventos pueden transferirse entre instalaciones usando archivos <span class="manual-kbd">.kruder1</span>. Estos son archivos ZIP que contienen un archivo <span class="manual-kbd">data.json</span> y una carpeta <span class="manual-kbd">images/</span> con todas las imagenes asociadas.'
+            },
+
+            /* ── Section 6: Event Mode ──────────────────────────── */
+
+            m_s6_title: { en: '6. Event Mode', es: '6. Event Mode' },
+            m_s6_text: {
+                en: 'Event Mode is the live photo booth experience designed for guests at your event. It provides a full-screen, touch-friendly interface that guides each guest through the AI generation workflow.',
+                es: 'Event Mode es la experiencia de cabina de fotos en vivo disenada para los invitados de su evento. Ofrece una interfaz de pantalla completa, amigable al tacto, que guia a cada invitado a traves del flujo de generacion con IA.'
+            },
+            m_s6_start_label: {
+                en: '<strong>Starting Event Mode:</strong>',
+                es: '<strong>Iniciar Event Mode:</strong>'
+            },
+            m_s6_start_steps: {
+                en: '<li>Go to the Event Manager and select an event</li><li>Press the <strong>START</strong> button on the event card</li><li>The screen shows "TOUCH TO START..." — the booth is now ready for guests</li>',
+                es: '<li>Vaya al Event Manager y seleccione un evento</li><li>Presione el boton <strong>START</strong> en la tarjeta del evento</li><li>La pantalla muestra "TOUCH TO START..." — la cabina esta lista para los invitados</li>'
+            },
+            m_s6_controls_label: {
+                en: '<strong>Controls:</strong>',
+                es: '<strong>Controles:</strong>'
+            },
+            m_s6_controls: {
+                en: '<li><strong>EXIT</strong> — Leave Event Mode (PIN required if configured)</li><li><strong>GALLERY</strong> — Open the event gallery during Event Mode</li>',
+                es: '<li><strong>EXIT</strong> — Salir de Event Mode (PIN requerido si esta configurado)</li><li><strong>GALLERY</strong> — Abrir la galeria del evento durante Event Mode</li>'
+            },
+            m_s6_flow_label: {
+                en: '<strong>Guest Flow:</strong>',
+                es: '<strong>Flujo del Invitado:</strong>'
+            },
+            m_s6_flow_steps: {
+                en: '<li><strong>Touch to Start</strong> — Guest taps the screen to begin</li><li><strong>Select Category</strong> — Browse available AI style categories</li><li><strong>Select Style</strong> — Choose a specific AI style within the category</li><li><strong>Preview Style</strong> — View the style with zoom support before proceeding</li><li><strong>Take Photo</strong> — A 3-second countdown begins, followed by a camera flash and capture (image is mirrored by default)</li><li><strong>Review Photo</strong> — Guest reviews the captured photo before generation</li><li><strong>AI Generation</strong> — The system processes the image with a loading screen and progress bar</li><li><strong>Result</strong> — The AI-generated image is displayed</li>',
+                es: '<li><strong>Touch to Start</strong> — El invitado toca la pantalla para comenzar</li><li><strong>Seleccionar Categoria</strong> — Explorar las categorias de estilos de IA disponibles</li><li><strong>Seleccionar Estilo</strong> — Elegir un estilo de IA especifico dentro de la categoria</li><li><strong>Vista Previa del Estilo</strong> — Ver el estilo con soporte de zoom antes de continuar</li><li><strong>Tomar Foto</strong> — Comienza una cuenta regresiva de 3 segundos, seguida de un flash de camara y captura (la imagen se refleja por defecto)</li><li><strong>Revisar Foto</strong> — El invitado revisa la foto capturada antes de la generacion</li><li><strong>Generacion con IA</strong> — El sistema procesa la imagen con una pantalla de carga y barra de progreso</li><li><strong>Resultado</strong> — La imagen generada con IA se muestra en pantalla</li>'
+            },
+            m_s6_gen_label: {
+                en: '<strong>During Generation:</strong>',
+                es: '<strong>Durante la Generacion:</strong>'
+            },
+            m_s6_gen: {
+                en: '<li>At approximately 15 seconds, an email input modal appears so the guest can enter their email address to receive the image</li><li>At approximately 40 seconds, a high demand message is displayed to reassure guests that the image is still being processed</li>',
+                es: '<li>A los 15 segundos aproximadamente, aparece un modal de entrada de correo electronico para que el invitado pueda ingresar su correo y recibir la imagen</li><li>A los 40 segundos aproximadamente, se muestra un mensaje de alta demanda para asegurar a los invitados que la imagen aun se esta procesando</li>'
+            },
+            m_s6_result_label: {
+                en: '<strong>Result Screen:</strong>',
+                es: '<strong>Pantalla de Resultado:</strong>'
+            },
+            m_s6_result: {
+                en: '<li>Displays "HERE\'S YOUR IMAGE!" with the generated result</li><li>A QR code overlay is shown for the guest to scan and access their image on a shareable web page</li>',
+                es: '<li>Muestra "HERE\'S YOUR IMAGE!" con el resultado generado</li><li>Se muestra un codigo QR superpuesto para que el invitado lo escanee y acceda a su imagen en una pagina web compartible</li>'
+            },
+            m_s6_print_label: {
+                en: '<strong>Printing:</strong>',
+                es: '<strong>Impresion:</strong>'
+            },
+            m_s6_print: {
+                en: '<li>If printing is enabled in Settings, the <strong>PRINT</strong> button appears on the result screen</li><li>A "HOW MANY PRINTS?" modal allows choosing the number of copies</li><li>If auto-print is enabled, the image prints automatically without user interaction</li>',
+                es: '<li>Si la impresion esta habilitada en la Configuracion, el boton <strong>PRINT</strong> aparece en la pantalla de resultado</li><li>Un modal "HOW MANY PRINTS?" permite elegir la cantidad de copias</li><li>Si la impresion automatica esta habilitada, la imagen se imprime automaticamente sin interaccion del usuario</li>'
+            },
+            m_s6_home_note: {
+                en: 'Press the <strong>home icon</strong> on the result screen to return to the "TOUCH TO START..." screen for the next guest.',
+                es: 'Presione el <strong>icono de inicio</strong> en la pantalla de resultado para volver a la pantalla "TOUCH TO START..." para el siguiente invitado.'
+            },
+
+            /* ── Section 7: Prompt Lab ──────────────────────────── */
+
+            m_s7_title: { en: '7. Prompt Lab', es: '7. Prompt Lab' },
+            m_s7_text: {
+                en: 'The Prompt Lab is where you manage all your AI styles. Styles are organized into categories, and each style has a name, description, thumbnail, and can be individually enabled or disabled.',
+                es: 'El Prompt Lab es donde gestiona todos sus estilos de IA. Los estilos estan organizados en categorias, y cada estilo tiene un nombre, descripcion, miniatura, y puede habilitarse o deshabilitarse individualmente.'
+            },
+            m_s7_library_label: {
+                en: '<strong>Library View:</strong>',
+                es: '<strong>Vista de Biblioteca:</strong>'
+            },
+            m_s7_library: {
+                en: '<li>Displays a grid of all categories with thumbnails</li><li><strong>UPDATE PROMPTS</strong> — Download the latest styles from the cloud and merge with your local library</li><li><strong>IMPORT/EXPORT ALL</strong> — Transfer your entire prompt library using <span class="manual-kbd">.kruder1</span> files</li>',
+                es: '<li>Muestra una cuadricula de todas las categorias con miniaturas</li><li><strong>UPDATE PROMPTS</strong> — Descargar los estilos mas recientes desde la nube y fusionar con su biblioteca local</li><li><strong>IMPORT/EXPORT ALL</strong> — Transferir toda su biblioteca de prompts usando archivos <span class="manual-kbd">.kruder1</span></li>'
+            },
+            m_s7_category_label: {
+                en: '<strong>Category Details:</strong>',
+                es: '<strong>Detalles de Categoria:</strong>'
+            },
+            m_s7_category: {
+                en: '<li>Shows a grid of all prompts within the selected category</li><li>Each prompt can be toggled on or off individually</li><li><strong>GENERATE PROMPT</strong> — Create a new AI style using the generation tool</li><li><strong>MANUAL PROMPT</strong> — Add a style manually with your own image (no credits consumed)</li>',
+                es: '<li>Muestra una cuadricula de todos los prompts dentro de la categoria seleccionada</li><li>Cada prompt puede activarse o desactivarse individualmente</li><li><strong>GENERATE PROMPT</strong> — Crear un nuevo estilo de IA usando la herramienta de generacion</li><li><strong>MANUAL PROMPT</strong> — Agregar un estilo manualmente con su propia imagen (no consume creditos)</li>'
+            },
+            m_s7_generate_label: {
+                en: '<strong>Generating a New Prompt:</strong>',
+                es: '<strong>Generar un Nuevo Prompt:</strong>'
+            },
+            m_s7_generate_steps: {
+                en: '<li>Enter a name for the new style</li><li>Select an existing category or create a new one</li><li>Write a description of the desired AI transformation</li><li>Optionally upload a reference image</li><li>Press <strong>GENERATE</strong> — this consumes <strong>1 credit</strong></li><li>The generated result becomes the style thumbnail</li>',
+                es: '<li>Ingrese un nombre para el nuevo estilo</li><li>Seleccione una categoria existente o cree una nueva</li><li>Escriba una descripcion de la transformacion de IA deseada</li><li>Opcionalmente suba una imagen de referencia</li><li>Presione <strong>GENERATE</strong> — esto consume <strong>1 credito</strong></li><li>El resultado generado se convierte en la miniatura del estilo</li>'
+            },
+            m_s7_generate_note: {
+                en: '<strong>Manual Prompt:</strong> You can also add styles manually by providing your own image. Manual prompts do not consume any credits.',
+                es: '<strong>Manual Prompt:</strong> Tambien puede agregar estilos manualmente proporcionando su propia imagen. Los prompts manuales no consumen creditos.'
+            },
+            m_s7_manual_label: {
+                en: '',
+                es: ''
+            },
+            m_s7_view_label: {
+                en: '<strong>Viewing and Editing Prompts:</strong>',
+                es: '<strong>Ver y Editar Prompts:</strong>'
+            },
+            m_s7_view: {
+                en: '<li>Prompt name — tap the pen icon to rename</li><li>Description — tap to copy the description text</li><li>Thumbnail — tap to view full-screen</li><li>Categories and prompts can both be renamed via the pen icon</li>',
+                es: '<li>Nombre del prompt — toque el icono de lapiz para renombrar</li><li>Descripcion — toque para copiar el texto de la descripcion</li><li>Miniatura — toque para ver a pantalla completa</li><li>Tanto las categorias como los prompts pueden renombrarse con el icono de lapiz</li>'
+            },
+            m_s7_drag_label: {
+                en: '<strong>Drag and Drop:</strong>',
+                es: '<strong>Arrastrar y Soltar:</strong>'
+            },
+            m_s7_drag: {
+                en: '<li>Reorder prompts within a category by dragging</li><li>Move prompts between categories</li><li>Create a new category by dropping a prompt in the designated area</li><li>Delete prompts by dragging to the trash icon</li><li>Delete categories (irreversible — all prompts within the category are removed)</li>',
+                es: '<li>Reordenar prompts dentro de una categoria arrastrando</li><li>Mover prompts entre categorias</li><li>Crear una nueva categoria soltando un prompt en el area designada</li><li>Eliminar prompts arrastrando al icono de papelera</li><li>Eliminar categorias (irreversible — todos los prompts dentro de la categoria se eliminan)</li>'
+            },
+            m_s7_toggle_label: {
+                en: '<strong>Enable/Disable:</strong> Both individual prompts and entire categories have toggle switches. Disabled styles will not appear during Event Mode for guest selection.',
+                es: '<strong>Habilitar/Deshabilitar:</strong> Tanto los prompts individuales como las categorias completas tienen interruptores de activacion. Los estilos deshabilitados no apareceran durante Event Mode para la seleccion de invitados.'
+            },
+
+            /* ── Section 8: Frames ──────────────────────────────── */
+
+            m_s8_title: { en: '8. Frames', es: '8. Marcos (Frames)' },
+            m_s8_text: {
+                en: 'Frames are PNG image overlays that are composited on top of generated images, ideal for event branding, logos, or decorative borders.',
+                es: 'Los marcos son superposiciones de imagenes PNG que se componen sobre las imagenes generadas, ideales para branding de eventos, logos o bordes decorativos.'
+            },
+            m_s8_features: {
+                en: '<li>Frames must be PNG files with transparency</li><li>Only one frame can be active at a time (exclusive toggle)</li><li>The frames grid shows each frame with its toggle, preview, and name</li>',
+                es: '<li>Los marcos deben ser archivos PNG con transparencia</li><li>Solo un marco puede estar activo a la vez (activacion exclusiva)</li><li>La cuadricula de marcos muestra cada marco con su interruptor, vista previa y nombre</li>'
+            },
+            m_s8_actions_label: {
+                en: '<strong>Managing Frames:</strong>',
+                es: '<strong>Gestionar Marcos:</strong>'
+            },
+            m_s8_actions: {
+                en: '<li><strong>ADD FRAME</strong> — Open a file picker to select a PNG file</li><li><strong>Preview</strong> — Tap a frame to view it full-screen</li><li><strong>Delete</strong> — Drag a frame to the trash icon (moves to Recycle Bin)</li><li><strong>Toggle</strong> — Activate or deactivate a frame</li>',
+                es: '<li><strong>ADD FRAME</strong> — Abrir un selector de archivos para elegir un archivo PNG</li><li><strong>Vista previa</strong> — Toque un marco para verlo a pantalla completa</li><li><strong>Eliminar</strong> — Arrastre un marco al icono de papelera (se mueve a la Papelera de Reciclaje)</li><li><strong>Activar/Desactivar</strong> — Active o desactive un marco</li>'
+            },
+            m_s8_note: {
+                en: 'When no frame is active, generated images are saved without any overlay.',
+                es: 'Cuando ningun marco esta activo, las imagenes generadas se guardan sin ninguna superposicion.'
+            },
+
+            /* ── Section 9: Settings ────────────────────────────── */
+
+            m_s9_title: { en: '9. Settings', es: '9. Configuracion' },
+            m_s9_text: {
+                en: 'The Settings panel provides full control over the software behavior and appearance. Access it from the Dashboard by pressing <strong>SETTINGS</strong>.',
+                es: 'El panel de Configuracion ofrece control total sobre el comportamiento y la apariencia del software. Acceda desde el Dashboard presionando <strong>SETTINGS</strong>.'
+            },
+            m_s9_menu: {
+                en: '<li>Camera</li><li>Printing</li><li>Sound</li><li>Language</li><li>Interface</li><li>Fullscreen</li><li>Security PIN</li><li>Software Update</li>',
+                es: '<li>Camara</li><li>Impresion</li><li>Sonido</li><li>Idioma</li><li>Interfaz</li><li>Pantalla Completa</li><li>PIN de Seguridad</li><li>Actualizacion de Software</li>'
+            },
+
+            m_s9_camera_label: {
+                en: '<strong>Camera:</strong>',
+                es: '<strong>Camara:</strong>'
+            },
+            m_s9_camera: {
+                en: '<li>Select the camera device from the dropdown</li><li>Live preview of the camera feed</li><li>Adjust <strong>brightness</strong>, <strong>contrast</strong>, and <strong>white balance</strong> with sliders (range 0-100, neutral at 50)</li><li>Press <strong>RESET</strong> to restore all camera settings to defaults</li>',
+                es: '<li>Seleccione el dispositivo de camara del menu desplegable</li><li>Vista previa en vivo de la camara</li><li>Ajuste el <strong>brillo</strong>, <strong>contraste</strong> y <strong>balance de blancos</strong> con controles deslizantes (rango 0-100, neutral en 50)</li><li>Presione <strong>RESET</strong> para restaurar toda la configuracion de camara a los valores predeterminados</li>'
+            },
+
+            m_s9_printing_label: {
+                en: '<strong>Printing:</strong>',
+                es: '<strong>Impresion:</strong>'
+            },
+            m_s9_printing: {
+                en: '<li>Upload a test image for print testing</li><li>Enable or disable printing with the toggle switch</li><li>Enable or disable automatic printing</li><li>Set the default number of copies</li><li>Select a printer from the available devices</li><li><strong>PRINTER SETTINGS</strong> — Open the system printer configuration</li><li><strong>TEST PRINTING</strong> — Send a test print to verify setup</li>',
+                es: '<li>Cargue una imagen de prueba para probar la impresion</li><li>Habilite o deshabilite la impresion con el interruptor</li><li>Habilite o deshabilite la impresion automatica</li><li>Establezca el numero predeterminado de copias</li><li>Seleccione una impresora de los dispositivos disponibles</li><li><strong>PRINTER SETTINGS</strong> — Abrir la configuracion de impresora del sistema</li><li><strong>TEST PRINTING</strong> — Enviar una impresion de prueba para verificar la configuracion</li>'
+            },
+
+            m_s9_sound_label: {
+                en: '<strong>Sound:</strong>',
+                es: '<strong>Sonido:</strong>'
+            },
+            m_s9_sound: {
+                en: '<li><strong>BACKGROUND SOUND</strong> — Ambient music volume (default: 15%, range: 0-100%)</li><li><strong>UI SOUND</strong> — Interface sound effects volume (default: 75%, range: 0-100%)</li>',
+                es: '<li><strong>BACKGROUND SOUND</strong> — Volumen de musica ambiental (predeterminado: 15%, rango: 0-100%)</li><li><strong>UI SOUND</strong> — Volumen de efectos de sonido de la interfaz (predeterminado: 75%, rango: 0-100%)</li>'
+            },
+
+            m_s9_language_label: {
+                en: '<strong>Language:</strong>',
+                es: '<strong>Idioma:</strong>'
+            },
+            m_s9_language: {
+                en: '<li>10 supported languages: English, Spanish, French, German, Italian, Portuguese, Japanese, Chinese, Russian, Arabic</li><li>Select from the dropdown and press <strong>APPLY</strong></li>',
+                es: '<li>10 idiomas soportados: Ingles, Espanol, Frances, Aleman, Italiano, Portugues, Japones, Chino, Ruso, Arabe</li><li>Seleccione del menu desplegable y presione <strong>APPLY</strong></li>'
+            },
+
+            m_s9_interface_label: {
+                en: '<strong>Interface:</strong>',
+                es: '<strong>Interfaz:</strong>'
+            },
+            m_s9_interface: {
+                en: '<li><strong>ACCENT COLOR</strong> — Adjust the accent hue (0-360 degrees on the color wheel)</li><li><strong>BACKGROUND LUMINANCE</strong> — Control background brightness (0-100%)</li><li><strong>TEXT/ICONS</strong> — Control text and icon brightness (0-100%)</li><li><strong>LIGHT MODE</strong> — Apply the default light theme preset</li><li><strong>DARK MODE</strong> — Apply the default dark theme preset</li>',
+                es: '<li><strong>ACCENT COLOR</strong> — Ajustar el tono del color de acento (0-360 grados en la rueda de color)</li><li><strong>BACKGROUND LUMINANCE</strong> — Controlar el brillo del fondo (0-100%)</li><li><strong>TEXT/ICONS</strong> — Controlar el brillo del texto e iconos (0-100%)</li><li><strong>LIGHT MODE</strong> — Aplicar el preset de tema claro predeterminado</li><li><strong>DARK MODE</strong> — Aplicar el preset de tema oscuro predeterminado</li>'
+            },
+
+            m_s9_fullscreen_label: {
+                en: '<strong>Fullscreen:</strong> Toggle between fullscreen and windowed display mode.',
+                es: '<strong>Pantalla Completa:</strong> Alterne entre el modo de pantalla completa y ventana.'
+            },
+
+            m_s9_pin_label: {
+                en: '<strong>Security PIN:</strong>',
+                es: '<strong>PIN de Seguridad:</strong>'
+            },
+            m_s9_pin: {
+                en: '<li>Set a 4-digit PIN for restricted actions</li><li>When active, the PIN is required to: exit Event Mode, unlock the Dashboard, and view the full gallery</li><li><strong>Setup:</strong> Enter a PIN, then confirm it</li><li><strong>Release:</strong> Enter the current PIN to remove it</li><li>The PIN is stored in session storage and resets when the application closes</li><li>You can customize the lock screen text message</li>',
+                es: '<li>Establezca un PIN de 4 digitos para acciones restringidas</li><li>Cuando esta activo, el PIN es requerido para: salir de Event Mode, desbloquear el Dashboard y ver la galeria completa</li><li><strong>Configurar:</strong> Ingrese un PIN, luego confirmelo</li><li><strong>Liberar:</strong> Ingrese el PIN actual para eliminarlo</li><li>El PIN se almacena en la sesion y se restablece cuando la aplicacion se cierra</li><li>Puede personalizar el mensaje de texto de la pantalla de bloqueo</li>'
+            },
+
+            m_s9_update_label: {
+                en: '<strong>Software Update:</strong>',
+                es: '<strong>Actualizacion de Software:</strong>'
+            },
+            m_s9_update: {
+                en: '<li>Displays the current software version</li><li><strong>CHECK FOR UPDATES</strong> — Query the server for new versions</li><li>If an update is available, download begins with a progress bar</li><li>The installer is verified with a <strong>SHA-256 hash</strong> check for integrity</li><li>Press <strong>INSTALL & RESTART</strong> to apply the update</li>',
+                es: '<li>Muestra la version actual del software</li><li><strong>CHECK FOR UPDATES</strong> — Consultar al servidor por nuevas versiones</li><li>Si hay una actualizacion disponible, la descarga comienza con una barra de progreso</li><li>El instalador se verifica con una comprobacion de hash <strong>SHA-256</strong> para integridad</li><li>Presione <strong>INSTALL & RESTART</strong> para aplicar la actualizacion</li>'
+            },
+
+            /* ── Section 10: Credit System ──────────────────────── */
+
+            m_s10_title: { en: '10. Credit System', es: '10. Sistema de Creditos' },
+            m_s10_text: {
+                en: 'Kruder 1 uses a credit-based model. Each AI image generation consumes exactly 1 credit. Credits are purchased in packages and never expire.',
+                es: 'Kruder 1 utiliza un modelo basado en creditos. Cada generacion de imagen con IA consume exactamente 1 credito. Los creditos se adquieren en paquetes y nunca expiran.'
+            },
+            m_s10_details: {
+                en: '<li><strong>1 credit = 1 AI generation</strong></li><li>10 free demo credits per device for new accounts</li><li>Credits never expire and are non-transferable</li><li>Your balance is visible in the Account panel and updates automatically after each generation</li>',
+                es: '<li><strong>1 credito = 1 generacion de IA</strong></li><li>10 creditos de demostracion gratuitos por dispositivo para cuentas nuevas</li><li>Los creditos nunca expiran y no son transferibles</li><li>Su saldo es visible en el panel de Cuenta y se actualiza automaticamente despues de cada generacion</li>'
+            },
+            m_s10_th_package: { en: 'Package', es: 'Paquete' },
+            m_s10_th_credits: { en: 'Credits', es: 'Creditos' },
+            m_s10_th_price: { en: 'Price', es: 'Precio' },
+            m_s10_purchase: {
+                en: 'Credits are purchased through the Kruder 1 website using Stripe for secure payment processing.',
+                es: 'Los creditos se adquieren a traves del sitio web de Kruder 1 utilizando Stripe para el procesamiento seguro de pagos.'
+            },
+
+            /* ── Section 11: Statistics ─────────────────────────── */
+
+            m_s11_title: { en: '11. Statistics', es: '11. Estadisticas' },
+            m_s11_text: {
+                en: 'The Statistics module provides detailed analytics for your photo booth operations.',
+                es: 'El modulo de Estadisticas proporciona analiticas detalladas para sus operaciones de cabina de fotos.'
+            },
+            m_s11_scope_label: {
+                en: '<strong>Scope Selector:</strong> View statistics globally across all events or filtered to a specific individual event.',
+                es: '<strong>Selector de Alcance:</strong> Vea estadisticas globalmente a traves de todos los eventos o filtradas a un evento individual especifico.'
+            },
+            m_s11_event_label: {
+                en: '<strong>Event Mode Statistics:</strong>',
+                es: '<strong>Estadisticas de Event Mode:</strong>'
+            },
+            m_s11_event_stats: {
+                en: '<li>Total Generations</li><li>Successful generations</li><li>Failed generations</li><li>Success Rate (%)</li><li>Sent prints</li><li>Successful prints</li><li>Failed prints</li><li>Print Success Rate (%)</li><li>Average Generation Time</li><li>Emails Collected</li>',
+                es: '<li>Generaciones Totales</li><li>Generaciones exitosas</li><li>Generaciones fallidas</li><li>Tasa de Exito (%)</li><li>Impresiones enviadas</li><li>Impresiones exitosas</li><li>Impresiones fallidas</li><li>Tasa de Exito de Impresion (%)</li><li>Tiempo Promedio de Generacion</li><li>Correos Electronicos Recopilados</li>'
+            },
+            m_s11_prompt_label: {
+                en: '<strong>Prompt Lab Statistics:</strong>',
+                es: '<strong>Estadisticas de Prompt Lab:</strong>'
+            },
+            m_s11_prompt_stats: {
+                en: '<li>Total Generations</li><li>Successful generations</li><li>Failed generations</li><li>Success Rate (%)</li><li>Average Generation Time</li>',
+                es: '<li>Generaciones Totales</li><li>Generaciones exitosas</li><li>Generaciones fallidas</li><li>Tasa de Exito (%)</li><li>Tiempo Promedio de Generacion</li>'
+            },
+            m_s11_export: {
+                en: '<strong>EXPORT EMAILS:</strong> Export all collected email addresses from your events for marketing or follow-up purposes.',
+                es: '<strong>EXPORT EMAILS:</strong> Exporte todos los correos electronicos recopilados de sus eventos para propositos de marketing o seguimiento.'
+            },
+
+            /* ── Section 12: Troubleshooting ────────────────────── */
+
+            m_s12_title: { en: '12. Troubleshooting', es: '12. Solucion de Problemas' },
+            m_s12_text: {
+                en: 'If you encounter issues, the following resources can help you diagnose and resolve common problems.',
+                es: 'Si encuentra problemas, los siguientes recursos pueden ayudarle a diagnosticar y resolver problemas comunes.'
+            },
+
+            m_s12_debug_label: {
+                en: '<strong>Debug Log Upload:</strong>',
+                es: '<strong>Carga del Registro de Depuracion:</strong>'
+            },
+            m_s12_debug_steps: {
+                en: '<li>Navigate to <strong>Settings</strong></li><li>Tap the <strong>Kruder 1 logo</strong> 5 times rapidly</li><li>The debug log is uploaded to the server automatically</li><li>A confirmation message appears when the upload is complete</li>',
+                es: '<li>Navegue a <strong>Settings</strong></li><li>Toque el <strong>logo de Kruder 1</strong> 5 veces rapidamente</li><li>El registro de depuracion se carga al servidor automaticamente</li><li>Aparece un mensaje de confirmacion cuando la carga se completa</li>'
+            },
+
+            m_s12_errors_label: {
+                en: '<strong>Common Error Messages:</strong>',
+                es: '<strong>Mensajes de Error Comunes:</strong>'
+            },
+            m_s12_th_error: { en: 'Error Message', es: 'Mensaje de Error' },
+            m_s12_th_solution: { en: 'Solution', es: 'Solucion' },
+
+            m_s12_e1_msg: { en: 'FILL ALL FIELDS', es: 'FILL ALL FIELDS' },
+            m_s12_e1_fix: {
+                en: 'Enter both email and password fields',
+                es: 'Ingrese ambos campos de correo y contrasena'
+            },
+            m_s12_e2_msg: { en: 'CONNECTION ERROR', es: 'CONNECTION ERROR' },
+            m_s12_e2_fix: {
+                en: 'Check your internet connection and try again',
+                es: 'Verifique su conexion a internet e intente de nuevo'
+            },
+            m_s12_e3_msg: { en: 'CAMERA ERROR: Access denied', es: 'CAMERA ERROR: Access denied' },
+            m_s12_e3_fix: {
+                en: 'Grant camera access permission to the application',
+                es: 'Otorgue permiso de acceso a la camara a la aplicacion'
+            },
+            m_s12_e4_msg: { en: 'NO SESSION -- PLEASE LOG IN', es: 'NO SESSION -- PLEASE LOG IN' },
+            m_s12_e4_fix: {
+                en: 'Your session has expired. Log in again',
+                es: 'Su sesion ha expirado. Inicie sesion nuevamente'
+            },
+            m_s12_e5_msg: { en: 'NO EVENT STARTED', es: 'NO EVENT STARTED' },
+            m_s12_e5_fix: {
+                en: 'Start Event Mode from the Event Manager first',
+                es: 'Inicie Event Mode desde el Event Manager primero'
+            },
+            m_s12_e6_msg: { en: 'GENERATION FAILED, TRY AGAIN', es: 'GENERATION FAILED, TRY AGAIN' },
+            m_s12_e6_fix: {
+                en: 'Retry the generation. Check that you have credits remaining',
+                es: 'Reintente la generacion. Verifique que tiene creditos disponibles'
+            },
+            m_s12_e7_msg: { en: 'Could not upload photo. Please try again.', es: 'Could not upload photo. Please try again.' },
+            m_s12_e7_fix: {
+                en: 'Check your internet connection and retry',
+                es: 'Verifique su conexion a internet e intente de nuevo'
+            },
+            m_s12_e8_msg: { en: 'ONLY PNG FILES ARE ALLOWED', es: 'ONLY PNG FILES ARE ALLOWED' },
+            m_s12_e8_fix: {
+                en: 'Use a PNG file with transparency for frames',
+                es: 'Use un archivo PNG con transparencia para los marcos'
+            },
+            m_s12_e9_msg: { en: 'WRONG PASSWORD', es: 'WRONG PASSWORD' },
+            m_s12_e9_fix: {
+                en: 'Re-enter the correct password',
+                es: 'Vuelva a ingresar la contrasena correcta'
+            },
+            m_s12_e10_msg: { en: 'SELECT A PRINTER FIRST', es: 'SELECT A PRINTER FIRST' },
+            m_s12_e10_fix: {
+                en: 'Choose a printer in Settings before printing',
+                es: 'Elija una impresora en la Configuracion antes de imprimir'
+            },
+            m_s12_e11_msg: { en: 'COULD NOT DOWNLOAD PROMPTS', es: 'COULD NOT DOWNLOAD PROMPTS' },
+            m_s12_e11_fix: {
+                en: 'Check your internet connection and try again',
+                es: 'Verifique su conexion a internet e intente de nuevo'
+            },
+
+            m_s12_camera_label: {
+                en: '<strong>Camera Issues:</strong>',
+                es: '<strong>Problemas de Camara:</strong>'
+            },
+            m_s12_camera: {
+                en: '<li><strong>No cameras listed</strong> — Ensure the webcam is connected via USB and recognized by Windows</li><li><strong>Black screen</strong> — Try selecting a different camera device or restarting the application</li><li><strong>Image too dark or too bright</strong> — Adjust the brightness, contrast, and white balance sliders in Camera Settings</li><li><strong>Image appears mirrored</strong> — This is by design. The camera feed is mirrored so guests see themselves naturally, like looking in a mirror</li>',
+                es: '<li><strong>No aparecen camaras</strong> — Asegurese de que la webcam esta conectada por USB y es reconocida por Windows</li><li><strong>Pantalla negra</strong> — Intente seleccionar un dispositivo de camara diferente o reiniciar la aplicacion</li><li><strong>Imagen demasiado oscura o brillante</strong> — Ajuste los controles deslizantes de brillo, contraste y balance de blancos en la Configuracion de Camara</li><li><strong>La imagen aparece reflejada</strong> — Esto es por diseno. La imagen de la camara se refleja para que los invitados se vean naturalmente, como mirarse en un espejo</li>'
+            },
+
+            m_s12_printer_label: {
+                en: '<strong>Printer Issues:</strong>',
+                es: '<strong>Problemas de Impresora:</strong>'
+            },
+            m_s12_printer: {
+                en: '<li><strong>No printers listed</strong> — Check that the printer is connected, powered on, and installed in Windows</li><li><strong>Test print fails</strong> — Open PRINTER SETTINGS to verify the printer configuration in Windows</li><li><strong>Auto-print not working</strong> — Ensure both the printing toggle and the auto-print toggle are enabled in Settings</li><li><strong>PRINT button not visible</strong> — Printing must be enabled in Settings for the button to appear during Event Mode</li>',
+                es: '<li><strong>No aparecen impresoras</strong> — Verifique que la impresora este conectada, encendida e instalada en Windows</li><li><strong>La impresion de prueba falla</strong> — Abra PRINTER SETTINGS para verificar la configuracion de la impresora en Windows</li><li><strong>La impresion automatica no funciona</strong> — Asegurese de que tanto el interruptor de impresion como el de impresion automatica esten habilitados en la Configuracion</li><li><strong>El boton PRINT no es visible</strong> — La impresion debe estar habilitada en la Configuracion para que el boton aparezca durante Event Mode</li>'
+            },
+
+            m_s12_network_label: {
+                en: '<strong>Network Issues:</strong>',
+                es: '<strong>Problemas de Red:</strong>'
+            },
+            m_s12_network: {
+                en: '<li><strong>Account not refreshing</strong> — Check your internet connection and press REFRESH in the Account panel</li><li><strong>Generation takes a long time</strong> — AI generation typically takes 15-30 seconds. During high demand periods, it may take longer. A message is displayed at ~40 seconds to reassure users</li>',
+                es: '<li><strong>La cuenta no se actualiza</strong> — Verifique su conexion a internet y presione REFRESH en el panel de Cuenta</li><li><strong>La generacion toma mucho tiempo</strong> — La generacion con IA tipicamente toma 15-30 segundos. Durante periodos de alta demanda, puede tomar mas tiempo. Un mensaje se muestra a los ~40 segundos para tranquilizar a los usuarios</li>'
+            },
+
+            m_s12_data_label: {
+                en: '<strong>Data and Storage:</strong>',
+                es: '<strong>Datos y Almacenamiento:</strong>'
+            },
+            m_s12_data: {
+                en: '<li>All local data is stored in <span class="manual-kbd">%APPDATA%\\Kruder1\\</span></li><li>Log files are automatically rotated every 30 days</li><li>Deleted items (events, images, frames) are moved to the Recycle Bin and can be recovered</li><li>To perform a clean reinstall, uninstall the application and delete the <span class="manual-kbd">%APPDATA%\\Kruder1\\</span> folder</li>',
+                es: '<li>Todos los datos locales se almacenan en <span class="manual-kbd">%APPDATA%\\Kruder1\\</span></li><li>Los archivos de registro se rotan automaticamente cada 30 dias</li><li>Los elementos eliminados (eventos, imagenes, marcos) se mueven a la Papelera de Reciclaje y pueden recuperarse</li><li>Para realizar una reinstalacion limpia, desinstale la aplicacion y elimine la carpeta <span class="manual-kbd">%APPDATA%\\Kruder1\\</span></li>'
+            }
+
+        });
+    </script>
+</body>
+</html>
