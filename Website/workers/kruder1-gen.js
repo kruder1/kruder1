@@ -747,6 +747,56 @@ export default {
         return json({ ok: true, service: "kruder1-gen", timestamp: new Date().toISOString() });
       }
 
+      // ─────────────────────────────────────────────────────────────────────
+      // GET /system-status - Aggregated health check for all services
+      // ─────────────────────────────────────────────────────────────────────
+      if (path === "system-status" && request.method === "GET") {
+        const services = { gen: { ok: true } };
+
+        // Check auth worker
+        try {
+          const r = await fetch("https://kruder1-auth.kruder1-master.workers.dev/health", { signal: AbortSignal.timeout(5000) });
+          services.auth = { ok: r.status < 500 };
+        } catch (_) {
+          services.auth = { ok: false };
+        }
+
+        // Check AI provider reachability (empty POST → 400/422 = alive, 5xx/timeout = down)
+        try {
+          const r = await fetch(SEGMIND_ENDPOINT, {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${env.SEGMIND_API_KEY}`, "Content-Type": "application/json" },
+            body: "{}",
+            signal: AbortSignal.timeout(8000),
+          });
+          services.ai = { ok: r.status < 500 };
+        } catch (_) {
+          services.ai = { ok: false };
+        }
+
+        // Check database reachability (any non-5xx = server is alive)
+        try {
+          const r = await fetch(`${env.SUPABASE_URL}/rest/v1/`, {
+            headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY },
+            signal: AbortSignal.timeout(5000),
+          });
+          services.db = { ok: r.status < 500 };
+        } catch (_) {
+          services.db = { ok: false };
+        }
+
+        const vals = Object.values(services);
+        const allOk = vals.every(s => s.ok);
+        const allDown = vals.every(s => !s.ok);
+
+        return json({
+          ok: true,
+          status: allOk ? "operational" : allDown ? "down" : "degraded",
+          services,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
       return err("Not found", 404);
     } catch (e) {
       console.error("Gen worker error:", e?.message || e);

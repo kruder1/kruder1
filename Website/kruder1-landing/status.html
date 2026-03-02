@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kruder 1 — System Status</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="img/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        .status-card {
+            max-width: 520px;
+            margin: 0 auto;
+            border: 2px solid var(--theme-ink);
+            border-radius: 0.75rem;
+            padding: 2rem;
+        }
+        .status-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 0;
+            border-bottom: 1px dotted var(--theme-ink-20);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+        .status-row:last-child { border-bottom: none; }
+        .status-row-name {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-weight: 600;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .status-dot.green  { background: #22c55e; box-shadow: 0 0 6px #22c55e88; }
+        .status-dot.red    { background: #ef4444; box-shadow: 0 0 6px #ef444488; }
+        .status-dot.orange { background: #f59e0b; box-shadow: 0 0 6px #f59e0b88; }
+        .status-dot.gray   { background: #9ca3af; }
+        .status-badge {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .status-badge.green  { color: #22c55e; }
+        .status-badge.red    { color: #ef4444; }
+        .status-badge.orange { color: #f59e0b; }
+        .status-badge.gray   { color: #9ca3af; }
+        .status-overall {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 2px solid var(--theme-ink);
+            border-radius: 0.5rem;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .status-overall.green  { border-color: #22c55e; color: #22c55e; }
+        .status-overall.red    { border-color: #ef4444; color: #ef4444; }
+        .status-overall.orange { border-color: #f59e0b; color: #f59e0b; }
+        .status-footer {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            font-family: 'Inter', sans-serif;
+        }
+        .status-footer span { margin: 0 0.25rem; }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .status-dot.checking { animation: pulse-dot 1s ease-in-out infinite; background: #9ca3af; }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div id="scanlines"></div>
+
+    <nav class="nav-sticky">
+        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
+        <div class="nav-actions">
+            <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+            <button id="btn-lang" class="nav-action-btn">EN</button>
+            <a href="login.html" class="btn-accent btn-sm" id="btn-access" data-i18n="nav_access">CLIENT ACCESS</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section">
+            <h1 class="section-title is-accent" data-i18n="st_title"></h1>
+
+            <div class="status-card" id="status-card">
+                <div class="status-row" id="row-gen">
+                    <div class="status-row-name">
+                        <span class="status-dot checking"></span>
+                        <span data-i18n="st_gen"></span>
+                    </div>
+                    <div>
+                        <span class="status-badge gray" data-i18n="st_checking"></span>
+                    </div>
+                </div>
+                <div class="status-row" id="row-auth">
+                    <div class="status-row-name">
+                        <span class="status-dot checking"></span>
+                        <span data-i18n="st_auth"></span>
+                    </div>
+                    <div>
+                        <span class="status-badge gray" data-i18n="st_checking"></span>
+                    </div>
+                </div>
+                <div class="status-row" id="row-ai">
+                    <div class="status-row-name">
+                        <span class="status-dot checking"></span>
+                        <span data-i18n="st_ai"></span>
+                    </div>
+                    <div>
+                        <span class="status-badge gray" data-i18n="st_checking"></span>
+                    </div>
+                </div>
+                <div class="status-row" id="row-db">
+                    <div class="status-row-name">
+                        <span class="status-dot checking"></span>
+                        <span data-i18n="st_db"></span>
+                    </div>
+                    <div>
+                        <span class="status-badge gray" data-i18n="st_checking"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-overall gray" id="status-overall" data-i18n="st_checking"></div>
+            <div class="status-footer" id="status-footer"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="privacy.html" data-i18n="footer_privacy"></a>
+            <span>&middot;</span>
+            <a href="terms.html" data-i18n="footer_terms"></a>
+            <span>&middot;</span>
+            <a href="contact.html" data-i18n="footer_contact"></a>
+        </div>
+        <div class="footer-copyright">&copy; 2026 Kruder 1. All rights reserved.</div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        KRUDER.init({
+            st_title:      { en: 'System Status', es: 'Estado del Sistema' },
+            st_gen:        { en: 'Kruder 1', es: 'Kruder 1' },
+            st_auth:       { en: 'Authentication', es: 'Autenticación' },
+            st_ai:         { en: 'AI Engine', es: 'Motor de IA' },
+            st_db:         { en: 'Database', es: 'Base de Datos' },
+            st_checking:   { en: 'Checking...', es: 'Verificando...' },
+            st_online:     { en: 'Online', es: 'En línea' },
+            st_offline:    { en: 'Offline', es: 'Sin conexión' },
+            st_slow:       { en: 'Slow', es: 'Lento' },
+            st_all_ok:     { en: 'All Systems Operational', es: 'Todos los Sistemas Operativos' },
+            st_degraded:   { en: 'Some Services Degraded', es: 'Algunos Servicios Degradados' },
+            st_down:       { en: 'Services Unavailable', es: 'Servicios No Disponibles' },
+            st_last_check: { en: 'Last checked', es: 'Última verificación' },
+            st_refresh:    { en: 'Auto-refreshes every 30s', es: 'Se actualiza cada 30s' }
+        });
+
+        // Re-check immediately when language changes
+        document.getElementById('btn-lang')?.addEventListener('click', () => {
+            setTimeout(checkStatus, 100);
+        });
+
+        const GEN_STATUS_URL = 'https://kruder1-gen.kruder1-master.workers.dev/system-status';
+
+        function updateRow(id, ok) {
+            const row = document.getElementById(id);
+            if (!row) return;
+            const dot = row.querySelector('.status-dot');
+            const badge = row.querySelector('.status-badge');
+
+            dot.className = 'status-dot ' + (ok ? 'green' : 'red');
+            badge.className = 'status-badge ' + (ok ? 'green' : 'red');
+            badge.textContent = ok ? KRUDER.t('st_online') : KRUDER.t('st_offline');
+        }
+
+        function updateOverall(status) {
+            const el = document.getElementById('status-overall');
+            const color = status === 'operational' ? 'green' : status === 'degraded' ? 'orange' : 'red';
+            const key = status === 'operational' ? 'st_all_ok' : status === 'degraded' ? 'st_degraded' : 'st_down';
+            el.className = 'status-overall ' + color;
+            el.textContent = KRUDER.t(key);
+        }
+
+        async function checkStatus() {
+            try {
+                const res = await fetch(GEN_STATUS_URL);
+                const data = await res.json();
+                if (data.ok) {
+                    updateRow('row-auth', data.services.auth?.ok);
+                    updateRow('row-gen', data.services.gen?.ok);
+                    updateRow('row-ai', data.services.ai?.ok);
+                    updateRow('row-db', data.services.db?.ok);
+                    updateOverall(data.status);
+                } else {
+                    updateOverall('down');
+                }
+            } catch (e) {
+                updateRow('row-auth', false);
+                updateRow('row-gen', false);
+                updateRow('row-ai', false);
+                updateRow('row-db', false);
+                updateOverall('down');
+            }
+            const footer = document.getElementById('status-footer');
+            const now = new Date().toLocaleTimeString();
+            footer.textContent = KRUDER.t('st_last_check') + ': ' + now + '  ·  ' + KRUDER.t('st_refresh');
+        }
+
+        checkStatus();
+        setInterval(checkStatus, 30000);
+    </script>
+</body>
+</html>

@@ -36,11 +36,18 @@
     "btn_logout": "ВЫЙТИ ИЗ АККАУНТА",
     "card_label_credits": "КРЕДИТЫ",
     "btn_refresh": "ОБНОВИТЬ",
+    "card_label_status": "СТАТУС СИСТЕМЫ",
     "pin_label": "ВВЕДИТЕ ПИН-КОД",
     "modal_exit": "ВЫЙТИ ИЗ СИСТЕМЫ?",
     "modal_logout": "ВВЕДИТЕ ПАРОЛЬ ДЛЯ ВЫХОДА",
     "placeholder_password": "ПАРОЛЬ",
     "error_wrong_password": "НЕВЕРНЫЙ ПАРОЛЬ"
+  },
+  "status": {
+    "checking": "ПРОВЕРКА...",
+    "all_online": "ВСЕ СЕРВИСЫ РАБОТАЮТ",
+    "degraded": "НЕКОТОРЫЕ СЕРВИСЫ НАРУШЕНЫ",
+    "down": "СЕРВИСЫ НЕДОСТУПНЫ"
   },
   "settings": {
     "title": "НАСТРОЙКИ",

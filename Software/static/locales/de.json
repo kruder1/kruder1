@@ -36,11 +36,18 @@
     "btn_logout": "ABMELDEN",
     "card_label_credits": "GUTHABEN",
     "btn_refresh": "AKTUALISIEREN",
+    "card_label_status": "SYSTEMSTATUS",
     "pin_label": "PIN EINGEBEN",
     "modal_exit": "SYSTEM VERLASSEN?",
     "modal_logout": "PASSWORT ZUR ABMELDUNG EINGEBEN",
     "placeholder_password": "PASSWORT",
     "error_wrong_password": "FALSCHES PASSWORT"
+  },
+  "status": {
+    "checking": "PRÜFE...",
+    "all_online": "ALLE DIENSTE ONLINE",
+    "degraded": "EINIGE DIENSTE BEEINTRÄCHTIGT",
+    "down": "DIENSTE NICHT VERFÜGBAR"
   },
   "settings": {
     "title": "EINSTELLUNGEN",

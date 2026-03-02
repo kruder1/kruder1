@@ -24,7 +24,8 @@ const KRUDER = (() => {
         nav_dashboard:  { en: 'DASHBOARD', es: 'DASHBOARD' },
         footer_privacy: { en: 'Privacy', es: 'Privacidad' },
         footer_terms:   { en: 'Terms', es: 'Términos' },
-        footer_contact: { en: 'Contact', es: 'Contacto' }
+        footer_contact: { en: 'Contact', es: 'Contacto' },
+        footer_status:  { en: 'Status', es: 'Estado' }
     };
 
     /* --- State --- */

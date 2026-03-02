@@ -36,11 +36,18 @@
     "btn_logout": "CERRAR SESIÓN",
     "card_label_credits": "CRÉDITOS",
     "btn_refresh": "ACTUALIZAR",
+    "card_label_status": "ESTADO DEL SISTEMA",
     "pin_label": "INTRODUCE EL PIN",
     "modal_exit": "¿SALIR DEL SISTEMA?",
     "modal_logout": "INTRODUCE LA CONTRASEÑA PARA CERRAR SESIÓN",
     "placeholder_password": "CONTRASEÑA",
     "error_wrong_password": "CONTRASEÑA INCORRECTA"
+  },
+  "status": {
+    "checking": "VERIFICANDO...",
+    "all_online": "TODOS LOS SERVICIOS EN LÍNEA",
+    "degraded": "ALGUNOS SERVICIOS DEGRADADOS",
+    "down": "SERVICIOS NO DISPONIBLES"
   },
   "settings": {
     "title": "AJUSTES",

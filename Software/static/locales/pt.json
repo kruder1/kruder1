@@ -36,11 +36,18 @@
     "btn_logout": "DESCONECTAR",
     "card_label_credits": "CRÉDITOS",
     "btn_refresh": "ATUALIZAR",
+    "card_label_status": "STATUS DO SISTEMA",
     "pin_label": "DIGITE O PIN",
     "modal_exit": "SAIR DO SISTEMA?",
     "modal_logout": "DIGITE A SENHA PARA DESCONECTAR",
     "placeholder_password": "SENHA",
     "error_wrong_password": "SENHA INCORRETA"
+  },
+  "status": {
+    "checking": "VERIFICANDO...",
+    "all_online": "TODOS OS SERVIÇOS ONLINE",
+    "degraded": "ALGUNS SERVIÇOS DEGRADADOS",
+    "down": "SERVIÇOS INDISPONÍVEIS"
   },
   "settings": {
     "title": "CONFIGURAÇÕES",

@@ -36,11 +36,18 @@
     "btn_logout": "登出",
     "card_label_credits": "积分",
     "btn_refresh": "刷新",
+    "card_label_status": "系统状态",
     "pin_label": "输入 PIN 码",
     "modal_exit": "退出系统？",
     "modal_logout": "输入密码以登出",
     "placeholder_password": "密码",
     "error_wrong_password": "密码错误"
+  },
+  "status": {
+    "checking": "检查中...",
+    "all_online": "所有服务正常",
+    "degraded": "部分服务异常",
+    "down": "服务不可用"
   },
   "settings": {
     "title": "设置",

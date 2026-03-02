@@ -63,6 +63,16 @@
                 <i class="fa-solid fa-rotate-right"></i> <span data-i18n="dashboard.btn_refresh">REFRESH</span>
             </button>
         </div>
+        <div class="card-row card-row--status" id="system-status-row">
+            <div class="card-info-header">
+                <i class="fa-solid fa-signal"></i>
+                <span class="card-label" data-i18n="dashboard.card_label_status">SYSTEM STATUS</span>
+            </div>
+            <span class="card-value card-value--status" id="system-status-text">
+                <span class="status-dot status-dot--checking"></span>
+                <span data-i18n="status.checking">CHECKING...</span>
+            </span>
+        </div>
     </div>
 </div>
 
@@ -332,6 +342,28 @@ window.DashboardModule = {
     openAccountModal() {
         this.updateAccountModalDisplay();
         this.showModal('account-modal');
+        this.checkSystemStatus();
+    },
+
+    async checkSystemStatus() {
+        const textEl = document.getElementById('system-status-text');
+        if (!textEl) return;
+        textEl.innerHTML = '<span class="status-dot status-dot--checking"></span> ' + (typeof t === 'function' ? t('status.checking') : 'CHECKING...');
+        try {
+            const data = await window.pywebview.api.check_system_status();
+            if (data && data.ok) {
+                const allOk = data.status === 'operational';
+                const allDown = data.status === 'down';
+                const dotClass = allOk ? 'status-dot--ok' : allDown ? 'status-dot--down' : 'status-dot--degraded';
+                const labelKey = allOk ? 'status.all_online' : allDown ? 'status.down' : 'status.degraded';
+                const label = typeof t === 'function' ? t(labelKey) : (allOk ? 'ALL SERVICES ONLINE' : allDown ? 'SERVICES UNAVAILABLE' : 'SOME SERVICES DEGRADED');
+                textEl.innerHTML = '<span class="status-dot ' + dotClass + '"></span> ' + label;
+            } else {
+                textEl.innerHTML = '<span class="status-dot status-dot--down"></span> ' + (typeof t === 'function' ? t('status.down') : 'SERVICES UNAVAILABLE');
+            }
+        } catch (e) {
+            textEl.innerHTML = '<span class="status-dot status-dot--down"></span> ' + (typeof t === 'function' ? t('status.down') : 'SERVICES UNAVAILABLE');
+        }
     },
 
     updateAccountModalDisplay() {

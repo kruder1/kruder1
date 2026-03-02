@@ -237,6 +237,18 @@ class NetworkService:
             data = {"generationId": generation_id}
             return requests.post(url, data=data, files=files, headers=headers, timeout=60)
 
+    @staticmethod
+    def check_system_status():
+        """Check health of all services via gen worker."""
+        try:
+            url = f"{GEN_WORKER_BASE}/system-status"
+            r = requests.get(url, timeout=12)
+            if r.status_code == 200:
+                return r.json()
+        except Exception:
+            pass
+        return {"ok": False, "status": "down", "services": {}}
+
 # =============================================================================
 # DATA SERVICE
 # =============================================================================

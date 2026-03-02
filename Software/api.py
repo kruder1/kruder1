@@ -10,7 +10,7 @@ import webview
 import requests
 
 from config import GEN_WORKER_BASE, APP_VERSION
-from utils import EVENTS_DIR, DataService, SecurityService, SESSION_FILE
+from utils import EVENTS_DIR, DataService, SecurityService, NetworkService, SESSION_FILE
 from log_service import append_log, get_log_path_for_today
 from modules import AuthModule, SettingsModule
 
@@ -97,9 +97,12 @@ class NativeApi:
         os._exit(0)
 
     def toggle_fullscreen(self):
-        """Toggle between fullscreen and windowed."""
+        """Toggle between fullscreen and maximized windowed."""
         if self._window:
             self._window.toggle_fullscreen()
+            # When leaving fullscreen, maximize the window so it's not tiny
+            if not self._window.fullscreen:
+                self._window.maximize()
             return {"ok": True, "fullscreen": self._window.fullscreen}
         return {"error": "Window not available"}
 
@@ -108,6 +111,10 @@ class NativeApi:
         if self._window:
             return {"ok": True, "fullscreen": self._window.fullscreen}
         return {"error": "Window not available"}
+
+    def check_system_status(self):
+        """Check health of all backend services."""
+        return NetworkService.check_system_status()
 
     def log_event(self, level, message, data=None):
         """Append an event to the daily log file (called from frontend)."""

@@ -34,7 +34,7 @@ if __name__ == '__main__':
         url=f'http://127.0.0.1:{PORT}/index.html',
         maximized=True,
         resizable=True,
-        fullscreen=False,
+        fullscreen=True,
         frameless=False,
         js_api=api
     )

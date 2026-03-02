@@ -36,11 +36,18 @@
     "btn_logout": "LOGOUT",
     "card_label_credits": "CREDITS",
     "btn_refresh": "REFRESH",
+    "card_label_status": "SYSTEM STATUS",
     "pin_label": "ENTER PIN",
     "modal_exit": "EXIT SYSTEM?",
     "modal_logout": "ENTER PASSWORD TO LOGOUT",
     "placeholder_password": "PASSWORD",
     "error_wrong_password": "WRONG PASSWORD"
+  },
+  "status": {
+    "checking": "CHECKING...",
+    "all_online": "ALL SERVICES ONLINE",
+    "degraded": "SOME SERVICES DEGRADED",
+    "down": "SERVICES UNAVAILABLE"
   },
   "settings": {
     "title": "SETTINGS",

@@ -36,11 +36,18 @@
     "btn_logout": "تسجيل الخروج",
     "card_label_credits": "الأرصدة",
     "btn_refresh": "تحديث",
+    "card_label_status": "حالة النظام",
     "pin_label": "أدخل رمز PIN",
     "modal_exit": "الخروج من النظام؟",
     "modal_logout": "أدخل كلمة المرور لتسجيل الخروج",
     "placeholder_password": "كلمة المرور",
     "error_wrong_password": "كلمة المرور خاطئة"
+  },
+  "status": {
+    "checking": "جارٍ الفحص...",
+    "all_online": "جميع الخدمات تعمل",
+    "degraded": "بعض الخدمات متدهورة",
+    "down": "الخدمات غير متاحة"
   },
   "settings": {
     "title": "الإعدادات",

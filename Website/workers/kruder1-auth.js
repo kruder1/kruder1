@@ -793,6 +793,11 @@ export default {
         return json({ purchases: rows || [] });
       }
 
+      // ── Health check ────────────────────────────────────
+      if ((path === "health" || path === "") && request.method === "GET") {
+        return json({ ok: true, service: "kruder1-auth", timestamp: new Date().toISOString() });
+      }
+
       return err("Not found", 404);
     } catch (e) {
       console.error("Auth worker error:", e?.message || e);

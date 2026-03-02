@@ -36,11 +36,18 @@
     "btn_logout": "DISCONNETTI",
     "card_label_credits": "CREDITI",
     "btn_refresh": "AGGIORNA",
+    "card_label_status": "STATO DEL SISTEMA",
     "pin_label": "INSERISCI PIN",
     "modal_exit": "USCIRE DAL SISTEMA?",
     "modal_logout": "INSERISCI PASSWORD PER DISCONNETTERTI",
     "placeholder_password": "PASSWORD",
     "error_wrong_password": "PASSWORD ERRATA"
+  },
+  "status": {
+    "checking": "VERIFICA...",
+    "all_online": "TUTTI I SERVIZI ONLINE",
+    "degraded": "ALCUNI SERVIZI DEGRADATI",
+    "down": "SERVIZI NON DISPONIBILI"
   },
   "settings": {
     "title": "IMPOSTAZIONI",

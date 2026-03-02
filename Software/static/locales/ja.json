@@ -36,11 +36,18 @@
     "btn_logout": "ログアウト",
     "card_label_credits": "クレジット",
     "btn_refresh": "更新",
+    "card_label_status": "システムステータス",
     "pin_label": "PINを入力",
     "modal_exit": "システムを終了しますか？",
     "modal_logout": "ログアウトするにはパスワードを入力してください",
     "placeholder_password": "パスワード",
     "error_wrong_password": "パスワードが間違っています"
+  },
+  "status": {
+    "checking": "確認中...",
+    "all_online": "全サービス正常",
+    "degraded": "一部サービスに問題あり",
+    "down": "サービス利用不可"
   },
   "settings": {
     "title": "設定",

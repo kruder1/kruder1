@@ -36,11 +36,18 @@
     "btn_logout": "DÉCONNEXION",
     "card_label_credits": "CRÉDITS",
     "btn_refresh": "RAFRAÎCHIR",
+    "card_label_status": "ÉTAT DU SYSTÈME",
     "pin_label": "ENTRER LE CODE PIN",
     "modal_exit": "QUITTER LE SYSTÈME ?",
     "modal_logout": "ENTREZ LE MOT DE PASSE POUR VOUS DÉCONNECTER",
     "placeholder_password": "MOT DE PASSE",
     "error_wrong_password": "MOT DE PASSE INCORRECT"
+  },
+  "status": {
+    "checking": "VÉRIFICATION...",
+    "all_online": "TOUS LES SERVICES EN LIGNE",
+    "degraded": "CERTAINS SERVICES DÉGRADÉS",
+    "down": "SERVICES INDISPONIBLES"
   },
   "settings": {
     "title": "PARAMÈTRES",
