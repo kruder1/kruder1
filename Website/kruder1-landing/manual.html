@@ -396,12 +396,12 @@
                 es: '<li>Descargue el instalador desde el sitio web de Kruder 1</li><li>Ejecute el instalador y siga las instrucciones en pantalla</li><li>Inicie Kruder 1 desde el acceso directo en el escritorio o el menu Inicio</li>'
             },
             m_s2_data_label: {
-                en: '<strong>Local Data Storage:</strong>',
-                es: '<strong>Almacenamiento Local de Datos:</strong>'
+                en: '',
+                es: ''
             },
             m_s2_data_note: {
-                en: 'All local data is stored in <span class="manual-kbd">%APPDATA%\\Kruder1\\</span><br>This includes session data, prompts, frames, events, and log files. Logs are automatically rotated every 30 days.',
-                es: 'Todos los datos locales se almacenan en <span class="manual-kbd">%APPDATA%\\Kruder1\\</span><br>Esto incluye datos de sesion, prompts, marcos, eventos y archivos de registro. Los registros se rotan automaticamente cada 30 dias.'
+                en: 'All your data (session, prompts, frames, events) is stored locally on your computer and managed automatically by the application.',
+                es: 'Todos sus datos (sesion, prompts, marcos, eventos) se almacenan localmente en su computadora y son gestionados automaticamente por la aplicacion.'
             },
 
             /* ── Section 3: Getting Started ─────────────────────── */
@@ -420,8 +420,8 @@
                 es: '<strong>Creditos de Demostracion:</strong>'
             },
             m_s3_demo_note: {
-                en: 'Every verified account receives <strong>10 free demo credits</strong>, limited to one claim per hardware device (HWID). These credits are claimed through the website and allow you to test the full generation workflow before purchasing a package.',
-                es: 'Cada cuenta verificada recibe <strong>10 creditos de demostracion gratuitos</strong>, limitados a una reclamacion por dispositivo de hardware (HWID). Estos creditos se reclaman a traves del sitio web y le permiten probar el flujo completo de generacion antes de adquirir un paquete.'
+                en: 'Every verified account receives <strong>10 free demo credits</strong>, limited to one claim per device. These credits are claimed automatically when you log in for the first time and allow you to test the full generation workflow before purchasing a package.',
+                es: 'Cada cuenta verificada recibe <strong>10 creditos de demostracion gratuitos</strong>, limitados a una reclamacion por dispositivo. Estos creditos se reclaman automaticamente al iniciar sesion por primera vez y le permiten probar el flujo completo de generacion antes de adquirir un paquete.'
             },
             m_s3_login_label: {
                 en: '<strong>First Login:</strong>',
@@ -536,8 +536,8 @@
                 es: '<li><strong>IMAGES</strong> — Exportar todas las imagenes a una carpeta en su computadora</li><li><strong>ZIP</strong> — Exportar todas las imagenes como un archivo ZIP comprimido</li>'
             },
             m_s5_importexport_label: {
-                en: '<strong>Import/Export:</strong> Events can be transferred between installations using <span class="manual-kbd">.kruder1</span> files. These are ZIP archives containing a <span class="manual-kbd">data.json</span> file and an <span class="manual-kbd">images/</span> folder with all associated images.',
-                es: '<strong>Importar/Exportar:</strong> Los eventos pueden transferirse entre instalaciones usando archivos <span class="manual-kbd">.kruder1</span>. Estos son archivos ZIP que contienen un archivo <span class="manual-kbd">data.json</span> y una carpeta <span class="manual-kbd">images/</span> con todas las imagenes asociadas.'
+                en: '',
+                es: ''
             },
 
             /* ── Section 6: Event Mode ──────────────────────────── */
@@ -620,8 +620,8 @@
                 es: '<strong>Detalles de Categoria:</strong>'
             },
             m_s7_category: {
-                en: '<li>Shows a grid of all prompts within the selected category</li><li>Each prompt can be toggled on or off individually</li><li><strong>GENERATE PROMPT</strong> — Create a new AI style using the generation tool</li><li><strong>MANUAL PROMPT</strong> — Add a style manually with your own image (no credits consumed)</li>',
-                es: '<li>Muestra una cuadricula de todos los prompts dentro de la categoria seleccionada</li><li>Cada prompt puede activarse o desactivarse individualmente</li><li><strong>GENERATE PROMPT</strong> — Crear un nuevo estilo de IA usando la herramienta de generacion</li><li><strong>MANUAL PROMPT</strong> — Agregar un estilo manualmente con su propia imagen (no consume creditos)</li>'
+                en: '<li>Shows a grid of all prompts within the selected category</li><li>Each prompt can be toggled on or off individually</li><li><strong>GENERATE PROMPT</strong> — Create a new AI style using the generation tool (costs 1 credit)</li>',
+                es: '<li>Muestra una cuadricula de todos los prompts dentro de la categoria seleccionada</li><li>Cada prompt puede activarse o desactivarse individualmente</li><li><strong>GENERATE PROMPT</strong> — Crear un nuevo estilo de IA usando la herramienta de generacion (cuesta 1 credito)</li>'
             },
             m_s7_generate_label: {
                 en: '<strong>Generating a New Prompt:</strong>',
@@ -632,20 +632,20 @@
                 es: '<li>Ingrese un nombre para el nuevo estilo</li><li>Seleccione una categoria existente o cree una nueva</li><li>Escriba una descripcion de la transformacion de IA deseada</li><li>Opcionalmente suba una imagen de referencia</li><li>Presione <strong>GENERATE</strong> — esto consume <strong>1 credito</strong></li><li>El resultado generado se convierte en la miniatura del estilo</li>'
             },
             m_s7_generate_note: {
-                en: '<strong>Manual Prompt:</strong> You can also add styles manually by providing your own image. Manual prompts do not consume any credits.',
-                es: '<strong>Manual Prompt:</strong> Tambien puede agregar estilos manualmente proporcionando su propia imagen. Los prompts manuales no consumen creditos.'
+                en: '',
+                es: ''
             },
             m_s7_manual_label: {
                 en: '',
                 es: ''
             },
             m_s7_view_label: {
-                en: '<strong>Viewing and Editing Prompts:</strong>',
-                es: '<strong>Ver y Editar Prompts:</strong>'
+                en: '<strong>Viewing Prompts:</strong>',
+                es: '<strong>Ver Prompts:</strong>'
             },
             m_s7_view: {
-                en: '<li>Prompt name — tap the pen icon to rename</li><li>Description — tap to copy the description text</li><li>Thumbnail — tap to view full-screen</li><li>Categories and prompts can both be renamed via the pen icon</li>',
-                es: '<li>Nombre del prompt — toque el icono de lapiz para renombrar</li><li>Descripcion — toque para copiar el texto de la descripcion</li><li>Miniatura — toque para ver a pantalla completa</li><li>Tanto las categorias como los prompts pueden renombrarse con el icono de lapiz</li>'
+                en: '<li>Prompt name — tap the pen icon to rename</li><li>Description — view only (tap to copy the text)</li><li>Thumbnail — tap to view full-screen</li><li>Categories can also be renamed via the pen icon</li>',
+                es: '<li>Nombre del prompt — toque el icono de lapiz para renombrar</li><li>Descripcion — solo lectura (toque para copiar el texto)</li><li>Miniatura — toque para ver a pantalla completa</li><li>Las categorias tambien pueden renombrarse con el icono de lapiz</li>'
             },
             m_s7_drag_label: {
                 en: '<strong>Drag and Drop:</strong>',
@@ -710,8 +710,8 @@
                 es: '<strong>Impresion:</strong>'
             },
             m_s9_printing: {
-                en: '<li>Upload a test image for print testing</li><li>Enable or disable printing with the toggle switch</li><li>Enable or disable automatic printing</li><li>Set the default number of copies</li><li>Select a printer from the available devices</li><li><strong>PRINTER SETTINGS</strong> — Open the system printer configuration</li><li><strong>TEST PRINTING</strong> — Send a test print to verify setup</li>',
-                es: '<li>Cargue una imagen de prueba para probar la impresion</li><li>Habilite o deshabilite la impresion con el interruptor</li><li>Habilite o deshabilite la impresion automatica</li><li>Establezca el numero predeterminado de copias</li><li>Seleccione una impresora de los dispositivos disponibles</li><li><strong>PRINTER SETTINGS</strong> — Abrir la configuracion de impresora del sistema</li><li><strong>TEST PRINTING</strong> — Enviar una impresion de prueba para verificar la configuracion</li>'
+                en: '<li>Enable or disable printing with the toggle switch</li><li>Enable or disable automatic printing</li><li>Set the default number of copies</li><li>Select a printer from the available devices</li><li><strong>PRINTER SETTINGS</strong> — Open the system printer configuration</li><li><strong>TEST PRINTING</strong> — Send a test print to verify setup</li>',
+                es: '<li>Habilite o deshabilite la impresion con el interruptor</li><li>Habilite o deshabilite la impresion automatica</li><li>Establezca el numero predeterminado de copias</li><li>Seleccione una impresora de los dispositivos disponibles</li><li><strong>PRINTER SETTINGS</strong> — Abrir la configuracion de impresora del sistema</li><li><strong>TEST PRINTING</strong> — Enviar una impresion de prueba para verificar la configuracion</li>'
             },
 
             m_s9_sound_label: {
@@ -923,12 +923,12 @@
             },
 
             m_s12_data_label: {
-                en: '<strong>Data and Storage:</strong>',
-                es: '<strong>Datos y Almacenamiento:</strong>'
+                en: '<strong>Reinstallation:</strong>',
+                es: '<strong>Reinstalacion:</strong>'
             },
             m_s12_data: {
-                en: '<li>All local data is stored in <span class="manual-kbd">%APPDATA%\\Kruder1\\</span></li><li>Log files are automatically rotated every 30 days</li><li>Deleted items (events, images, frames) are moved to the Recycle Bin and can be recovered</li><li>To perform a clean reinstall, uninstall the application and delete the <span class="manual-kbd">%APPDATA%\\Kruder1\\</span> folder</li>',
-                es: '<li>Todos los datos locales se almacenan en <span class="manual-kbd">%APPDATA%\\Kruder1\\</span></li><li>Los archivos de registro se rotan automaticamente cada 30 dias</li><li>Los elementos eliminados (eventos, imagenes, marcos) se mueven a la Papelera de Reciclaje y pueden recuperarse</li><li>Para realizar una reinstalacion limpia, desinstale la aplicacion y elimine la carpeta <span class="manual-kbd">%APPDATA%\\Kruder1\\</span></li>'
+                en: '<li>Deleted items (events, images, frames) are moved to the Recycle Bin and can be recovered</li><li>If you experience persistent issues, uninstall and reinstall the application</li>',
+                es: '<li>Los elementos eliminados (eventos, imagenes, marcos) se mueven a la Papelera de Reciclaje y pueden recuperarse</li><li>Si experimenta problemas persistentes, desinstale y reinstale la aplicacion</li>'
             }
 
         });
