@@ -8,11 +8,11 @@
 
 :root {
     /* Z-Index Scale */
-    --z-particles: 0;
+    --z-canvas: 0;
     --z-content: 10;
+    --z-ui: 50;
     --z-header: 1200;
     --z-modal: 2000;
-    --z-scanlines: 9999;
 
     /* Typography */
     --font-base: 'Barlow', sans-serif;
@@ -46,33 +46,33 @@
     --border-width: 2px;
     --radius-main: 0.5rem;
 
-    /* ── Light Theme (Software preset: HUE=20, BG=15, INK=75) ── */
-    --theme-paper: rgb(217, 217, 217);
-    --theme-ink: rgb(64, 64, 64);
-    --theme-accent: hsl(20, 70%, 50%);
-    --theme-accent-dark: hsl(20, 70%, 35%);
-    --theme-border: rgba(64, 64, 64, 0.2);
-    --theme-scanline: rgba(64, 64, 64, 0.0725);
-    --theme-focus: rgba(64, 64, 64, 0.0725);
-    --theme-input-bg: rgb(217, 217, 217);
+    /* ── Light Theme (monochrome flat) ── */
+    --theme-paper: #FFFFFF;
+    --theme-ink: #000000;
+    --theme-accent: #000000;
+    --theme-accent-dark: #000000;
+    --theme-border: rgba(0, 0, 0, 0.2);
+    --theme-focus: rgba(0, 0, 0, 0.05);
+    --theme-input-bg: #FFFFFF;
     --theme-overlay: rgba(0, 0, 0, 0.6);
     --theme-white: #FFFFFF;
-    --color-muted: rgba(64, 64, 64, 0.5);
+    --color-muted: rgba(0, 0, 0, 0.5);
     --color-error: #ff3333;
-    --shadow-btn: rgba(0, 0, 0, 0.15);
+    --shadow-btn: none;
 }
 
-/* ── Dark Theme (Software preset: HUE=20, BG=90, INK=10) ── */
+/* ── Dark Theme (monochrome flat) ── */
 [data-theme="dark"] {
-    --theme-paper: rgb(26, 26, 26);
-    --theme-ink: rgb(230, 230, 230);
-    --theme-border: rgba(230, 230, 230, 0.2);
-    --theme-scanline: rgba(230, 230, 230, 0.053);
-    --theme-focus: rgba(230, 230, 230, 0.053);
-    --theme-input-bg: rgb(26, 26, 26);
+    --theme-paper: #000000;
+    --theme-ink: #FFFFFF;
+    --theme-accent: #FFFFFF;
+    --theme-accent-dark: #FFFFFF;
+    --theme-border: rgba(255, 255, 255, 0.2);
+    --theme-focus: rgba(255, 255, 255, 0.04);
+    --theme-input-bg: #000000;
     --theme-overlay: rgba(0, 0, 0, 0.8);
-    --color-muted: rgba(230, 230, 230, 0.5);
-    --shadow-btn: rgba(0, 0, 0, 0.5);
+    --color-muted: rgba(255, 255, 255, 0.5);
+    --shadow-btn: none;
 
     color-scheme: dark;
 }
@@ -105,26 +105,38 @@ a { color: inherit; text-decoration: none; }
 
 img { max-width: 100%; height: auto; }
 
-/* ── 3. Scanlines & Particles ─────────────────────────────── */
+/* ── 3. Animated Grid Canvas & Crosshairs ────────────────── */
 
-#particles-js {
+#bgCanvas {
+    display: block;
     position: fixed;
-    inset: 0;
-    z-index: var(--z-particles);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: var(--z-canvas);
     pointer-events: none;
 }
 
-#scanlines {
+/* Corner Crosshairs (+) */
+body::before,
+body::after,
+#ch-bottom::before,
+#ch-bottom::after {
+    content: '+';
     position: fixed;
-    inset: 0;
-    z-index: var(--z-scanlines);
+    font-family: monospace;
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--theme-ink);
+    z-index: var(--z-ui);
     pointer-events: none;
-    background: repeating-linear-gradient(
-        0deg,
-        var(--theme-scanline), var(--theme-scanline) 1px,
-        transparent 1px, transparent 3px
-    );
 }
+body::before       { top: 8px; left: 8px; }
+body::after        { top: 8px; right: 8px; }
+#ch-bottom::before { bottom: 8px; left: 8px; }
+#ch-bottom::after  { bottom: 8px; right: 8px; }
 
 /* ── 4. Sticky Nav ────────────────────────────────────────── */
 
@@ -200,26 +212,23 @@ img { max-width: 100%; height: auto; }
     font-family: var(--font-base);
     font-size: var(--text-btn);
     font-weight: 700;
-    color: var(--theme-white);
-    background: var(--theme-accent);
-    border: var(--border-width) solid var(--theme-accent);
+    color: var(--theme-paper);
+    background: var(--theme-ink);
+    border: var(--border-width) solid var(--theme-ink);
     border-radius: var(--radius-main);
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: var(--ls-wide);
-    box-shadow: 0 4px 0 var(--theme-accent-dark);
-    transition: all 0.15s ease;
+    transition: opacity 0.15s ease;
     text-decoration: none;
 }
 
 .btn-accent:hover {
-    background: var(--theme-accent-dark);
-    border-color: var(--theme-accent-dark);
+    opacity: 0.8;
 }
 
 .btn-accent:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 var(--theme-accent-dark);
+    opacity: 0.6;
 }
 
 .btn-accent.is-full { width: 100%; }
@@ -249,18 +258,17 @@ img { max-width: 100%; height: auto; }
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: var(--ls-wide);
-    box-shadow: 0 4px 0 var(--shadow-btn);
-    transition: all 0.15s ease;
+    transition: opacity 0.15s ease;
     text-decoration: none;
 }
 
 .btn-secondary:hover {
-    background: var(--theme-focus);
+    background: var(--theme-ink);
+    color: var(--theme-paper);
 }
 
 .btn-secondary:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 var(--shadow-btn);
+    opacity: 0.6;
 }
 
 .btn-link {
