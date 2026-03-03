@@ -25,49 +25,44 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="https://kruder1.com/img/icon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"><\/script>
   <style>
     :root {
       /* Z-Index System */
-      --z-particles: 0;
+      --z-canvas: 0;
       --z-content: 10;
+      --z-ui: 50;
       --z-header: 1200;
-      --z-scanlines: 9999;
-      
+
       /* Typography */
       --font-base: 'Barlow', sans-serif;
       --font-input: 'Inter', sans-serif;
-      
+
       /* Spacing */
       --space-xs: 0.5rem;
       --space-sm: 1rem;
       --space-md: 1.5rem;
       --space-lg: 2rem;
-      
-      /* Layout - same as website */
+
+      /* Layout */
       --nav-height: 130px;
       --logo-width: 80px;
       --border-width: 2px;
       --radius-main: 0.5rem;
-      --color-accent: #F25606;
-      --color-accent-dark: #b33f04;
-      
+
       /* Colors (Light Theme Default) */
-      --color-bg: #ffffff;
+      --color-bg: #FFFFFF;
       --color-text: #000000;
-      --color-contrast: #ffffff;
+      --color-contrast: #FFFFFF;
       --color-border: #000000;
       --color-muted: rgba(0, 0, 0, 0.5);
-      --bg-overlay-light: rgba(0, 0, 0, 0.05);
     }
-    
+
     [data-theme="dark"] {
       --color-bg: #000000;
-      --color-text: #ffffff;
+      --color-text: #FFFFFF;
       --color-contrast: #000000;
-      --color-border: #ffffff;
+      --color-border: #FFFFFF;
       --color-muted: rgba(255, 255, 255, 0.5);
-      --bg-overlay-light: rgba(255, 255, 255, 0.05);
       color-scheme: dark;
     }
     
@@ -92,20 +87,35 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
     
     [data-theme="dark"] .brand-logo img { filter: invert(1); }
     
-    /* Particles */
-    #particles-js {
-      position: fixed; inset: 0;
-      z-index: var(--z-particles);
+    /* Animated Grid Canvas */
+    #bgCanvas {
+      display: block;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: var(--z-canvas);
       pointer-events: none;
     }
-    
-    /* Scanlines */
-    #scanlines {
-      position: fixed; inset: 0;
-      background: repeating-linear-gradient(0deg, var(--bg-overlay-light), var(--bg-overlay-light) 1px, transparent 1px, transparent 3px);
+
+    /* Corner Crosshairs (+) */
+    body::before,
+    body::after,
+    #ch-bottom::before,
+    #ch-bottom::after {
+      content: '+';
+      position: fixed;
+      font-family: monospace;
+      font-size: 2.5rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--color-text);
+      z-index: var(--z-ui);
       pointer-events: none;
-      z-index: var(--z-scanlines);
     }
+    body::before       { top: 8px; left: 8px; }
+    body::after        { top: 8px; right: 8px; }
+    #ch-bottom::before { bottom: 8px; left: 8px; }
+    #ch-bottom::after  { bottom: 8px; right: 8px; }
     
     /* Header/Nav - exactly like website */
     .nav-container {
@@ -208,33 +218,23 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
     }
 
     .btn-primary {
-      background: var(--color-accent);
-      color: #ffffff;
-      border: var(--border-width) solid var(--color-accent);
-      box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+      background: var(--color-text);
+      color: var(--color-bg);
+      border: var(--border-width) solid var(--color-text);
     }
-    .btn-primary:hover {
-      background: var(--color-accent-dark);
-      border-color: var(--color-accent-dark);
-    }
-    .btn-primary:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 rgba(0,0,0,0.2);
-    }
+    .btn-primary:hover { opacity: 0.8; }
+    .btn-primary:active { opacity: 0.6; }
 
     .btn-secondary {
       background: transparent;
       color: var(--color-text);
       border: var(--border-width) solid var(--color-border);
-      box-shadow: 0 4px 0 var(--shadow-strong, rgba(0,0,0,0.15));
     }
     .btn-secondary:hover {
-      background: var(--bg-overlay-light);
+      background: var(--color-text);
+      color: var(--color-bg);
     }
-    .btn-secondary:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 var(--shadow-strong, rgba(0,0,0,0.15));
-    }
+    .btn-secondary:active { opacity: 0.6; }
     
     /* Footer - same as website */
     .site-footer {
@@ -267,8 +267,8 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
   </style>
 </head>
 <body>
-  <div id="particles-js"></div>
-  <div id="scanlines"></div>
+  <canvas id="bgCanvas"></canvas>
+  <div id="ch-bottom"></div>
   
   <nav class="nav-container">
     <a href="https://kruder1.com" class="brand-logo">
@@ -312,7 +312,6 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       var CONFIG = {
         keyTheme: 'KRUDER1-concept-theme',
         keyLang: 'KRUDER1-concept-lang',
-        particlesColor: { light: '#000000', dark: '#ffffff' },
         imageUrl: '${imageUrl}'
       };
       
@@ -370,7 +369,6 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
           root.removeAttribute('data-theme');
           btnTheme.innerHTML = '<i class="fa-solid fa-moon"></i>';
         }
-        initParticles();
       };
       
       btnTheme.addEventListener('click', function() {
@@ -405,23 +403,81 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
         });
       }
       
-      // --- Particles (same config as all website pages) ---
-      var initParticles = function() {
-        if (!window.particlesJS) return;
-        var color = STATE.theme === 'dark' ? CONFIG.particlesColor.dark : CONFIG.particlesColor.light;
-        particlesJS('particles-js', {
-          particles: {
-            number: { value: 200, density: { enable: true, value_area: 800 } },
-            color: { value: color },
-            shape: { type: 'circle' },
-            opacity: { value: 0.1, random: true },
-            size: { value: 2, random: true },
-            line_linked: { enable: true, distance: 150, color: color, opacity: 0.1, width: 1 },
-            move: { enable: true, speed: 2, direction: 'none', out_mode: 'out' }
-          },
-          interactivity: { detect_on: 'canvas', events: { onhover: { enable: false }, onclick: { enable: false } } },
-          retina_detect: true
+      // --- Animated Grid Background ---
+      var initGrid = function() {
+        var canvas = document.getElementById('bgCanvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        var GRID = { SIZE: 40, PARTICLES: 30, SPEED_MIN: 0.5, SPEED_MAX: 5, TRAIL_LIMIT: 60, GRID_OPACITY: 0.15, DOT_RADIUS: 0.4 };
+        var occupied = { h: new Set(), v: new Set() };
+        function resize() {
+          canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+          occupied.h.clear(); occupied.v.clear();
+          particles.forEach(function(p) { p.init(); });
+        }
+        function getColors() {
+          var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+          return { bg: dark ? '#000000' : '#FFFFFF', rgb: dark ? '255,255,255' : '0,0,0' };
+        }
+        function drawGrid() {
+          var c = getColors();
+          ctx.fillStyle = c.bg;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          var grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+          grad.addColorStop(0, 'rgba(' + c.rgb + ',' + GRID.GRID_OPACITY + ')');
+          grad.addColorStop(1, 'rgba(' + c.rgb + ',0)');
+          ctx.strokeStyle = grad; ctx.lineWidth = 1;
+          for (var y = 0; y < canvas.height; y += GRID.SIZE) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
+          for (var x = 0; x < canvas.width; x += GRID.SIZE) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
+        }
+        function Particle() { this.init(); }
+        Particle.prototype.init = function() {
+          this.trail = []; this.speed = Math.random() * (GRID.SPEED_MAX - GRID.SPEED_MIN) + GRID.SPEED_MIN; this.lineFreed = false;
+          var ok = false;
+          for (var i = 0; i < 100; i++) {
+            if (Math.random() > 0.5) {
+              var y = Math.round(Math.random() * canvas.height / GRID.SIZE) * GRID.SIZE;
+              if (!occupied.h.has(y)) { this.axis = 'h'; this.x = 0; this.y = y; occupied.h.add(y); ok = true; break; }
+            } else {
+              var x = Math.round(Math.random() * canvas.width / GRID.SIZE) * GRID.SIZE;
+              if (!occupied.v.has(x)) { this.axis = 'v'; this.x = x; this.y = 0; occupied.v.add(x); ok = true; break; }
+            }
+          }
+          if (!ok) { this.axis = 'h'; this.x = -9999; this.y = -9999; this.lineFreed = true; }
+        };
+        Particle.prototype.update = function() {
+          this.trail.push({ x: this.x, y: this.y });
+          if (this.trail.length > GRID.TRAIL_LIMIT) this.trail.shift();
+          if (this.axis === 'h') { this.x += this.speed; if (!this.lineFreed && this.x > canvas.width) { this.lineFreed = true; occupied.h.delete(this.y); } }
+          else { this.y += this.speed; if (!this.lineFreed && this.y > canvas.height) { this.lineFreed = true; occupied.v.delete(this.x); } }
+          if (this.lineFreed) {
+            var w = canvas.width, h = canvas.height, ax = this.axis;
+            var allGone = this.trail.length === 0 || this.trail.every(function(p) { return ax === 'h' ? p.x > w : p.y > h; });
+            if (allGone) this.init();
+          }
+        };
+        Particle.prototype.draw = function() {
+          var c = getColors();
+          for (var i = 0; i < this.trail.length; i++) {
+            var alpha = i / this.trail.length;
+            ctx.fillStyle = 'rgba(' + c.rgb + ',' + alpha + ')';
+            ctx.beginPath(); ctx.arc(this.trail[i].x, this.trail[i].y, GRID.DOT_RADIUS, 0, Math.PI * 2); ctx.fill();
+          }
+        };
+        var particles = [];
+        for (var i = 0; i < GRID.PARTICLES; i++) particles.push(new Particle());
+        var animFrameId = null;
+        function animate() {
+          drawGrid();
+          for (var i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); }
+          animFrameId = requestAnimationFrame(animate);
+        }
+        document.addEventListener('visibilitychange', function() {
+          if (document.hidden) { if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; } }
+          else { if (!animFrameId) animate(); }
         });
+        window.addEventListener('resize', resize);
+        resize(); animate();
       };
       
       // --- Photo click: open full image in new tab ---
@@ -462,6 +518,7 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       // --- Init ---
       setTheme(STATE.theme);
       setLang(STATE.lang);
+      initGrid();
     })();
   <\/script>
 </body>
@@ -530,6 +587,7 @@ export default {
         method: request.method,
         headers: request.headers,
         body: request.method !== "GET" && request.method !== "HEAD" ? request.body : undefined,
+        cf: { cacheTtl: 0 },
       });
       const newHeaders = new Headers(res.headers);
       newHeaders.delete("content-encoding");
