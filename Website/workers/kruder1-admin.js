@@ -7,6 +7,8 @@
 const ALLOWED_ORIGINS = [
   "https://kruder1.com",
   "https://www.kruder1.com",
+  "https://admin.kruder1.com",
+  "https://kruder1-admin.pages.dev",
   "http://127.0.0.1",
   "http://localhost",
 ];

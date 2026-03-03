@@ -1,0 +1,59 @@
+name: Deploy to Cloudflare
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'Website/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Pages & Workers
+    steps:
+      - uses: actions/checkout@v4
+
+      # ── Pages: Landing (kruder1.com, kruder.uno, kruder.one) ──
+      - name: Deploy Landing Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy Website/kruder1-landing --project-name=kruder1-landing --branch=main --commit-dirty=true
+
+      # ── Pages: Admin (admin.kruder1.com) ──
+      - name: Deploy Admin Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy Website/kruder1-admin --project-name=kruder1-admin --branch=main --commit-dirty=true
+
+      # ── Workers ──
+      - name: Deploy Landing Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy -c Website/workers/wrangler-landing.toml
+
+      - name: Deploy Auth Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy -c Website/workers/wrangler-auth.toml
+
+      - name: Deploy Gen Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy -c Website/workers/wrangler-gen.toml
+
+      - name: Deploy Admin Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy -c Website/workers/wrangler-admin.toml

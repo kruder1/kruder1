@@ -9,14 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <style>
 /* ── Design Tokens ───────────────────────────────────────── */
 :root {
-    --z-particles: 0;
+    --z-canvas: 0;
     --z-content: 10;
+    --z-ui: 50;
     --z-header: 1200;
-    --z-scanlines: 9999;
+    --z-modal: 2000;
 
     --font-base: 'Barlow', sans-serif;
     --font-input: 'Inter', sans-serif;
@@ -41,30 +41,32 @@
     --border-width: 2px;
     --radius-main: 0.5rem;
 
-    --theme-paper: rgb(217, 217, 217);
-    --theme-ink: rgb(64, 64, 64);
-    --theme-accent: hsl(20, 70%, 50%);
-    --theme-accent-dark: hsl(20, 70%, 35%);
-    --theme-border: rgba(64, 64, 64, 0.2);
-    --theme-scanline: rgba(64, 64, 64, 0.0725);
-    --theme-focus: rgba(64, 64, 64, 0.0725);
-    --theme-input-bg: rgb(217, 217, 217);
+    /* ── Light Theme (monochrome flat) ── */
+    --theme-paper: #FFFFFF;
+    --theme-ink: #000000;
+    --theme-accent: #000000;
+    --theme-accent-dark: #000000;
+    --theme-border: rgba(0, 0, 0, 0.2);
+    --theme-focus: rgba(0, 0, 0, 0.05);
+    --theme-input-bg: #FFFFFF;
     --theme-white: #FFFFFF;
-    --color-muted: rgba(64, 64, 64, 0.5);
+    --color-muted: rgba(0, 0, 0, 0.5);
     --color-error: #ff3333;
     --color-success: #2ecc40;
-    --shadow-btn: rgba(0, 0, 0, 0.15);
+    --shadow-btn: none;
 }
 
+/* ── Dark Theme (monochrome flat) ── */
 [data-theme="dark"] {
-    --theme-paper: rgb(26, 26, 26);
-    --theme-ink: rgb(230, 230, 230);
-    --theme-border: rgba(230, 230, 230, 0.2);
-    --theme-scanline: rgba(230, 230, 230, 0.053);
-    --theme-focus: rgba(230, 230, 230, 0.053);
-    --theme-input-bg: rgb(26, 26, 26);
-    --color-muted: rgba(230, 230, 230, 0.5);
-    --shadow-btn: rgba(0, 0, 0, 0.5);
+    --theme-paper: #000000;
+    --theme-ink: #FFFFFF;
+    --theme-accent: #FFFFFF;
+    --theme-accent-dark: #FFFFFF;
+    --theme-border: rgba(255, 255, 255, 0.2);
+    --theme-focus: rgba(255, 255, 255, 0.04);
+    --theme-input-bg: #000000;
+    --color-muted: rgba(255, 255, 255, 0.5);
+    --shadow-btn: none;
     color-scheme: dark;
 }
 
@@ -89,19 +91,34 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
-/* ── Scanlines & Particles ───────────────────────────────── */
-#particles-js {
-    position: fixed; inset: 0;
-    z-index: var(--z-particles);
+/* ── Animated Grid Canvas & Crosshairs ───────────────────── */
+#bgCanvas {
+    display: block;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: var(--z-canvas);
     pointer-events: none;
 }
 
-#scanlines {
-    position: fixed; inset: 0;
-    z-index: var(--z-scanlines);
+body::before,
+body::after,
+#ch-bottom::before,
+#ch-bottom::after {
+    content: '+';
+    position: fixed;
+    font-family: monospace;
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--theme-ink);
+    z-index: var(--z-ui);
     pointer-events: none;
-    background: repeating-linear-gradient(0deg, var(--theme-scanline), var(--theme-scanline) 1px, transparent 1px, transparent 3px);
 }
+body::before       { top: 8px; left: 8px; }
+body::after        { top: 8px; right: 8px; }
+#ch-bottom::before { bottom: 8px; left: 8px; }
+#ch-bottom::after  { bottom: 8px; right: 8px; }
 
 /* ── Nav ─────────────────────────────────────────────────── */
 .nav-sticky {
@@ -525,8 +542,8 @@ a { color: inherit; text-decoration: none; }
 </head>
 <body>
 
-    <div id="particles-js"></div>
-    <div id="scanlines"></div>
+    <canvas id="bgCanvas"></canvas>
+    <div id="ch-bottom"></div>
 
     <!-- ── Login Screen ──────────────────────────────────── -->
     <div id="screen-login">
@@ -663,24 +680,92 @@ a { color: inherit; text-decoration: none; }
             document.documentElement.removeAttribute('data-theme');
             $$('.nav-action-btn[aria-label="Toggle theme"]').forEach(b => b.innerHTML = '<i class="fa-solid fa-moon"></i>');
         }
-        initParticles();
     }
 
-    function initParticles() {
-        if (!window.particlesJS) return;
-        const c = state.theme === 'dark' ? '#E6E6E6' : '#404040';
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 200, density: { enable: true, value_area: 800 } },
-                color: { value: c }, shape: { type: 'circle' },
-                opacity: { value: 0.25, random: true },
-                size: { value: 2, random: true },
-                line_linked: { enable: true, distance: 150, color: c, opacity: 0.2, width: 1 },
-                move: { enable: true, speed: 2, direction: 'none', out_mode: 'out' }
-            },
-            interactivity: { detect_on: 'canvas', events: { onhover: { enable: false }, onclick: { enable: false } } },
-            retina_detect: true
+    function initGrid() {
+        const canvas = document.getElementById('bgCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const GRID = { SIZE: 40, PARTICLES: 30, SPEED_MIN: 0.5, SPEED_MAX: 5, TRAIL_LIMIT: 60, GRID_OPACITY: 0.15, DOT_RADIUS: 0.4 };
+        const occupied = { h: new Set(), v: new Set() };
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            occupied.h.clear(); occupied.v.clear();
+            particles.forEach(p => p.init());
+        }
+
+        function getColors() {
+            const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+            return { bg: dark ? '#000000' : '#FFFFFF', rgb: dark ? '255,255,255' : '0,0,0' };
+        }
+
+        function drawGrid() {
+            const c = getColors();
+            ctx.fillStyle = c.bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            grad.addColorStop(0, 'rgba(' + c.rgb + ',' + GRID.GRID_OPACITY + ')');
+            grad.addColorStop(1, 'rgba(' + c.rgb + ',0)');
+            ctx.strokeStyle = grad; ctx.lineWidth = 1;
+            for (let y = 0; y < canvas.height; y += GRID.SIZE) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
+            for (let x = 0; x < canvas.width; x += GRID.SIZE) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
+        }
+
+        function Particle() { this.init(); }
+        Particle.prototype.init = function() {
+            this.trail = []; this.speed = Math.random() * (GRID.SPEED_MAX - GRID.SPEED_MIN) + GRID.SPEED_MIN; this.lineFreed = false;
+            let ok = false;
+            for (let i = 0; i < 100; i++) {
+                if (Math.random() > 0.5) {
+                    const y = Math.round(Math.random() * canvas.height / GRID.SIZE) * GRID.SIZE;
+                    if (!occupied.h.has(y)) { this.axis = 'h'; this.x = 0; this.y = y; occupied.h.add(y); ok = true; break; }
+                } else {
+                    const x = Math.round(Math.random() * canvas.width / GRID.SIZE) * GRID.SIZE;
+                    if (!occupied.v.has(x)) { this.axis = 'v'; this.x = x; this.y = 0; occupied.v.add(x); ok = true; break; }
+                }
+            }
+            if (!ok) { this.axis = 'h'; this.x = -9999; this.y = -9999; this.lineFreed = true; }
+        };
+        Particle.prototype.update = function() {
+            this.trail.push({ x: this.x, y: this.y });
+            if (this.trail.length > GRID.TRAIL_LIMIT) this.trail.shift();
+            if (this.axis === 'h') { this.x += this.speed; if (!this.lineFreed && this.x > canvas.width) { this.lineFreed = true; occupied.h.delete(this.y); } }
+            else { this.y += this.speed; if (!this.lineFreed && this.y > canvas.height) { this.lineFreed = true; occupied.v.delete(this.x); } }
+            if (this.lineFreed) {
+                const w = canvas.width, h = canvas.height, ax = this.axis;
+                const allGone = this.trail.length === 0 || this.trail.every(p => ax === 'h' ? p.x > w : p.y > h);
+                if (allGone) this.init();
+            }
+        };
+        Particle.prototype.draw = function() {
+            const c = getColors();
+            for (let i = 0; i < this.trail.length; i++) {
+                const alpha = i / this.trail.length;
+                ctx.fillStyle = 'rgba(' + c.rgb + ',' + alpha + ')';
+                ctx.beginPath(); ctx.arc(this.trail[i].x, this.trail[i].y, GRID.DOT_RADIUS, 0, Math.PI * 2); ctx.fill();
+            }
+        };
+
+        const particles = [];
+        for (let i = 0; i < GRID.PARTICLES; i++) particles.push(new Particle());
+
+        let animFrameId = null;
+        function animate() {
+            drawGrid();
+            for (let i = 0; i < particles.length; i++) { particles[i].update(); particles[i].draw(); }
+            animFrameId = requestAnimationFrame(animate);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) { if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; } }
+            else { if (!animFrameId) animate(); }
         });
+
+        window.addEventListener('resize', resize);
+        resize(); animate();
     }
 
     // ── API ─────────────────────────────────────────────
@@ -1071,6 +1156,7 @@ a { color: inherit; text-decoration: none; }
     function init() {
         setTheme(state.theme);
         bindEvents();
+        initGrid();
 
         if (state.token) {
             showAdmin();

@@ -581,16 +581,17 @@ export default {
 
     // ─── Pass-through to static site ────────────────────────────────────
     const origin = (env.PAGES_ORIGIN || "https://kruder1-landing.pages.dev").replace(/\/$/, "");
-    const targetUrl = `${origin}/${path}${url.search}`;
+    const sep = url.search ? "&" : "?";
+    const targetUrl = `${origin}/${path}${url.search}${sep}_v=${Date.now()}`;
     try {
       const res = await fetch(targetUrl, {
         method: request.method,
         headers: request.headers,
         body: request.method !== "GET" && request.method !== "HEAD" ? request.body : undefined,
-        cf: { cacheTtl: 0 },
       });
       const newHeaders = new Headers(res.headers);
       newHeaders.delete("content-encoding");
+      newHeaders.set("Cache-Control", "no-store, no-cache, must-revalidate");
       return new Response(res.body, {
         status: res.status,
         statusText: res.statusText,
