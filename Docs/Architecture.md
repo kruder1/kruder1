@@ -106,7 +106,7 @@ Software/
 │   └── settings.html       # UI de configuración
 └── static/
     ├── css/
-    │   ├── app.css          # Hoja de estilos principal (estética CRT/scanline)
+    │   ├── app.css          # Hoja de estilos principal (diseño monocromático flat)
     │   ├── fonts.css        # Definición de fuentes
     │   └── all.min.css      # Font Awesome (iconos)
     ├── fonts/
@@ -120,8 +120,7 @@ Software/
     │   ├── Kruder 1 Black Frame.png
     │   └── Kruder 1 White Frame.png
     ├── js/
-    │   ├── i18n.js          # Sistema de internacionalización
-    │   └── particles.min.js # Efectos de partículas
+    │   └── i18n.js          # Sistema de internacionalización
     ├── locales/
     │   ├── ar.json           # Árabe
     │   ├── de.json           # Alemán
@@ -356,7 +355,7 @@ Website/
 - **Idiomas**: Inglés (default) y Español con toggle
 - **Temas**: Light y Dark con persistencia
 - **Responsive**: Diseño mobile-first
-- **Efectos**: Particles.js, scanlines overlay
+- **Efectos**: Grid canvas animado con puntos viajando por líneas de grid
 - **Tipografía**: Barlow (headings/buttons), Inter (inputs)
 
 ---

@@ -193,21 +193,19 @@ The desktop application (`Software/static/css/app.css`) is the **source of truth
 |-------|-------|-------|
 | `--theme-ink` | `#000000` | Text, borders, icons |
 | `--theme-paper` | `#FFFFFF` | Backgrounds |
-| `--theme-accent` | `#F25606` | CTAs, highlights, brand orange |
-| `--theme-accent-dark` | `#b33f04` | Hover/active states |
+| `--theme-border` | `#000000` | Borders |
+| `--theme-input-bg` | `#FFFFFF` | Input backgrounds |
 | `--color-error` | `#ff3333` | Error states |
-| `--theme-border` | `rgba(0,0,0,0.2)` | Subtle borders |
-| `--theme-scanline` | `rgba(0,0,0,0.05)` | CRT scanline effect |
 
 **Dark Theme:**
 | Token | Value |
 |-------|-------|
 | `--theme-ink` | `#FFFFFF` |
 | `--theme-paper` | `#000000` |
-| `--theme-border` | `rgba(255,255,255,0.2)` |
-| `--theme-scanline` | `rgba(255,255,255,0.08)` |
+| `--theme-border` | `#FFFFFF` |
+| `--theme-input-bg` | `#000000` |
 
-Accent colors remain the same in both themes.
+Fully monochrome — no accent colors. Both themes use only black and white.
 
 ### Dimensions & Spacing
 | Token | Value |
@@ -216,20 +214,20 @@ Accent colors remain the same in both themes.
 | `--width-border` | `2px` |
 | `--border-main` | `2px solid var(--theme-ink)` |
 | `--dim-btn-height` | `60px` |
-| Button shadow | `4px` drop shadow |
+| Shadows | `none` (flat design) |
 
 ### Effects
-- **Scanlines**: CRT overlay across the entire viewport
-- **Particles**: particles.js background animation
-- **Button press**: Active state with scale + shadow reduction
+- **Animated grid canvas**: Full-viewport grid with dot particles traveling along grid lines
+- **Button press**: Active state with scale animation
+- No scanlines, no CRT effects, no particles.js
 
 ### Key Principles
 - Pure black & white (no grays for main surfaces)
-- Orange accent (#F25606) for CTAs and highlights only
+- Fully monochrome — no accent colors
 - 2px solid borders everywhere
 - 0.5rem border radius (not 12px, not rounded)
-- Buttons with 4px drop shadow and press animation
-- Monochrome + single accent color = visual identity
+- Flat buttons with no drop shadow
+- Pure monochrome = visual identity
 
 ---
 

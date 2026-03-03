@@ -319,7 +319,7 @@ select {
 }
 select option { background: var(--theme-paper); color: var(--theme-ink); }
 
-input::placeholder, textarea::placeholder { color: var(--theme-ink); text-transform: uppercase; font-style: italic; }
+input::placeholder, textarea::placeholder { color: var(--theme-ink); text-transform: uppercase; opacity: 0.3; }
 
 .input-group {
     width: var(--dim-layout-width);

@@ -889,8 +889,7 @@ The main SPA shell contains:
   - Sound system (background music + UI effects)
   - Virtual keyboard for kiosk mode
   - PIN lock screen (4-digit, sessionStorage-based)
-  - particles.js initialization
-  - CRT scanline overlay
+  - Animated grid canvas (dots traveling along grid lines)
 
 ### Virtual Keyboard
 ```javascript
@@ -987,32 +986,29 @@ Two volume controls: `volume` (music) and `uiVolume` (effects).
 ```css
 --theme-ink: #000000;
 --theme-paper: #FFFFFF;
---theme-accent: #F25606;
---theme-accent-dark: #b33f04;
+--theme-border: #000000;
+--theme-input-bg: #FFFFFF;
 --color-error: #ff3333;
---theme-border: rgba(0,0,0,0.2);
---theme-scanline: rgba(0,0,0,0.05);
 ```
 
 **Dark Theme:**
 ```css
 --theme-ink: #FFFFFF;
 --theme-paper: #000000;
---theme-border: rgba(255,255,255,0.2);
---theme-scanline: rgba(255,255,255,0.08);
+--theme-border: #FFFFFF;
+--theme-input-bg: #000000;
 ```
 
-Accent colors (`#F25606` / `#b33f04`) remain the same in both themes.
+Fully monochrome — no accent colors. Both themes use only black and white.
 
 #### Key Design Rules
 1. **Pure B&W**: No grays for main surfaces — only pure black and pure white
-2. **Orange accent**: `#F25606` for CTAs and highlights only
+2. **Fully monochrome**: No accent colors — everything is black and white
 3. **Borders**: `2px solid` everywhere
 4. **Border radius**: `0.5rem` (8px) — not 12px, not rounded
-5. **Button shadow**: `4px` drop shadow with press animation (scale + shadow reduction)
-6. **CRT scanlines**: Full-viewport overlay with repeating gradient
-7. **Particles**: particles.js animated background
-8. **Button height**: 60px (`--dim-btn-height`)
+5. **Flat buttons**: No drop shadow, scale animation on press
+6. **Animated grid canvas**: Full-viewport grid with dot particles traveling along grid lines
+7. **Button height**: 60px (`--dim-btn-height`)
 
 #### Button Styles
 ```css
@@ -1172,7 +1168,7 @@ logs/{hwid}_{timestamp}.txt  # Debug logs
 | `* (everything else)` | Pass-through to Cloudflare Pages (static site) |
 
 #### Photo Page Features
-- Full branded page with Kruder 1 design (particles, scanlines, header)
+- Full branded page with Kruder 1 design (animated grid, header)
 - Photo displayed with border
 - **Share button**: Uses `navigator.share()` if available, falls back to clipboard copy
 - **Download button**: Direct download link
@@ -1671,7 +1667,6 @@ Kruder 1 - Official/
 │       ├── css/fonts.css            # Font definitions
 │       ├── css/all.min.css          # Font Awesome
 │       ├── js/i18n.js               # i18n engine
-│       ├── js/particles.min.js      # Particle effects
 │       ├── locales/                 # 10 language JSON files
 │       ├── fonts/                   # Barlow + Inter
 │       ├── sounds/                  # 10 sound effect files
@@ -1690,7 +1685,7 @@ Kruder 1 - Official/
 │   │   ├── reset-password.html      # Password reset
 │   │   ├── status.html              # System status
 │   │   ├── style.css                # Website stylesheet
-│   │   ├── main.js                  # Shared JS (i18n, theme, particles)
+│   │   ├── main.js                  # Shared JS (i18n, theme, grid canvas)
 │   │   ├── _headers                 # Cloudflare Pages headers (CSP)
 │   │   └── img/                     # Website images
 │   └── workers/
