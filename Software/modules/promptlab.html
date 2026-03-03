@@ -605,7 +605,7 @@ window.PromptLabModule = {
                 container.appendChild(card);
             });
         } catch(e) {
-            container.innerHTML = '<div class="text-placeholder">ERROR LOADING LIBRARY</div>';
+            container.innerHTML = '<div class="text-placeholder">' + (window.t ? window.t('promptlab.error_loading_library') : 'ERROR LOADING LIBRARY') + '</div>';
         }
     },
 
@@ -644,10 +644,10 @@ window.PromptLabModule = {
             });
 
             if (prompts.length === 0) {
-                container.innerHTML = '<div class="text-placeholder">NO PROMPTS IN THIS CATEGORY</div>';
+                container.innerHTML = '<div class="text-placeholder">' + (window.t ? window.t('promptlab.no_prompts') : 'NO PROMPTS IN THIS CATEGORY') + '</div>';
             }
         } catch(e) {
-            container.innerHTML = '<div class="text-placeholder">ERROR LOADING PROMPTS</div>';
+            container.innerHTML = '<div class="text-placeholder">' + (window.t ? window.t('promptlab.error_loading_prompts') : 'ERROR LOADING PROMPTS') + '</div>';
         }
     },
 
@@ -867,15 +867,15 @@ window.PromptLabModule = {
             } else {
                 this.state.generation.active = false;
                 if (resBox) {
-                    resBox.innerHTML = `<div class="text-error-inline">GENERATION FAILED</div>`;
+                    resBox.innerHTML = `<div class="text-error-inline">${window.t ? window.t('promptlab.generation_failed') : 'GENERATION FAILED'}</div>`;
                     resBox.classList.remove('filled');
                 }
                 if (btn) {
                     btn.classList.remove('btn-disabled');
-                    btn.innerHTML = 'GENERATE (1 CREDIT)';
+                    btn.innerHTML = window.t ? window.t('promptlab.btn_generate_credit') : 'GENERATE (1 CREDIT)';
                 }
                 if (refBox) refBox.classList.remove('btn-disabled');
-                this.showAlert(res.error || 'GENERATION FAILED');
+                this.showAlert(res.error || (window.t ? window.t('promptlab.generation_failed') : 'GENERATION FAILED'));
             }
         } catch(e) {
             clearInterval(this.state.generation.timerId);

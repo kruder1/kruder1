@@ -37,7 +37,7 @@
     <button class="btn-control dashboard-lock-btn" data-action="unlock-dashboard" aria-label="Unlock booth" data-i18n="dashboard.aria_unlock" data-i18n-attr="aria-label">
         <i class="fa-solid fa-lock-open"></i>
     </button>
-    <h1 class="animate-breathe" id="dashboard-lock-text">WE'LL BE BACK IN A FEW MINUTES...</h1>
+    <h1 id="dashboard-lock-text" data-i18n="dashboard.lock_text">WE'LL BE BACK IN A FEW MINUTES...</h1>
 </section>
 
 <!-- Account Info Modal -->
@@ -48,7 +48,7 @@
                 <i class="fa-solid fa-envelope"></i>
                 <span class="card-label" data-i18n="dashboard.card_label_signed_in">SIGNED IN AS</span>
             </div>
-            <span class="card-value card-value--email" id="account-modal-email">LOADING...</span>
+            <span class="card-value card-value--email" id="account-modal-email" data-i18n="common.loading">LOADING...</span>
             <button type="button" class="btn-main card-action-btn" data-action="account-logout">
                 <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="dashboard.btn_logout">LOGOUT</span>
             </button>
@@ -62,16 +62,6 @@
             <button type="button" class="btn-main card-action-btn" data-action="account-refresh">
                 <i class="fa-solid fa-rotate-right"></i> <span data-i18n="dashboard.btn_refresh">REFRESH</span>
             </button>
-        </div>
-        <div class="card-row card-row--status" id="system-status-row">
-            <div class="card-info-header">
-                <i class="fa-solid fa-signal"></i>
-                <span class="card-label" data-i18n="dashboard.card_label_status">SYSTEM STATUS</span>
-            </div>
-            <span class="card-value card-value--status" id="system-status-text">
-                <span class="status-dot status-dot--checking"></span>
-                <span data-i18n="status.checking">CHECKING...</span>
-            </span>
         </div>
     </div>
 </div>
@@ -191,7 +181,8 @@ window.DashboardModule = {
         currentView: 'home',
         verifyPinCurrent: '',
         verifyPinCallback: null,
-        verifyPinTimer: null
+        verifyPinTimer: null,
+        lockScramble: null
     },
 
     init() {
@@ -242,18 +233,33 @@ window.DashboardModule = {
     },
 
     showView(viewId) {
+        // Stop lock scramble when leaving locked view
+        if (this.state.lockScramble) {
+            window.stopScrambleLoop(this.state.lockScramble);
+            this.state.lockScramble = null;
+        }
+
         document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
         document.getElementById(`view-${viewId}`)?.classList.remove('hidden');
         this.state.currentView = viewId;
+
         if (viewId === 'dashboard-locked') {
+            const self = this;
             const h1 = document.getElementById('dashboard-lock-text');
             if (h1) {
-                h1.textContent = window.t ? window.t('dashboard.lock_text') : "WE'LL BE BACK IN A FEW MINUTES...";
+                var fallback = window.t ? window.t('dashboard.lock_text') : "WE'LL BE BACK IN A FEW MINUTES...";
+                h1.textContent = fallback;
                 (async () => {
                     try {
                         const res = await window.pywebview.api.get_lock_screen_text();
-                        if (res && res.ok && res.text != null) h1.textContent = String(res.text).trim() || h1.textContent;
+                        if (res && res.ok && res.text != null) {
+                            var apiText = String(res.text).trim();
+                            if (apiText) fallback = apiText;
+                        }
                     } catch (e) { console.error('[DASHBOARD] lock screen text load error', e); }
+                    if (self.state.currentView === 'dashboard-locked' && window.startScrambleLoop) {
+                        self.state.lockScramble = window.startScrambleLoop(h1, fallback, 3000);
+                    }
                 })();
             }
         }
@@ -342,28 +348,6 @@ window.DashboardModule = {
     openAccountModal() {
         this.updateAccountModalDisplay();
         this.showModal('account-modal');
-        this.checkSystemStatus();
-    },
-
-    async checkSystemStatus() {
-        const textEl = document.getElementById('system-status-text');
-        if (!textEl) return;
-        textEl.innerHTML = '<span class="status-dot status-dot--checking"></span> ' + (typeof t === 'function' ? t('status.checking') : 'CHECKING...');
-        try {
-            const data = await window.pywebview.api.check_system_status();
-            if (data && data.ok) {
-                const allOk = data.status === 'operational';
-                const allDown = data.status === 'down';
-                const dotClass = allOk ? 'status-dot--ok' : allDown ? 'status-dot--down' : 'status-dot--degraded';
-                const labelKey = allOk ? 'status.all_online' : allDown ? 'status.down' : 'status.degraded';
-                const label = typeof t === 'function' ? t(labelKey) : (allOk ? 'ALL SERVICES ONLINE' : allDown ? 'SERVICES UNAVAILABLE' : 'SOME SERVICES DEGRADED');
-                textEl.innerHTML = '<span class="status-dot ' + dotClass + '"></span> ' + label;
-            } else {
-                textEl.innerHTML = '<span class="status-dot status-dot--down"></span> ' + (typeof t === 'function' ? t('status.down') : 'SERVICES UNAVAILABLE');
-            }
-        } catch (e) {
-            textEl.innerHTML = '<span class="status-dot status-dot--down"></span> ' + (typeof t === 'function' ? t('status.down') : 'SERVICES UNAVAILABLE');
-        }
     },
 
     updateAccountModalDisplay() {

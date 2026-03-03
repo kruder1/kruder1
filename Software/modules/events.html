@@ -761,7 +761,7 @@ window.EventsModule = {
                 grid.appendChild(card);
             });
         } else {
-            grid.innerHTML = '<div class="text-placeholder">' + (emptyMessage || 'NO IMAGES YET') + '</div>';
+            grid.innerHTML = '<div class="text-placeholder">' + (emptyMessage || (window.t ? window.t('events.empty_gallery') : 'NO IMAGES YET')) + '</div>';
         }
 
         document.getElementById('gallery-choice').classList.add('hidden');
@@ -776,12 +776,12 @@ window.EventsModule = {
         try {
             const events = await window.pywebview.api.get_events();
             const currentEvent = events.find(e => e.id === id);
-            this.renderGalleryGrid(currentEvent?.images || [], 'NO IMAGES YET');
+            this.renderGalleryGrid(currentEvent?.images || [], window.t ? window.t('events.empty_gallery') : 'NO IMAGES YET');
         } catch (e) {
             if (window.pywebview && window.pywebview.api && window.pywebview.api.log_event) {
                 window.pywebview.api.log_event('WARN', 'events_gallery_load_failed', { error: String(e && (e.message || e)) });
             }
-            this.renderGalleryGrid([], 'ERROR LOADING GALLERY');
+            this.renderGalleryGrid([], window.t ? window.t('events.error_loading_gallery') : 'ERROR LOADING GALLERY');
         }
     },
 
@@ -912,7 +912,7 @@ window.EventsModule = {
         const btn = document.querySelector(`[data-action="export-${type}"]`);
         const origHTML = btn.innerHTML;
         btn.classList.add('btn-disabled');
-        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> EXPORTING...';
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> ' + (typeof window.t === 'function' ? window.t('events.loading_exporting') : 'EXPORTING...');
 
         try {
             const res = await window.pywebview.api.export_gallery(eid, ename, type);

@@ -11,7 +11,7 @@ from datetime import datetime
 
 import requests
 
-from utils import PORT, APP_DATA, IMAGES_DIR, JSON_FILE, NetworkService, DataService, send_to_recycle_bin, update_session_credits, friendly_error, process_and_save_image, decode_and_resize_image
+from utils import PORT, APP_DATA, IMAGES_DIR, JSON_FILE, NetworkService, DataService, update_session_credits, friendly_error, process_and_save_image
 from config import GEN_WORKER_BASE
 from log_service import append_log
 
@@ -284,8 +284,11 @@ class PromptLabModule:
             
             DataService.save_json(JSON_FILE, db)
             
-            if files_to_delete:
-                send_to_recycle_bin(files_to_delete)
+            for f in files_to_delete:
+                try:
+                    os.remove(f)
+                except OSError:
+                    pass
             return {"ok": True}
         except Exception as e:
             return {"error": str(e)}

@@ -11,7 +11,7 @@
 </head>
 <body data-theme="light">
 
-    <div id="particles-js"></div>
+    <canvas id="bgCanvas"></canvas>
     <div class="header-overlay"></div>
     <audio id="btn-sound" src="static/sounds/button.mp3" preload="auto" class="hidden"></audio>
     <audio id="bg-loop" src="static/sounds/loop.mp3" preload="auto" loop class="hidden"></audio>
@@ -25,6 +25,12 @@
 
     <div class="app-logo hidden">
         <img src="static/img/logo.png" alt="KRUDER 1">
+    </div>
+    <div class="system-status hidden" id="global-system-status">
+        <div class="system-status-version" id="global-app-version"></div>
+        <div class="system-status-header"><i class="fa-solid fa-signal"></i> <span data-i18n="status.label">SYSTEM STATUS</span></div>
+        <div class="system-status-value"><span class="status-dot status-dot--checking"></span> <span class="system-status-label">CHECKING...</span></div>
+        <div class="system-barcode"></div>
     </div>
 
     <!-- Boot Intro Overlay -->
@@ -48,7 +54,6 @@
     </div>
 
     <script src="static/js/i18n.js"></script>
-    <script src="static/js/particles.min.js"></script>
     <script>
         // ========================================
         // GLOBAL STATE
@@ -69,24 +74,77 @@
         };
 
         // ========================================
-        // PARTICLES CONFIG
+        // TEXT SCRAMBLE (global utility)
         // ========================================
-        const particlesConfig = {
-            particles: {
-                number: { value: 200, density: { enable: true, value_area: 800 } },
-                color: { value: "#000000" },
-                shape: { type: "circle" },
-                opacity: { value: 0.1, random: true },
-                size: { value: 2, random: true },
-                line_linked: { enable: true, distance: 150, color: "#000000", opacity: 0.1, width: 1 },
-                move: { enable: true, speed: 2, direction: "none", out_mode: "out" }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: false } },
-                modes: { grab: { distance: 140, line_linked: { opacity: 1 } } }
-            },
-            retina_detect: true
+        window.TextScramble = function(el) {
+            this.el = el;
+            this.chars = '!<>-_\\/[]{}—=+*^?#________';
+            this.update = this.update.bind(this);
+            this.frameRequest = null;
+        };
+        window.TextScramble.prototype.setText = function(newText) {
+            var oldText = this.el.innerText;
+            var length = Math.max(oldText.length, newText.length);
+            var self = this;
+            var promise = new Promise(function(resolve) { self.resolve = resolve; });
+            this.queue = [];
+            for (var i = 0; i < length; i++) {
+                var from = oldText[i] || '';
+                var to = newText[i] || '';
+                var start = Math.floor(Math.random() * 40);
+                var end = start + Math.floor(Math.random() * 40);
+                this.queue.push({ from: from, to: to, start: start, end: end, char: null });
+            }
+            cancelAnimationFrame(this.frameRequest);
+            this.frame = 0;
+            this.update();
+            return promise;
+        };
+        window.TextScramble.prototype.update = function() {
+            var output = '';
+            var complete = 0;
+            for (var i = 0, n = this.queue.length; i < n; i++) {
+                var item = this.queue[i];
+                if (this.frame >= item.end) {
+                    complete++;
+                    output += item.to;
+                } else if (this.frame >= item.start) {
+                    if (!item.char || Math.random() < 0.28) {
+                        item.char = this.chars[Math.floor(Math.random() * this.chars.length)];
+                    }
+                    output += '<span class="scramble-dud">' + item.char + '</span>';
+                } else {
+                    output += item.from;
+                }
+            }
+            this.el.innerHTML = output;
+            if (complete === this.queue.length) {
+                this.resolve();
+            } else {
+                this.frameRequest = requestAnimationFrame(this.update);
+                this.frame++;
+            }
+        };
+        window.TextScramble.prototype.stop = function() {
+            cancelAnimationFrame(this.frameRequest);
+        };
+
+        // Helper: start a looping scramble on an element
+        window.startScrambleLoop = function(el, text, delay) {
+            if (!el) return null;
+            var fx = new window.TextScramble(el);
+            var run = function() {
+                fx.setText(text).then(function() {
+                    fx._loopTimer = setTimeout(run, delay || 3000);
+                });
+            };
+            run();
+            return fx;
+        };
+        window.stopScrambleLoop = function(fx) {
+            if (!fx) return;
+            fx.stop();
+            if (fx._loopTimer) clearTimeout(fx._loopTimer);
         };
 
         // ========================================
@@ -443,6 +501,7 @@
                 }
                 var warningAudio = document.getElementById('sound-warning');
                 if (warningAudio) {
+                    warningAudio.volume = Math.max(0, Math.min(1, window._uiSoundVolume));
                     warningAudio.currentTime = 0;
                     warningAudio.play().catch(function() {});
                 }
@@ -792,14 +851,198 @@
         };
 
         // ========================================
+        // SYSTEM STATUS
+        // ========================================
+        window.checkSystemStatus = async function() {
+            var el = document.getElementById('global-system-status');
+            if (!el) return;
+            var dotEl = el.querySelector('.status-dot');
+            var labelEl = el.querySelector('.system-status-label');
+            if (!dotEl || !labelEl) return;
+            try {
+                var data = await window.pywebview.api.check_system_status();
+                if (data && data.ok) {
+                    var allOk = data.status === 'operational';
+                    var allDown = data.status === 'down';
+                    dotEl.className = 'status-dot ' + (allOk ? 'status-dot--ok' : allDown ? 'status-dot--down' : 'status-dot--degraded');
+                    var label = allOk ? 'ALL ONLINE' : allDown ? 'OFFLINE' : 'DEGRADED';
+                    if (typeof window.t === 'function') {
+                        var key = allOk ? 'status.all_online' : allDown ? 'status.down' : 'status.degraded';
+                        label = window.t(key);
+                    }
+                    labelEl.textContent = label;
+                } else {
+                    dotEl.className = 'status-dot status-dot--down';
+                    labelEl.textContent = typeof window.t === 'function' ? window.t('status.down') : 'OFFLINE';
+                }
+            } catch (e) {
+                dotEl.className = 'status-dot status-dot--down';
+                labelEl.textContent = typeof window.t === 'function' ? window.t('status.down') : 'OFFLINE';
+            }
+        };
+
+        // Re-check on language change so status text updates immediately
+        window.addEventListener('languagechange', function() {
+            window.checkSystemStatus();
+        });
+
+        // ========================================
+        // ANIMATED GRID BACKGROUND
+        // ========================================
+        (function() {
+            var bgCanvas = document.getElementById('bgCanvas');
+            if (!bgCanvas) return;
+            var ctx = bgCanvas.getContext('2d');
+
+            var GRID = {
+                SIZE: 40,
+                PARTICLES: 30,
+                SPEED_MIN: 0.5,
+                SPEED_MAX: 5,
+                TRAIL_LIMIT: 60,
+                GRID_OPACITY: 0.15,
+                DOT_RADIUS: 0.4
+            };
+
+            var occupied = { h: new Set(), v: new Set() };
+
+            function resize() {
+                bgCanvas.width = window.innerWidth;
+                bgCanvas.height = window.innerHeight;
+                occupied.h.clear();
+                occupied.v.clear();
+                particles.forEach(function(p) { p.init(); });
+            }
+
+            function getColors() {
+                var dark = document.body.getAttribute('data-theme') === 'dark';
+                return {
+                    bg: dark ? '#000000' : '#FFFFFF',
+                    rgb: dark ? '255,255,255' : '0,0,0'
+                };
+            }
+
+            function drawGrid() {
+                var c = getColors();
+                ctx.fillStyle = c.bg;
+                ctx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+                var grad = ctx.createLinearGradient(0, 0, bgCanvas.width, bgCanvas.height);
+                grad.addColorStop(0, 'rgba(' + c.rgb + ',' + GRID.GRID_OPACITY + ')');
+                grad.addColorStop(1, 'rgba(' + c.rgb + ',0)');
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 1;
+
+                for (var y = 0; y < bgCanvas.height; y += GRID.SIZE) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(bgCanvas.width, y);
+                    ctx.stroke();
+                }
+                for (var x = 0; x < bgCanvas.width; x += GRID.SIZE) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, bgCanvas.height);
+                    ctx.stroke();
+                }
+            }
+
+            function Particle() { this.init(); }
+            Particle.prototype.init = function() {
+                this.trail = [];
+                this.speed = Math.random() * (GRID.SPEED_MAX - GRID.SPEED_MIN) + GRID.SPEED_MIN;
+                this.lineFreed = false;
+                // Try to claim a grid line
+                var ok = false;
+                for (var i = 0; i < 100; i++) {
+                    if (Math.random() > 0.5) {
+                        var y = Math.round(Math.random() * bgCanvas.height / GRID.SIZE) * GRID.SIZE;
+                        if (!occupied.h.has(y)) {
+                            this.axis = 'h'; this.x = 0; this.y = y;
+                            occupied.h.add(y); ok = true; break;
+                        }
+                    } else {
+                        var x = Math.round(Math.random() * bgCanvas.width / GRID.SIZE) * GRID.SIZE;
+                        if (!occupied.v.has(x)) {
+                            this.axis = 'v'; this.x = x; this.y = 0;
+                            occupied.v.add(x); ok = true; break;
+                        }
+                    }
+                }
+                if (!ok) {
+                    // No free line — park off-screen, will retry next frame
+                    this.axis = 'h'; this.x = -9999; this.y = -9999;
+                    this.lineFreed = true;
+                }
+            };
+            Particle.prototype.update = function() {
+                // Always move and record trail
+                this.trail.push({ x: this.x, y: this.y });
+                if (this.trail.length > GRID.TRAIL_LIMIT) this.trail.shift();
+
+                if (this.axis === 'h') {
+                    this.x += this.speed;
+                    if (!this.lineFreed && this.x > bgCanvas.width) {
+                        this.lineFreed = true;
+                        occupied.h.delete(this.y);
+                    }
+                } else {
+                    this.y += this.speed;
+                    if (!this.lineFreed && this.y > bgCanvas.height) {
+                        this.lineFreed = true;
+                        occupied.v.delete(this.x);
+                    }
+                }
+
+                // Reinit when entire trail is off screen
+                if (this.lineFreed) {
+                    var w = bgCanvas.width, h = bgCanvas.height, ax = this.axis;
+                    var allGone = this.trail.length === 0 || this.trail.every(function(p) {
+                        return ax === 'h' ? p.x > w : p.y > h;
+                    });
+                    if (allGone) this.init();
+                }
+            };
+            Particle.prototype.draw = function() {
+                var c = getColors();
+                for (var i = 0; i < this.trail.length; i++) {
+                    var alpha = i / this.trail.length;
+                    ctx.fillStyle = 'rgba(' + c.rgb + ',' + alpha + ')';
+                    ctx.beginPath();
+                    ctx.arc(this.trail[i].x, this.trail[i].y, GRID.DOT_RADIUS, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            };
+
+            var particles = [];
+            for (var i = 0; i < GRID.PARTICLES; i++) particles.push(new Particle());
+
+            var animFrameId = null;
+            function animate() {
+                drawGrid();
+                for (var i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                animFrameId = requestAnimationFrame(animate);
+            }
+
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+                } else {
+                    if (!animFrameId) animate();
+                }
+            });
+
+            window.addEventListener('resize', resize);
+            resize();
+            animate();
+        })();
+
+        // ========================================
         // INIT
         // ========================================
-        function initParticles() {
-            if (window.particlesJS) {
-                particlesJS('particles-js', particlesConfig);
-            }
-        }
-
         function playBootIntro() {
             return new Promise(resolve => {
                 const intro = document.getElementById('boot-intro');
@@ -812,6 +1055,8 @@
                     setTimeout(() => {
                         intro.classList.add('hidden');
                         document.querySelector('.app-logo')?.classList.remove('hidden');
+                        document.getElementById('global-system-status')?.classList.remove('hidden');
+
                         resolve();
                     }, 500);
                 });
@@ -831,46 +1076,21 @@
                 document.removeEventListener('click', startLoop);
             }, { once: true });
             
-            // Init particles
-            initParticles();
-            
-            // Check session, load settings (theme + sound)
+            // Run boot animation + API calls in parallel for faster startup
             try {
-                const [session, settingsRes] = await Promise.all([
+                const bootPromise = playBootIntro();
+                const dataPromise = Promise.all([
                     window.pywebview.api.get_session_data(),
                     window.pywebview.api.get_settings().catch(() => null)
                 ]);
+                const [, [session, settingsRes]] = await Promise.all([bootPromise, dataPromise]);
                 if (settingsRes && settingsRes.ok && settingsRes.settings) {
                     const s = settingsRes.settings;
-                    if (typeof s.themeLuminance === 'number' && s.themeLuminance >= 0 && s.themeLuminance <= 100) {
-                        const bgPct = s.themeLuminance / 100;
-                        const inkPct = (typeof s.inkLuminance === 'number' && s.inkLuminance >= 0 && s.inkLuminance <= 100)
-                            ? s.inkLuminance / 100
-                            : 1;
-                        const paperVal = Math.round(255 * (1 - bgPct));
-                        const inkVal = Math.round(255 * (1 - inkPct));
-                        const opacity = 0.05 + 0.03 * inkPct;
-                        document.body.style.setProperty('--theme-ink', `rgb(${inkVal},${inkVal},${inkVal})`);
-                        document.body.style.setProperty('--theme-paper', `rgb(${paperVal},${paperVal},${paperVal})`);
-                        document.body.style.setProperty('--theme-input-bg', `rgb(${paperVal},${paperVal},${paperVal})`);
-                        document.body.style.setProperty('--theme-focus', `rgba(${inkVal},${inkVal},${inkVal},${opacity})`);
-                        document.body.style.setProperty('--theme-scanline', `rgba(${inkVal},${inkVal},${inkVal},${opacity})`);
-                        document.body.style.setProperty('--theme-border', `rgba(${inkVal},${inkVal},${inkVal},0.2)`);
-                        document.body.style.setProperty('--theme-ink-brightness', (inkVal / 255).toFixed(3));
-                        document.body.setAttribute('data-theme', bgPct >= 0.5 ? 'dark' : 'light');
-                        window.AppState.theme = bgPct >= 0.5 ? 'dark' : 'light';
-                    } else {
-                        const theme = s.theme === 'dark' || s.theme === 'light' ? s.theme : 'light';
-                        document.body.setAttribute('data-theme', theme);
-                        window.AppState.theme = theme;
-                    }
+                    const theme = s.theme === 'dark' || s.theme === 'light' ? s.theme : 'light';
+                    document.body.setAttribute('data-theme', theme);
+                    window.AppState.theme = theme;
                     const lang = (s.language && typeof s.language === 'string') ? s.language : 'en';
                     if (window.i18n) await window.i18n.load(lang);
-                    if (typeof s.accentHue === 'number' && s.accentHue >= 0 && s.accentHue <= 360) {
-                        const h = Math.round(s.accentHue);
-                        document.body.style.setProperty('--theme-accent', `hsl(${h}, 70%, 50%)`);
-                        document.body.style.setProperty('--theme-accent-dark', `hsl(${h}, 70%, 35%)`);
-                    }
                     if (s.sound) {
                         if (typeof s.sound.volume === 'number') window.setBgLoopVolume(s.sound.volume);
                         if (typeof s.sound.uiVolume === 'number') window.setUiSoundVolume(s.sound.uiVolume);
@@ -878,14 +1098,22 @@
                 } else if (window.i18n) {
                     await window.i18n.load('en');
                 }
-                // Play boot intro, then load module
                 const targetModule = (session && session.token) ? 'dashboard' : 'auth';
                 if (session && session.token) window.AppState.session = session;
                 if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.log_event === 'function') {
                     window.pywebview.api.log_event('INFO', 'session_loaded', { has_token: !!(session && session.token) }).catch(function() {});
                 }
-                await playBootIntro();
                 loadModule(targetModule);
+                // Start system status check + periodic refresh
+                window.checkSystemStatus();
+                setInterval(window.checkSystemStatus, 30000);
+                // Load app version globally
+                if (window.pywebview?.api?.get_app_version) {
+                    window.pywebview.api.get_app_version().then(function(v) {
+                        var el = document.getElementById('global-app-version');
+                        if (el && v) el.textContent = 'v' + v;
+                    }).catch(function() {});
+                }
             } catch (error) {
                 if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.log_event === 'function') {
                     window.pywebview.api.log_event('ERROR', 'init_app_failed', { error: (error && error.message) ? error.message : String(error) }).catch(function() {});
@@ -894,6 +1122,8 @@
                 // Skip intro on error, go straight to auth
                 document.getElementById('boot-intro')?.classList.add('hidden');
                 document.querySelector('.app-logo')?.classList.remove('hidden');
+                document.getElementById('global-system-status')?.classList.remove('hidden');
+                document.getElementById('global-app-version')?.classList.remove('hidden');
                 loadModule('auth');
             }
         }
