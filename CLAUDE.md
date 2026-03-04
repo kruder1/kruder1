@@ -117,8 +117,8 @@ GitHub Secrets (already configured):
 
 | Project | Directory | Production Branch | Domains |
 |---------|-----------|-------------------|---------|
-| `kruder1-landing` | `Website/kruder1-landing/` | `main` | kruder1.com, kruder.uno, kruder.one |
-| `kruder1-admin` | `Website/kruder1-admin/` | `main` | admin.kruder1.com |
+| `kruder1-landing` | `Website/kruder1-landing/` | `master` | kruder1.com, kruder.uno, kruder.one |
+| `kruder1-admin` | `Website/kruder1-admin/` | `master` | admin.kruder1.com |
 
 ### Manual Deploy (backup)
 
@@ -184,4 +184,4 @@ Workers have secrets configured in the Cloudflare dashboard (not in code):
 - No npm in the project — vanilla JS everywhere
 - **NEVER use worktrees** — always work directly on `master` branch
 - When deploying website changes: just commit and push, GitHub Actions handles the rest
-- Pages production branch is `main` (not `master`) — the GitHub Action handles this mapping
+- Pages production branch is `master` — GitHub Action deploys with `--branch=master`

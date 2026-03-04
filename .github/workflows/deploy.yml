@@ -19,7 +19,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy Website/kruder1-landing --project-name=kruder1-landing --branch=main --commit-dirty=true
+          command: pages deploy Website/kruder1-landing --project-name=kruder1-landing --branch=master --commit-dirty=true
 
       # ── Pages: Admin (admin.kruder1.com) ──
       - name: Deploy Admin Pages
@@ -27,7 +27,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy Website/kruder1-admin --project-name=kruder1-admin --branch=main --commit-dirty=true
+          command: pages deploy Website/kruder1-admin --project-name=kruder1-admin --branch=master --commit-dirty=true
 
       # ── Workers ──
       - name: Deploy Landing Worker
