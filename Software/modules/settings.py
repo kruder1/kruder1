@@ -570,6 +570,7 @@ class SettingsModule:
                 timeout=15,
             )
             if resp.status_code != 200:
+                append_log("ERROR", "check_for_update", {"status": resp.status_code})
                 return {"error": f"Server returned {resp.status_code}"}
             data = resp.json()
             if not data.get("ok"):
