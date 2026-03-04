@@ -1,13 +1,13 @@
 /**
  * Kruder1 Landing Worker
- * Sits in front of kruder1.com (Pages).
+ * Only handles /photo/* routes on kruder1.com.
+ * All other traffic goes directly to Pages (custom domain).
+ *
  * Routes:
  *   GET /photo/:id         - Photo page with Share + Download
  *   GET /photo/:id/download - Proxy download (Content-Disposition: attachment)
- *   *                      - Pass-through to static site (Pages)
  *
  * Required env:
- *   PAGES_ORIGIN   - e.g. https://kruder1-landing.pages.dev (no trailing slash)
  *   MEDIA_BASE_URL - e.g. https://media.kruder1.com
  */
 
@@ -579,26 +579,7 @@ export default {
       }
     }
 
-    // ─── Pass-through to static site ────────────────────────────────────
-    const origin = (env.PAGES_ORIGIN || "https://kruder1-landing.pages.dev").replace(/\/$/, "");
-    const sep = url.search ? "&" : "?";
-    const targetUrl = `${origin}/${path}${url.search}${sep}_v=${Date.now()}`;
-    try {
-      const res = await fetch(targetUrl, {
-        method: request.method,
-        headers: request.headers,
-        body: request.method !== "GET" && request.method !== "HEAD" ? request.body : undefined,
-      });
-      const newHeaders = new Headers(res.headers);
-      newHeaders.delete("content-encoding");
-      newHeaders.set("Cache-Control", "no-store, no-cache, must-revalidate");
-      return new Response(res.body, {
-        status: res.status,
-        statusText: res.statusText,
-        headers: newHeaders,
-      });
-    } catch (e) {
-      return new Response("Origin unavailable", { status: 502 });
-    }
+    // Worker only handles /photo/* routes — everything else is served by Pages directly
+    return new Response("Not found", { status: 404 });
   },
 };

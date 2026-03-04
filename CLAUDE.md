@@ -69,7 +69,7 @@ Website/
 ├── kruder1-admin/           ← Cloudflare Pages: admin.kruder1.com
 │   └── index.html           ← Admin dashboard (single-page)
 ├── workers/
-│   ├── kruder1-landing.js   ← Photo pages + pass-through proxy to Pages
+│   ├── kruder1-landing.js   ← Photo pages only (/photo/* routes)
 │   ├── kruder1-auth.js      ← Auth, payments, credits
 │   ├── kruder1-gen.js       ← AI generation, email, prompts sync
 │   ├── kruder1-admin.js     ← Admin API (stats, users, credits)
@@ -105,12 +105,13 @@ GitHub Secrets (already configured):
 
 | Domain | Points to | Notes |
 |--------|-----------|-------|
-| `kruder1.com` | Landing Worker → Pages | Worker proxies to Pages + handles `/photo/:id` |
+| `kruder1.com` | Pages direct | Same as all other domains |
+| `kruder1.com/photo/*` | Landing Worker | Only photo routes go through worker |
 | `kruder.uno` | Pages direct | |
 | `kruder.one` | Pages direct | |
 | `admin.kruder1.com` | Admin Pages direct | |
 
-**Important**: `kruder1.com` is the only domain that goes through the `kruder1-landing` worker. The worker adds cache-busting (`?_v=timestamp`) and `Cache-Control: no-store` to prevent stale content. The other domains go directly to Cloudflare Pages.
+**All domains point directly to Cloudflare Pages.** The `kruder1-landing` worker only handles `/photo/*` routes (photo sharing pages + download).
 
 ### Cloudflare Pages Projects
 
@@ -132,7 +133,7 @@ cd Website
 ### Worker Environment Variables (Cloudflare Dashboard)
 
 Workers have secrets configured in the Cloudflare dashboard (not in code):
-- **kruder1-landing**: `PAGES_ORIGIN`, `MEDIA_BASE_URL`
+- **kruder1-landing**: `MEDIA_BASE_URL`
 - **kruder1-auth**: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `JWT_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
 - **kruder1-gen**: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `JWT_SECRET`, `SEGMIND_API_KEY`, `BREVO_API_KEY`
 - **kruder1-admin**: `ADMIN_PASSWORD`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `JWT_SECRET`

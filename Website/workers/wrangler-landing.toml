@@ -1,3 +1,8 @@
 name = "kruder1-landing"
 main = "kruder1-landing.js"
 compatibility_date = "2025-01-01"
+
+routes = [
+  { pattern = "kruder1.com/photo/*", zone_name = "kruder1.com" },
+  { pattern = "www.kruder1.com/photo/*", zone_name = "kruder1.com" }
+]
