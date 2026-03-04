@@ -224,6 +224,8 @@
             });
 
             if (localStorage.getItem(KRUDER.CONFIG.keyToken)) { window.location.href = 'dashboard.html'; return; }
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById('auth-' + hash)) switchAuthView(hash);
 
             document.querySelectorAll('.auth-form input').forEach(input => {
                 input.addEventListener('input', validateInput);

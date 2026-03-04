@@ -73,7 +73,7 @@
                 </div>
 
                 <div style="margin-top:var(--space-lg);" data-auth-guest>
-                    <a href="login.html" class="btn-secondary" data-i18n="btn_start"></a>
+                    <a href="login.html#create" class="btn-secondary" data-i18n="btn_start"></a>
                 </div>
             </div>
         </section>
@@ -226,7 +226,7 @@
 
             const startCheckout = async (priceId) => {
                 const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
-                if (!token) { window.location.href = 'login.html'; return; }
+                if (!token) { window.location.href = 'login.html#create'; return; }
                 const btn = document.querySelector(`.btn-buy[data-price-id="${priceId}"]`);
                 KRUDER.setBtnLoading(btn, true);
                 try {
@@ -249,7 +249,7 @@
                 btn.addEventListener('click', () => {
                     const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
                     const priceId = btn.dataset.priceId;
-                    if (!token) { window.location.href = 'login.html'; return; }
+                    if (!token) { window.location.href = 'login.html#create'; return; }
                     if (priceId) startCheckout(priceId);
                 });
             });
