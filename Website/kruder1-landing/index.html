@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- v1.0.0 -->
+<!-- v1.1.0 -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kruder 1 — AI Photo Booth Software</title>
-    <meta name="description" content="AI photo booth software. Ridiculously easy to use. Ridiculously easy to stand out with.">
+    <title>Kruder 1 — AI Photo Booth Software | No Monthly Fees</title>
+    <meta name="description" content="AI photo booth software for events. No subscriptions, no monthly fees. Pay only for what you use. 10 free credits to start. Download for Windows.">
+    <meta name="keywords" content="AI photo booth software, photo booth software, software cabina de fotos IA, AI photo booth, photo booth para eventos, ai portrait booth, software for photo booth business">
+    <meta property="og:title" content="Kruder 1 — AI Photo Booth Software">
+    <meta property="og:description" content="Turn any Windows PC into an AI photo booth. No monthly fees. 10 free credits.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kruder1.com">
+    <meta property="og:image" content="https://kruder1.com/img/og-image.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -36,8 +42,72 @@
             <div class="section-inner">
                 <h1 class="hero-title" data-i18n="hero_title"></h1>
                 <p class="hero-subtitle" data-i18n="hero_subtitle"></p>
-                <p class="hero-desc" data-i18n="hero_desc"></p>
-                <a href="#pricing" class="btn-accent" style="margin-top:2rem;" data-i18n="hero_cta"></a>
+                <div class="hero-ctas">
+                    <a href="login.html#create" class="btn-accent" data-i18n="hero_cta_free"></a>
+                    <a href="#pricing" class="btn-secondary" data-i18n="hero_cta_pricing"></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── HOW IT WORKS ──────────────────────────── -->
+        <section id="how" class="section is-compact">
+            <div class="section-inner">
+                <h2 class="section-title" data-i18n="how_title"></h2>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-camera"></i></div>
+                        <h3 class="step-title" data-i18n="how_step1_title"></h3>
+                        <p class="step-desc" data-i18n="how_step1_desc"></p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <h3 class="step-title" data-i18n="how_step2_title"></h3>
+                        <p class="step-desc" data-i18n="how_step2_desc"></p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon"><i class="fa-solid fa-share-nodes"></i></div>
+                        <h3 class="step-title" data-i18n="how_step3_title"></h3>
+                        <p class="step-desc" data-i18n="how_step3_desc"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── WHY KRUDER 1 ──────────────────────────── -->
+        <section id="why" class="section is-compact">
+            <div class="section-inner">
+                <h2 class="section-title" data-i18n="why_title"></h2>
+                <div class="why-grid">
+                    <div class="why-card">
+                        <div class="why-icon"><i class="fa-solid fa-circle-dollar-to-slot"></i></div>
+                        <h3 class="why-card-title" data-i18n="why1_title"></h3>
+                        <p class="why-card-desc" data-i18n="why1_desc"></p>
+                    </div>
+                    <div class="why-card">
+                        <div class="why-icon"><i class="fa-solid fa-infinity"></i></div>
+                        <h3 class="why-card-title" data-i18n="why2_title"></h3>
+                        <p class="why-card-desc" data-i18n="why2_desc"></p>
+                    </div>
+                    <div class="why-card">
+                        <div class="why-icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+                        <h3 class="why-card-title" data-i18n="why3_title"></h3>
+                        <p class="why-card-desc" data-i18n="why3_desc"></p>
+                    </div>
+                    <div class="why-card">
+                        <div class="why-icon"><i class="fa-solid fa-hand-pointer"></i></div>
+                        <h3 class="why-card-title" data-i18n="why4_title"></h3>
+                        <p class="why-card-desc" data-i18n="why4_desc"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FREE DEMO CTA ─────────────────────────── -->
+        <section id="demo" class="section is-compact">
+            <div class="section-inner demo-cta">
+                <h2 class="section-title" data-i18n="demo_title"></h2>
+                <p class="section-subtitle" data-i18n="demo_desc"></p>
+                <a href="login.html#create" class="btn-accent" style="margin-top:var(--space-lg);" data-i18n="demo_cta"></a>
             </div>
         </section>
 
@@ -73,6 +143,8 @@
                     </div>
                 </div>
 
+                <p class="hardware-teaser" data-i18n="hardware_teaser"></p>
+
                 <div style="margin-top:var(--space-lg);" data-auth-guest>
                     <a href="login.html#create" class="btn-secondary" data-i18n="btn_start"></a>
                 </div>
@@ -85,6 +157,20 @@
                 <h2 class="section-title" data-i18n="faq_title"></h2>
 
                 <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span class="faq-q-text" data-i18n="q0a"></span>
+                            <i class="fa-solid fa-plus faq-icon"></i>
+                        </button>
+                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a0a"></p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span class="faq-q-text" data-i18n="q0b"></span>
+                            <i class="fa-solid fa-plus faq-icon"></i>
+                        </button>
+                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a0b"></p></div>
+                    </div>
                     <div class="faq-item">
                         <button class="faq-question">
                             <span class="faq-q-text" data-i18n="q1"></span>
@@ -174,15 +260,39 @@
         document.addEventListener('DOMContentLoaded', () => {
             KRUDER.init({
                 /* ── Hero ── */
-                hero_title:    { en: 'The photo booth evolved.', es: 'La cabina de fotos evolucionó.' },
-                hero_subtitle: { en: 'Has yours?', es: '¿Y la tuya?' },
-                hero_desc:     { en: 'AI photo booth software. Ridiculously easy to use. Ridiculously easy to stand out with. Your clients pay for the experience — make sure it\'s worth remembering.', es: 'Software de cabina de fotos con IA. Ridículamente fácil de usar. Ridículamente fácil de destacar. Tus clientes pagan por la experiencia — asegúrate de que valga la pena recordarla.' },
-                hero_cta:      { en: 'SEE PRICING', es: 'VER PRECIOS' },
+                hero_title:      { en: 'AI photo booth software.<br>Zero monthly fees.', es: 'Software de cabina de fotos con IA.<br>Sin rentas mensuales.' },
+                hero_subtitle:   { en: 'Your clients pay for the experience — give them one worth remembering.', es: 'Tus clientes pagan por la experiencia — dales una que valga la pena recordar.' },
+                hero_cta_free:   { en: 'TRY FREE — 10 CREDITS', es: 'PRUEBA GRATIS — 10 CRÉDITOS' },
+                hero_cta_pricing:{ en: 'SEE PRICING', es: 'VER PRECIOS' },
+
+                /* ── How it works ── */
+                how_title:       { en: 'How it works', es: 'Cómo funciona' },
+                how_step1_title: { en: 'Capture', es: 'Captura' },
+                how_step1_desc:  { en: 'Guest takes a photo with any webcam.', es: 'El invitado se toma una foto con cualquier webcam.' },
+                how_step2_title: { en: 'AI transforms', es: 'La IA transforma' },
+                how_step2_desc:  { en: 'Our AI creates a unique image in seconds.', es: 'Nuestra IA crea una imagen única en segundos.' },
+                how_step3_title: { en: 'Share & print', es: 'Comparte e imprime' },
+                how_step3_desc:  { en: 'Email, QR, or print on the spot.', es: 'Email, QR, o imprime en el momento.' },
+
+                /* ── Why Kruder 1 ── */
+                why_title:       { en: 'Why Kruder 1', es: 'Por qué Kruder 1' },
+                why1_title:      { en: 'No monthly fees', es: 'Sin rentas mensuales' },
+                why1_desc:       { en: 'Free software. Pay only for credits. No subscriptions, no surprises.', es: 'Software gratis. Solo pagas créditos. Sin suscripciones, sin sorpresas.' },
+                why2_title:      { en: 'Credits never expire', es: 'Los créditos no expiran' },
+                why2_desc:       { en: 'Buy once, use whenever. Slow month? No problem.', es: 'Compra una vez, usa cuando quieras. ¿Mes lento? No hay problema.' },
+                why3_title:      { en: 'Built for real events', es: 'Hecho para eventos reales' },
+                why3_desc:       { en: '14 years running photo booths. We built what we needed.', es: '14 años operando cabinas de fotos. Construimos lo que necesitábamos.' },
+                why4_title:      { en: 'Ridiculously simple', es: 'Ridículamente simple' },
+                why4_desc:       { en: 'If your staff can take a selfie, they can run Kruder 1.', es: 'Si tu staff puede tomar una selfie, puede operar Kruder 1.' },
+
+                /* ── Demo CTA ── */
+                demo_title:      { en: 'Try it free. 10 credits on us.', es: 'Pruébalo gratis. 10 créditos de regalo.' },
+                demo_desc:       { en: 'Create an account, download the software, and generate your first 10 AI images — free. No credit card required.', es: 'Crea tu cuenta, descarga el software y genera tus primeras 10 imágenes con IA — gratis. Sin tarjeta de crédito.' },
+                demo_cta:        { en: 'CREATE FREE ACCOUNT', es: 'CREAR CUENTA GRATIS' },
 
                 /* ── Pricing ── */
                 pricing_title:    { en: 'One credit. One image.<br>No fine print.', es: 'Un crédito. Una imagen.<br>Sin letra chiquita.' },
-                pricing_subtitle: { en: 'No subscriptions. No expiration. Buy once, use whenever.', es: 'Sin suscripciones. Sin expiración. Compra una vez, usa cuando quieras.' },
-                pricing_features: { en: 'Free software. Free download. You only pay for credits.', es: 'Software gratis. Descarga gratis. Solo pagas por créditos.' },
+                pricing_subtitle: { en: 'Others charge expensive monthly subscriptions on top of everything. We just charge credits.', es: 'Otros cobran costosas mensualidades además de todo. Nosotros solo cobramos créditos.' },
                 p_basic_title:    { en: 'Basic', es: 'Basic' },
                 p_plus_title:     { en: 'Plus', es: 'Plus' },
                 p_pro_title:      { en: 'Pro', es: 'Pro' },
@@ -190,9 +300,16 @@
                 p_credits_label:  { en: 'credits', es: 'créditos' },
                 btn_buy:          { en: 'Buy', es: 'Comprar' },
                 btn_start:        { en: 'Get Started', es: 'Comenzar' },
+                hardware_teaser:  { en: 'Hardware coming soon — the complete photo booth solution.', es: 'Hardware próximamente — la solución completa para tu cabina.' },
 
                 /* ── FAQs ── */
                 faq_title: { en: 'Questions? Good.', es: '¿Preguntas? Bien.' },
+
+                q0a: { en: 'What exactly is Kruder 1?', es: '¿Qué es exactamente Kruder 1?' },
+                a0a: { en: 'Software that turns any Windows PC and webcam into an AI photo booth for events. Free to download, pay only for credits.', es: 'Software que convierte cualquier PC con Windows y webcam en una cabina de fotos con IA para eventos. Descarga gratis, solo pagas créditos.' },
+
+                q0b: { en: 'Can I really try it for free?', es: '¿Realmente puedo probarlo gratis?' },
+                a0b: { en: 'Yes. Create an account and you get 10 free credits to generate your first AI images. No credit card needed.', es: 'Sí. Crea una cuenta y obtén 10 créditos gratis para generar tus primeras imágenes con IA. Sin tarjeta de crédito.' },
 
                 q1: { en: 'Do credits expire?', es: '¿Los créditos expiran?' },
                 a1: { en: 'No, never. Buy credits once and use them whenever you want. No expiration dates. No rush.', es: 'No, nunca. Compra créditos una vez y úsalos cuando quieras. Sin fecha de vencimiento. Sin prisa.' },

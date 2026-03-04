@@ -319,6 +319,14 @@ body::after        { top: 8px; right: 8px; }
     line-height: 1.6;
 }
 
+.hero-ctas {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    margin-top: var(--space-lg);
+    flex-wrap: wrap;
+}
+
 .section-title {
     font-size: var(--text-title);
     font-weight: 900;
@@ -356,12 +364,115 @@ body::after        { top: 8px; right: 8px; }
     min-height: calc(100vh - var(--nav-height));
 }
 
+.section.is-compact {
+    min-height: auto;
+    padding: var(--space-xl) var(--space-lg);
+}
+
 .section-inner {
     width: 100%;
     max-width: var(--container-max);
 }
 
-/* ── 8. Pricing Cards ─────────────────────────────────────── */
+/* ── 8a. How It Works (Steps Grid) ────────────────────────── */
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+}
+
+.step-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-lg) var(--space-sm);
+}
+
+.step-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
+    opacity: 0.8;
+}
+
+.step-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    margin-bottom: var(--space-xs);
+}
+
+.step-desc {
+    font-size: 1rem;
+    opacity: 0.6;
+    line-height: 1.5;
+}
+
+/* ── 8b. Why Kruder 1 (Feature Grid) ─────────────────────── */
+
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    margin-top: var(--space-xl);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.why-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-lg);
+    border: var(--border-width) solid var(--theme-border);
+    border-radius: var(--radius-main);
+}
+
+.why-icon {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+    opacity: 0.7;
+}
+
+.why-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    margin-bottom: var(--space-xs);
+}
+
+.why-card-desc {
+    font-size: 0.95rem;
+    opacity: 0.6;
+    line-height: 1.5;
+}
+
+/* ── 8c. Demo CTA ────────────────────────────────────────── */
+
+.demo-cta {
+    border: var(--border-width) solid var(--theme-ink);
+    border-radius: var(--radius-main);
+    padding: var(--space-xl);
+}
+
+/* ── 8d. Hardware Teaser ─────────────────────────────────── */
+
+.hardware-teaser {
+    margin-top: var(--space-xl);
+    font-size: var(--fs-small);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--ls-wide);
+    opacity: 0.4;
+}
+
+/* ── 9. Pricing Cards ─────────────────────────────────────── */
 
 .pricing-grid {
     display: flex;
@@ -833,6 +944,9 @@ body::after        { top: 8px; right: 8px; }
     .hero-subtitle { font-size: 1.3rem; }
     .section-title { font-size: 2.5rem; }
     .section { padding-left: var(--space-md); padding-right: var(--space-md); }
+
+    .steps-grid { grid-template-columns: 1fr; gap: var(--space-md); }
+    .why-grid { grid-template-columns: 1fr; }
 
     .pricing-grid {
         flex-wrap: wrap;
