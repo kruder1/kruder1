@@ -38,3 +38,4 @@ Docs/stress tests/*.log
 
 # Claude Code
 .claude/
+node_modules/ 
