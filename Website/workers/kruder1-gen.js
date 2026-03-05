@@ -17,7 +17,7 @@
 // Configuration
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SEGMIND_ENDPOINT = "https://api.segmind.com/v1/seedream-4.5";
+const SEGMIND_ENDPOINT = "https://api.segmind.com/v1/nano-banana-2";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CORS & Response Helpers
@@ -327,12 +327,11 @@ async function callSegmind(apiKey, imageUrl, promptText, aspectRatio = "2:3") {
 
   const requestBody = {
     prompt: promptText,
-    image_input: [imageUrl],
-    size: "2K",
-    width,
-    height,
-    max_images: 1,
+    image_urls: [imageUrl],
+    output_resolution: "1K",
     aspect_ratio: aspectRatio,
+    num_images: 1,
+    output_format: "jpeg"
   };
 
   const res = await fetch(SEGMIND_ENDPOINT, {

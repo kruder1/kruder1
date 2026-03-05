@@ -107,7 +107,7 @@ class EventModeModule:
                         frame_img.close()
                     # --- END FRAME ---
 
-                    img.save(result_path, "JPEG", quality=85)
+                    img.save(result_path, "JPEG", quality=100, subsampling=0)
                     img.close()
 
                     # Upload final JPG to R2 (with or without frame) so QR and email serve the same image.

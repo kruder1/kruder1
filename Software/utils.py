@@ -300,8 +300,7 @@ def update_session_credits(credits_remaining):
 # IMAGE PROCESSING
 # =============================================================================
 
-def decode_and_resize_image(base64_str, scale=IMAGE_SCALE_FACTOR):
-    """Decode base64 image → RGB → resize. Returns PIL Image (caller must close)."""
+def decode_and_resize_image(base64_str, scale=None):
     import base64 as b64
     from io import BytesIO
     from PIL import Image
@@ -309,13 +308,11 @@ def decode_and_resize_image(base64_str, scale=IMAGE_SCALE_FACTOR):
     img = Image.open(BytesIO(b64.b64decode(raw)))
     if img.mode in ("RGBA", "P"):
         img = img.convert("RGB")
-    return img.resize((int(img.width * scale), int(img.height * scale)), Image.Resampling.LANCZOS)
+    return img
 
-
-def process_and_save_image(base64_str, output_path, scale=IMAGE_SCALE_FACTOR, quality=JPEG_QUALITY):
-    """Decode base64 image → RGB → resize → save as JPEG."""
-    img = decode_and_resize_image(base64_str, scale)
-    img.save(output_path, "JPEG", quality=quality)
+def process_and_save_image(base64_str, output_path, scale=None, quality=100):
+    img = decode_and_resize_image(base64_str)
+    img.save(output_path, "JPEG", quality=100, subsampling=0)
     img.close()
 
 # init_environment() is called explicitly from main.py at startup
