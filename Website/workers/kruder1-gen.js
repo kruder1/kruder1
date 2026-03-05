@@ -760,12 +760,10 @@ export default {
           services.auth = { ok: false };
         }
 
-        // Check AI provider reachability (empty POST → 400/422 = alive, 5xx/timeout = down)
+        // Check AI provider reachability (GET request to base API to avoid 500 errors on Nano Banana)
         try {
-          const r = await fetch(SEGMIND_ENDPOINT, {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${env.SEGMIND_API_KEY}`, "Content-Type": "application/json" },
-            body: "{}",
+          const r = await fetch("https://api.segmind.com", {
+            method: "GET",
             signal: AbortSignal.timeout(8000),
           });
           services.ai = { ok: r.status < 500 };
