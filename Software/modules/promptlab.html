@@ -698,11 +698,10 @@ window.PromptLabModule = {
         }
 
         if (this.state.generation.active || this.state.generation.completed) {
-            const btn = document.querySelector('[data-action="gp-generate"]');
-            const refBox = document.getElementById('gp-ref-img-box');
-            const resBox = document.getElementById('gp-res-img-box');
+            this.setFormDisabled(true);
 
-            if (refBox) refBox.classList.add('btn-disabled');
+            const btn = document.querySelector('[data-action="gp-generate"]');
+            const resBox = document.getElementById('gp-res-img-box');
 
             if (this.state.generation.completed) {
                 if (resBox) {
@@ -710,6 +709,7 @@ window.PromptLabModule = {
                     resBox.classList.add('filled');
                 }
                 if (btn) {
+                    btn.disabled = false;
                     btn.classList.remove('btn-disabled');
                     btn.classList.add('btn-success');
                     btn.innerHTML = `<i class="fa-solid fa-check"></i> SAVED - ${this.state.generation.timeTaken}s - CLICK TO RESTART`;
@@ -719,7 +719,6 @@ window.PromptLabModule = {
                     resBox.innerHTML = '<div class="spinner"></div>';
                     resBox.classList.add('filled');
                 }
-                if (btn) btn.classList.add('btn-disabled');
 
                 if (this.state.generation.timerId) clearInterval(this.state.generation.timerId);
                 this.state.generation.timerId = setInterval(() => {
@@ -729,6 +728,8 @@ window.PromptLabModule = {
                     if (b) b.innerHTML = `GENERATING... ${elapsed}s`;
                 }, 1000);
             }
+        } else {
+            this.setFormDisabled(false);
         }
     },
 
@@ -764,6 +765,43 @@ window.PromptLabModule = {
         }
 
         this.state.generation = { active: false, startTime: 0, completed: false, resultUrl: null, timeTaken: 0, timerId: null };
+        this.setFormDisabled(false);
+    },
+
+    setFormDisabled(disabled) {
+        const ids = ['gp-name', 'gp-category', 'gp-desc', 'gp-btn-paste'];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.disabled = disabled;
+        });
+
+        const newCatInput = document.getElementById('gp-new-cat');
+        const catSelect = document.getElementById('gp-category');
+        if (newCatInput) {
+            if (disabled) {
+                newCatInput.disabled = true;
+            } else {
+                newCatInput.disabled = (catSelect && catSelect.value !== 'create_new');
+            }
+        }
+
+        const btn = document.querySelector('[data-action="gp-generate"]');
+        if (btn) {
+            btn.disabled = disabled;
+            if (disabled) btn.classList.add('btn-disabled');
+            else btn.classList.remove('btn-disabled');
+        }
+
+        const refBox = document.getElementById('gp-ref-img-box');
+        if (refBox) {
+            if (disabled) {
+                refBox.classList.add('btn-disabled');
+                refBox.style.pointerEvents = 'none';
+            } else {
+                refBox.classList.remove('btn-disabled');
+                refBox.style.pointerEvents = 'auto';
+            }
+        }
     },
 
     async loadCategories(selectId) {
@@ -811,8 +849,7 @@ window.PromptLabModule = {
         this.state.generation.active = true;
         this.state.generation.startTime = Date.now();
 
-        if (btn) btn.classList.add('btn-disabled');
-        if (refBox) refBox.classList.add('btn-disabled');
+        this.setFormDisabled(true);
 
         if (resBox) {
             resBox.innerHTML = '<div class="spinner"></div>';
@@ -854,6 +891,7 @@ window.PromptLabModule = {
                     resBox.classList.add('filled');
                 }
                 if (btn) {
+                    btn.disabled = false;
                     btn.classList.remove('btn-disabled');
                     btn.classList.add('btn-success');
                     btn.innerHTML = `<i class="fa-solid fa-check"></i> SAVED - ${finalTime}s - CLICK TO RESTART`;
@@ -866,34 +904,32 @@ window.PromptLabModule = {
                 }
             } else {
                 this.state.generation.active = false;
+                this.setFormDisabled(false);
                 if (resBox) {
                     resBox.innerHTML = `<div class="text-error-inline">${window.t ? window.t('promptlab.generation_failed') : 'GENERATION FAILED'}</div>`;
                     resBox.classList.remove('filled');
                 }
                 if (btn) {
-                    btn.classList.remove('btn-disabled');
                     btn.innerHTML = window.t ? window.t('promptlab.btn_generate_credit') : 'GENERATE (1 CREDIT)';
                 }
-                if (refBox) refBox.classList.remove('btn-disabled');
                 this.showAlert(res.error || (window.t ? window.t('promptlab.generation_failed') : 'GENERATION FAILED'));
             }
         } catch(e) {
             clearInterval(this.state.generation.timerId);
             this.state.generation.active = false;
             
+            this.setFormDisabled(false);
+
             btn = document.querySelector('[data-action="gp-generate"]');
             resBox = document.getElementById('gp-res-img-box');
-            refBox = document.getElementById('gp-ref-img-box');
 
             if (resBox) {
                 resBox.innerHTML = window.t ? window.t('promptlab.result_image') : 'RESULT IMAGE';
                 resBox.classList.remove('filled');
             }
             if (btn) {
-                btn.classList.remove('btn-disabled');
                 btn.innerHTML = window.t ? window.t('promptlab.btn_generate_credit') : 'GENERATE (1 CREDIT)';
             }
-            if (refBox) refBox.classList.remove('btn-disabled');
             this.showAlert(window.t ? window.t('promptlab.error_system') : 'SYSTEM ERROR');
         }
     },
