@@ -9,6 +9,11 @@ import re
 import webview
 import requests
 
+try:
+    import winreg
+except ImportError:
+    winreg = None
+
 from config import GEN_WORKER_BASE, APP_VERSION
 from utils import EVENTS_DIR, DataService, SecurityService, NetworkService, SESSION_FILE
 from log_service import append_log, get_log_path_for_today
@@ -25,6 +30,7 @@ class NativeApi:
     def __init__(self):
         self._window = None
         self._modules = {}
+        self._is_fullscreen = True  # App starts in fullscreen (main.py)
 
         # Auth and Settings load immediately (needed for login + theme)
         self._modules['auth'] = AuthModule()
@@ -88,6 +94,7 @@ class NativeApi:
 
     def close_app(self):
         """Close the application."""
+        self._set_edge_swipe_blocked(False)
         try:
             append_log("INFO", "app_exit", {"source": "quit_button"})
         except Exception:
@@ -100,17 +107,41 @@ class NativeApi:
         """Toggle between fullscreen and maximized windowed."""
         if self._window:
             self._window.toggle_fullscreen()
-            # When leaving fullscreen, maximize the window so it's not tiny
-            if not self._window.fullscreen:
+            self._is_fullscreen = not self._is_fullscreen
+            if not self._is_fullscreen:
                 self._window.maximize()
-            return {"ok": True, "fullscreen": self._window.fullscreen}
+            self._set_edge_swipe_blocked(self._is_fullscreen)
+            return {"ok": True, "fullscreen": self._is_fullscreen}
         return {"error": "Window not available"}
 
     def get_fullscreen_state(self):
         """Get current fullscreen state."""
         if self._window:
-            return {"ok": True, "fullscreen": self._window.fullscreen}
+            return {"ok": True, "fullscreen": self._is_fullscreen}
         return {"error": "Window not available"}
+
+    def _set_edge_swipe_blocked(self, block):
+        """Block/unblock Windows edge swipe gestures via registry. Requires admin."""
+        if not winreg:
+            return
+        try:
+            key_path = r"SOFTWARE\Policies\Microsoft\Windows\EdgeUI"
+            if block:
+                key = winreg.CreateKeyEx(
+                    winreg.HKEY_LOCAL_MACHINE, key_path, 0,
+                    winreg.KEY_SET_VALUE | winreg.KEY_WOW64_64KEY
+                )
+                winreg.SetValueEx(key, "AllowEdgeSwipe", 0, winreg.REG_DWORD, 0)
+                winreg.CloseKey(key)
+            else:
+                key = winreg.OpenKey(
+                    winreg.HKEY_LOCAL_MACHINE, key_path, 0,
+                    winreg.KEY_SET_VALUE | winreg.KEY_WOW64_64KEY
+                )
+                winreg.SetValueEx(key, "AllowEdgeSwipe", 0, winreg.REG_DWORD, 1)
+                winreg.CloseKey(key)
+        except Exception:
+            pass  # No admin rights — silently skip
 
     def check_system_status(self):
         """Check health of all backend services."""

@@ -41,9 +41,11 @@ if __name__ == '__main__':
 
     # 4. Connect API to Window
     api._window = window
+    api._set_edge_swipe_blocked(True)
 
     # 5. Log when window is closed via title bar X button
     def _on_closing():
+        api._set_edge_swipe_blocked(False)
         append_log("INFO", "app_exit", {"source": "window_close"})
     window.events.closing += _on_closing
 
