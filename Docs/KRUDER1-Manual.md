@@ -827,7 +827,7 @@ This feature works from any screen except Event Mode.
 ### Network Issues
 
 - **Account data not refreshing:** Press the **REFRESH** button in the Account panel. Ensure you have an active internet connection.
-- **Generation takes very long:** AI generation typically completes within 30-60 seconds. If it exceeds this, the "HIGH DEMAND" message will appear. In rare cases of server overload, generation may take up to 90 seconds. If it fails, try again.
+- **Generation takes very long:** AI generation typically completes within 15-30 seconds. If it exceeds this, the "HIGH DEMAND" message will appear. In rare cases of server overload, generation may take longer. If it fails, try again.
 
 ### Data and Storage
 

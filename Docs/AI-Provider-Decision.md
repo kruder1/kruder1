@@ -1,17 +1,21 @@
 # Reporte: Decisión de IA para Photo Booth
 
-## Final Decision (February 2026)
+## Final Decision (March 2026)
 
 | Decision | Value |
 |----------|-------|
 | **Active Provider** | **Segmind** |
-| **Model** | Seedream 4.5 (ByteDance) |
+| **Model** | Nano Banana 2 / Gemini 3.1 Flash Image (Google) |
 | **Status** | Implemented and in production |
-| **Endpoint** | `https://api.segmind.com/v1/seedream-4.5` |
+| **Endpoint** | `https://api.segmind.com/v1/nano-banana-2` |
 | **Auth** | `x-api-key` header |
 | **Capacity** | 30+ concurrent per key, 60+ RPM per key |
+| **Generation time** | ~15-20 seconds |
+| **Output resolution** | 1K |
 
-Segmind was chosen over fal.ai based on stress tests (Section 12) showing significantly higher capacity per API key, eliminating the need for multiple keys. fal.ai was evaluated and is a valid fallback but requires 5 keys to achieve similar throughput.
+**Model migration (March 2026):** Switched from Seedream 4.5 (ByteDance) to Nano Banana 2 / Gemini 3.1 Flash Image (Google), still via Segmind. The new model is significantly faster (~15-20s vs ~35-40s) while maintaining acceptable quality for the photo booth use case. Segmind remains the provider — only the model changed.
+
+Previous model history: fal.ai (Seedream 4.5) → Segmind (Seedream 4.5) → Segmind (Nano Banana 2).
 
 ---
 

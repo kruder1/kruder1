@@ -68,7 +68,7 @@
 | Backend API | Cloudflare Workers | Lógica de negocio serverless |
 | Base de datos | Supabase (PostgreSQL) | Almacenamiento de datos |
 | Pagos | Stripe | Procesamiento de pagos |
-| Generación IA | Segmind (Seedream 4.5) | Transformación de imágenes |
+| Generación IA | Segmind (Nano Banana 2 / Gemini 3.1 Flash Image) | Transformación de imágenes |
 | Emails/SMS | Brevo | Comunicaciones transaccionales |
 | Almacenamiento | Cloudflare R2 | Imágenes temporales y resultados |
 
@@ -181,7 +181,7 @@ qrcode>=7.0         # Generación de códigos QR
 - Selección de categorías de prompts
 - Selección de estilo/prompt específico
 - Procesamiento con indicador de progreso
-- Tiempo estimado: ~35-40 segundos
+- Tiempo estimado: ~15-20 segundos
 
 #### 4. Prompt Lab
 - Crear categorías de prompts
@@ -397,10 +397,10 @@ Website/
 
 #### Características
 - API keys de Segmind (1-2 keys, 30+ concurrent por key)
-- Modelo: Seedream v4.5 (ByteDance)
-- Aspect ratio 2:3 (2048x3072) para fotos
-- Aspect ratio 1:1 (2048x2048) para thumbnails
-- Tiempo estimado: ~35-40 segundos
+- Modelo: Nano Banana 2 / Gemini 3.1 Flash Image (Google)
+- Resolución de salida: 1K
+- Aspect ratio 2:3 para fotos, 1:1 para thumbnails
+- Tiempo estimado: ~15-20 segundos
 
 #### Flujo de Generación
 1. Recibe foto en base64
@@ -508,8 +508,8 @@ created_at      TIMESTAMP DEFAULT NOW()
 
 ### Segmind (Generación IA)
 
-- **Modelo**: Seedream v4.5 (ByteDance)
-- **Endpoint**: `https://api.segmind.com/v1/seedream-4.5`
+- **Modelo**: Nano Banana 2 / Gemini 3.1 Flash Image (Google)
+- **Endpoint**: `https://api.segmind.com/v1/nano-banana-2`
 - **Auth**: `x-api-key` header
 - **Capacidad**: 30+ generaciones concurrentes por key (1-2 keys suficientes)
 

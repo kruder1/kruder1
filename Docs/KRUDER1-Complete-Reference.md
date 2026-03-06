@@ -62,7 +62,7 @@ Aldo understands the photo booth business deeply. The software is built from rea
 
 ## 2. What Is Kruder 1
 
-**Kruder 1** is an AI-powered photo booth software for Windows. It captures photos from a webcam, transforms them using AI (Seedream 4.5 by ByteDance, via Segmind API), and delivers the results to event guests via QR code, email, or print.
+**Kruder 1** is an AI-powered photo booth software for Windows. It captures photos from a webcam, transforms them using AI (Nano Banana 2 / Gemini 3.1 Flash Image by Google, via Segmind API), and delivers the results to event guests via QR code, email, or print.
 
 ### Core Concept
 - The software is **free to download and install**
@@ -186,7 +186,7 @@ Aldo understands the photo booth business deeply. The software is built from rea
 | Backend API | Cloudflare Workers | Serverless business logic |
 | Database | Supabase (PostgreSQL) | User accounts, credits, purchases |
 | Payments | Stripe | Credit card processing |
-| AI Generation | Segmind (Seedream 4.5) | Image transformation |
+| AI Generation | Segmind (Nano Banana 2 / Gemini 3.1 Flash Image) | Image transformation |
 | Email | Brevo (SendinBlue) | Transactional emails |
 | Object Storage | Cloudflare R2 | Temp photos, results, installer, logs |
 | Static Site | Cloudflare Pages | kruder1.com website |
@@ -1117,7 +1117,7 @@ Allowed origins:
 1. Verify JWT + check credits
 2. **Deduct 1 credit BEFORE generation** (atomic via `rpc/deduct_credit`)
 3. Upload user photo to R2 (`temp/{id}-input.jpg`)
-4. Call Segmind Seedream 4.5 with prompt + photo URL
+4. Call Segmind Nano Banana 2 with prompt + photo URL
 5. Return base64 image to client
 6. Delete temp photo from R2
 7. Send email if valid email provided
@@ -1125,9 +1125,9 @@ Allowed origins:
 
 #### Segmind Configuration
 ```javascript
-SEGMIND_ENDPOINT = "https://api.segmind.com/v1/seedream-4.5"
-// 2:3 aspect ratio (2048x3072) for event photos
-// 1:1 aspect ratio (2048x2048) for prompt thumbnails
+SEGMIND_ENDPOINT = "https://api.segmind.com/v1/nano-banana-2"
+// 2:3 aspect ratio for event photos, 1:1 for prompt thumbnails
+// Output resolution: 1K
 // Retry: 5 attempts on 429 with delays [5, 8, 12, 15, 20] seconds
 ```
 
@@ -1322,12 +1322,13 @@ Atomically adds 1 credit back (on generation failure).
 ## 27. External Integrations
 
 ### Segmind (AI Generation)
-- **Model**: Seedream 4.5 (ByteDance)
-- **Endpoint**: `https://api.segmind.com/v1/seedream-4.5`
-- **Auth**: `Authorization: Bearer {api_key}`
+- **Model**: Nano Banana 2 / Gemini 3.1 Flash Image (Google)
+- **Endpoint**: `https://api.segmind.com/v1/nano-banana-2`
+- **Auth**: `x-api-key` header
 - **Response**: Synchronous binary image (not async/polling)
 - **Capacity**: 30+ concurrent generations per API key
-- **Sizes**: 2048x3072 (2:3) for photos, 2048x2048 (1:1) for thumbnails
+- **Output resolution**: 1K
+- **Generation time**: ~15-20 seconds
 - **Retry**: 5 attempts on 429 with exponential backoff [5, 8, 12, 15, 20]s
 - **Note**: Provider name never exposed to clients — referred to as "AI Engine"
 
