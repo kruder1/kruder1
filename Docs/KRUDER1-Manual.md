@@ -301,13 +301,15 @@ The live camera feed is displayed with the heading "LOOK AT THE CAMERA!" and a *
 
 The camera uses saved settings for device selection, brightness, contrast, and white balance (configured in Settings).
 
-Pressing **TAKE PHOTO** triggers:
+Pressing **TAKE PHOTO** (or raising an open hand for 1 second) triggers:
 1. A **3-second countdown** (3... 2... 1...) displayed over the camera feed.
 2. A **flash strobe effect** at the moment of capture.
 3. The photo is captured from the canvas (with camera filters applied and the image mirrored horizontally).
 4. Navigation to the review screen.
 
 During the countdown, the TAKE PHOTO button and back arrow are temporarily disabled.
+
+**Hand Gesture Capture:** When the camera view is active, the software can detect an open hand gesture (all fingers extended). Holding an open hand in view for 1 second triggers the same countdown sequence as pressing the TAKE PHOTO button. This allows guests to take photos without touching the screen. The gesture detection requires an internet connection (it loads the detection model from a CDN). If unavailable, the TAKE PHOTO button remains fully functional.
 
 #### Step 6: Review Photo
 
@@ -498,14 +500,23 @@ Active frames have a highlighted preview border.
 
 The **ADD FRAME** button (with a plus icon) is always displayed at the top of the grid.
 
+### Frame Requirements
+
+Frames must meet the following specifications:
+
+- **Format**: PNG with transparency (alpha channel)
+- **Aspect ratio**: 2:3 (e.g., 848 × 1264, 1200 × 1800, 2400 × 3600)
+
+If the frame meets the aspect ratio requirement but is not exactly 848 × 1264 pixels, the software will automatically resize it to match the AI-generated image dimensions.
+
 ### Adding a Frame
 
 1. Press **ADD FRAME**.
-2. A file picker dialog opens. Select a **PNG file** from your computer.
-3. The frame is copied to the application's frames storage and added to the grid.
-4. Newly added frames are **disabled by default** -- you must toggle them on to activate.
-
-Only PNG files are accepted. Attempting to add a non-PNG file will display an error: "ONLY PNG FILES ARE ALLOWED."
+2. A requirements modal appears showing the frame specifications (PNG with transparency, 2:3 aspect ratio).
+3. Press **SELECT FILE** to open the file picker dialog. Select a PNG file from your computer.
+4. The software validates the file: format, transparency, and aspect ratio. If validation fails, an error message is displayed.
+5. The frame is processed (resized if needed), saved to the application's frames storage, and added to the grid.
+6. Newly added frames are **disabled by default** -- you must toggle them on to activate.
 
 ### Previewing a Frame
 
@@ -806,6 +817,8 @@ This feature works from any screen except Event Mode.
 | "GENERATION FAILED, TRY AGAIN" | AI generation service returned an error | Try again; if persistent, check your credit balance and internet connection |
 | "Could not upload photo. Please try again." | Failed to upload the framed result to cloud storage after 3 retry attempts | Check your internet connection and try again |
 | "ONLY PNG FILES ARE ALLOWED" | Attempted to add a non-PNG file as a frame | Use a PNG file with transparency for frame overlays |
+| "INVALID FORMAT: PNG WITH TRANSPARENCY REQUIRED" | Frame file is PNG but has no alpha channel | Re-export the frame with transparency enabled |
+| "INVALID RATIO: IMAGE MUST BE 2:3 PROPORTION" | Frame dimensions are not in 2:3 aspect ratio | Resize the frame to 2:3 ratio (e.g., 848×1264, 1200×1800) |
 | "WRONG PASSWORD" | Incorrect password during logout verification | Re-enter the correct account password |
 | "SELECT A PRINTER FIRST" | Attempted test print or printer settings without selecting a printer | Choose a printer from the dropdown in Printing settings |
 | "COULD NOT DOWNLOAD PROMPTS" | Prompt update from cloud server failed | Check your internet connection and try again |
