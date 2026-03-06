@@ -243,7 +243,14 @@ window.EventModeModule = {
         verifyPinCurrent: '',
         verifyPinTimer: null,
         touchScramble: null,
-        touchScrambleText: null
+        touchScrambleText: null,
+        gesture: {
+            hands: null,
+            active: false,
+            startTime: 0,
+            scriptsLoaded: false,
+            processing: false
+        }
     },
 
     async init() {
@@ -651,11 +658,13 @@ window.EventModeModule = {
             self.state.cameraDrawId = requestAnimationFrame(drawLoop);
         };
         drawLoop();
+        this.startGesture();
     },
 
     stopCamera() {
         const video = document.getElementById('camera-feed');
         const canvas = document.getElementById('camera-feed-canvas');
+        this.stopGesture();
         if (this.state.cameraStream) {
             this.state.cameraStream.getTracks().forEach(track => track.stop());
             this.state.cameraStream = null;
@@ -669,6 +678,98 @@ window.EventModeModule = {
             const ctx = canvas.getContext('2d');
             if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
+    },
+
+    // ========================================
+    // GESTURE DETECTION (MediaPipe Hands)
+    // ========================================
+    _loadScript(src) {
+        return new Promise((resolve, reject) => {
+            if (document.querySelector(`script[src="${src}"]`)) { resolve(); return; }
+            const s = document.createElement('script');
+            s.src = src;
+            s.crossOrigin = 'anonymous';
+            s.onload = resolve;
+            s.onerror = reject;
+            document.head.appendChild(s);
+        });
+    },
+
+    async startGesture() {
+        const g = this.state.gesture;
+        if (g.active) return;
+        const video = document.getElementById('camera-feed');
+        if (!video) return;
+
+        try {
+            // Load MediaPipe scripts once
+            if (!g.scriptsLoaded) {
+                await this._loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js');
+                g.scriptsLoaded = true;
+            }
+
+            if (!window.Hands) return;
+
+            g.hands = new window.Hands({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}` });
+            g.hands.setOptions({ maxNumHands: 1, modelComplexity: 0, minDetectionConfidence: 0.7, minTrackingConfidence: 0.5 });
+
+            const self = this;
+            g.hands.onResults((results) => {
+                if (!g.active || self.state.currentView !== 'take-photo') return;
+                if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                    const lm = results.multiHandLandmarks[0];
+                    // Open hand: all 4 fingers extended (tip above PIP joint)
+                    const open = lm[8].y < lm[6].y && lm[12].y < lm[10].y && lm[16].y < lm[14].y && lm[20].y < lm[18].y;
+                    if (open) {
+                        if (g.startTime === 0) g.startTime = Date.now();
+                        if (Date.now() - g.startTime >= 1000) {
+                            g.startTime = 0;
+                            g.active = false;
+                            self.triggerPhotoSequence();
+                        }
+                    } else {
+                        g.startTime = 0;
+                    }
+                } else {
+                    g.startTime = 0;
+                }
+                // Send next frame
+                if (g.active) self._gestureFrame();
+            });
+
+            g.active = true;
+            g.startTime = 0;
+            // Wait for video to be ready then start sending frames
+            const waitReady = () => {
+                if (video.readyState >= 2 && g.active) {
+                    self._gestureFrame();
+                } else if (g.active) {
+                    setTimeout(waitReady, 200);
+                }
+            };
+            waitReady();
+            console.debug('[EVENTMODE] Gesture detection started');
+        } catch (e) {
+            console.warn('[EVENTMODE] Gesture detection unavailable:', e.message || e);
+            g.active = false;
+        }
+    },
+
+    _gestureFrame() {
+        const g = this.state.gesture;
+        if (!g.active || !g.hands || g.processing) return;
+        const video = document.getElementById('camera-feed');
+        if (!video || video.readyState < 2) return;
+        g.processing = true;
+        g.hands.send({ image: video }).then(() => { g.processing = false; }).catch(() => { g.processing = false; });
+    },
+
+    stopGesture() {
+        const g = this.state.gesture;
+        g.active = false;
+        g.startTime = 0;
+        g.processing = false;
+        if (g.hands) { try { g.hands.close(); } catch(e) {} g.hands = null; }
     },
 
     async triggerPhotoSequence() {
