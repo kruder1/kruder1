@@ -1374,6 +1374,7 @@ input::placeholder, textarea::placeholder { color: var(--theme-ink); text-transf
 /* Module overrides */
 input:disabled, textarea:disabled, select:disabled { border-style: dashed; pointer-events: none; }
 .btn-success { animation: btnPulse 1.2s ease-in-out infinite; }
+.btn-error { animation: btnPulse 1.2s ease-in-out infinite; }
 @keyframes btnPulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }

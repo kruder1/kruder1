@@ -318,13 +318,10 @@ function arrayBufferToBase64(buffer) {
 }
 
 /**
- * Call Segmind Seedream 4.5. Returns binary image buffer.
- * Response is synchronous (binary image/png in body).
+ * Call Segmind. Returns binary image buffer.
+ * Response is synchronous (binary JPEG in body).
  */
 async function callSegmind(apiKey, imageUrl, promptText, aspectRatio = "2:3") {
-  const width = aspectRatio === "1:1" ? 2048 : 2048;
-  const height = aspectRatio === "1:1" ? 2048 : 3072;
-
   const requestBody = {
     prompt: promptText,
     image_urls: [imageUrl],
@@ -349,6 +346,16 @@ async function callSegmind(apiKey, imageUrl, promptText, aspectRatio = "2:3") {
   }
 
   const buffer = await res.arrayBuffer();
+
+  // Validate response is a real JPEG (must be >1KB and start with FF D8 FF)
+  if (buffer.byteLength < 1024) {
+    throw new Error("Segmind returned empty or too-small response");
+  }
+  const header = new Uint8Array(buffer.slice(0, 3));
+  if (header[0] !== 0xFF || header[1] !== 0xD8 || header[2] !== 0xFF) {
+    throw new Error("Segmind returned invalid image data (not JPEG)");
+  }
+
   return buffer;
 }
 
@@ -359,6 +366,10 @@ async function callSegmindWithRetry(env, imageUrl, promptText, aspectRatio = "2:
   }
 
   let lastError;
+  let retries500 = 0;
+  const max500Retries = 2;
+  const delays500 = [3000, 5000];
+
   for (let attempt = 0; attempt <= RETRY_CONFIG.maxRetries; attempt++) {
     try {
       const buffer = await callSegmind(apiKey, imageUrl, promptText, aspectRatio);
@@ -367,12 +378,23 @@ async function callSegmindWithRetry(env, imageUrl, promptText, aspectRatio = "2:
       lastError = error;
       const errorMsg = error.message || "";
       const is429 = errorMsg.includes("429") || errorMsg.includes("Too Many Requests");
+      const is500 = errorMsg.includes("(500)") || errorMsg.includes("(502)") || errorMsg.includes("(503)");
+
       if (is429 && attempt < RETRY_CONFIG.maxRetries) {
         const delay = RETRY_CONFIG.delays[attempt] || RETRY_CONFIG.delays[RETRY_CONFIG.delays.length - 1];
         console.log(`Segmind rate limited, retrying in ${delay}ms (attempt ${attempt + 1}/${RETRY_CONFIG.maxRetries})`);
         await new Promise((r) => setTimeout(r, delay));
         continue;
       }
+
+      if (is500 && retries500 < max500Retries) {
+        const delay = delays500[retries500];
+        console.log(`Segmind server error, retrying in ${delay}ms (500-retry ${retries500 + 1}/${max500Retries})`);
+        retries500++;
+        await new Promise((r) => setTimeout(r, delay));
+        continue;
+      }
+
       throw error;
     }
   }

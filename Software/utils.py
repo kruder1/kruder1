@@ -211,14 +211,14 @@ class NetworkService:
         """Generate prompt thumbnail with AI."""
         url = f"{GEN_WORKER_BASE}/generate-prompt"
         headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-        return requests.post(url, json=payload, headers=headers)
+        return requests.post(url, json=payload, headers=headers, timeout=120)
 
     @staticmethod
     def generate_event_photo(token, payload):
         """Generate event photo with AI."""
         url = f"{GEN_WORKER_BASE}/generate"
         headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-        return requests.post(url, json=payload, headers=headers)
+        return requests.post(url, json=payload, headers=headers, timeout=120)
 
     @staticmethod
     def send_email(token, payload):

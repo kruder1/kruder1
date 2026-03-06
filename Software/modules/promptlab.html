@@ -904,31 +904,36 @@ window.PromptLabModule = {
                 }
             } else {
                 this.state.generation.active = false;
-                this.setFormDisabled(false);
+                this.state.generation.completed = true;
                 if (resBox) {
                     resBox.innerHTML = `<div class="text-error-inline">${window.t ? window.t('promptlab.generation_failed') : 'GENERATION FAILED'}</div>`;
                     resBox.classList.remove('filled');
                 }
                 if (btn) {
-                    btn.innerHTML = window.t ? window.t('promptlab.btn_generate_credit') : 'GENERATE (1 CREDIT)';
+                    btn.disabled = false;
+                    btn.classList.remove('btn-disabled');
+                    btn.classList.add('btn-error');
+                    btn.innerHTML = `<i class="fa-solid fa-xmark"></i> ${window.t ? window.t('promptlab.btn_failed_reset') : 'FAILED — CLICK TO RESET'}`;
                 }
                 this.showAlert(res.error || (window.t ? window.t('promptlab.generation_failed') : 'GENERATION FAILED'));
             }
         } catch(e) {
             clearInterval(this.state.generation.timerId);
             this.state.generation.active = false;
-            
-            this.setFormDisabled(false);
+            this.state.generation.completed = true;
 
             btn = document.querySelector('[data-action="gp-generate"]');
             resBox = document.getElementById('gp-res-img-box');
 
             if (resBox) {
-                resBox.innerHTML = window.t ? window.t('promptlab.result_image') : 'RESULT IMAGE';
+                resBox.innerHTML = `<div class="text-error-inline">${window.t ? window.t('promptlab.error_system') : 'SYSTEM ERROR'}</div>`;
                 resBox.classList.remove('filled');
             }
             if (btn) {
-                btn.innerHTML = window.t ? window.t('promptlab.btn_generate_credit') : 'GENERATE (1 CREDIT)';
+                btn.disabled = false;
+                btn.classList.remove('btn-disabled');
+                btn.classList.add('btn-error');
+                btn.innerHTML = `<i class="fa-solid fa-xmark"></i> ${window.t ? window.t('promptlab.btn_failed_reset') : 'FAILED — CLICK TO RESET'}`;
             }
             this.showAlert(window.t ? window.t('promptlab.error_system') : 'SYSTEM ERROR');
         }

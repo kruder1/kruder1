@@ -242,7 +242,8 @@ window.EventModeModule = {
         resultImageFilename: null,
         verifyPinCurrent: '',
         verifyPinTimer: null,
-        touchScramble: null
+        touchScramble: null,
+        touchScrambleText: null
     },
 
     async init() {
@@ -269,8 +270,13 @@ window.EventModeModule = {
     startTouchScramble() {
         var el = document.getElementById('touch-start-text');
         if (el && window.startScrambleLoop) {
-            var text = el.textContent || 'TOUCH TO START...';
-            this.state.touchScramble = window.startScrambleLoop(el, text, 3000);
+            // Store original text once to prevent corruption from scramble artifacts
+            if (!this.state.touchScrambleText) {
+                this.state.touchScrambleText = el.textContent || 'TOUCH TO START...';
+            }
+            // Reset element text before starting new scramble loop
+            el.textContent = this.state.touchScrambleText;
+            this.state.touchScramble = window.startScrambleLoop(el, this.state.touchScrambleText, 3000);
         }
     },
 
@@ -759,6 +765,7 @@ window.EventModeModule = {
         const textEl = document.getElementById('loading-percentage');
         const hdMsg = document.getElementById('high-demand-message');
         const duration = 90000;
+        const maxTimeout = 120000;
         const totalSegments = 30;
         let modalShown = false;
         let hdShown = false;
@@ -780,6 +787,12 @@ window.EventModeModule = {
 
         this.state.eventGen.timer = setInterval(async () => {
             const elapsed = Date.now() - startTime;
+
+            // Hard timeout — abort after 2 minutes
+            if (elapsed >= maxTimeout) {
+                self.failGeneration(window.t ? window.t('eventmode.error_timeout') : 'GENERATION TIMED OUT — TRY AGAIN');
+                return;
+            }
 
             // Update percentage text and segments
             const pct = Math.min((elapsed / duration) * 100, 95);
@@ -883,12 +896,19 @@ window.EventModeModule = {
 
     failGeneration(err) {
         if (this.state.eventGen.timer) clearInterval(this.state.eventGen.timer);
+        this.state.eventGen.active = false;
+        this.state.eventGen.genId = null;
         if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('ERROR', 'generation_failed', { eventId: this.state.eventId, genId: this.state.eventGen.genId, error: String(err || '').substring(0, 300) }).catch(() => {});
         this.hideModal('event-email-modal');
         const hdMsg = document.getElementById('high-demand-message');
         if (hdMsg) hdMsg.style.display = 'none';
-        this.showAlert(err || 'GENERATION FAILED, TRY AGAIN');
-        this.showView('event-start');
+        this.showAlert(err || (window.t ? window.t('eventmode.error_generation') : 'GENERATION FAILED, TRY AGAIN'));
+        // Go back to review-photo so user can retry with one tap (CONFIRM)
+        if (this.state.lastCapturedPhoto) {
+            this.showView('review-photo');
+        } else {
+            this.showView('event-start');
+        }
     },
 
     finishCycle() {
