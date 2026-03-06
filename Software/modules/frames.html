@@ -11,6 +11,22 @@
     </div>
 </section>
 
+<!-- Frame Specs Modal -->
+<div id="frame-specs-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="frames.modal_specs_title">FRAME REQUIREMENTS</div>
+        <div class="modal-specs-list">
+            <div class="modal-spec-item"><i class="fa-solid fa-file-image"></i> <span data-i18n="frames.spec_format">PNG with transparency</span></div>
+            <div class="modal-spec-item"><i class="fa-solid fa-crop-simple"></i> <span data-i18n="frames.spec_ratio">2:3 aspect ratio</span></div>
+            <div class="modal-spec-item"><i class="fa-solid fa-expand"></i> <span data-i18n="frames.spec_example">Example: 848 × 1264 px</span></div>
+        </div>
+        <div class="modal-actions">
+            <button data-action="frame-specs-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="frame-specs-confirm" class="btn-main" data-i18n="frames.btn_select_file">SELECT FILE</button>
+        </div>
+    </div>
+</div>
+
 <!-- Delete Frame Modal -->
 <div id="delete-frame-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-box">
@@ -61,17 +77,19 @@ window.FramesModule = {
     bindEvents() {
         const self = this;
 
-        const deleteModal = document.getElementById('delete-frame-modal');
-        if (deleteModal) {
-            deleteModal.addEventListener('click', (e) => {
-                const btn = e.target.closest('[data-action]');
-                if (btn && (btn.dataset.action === 'delete-frame-cancel' || btn.dataset.action === 'delete-frame-confirm')) {
-                    e.stopPropagation();
-                    window.playButtonSound?.();
-                    self.handleAction(btn.dataset.action, btn.dataset);
-                }
-            });
-        }
+        ['frame-specs-modal', 'delete-frame-modal'].forEach(modalId => {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    const btn = e.target.closest('[data-action]');
+                    if (btn) {
+                        e.stopPropagation();
+                        window.playButtonSound?.();
+                        self.handleAction(btn.dataset.action, btn.dataset);
+                    }
+                });
+            }
+        });
 
         window.moduleHandlers.click = (e) => {
             if (e.target.closest('.switch')) return;
@@ -104,6 +122,7 @@ window.FramesModule = {
                 if (self.state.currentView === 'frame-preview') {
                     self.showView('frames');
                 } else {
+                    self.hideModal('frame-specs-modal');
                     self.hideModal('delete-frame-modal');
                 }
             }
@@ -116,6 +135,13 @@ window.FramesModule = {
                 window.navigateTo('dashboard');
                 break;
             case 'add-frame':
+                this.showModal('frame-specs-modal');
+                break;
+            case 'frame-specs-cancel':
+                this.hideModal('frame-specs-modal');
+                break;
+            case 'frame-specs-confirm':
+                this.hideModal('frame-specs-modal');
                 this.addFrame();
                 break;
             case 'delete-frame-cancel':
@@ -184,7 +210,14 @@ window.FramesModule = {
                 if (window.pywebview?.api?.log_event) window.pywebview.api.log_event('INFO', 'frame_added', {}).catch(() => {});
                 this.renderFrames();
             } else if (!res.cancelled) {
-                this.showAlert(res.error || (window.t ? window.t('frames.error_adding') : 'ERROR ADDING FRAME'));
+                const err = res.error || '';
+                if (err === 'INVALID_FORMAT') {
+                    this.showAlert(window.t ? window.t('frames.error_invalid_format') : 'INVALID FORMAT: PNG WITH TRANSPARENCY REQUIRED');
+                } else if (err === 'INVALID_RATIO') {
+                    this.showAlert(window.t ? window.t('frames.error_invalid_ratio') : 'INVALID RATIO: IMAGE MUST BE 2:3 PROPORTION');
+                } else {
+                    this.showAlert(err || (window.t ? window.t('frames.error_adding') : 'ERROR ADDING FRAME'));
+                }
             }
         } catch (e) {
             this.showAlert(window.t ? window.t('frames.error_adding') : 'ERROR ADDING FRAME');

@@ -266,6 +266,13 @@
     "modal_delete": "ELIMINARE QUESTA CORNICE?",
     "btn_add_frame": "AGGIUNGI CORNICE",
     "error_adding": "ERRORE DURANTE L'AGGIUNTA DELLA CORNICE",
-    "error_deleting": "ERRORE DURANTE L'ELIMINAZIONE DELLA CORNICE"
+    "error_deleting": "ERRORE DURANTE L'ELIMINAZIONE DELLA CORNICE",
+    "modal_specs_title": "REQUISITI DELLA CORNICE",
+    "spec_format": "PNG con trasparenza",
+    "spec_ratio": "Proporzione 2:3",
+    "spec_example": "Esempio: 848 × 1264 px",
+    "btn_select_file": "SELEZIONA FILE",
+    "error_invalid_format": "FORMATO NON VALIDO: RICHIESTO PNG CON TRASPARENZA",
+    "error_invalid_ratio": "PROPORZIONE NON VALIDA: L'IMMAGINE DEVE ESSERE 2:3"
   }
 }

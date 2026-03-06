@@ -266,6 +266,13 @@
     "modal_delete": "УДАЛИТЬ ЭТУ РАМКУ?",
     "btn_add_frame": "ДОБАВИТЬ РАМКУ",
     "error_adding": "ОШИБКА ДОБАВЛЕНИЯ РАМКИ",
-    "error_deleting": "ОШИБКА УДАЛЕНИЯ РАМКИ"
+    "error_deleting": "ОШИБКА УДАЛЕНИЯ РАМКИ",
+    "modal_specs_title": "ТРЕБОВАНИЯ К РАМКЕ",
+    "spec_format": "PNG с прозрачностью",
+    "spec_ratio": "Пропорция 2:3",
+    "spec_example": "Пример: 848 × 1264 пикс.",
+    "btn_select_file": "ВЫБРАТЬ ФАЙЛ",
+    "error_invalid_format": "НЕВЕРНЫЙ ФОРМАТ: ТРЕБУЕТСЯ PNG С ПРОЗРАЧНОСТЬЮ",
+    "error_invalid_ratio": "НЕВЕРНАЯ ПРОПОРЦИЯ: ИЗОБРАЖЕНИЕ ДОЛЖНО БЫТЬ 2:3"
   }
 }

@@ -266,6 +266,13 @@
     "modal_delete": "このフレームを削除しますか？",
     "btn_add_frame": "フレームを追加",
     "error_adding": "フレームの追加エラー",
-    "error_deleting": "フレームの削除エラー"
+    "error_deleting": "フレームの削除エラー",
+    "modal_specs_title": "フレームの要件",
+    "spec_format": "透過PNG形式",
+    "spec_ratio": "2:3 アスペクト比",
+    "spec_example": "例：848 × 1264 ピクセル",
+    "btn_select_file": "ファイルを選択",
+    "error_invalid_format": "無効な形式：透過PNGが必要です",
+    "error_invalid_ratio": "無効な比率：画像は2:3でなければなりません"
   }
 }

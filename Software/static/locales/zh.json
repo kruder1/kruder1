@@ -266,6 +266,13 @@
     "modal_delete": "删除此相框？",
     "btn_add_frame": "添加相框",
     "error_adding": "添加相框时出错",
-    "error_deleting": "删除相框时出错"
+    "error_deleting": "删除相框时出错",
+    "modal_specs_title": "相框要求",
+    "spec_format": "透明 PNG 格式",
+    "spec_ratio": "2:3 比例",
+    "spec_example": "示例：848 × 1264 像素",
+    "btn_select_file": "选择文件",
+    "error_invalid_format": "格式无效：需要透明 PNG",
+    "error_invalid_ratio": "比例无效：图片必须为 2:3 比例"
   }
 }

@@ -266,6 +266,13 @@
     "modal_delete": "EXCLUIR ESTA MOLDURA?",
     "btn_add_frame": "ADICIONAR MOLDURA",
     "error_adding": "ERRO AO ADICIONAR MOLDURA",
-    "error_deleting": "ERRO AO EXCLUIR MOLDURA"
+    "error_deleting": "ERRO AO EXCLUIR MOLDURA",
+    "modal_specs_title": "REQUISITOS DA MOLDURA",
+    "spec_format": "PNG com transparência",
+    "spec_ratio": "Proporção 2:3",
+    "spec_example": "Exemplo: 848 × 1264 px",
+    "btn_select_file": "SELECIONAR ARQUIVO",
+    "error_invalid_format": "FORMATO INVÁLIDO: PNG COM TRANSPARÊNCIA NECESSÁRIO",
+    "error_invalid_ratio": "PROPORÇÃO INVÁLIDA: A IMAGEM DEVE SER 2:3"
   }
 }

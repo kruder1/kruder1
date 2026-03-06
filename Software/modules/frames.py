@@ -8,7 +8,12 @@ import uuid
 import shutil
 from datetime import datetime
 
+from PIL import Image
+
 from utils import FRAMES_DIR, FRAMES_IMAGES_DIR, FRAMES_JSON, DataService, send_to_recycle_bin
+
+TARGET_WIDTH = 848
+TARGET_HEIGHT = 1264
 
 
 class FramesModule:
@@ -20,17 +25,39 @@ class FramesModule:
         return db.get("frames", [])
 
     def add_frame(self, src_path: str) -> dict:
-        """Add a new frame from a PNG file."""
+        """Add a new frame from a PNG file. Validates transparency and 2:3 aspect ratio."""
         try:
             if not src_path.lower().endswith(".png"):
                 return {"error": "ONLY PNG FILES ARE ALLOWED"}
 
-            # Generate unique filename
+            # Validate image
+            img = Image.open(src_path)
+            w, h = img.size
+
+            # Must have alpha channel (RGBA or PA)
+            if img.mode not in ("RGBA", "LA", "PA") and "transparency" not in img.info:
+                img.close()
+                return {"error": "INVALID_FORMAT"}
+
+            # Convert to RGBA if needed
+            if img.mode != "RGBA":
+                img = img.convert("RGBA")
+
+            # Check aspect ratio is ~2:3 (tolerance 1% for non-exact sizes like 848x1264)
+            ratio = w / h
+            if abs(ratio - 2 / 3) > 0.01:
+                img.close()
+                return {"error": "INVALID_RATIO"}
+
+            # Resize to target if different
+            if w != TARGET_WIDTH or h != TARGET_HEIGHT:
+                img = img.resize((TARGET_WIDTH, TARGET_HEIGHT), Image.Resampling.LANCZOS)
+
+            # Save to destination
             filename = f"{uuid.uuid4().hex}.png"
             dest_path = os.path.join(FRAMES_IMAGES_DIR, filename)
-
-            # Copy file
-            shutil.copy2(src_path, dest_path)
+            img.save(dest_path, "PNG")
+            img.close()
 
             # Extract name from original filename
             original_name = os.path.splitext(os.path.basename(src_path))[0].upper()

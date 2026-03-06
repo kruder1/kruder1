@@ -266,6 +266,13 @@
     "modal_delete": "حذف هذا الإطار؟",
     "btn_add_frame": "إضافة إطار",
     "error_adding": "خطأ في إضافة الإطار",
-    "error_deleting": "خطأ في حذف الإطار"
+    "error_deleting": "خطأ في حذف الإطار",
+    "modal_specs_title": "متطلبات الإطار",
+    "spec_format": "PNG بخلفية شفافة",
+    "spec_ratio": "نسبة 2:3",
+    "spec_example": "مثال: 848 × 1264 بكسل",
+    "btn_select_file": "اختيار الملف",
+    "error_invalid_format": "تنسيق غير صالح: مطلوب PNG بخلفية شفافة",
+    "error_invalid_ratio": "نسبة غير صالحة: يجب أن تكون الصورة بنسبة 2:3"
   }
 }

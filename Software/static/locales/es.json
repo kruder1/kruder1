@@ -266,6 +266,13 @@
     "modal_delete": "¿ELIMINAR ESTE MARCO?",
     "btn_add_frame": "AÑADIR MARCO",
     "error_adding": "ERROR AL AÑADIR MARCO",
-    "error_deleting": "ERROR AL ELIMINAR MARCO"
+    "error_deleting": "ERROR AL ELIMINAR MARCO",
+    "modal_specs_title": "REQUISITOS DEL MARCO",
+    "spec_format": "PNG con transparencia",
+    "spec_ratio": "Proporción 2:3",
+    "spec_example": "Ejemplo: 848 × 1264 px",
+    "btn_select_file": "SELECCIONAR ARCHIVO",
+    "error_invalid_format": "FORMATO INVÁLIDO: SE REQUIERE PNG CON TRANSPARENCIA",
+    "error_invalid_ratio": "PROPORCIÓN INVÁLIDA: LA IMAGEN DEBE SER 2:3"
   }
 }

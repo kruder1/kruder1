@@ -266,6 +266,13 @@
     "modal_delete": "SUPPRIMER CE CADRE ?",
     "btn_add_frame": "AJOUTER UN CADRE",
     "error_adding": "ERREUR LORS DE L'AJOUT DU CADRE",
-    "error_deleting": "ERREUR LORS DE LA SUPPRESSION DU CADRE"
+    "error_deleting": "ERREUR LORS DE LA SUPPRESSION DU CADRE",
+    "modal_specs_title": "EXIGENCES DU CADRE",
+    "spec_format": "PNG avec transparence",
+    "spec_ratio": "Proportion 2:3",
+    "spec_example": "Exemple : 848 × 1264 px",
+    "btn_select_file": "SÉLECTIONNER LE FICHIER",
+    "error_invalid_format": "FORMAT INVALIDE : PNG AVEC TRANSPARENCE REQUIS",
+    "error_invalid_ratio": "PROPORTION INVALIDE : L'IMAGE DOIT ÊTRE EN 2:3"
   }
 }

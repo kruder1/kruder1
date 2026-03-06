@@ -266,6 +266,13 @@
     "modal_delete": "DELETE THIS FRAME?",
     "btn_add_frame": "ADD FRAME",
     "error_adding": "ERROR ADDING FRAME",
-    "error_deleting": "ERROR DELETING FRAME"
+    "error_deleting": "ERROR DELETING FRAME",
+    "modal_specs_title": "FRAME REQUIREMENTS",
+    "spec_format": "PNG with transparency",
+    "spec_ratio": "2:3 aspect ratio",
+    "spec_example": "Example: 848 × 1264 px",
+    "btn_select_file": "SELECT FILE",
+    "error_invalid_format": "INVALID FORMAT: PNG WITH TRANSPARENCY REQUIRED",
+    "error_invalid_ratio": "INVALID RATIO: IMAGE MUST BE 2:3 PROPORTION"
   }
 }

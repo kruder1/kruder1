@@ -266,6 +266,13 @@
     "modal_delete": "DIESEN RAHMEN LÖSCHEN?",
     "btn_add_frame": "RAHMEN HINZUFÜGEN",
     "error_adding": "FEHLER BEIM HINZUFÜGEN DES RAHMENS",
-    "error_deleting": "FEHLER BEIM LÖSCHEN DES RAHMENS"
+    "error_deleting": "FEHLER BEIM LÖSCHEN DES RAHMENS",
+    "modal_specs_title": "RAHMENANFORDERUNGEN",
+    "spec_format": "PNG mit Transparenz",
+    "spec_ratio": "Seitenverhältnis 2:3",
+    "spec_example": "Beispiel: 848 × 1264 px",
+    "btn_select_file": "DATEI AUSWÄHLEN",
+    "error_invalid_format": "UNGÜLTIGES FORMAT: PNG MIT TRANSPARENZ ERFORDERLICH",
+    "error_invalid_ratio": "UNGÜLTIGES VERHÄLTNIS: BILD MUSS 2:3 SEIN"
   }
 }
