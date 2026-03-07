@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gesture Detector - Kruder 1</title>
+    <style>
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: #111; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        canvas { 
+            display: block; width: 100vw; height: 100vh; object-fit: cover; 
+        }
+        .ui-layer { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8); z-index: 10;
+        }
+        /* Para que los gestos de la cámara no interfieran con los botones */
+        #gesture-ui { pointer-events: none; }
+        
+        #status { font-size: 2.5rem; color: white; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;}
+        #countdown { font-size: 12rem; font-weight: 900; color: #ffffff; display: none; margin: 0; line-height: 1;}
+        #progress-bar { 
+            width: 400px; height: 12px; background: rgba(255,255,255,0.2); 
+            border-radius: 10px; overflow: hidden; display: none; border: 2px solid rgba(255,255,255,0.5);
+            margin-bottom: 30px;
+        }
+        #progress-fill { height: 100%; width: 0%; background: #ffffff; transition: width 0.1s linear; }
+        
+        button {
+            pointer-events: auto;
+            padding: 15px 40px; font-size: 1.5rem; font-weight: bold; cursor: pointer;
+            background: #ffffff; color: #111; border: none; border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: transform 0.2s, background 0.2s;
+        }
+        button:hover { background: #333333; color: white; transform: scale(1.05); }
+        button:active { transform: scale(0.95); }
+
+        /* Pantalla de resultado */
+        #result-layer { background: #000; display: none; z-index: 20; }
+        #result-img { max-width: 100%; max-height: 100vh; object-fit: contain; transform: scaleX(-1); }
+        #btn-retake { position: absolute; bottom: 40px; }
+    </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <video id="video" style="display: none;" playsinline></video>
+    <canvas id="output_canvas"></canvas>
+
+    <div id="gesture-ui" class="ui-layer">
+        <div id="status">Raise your hand to start</div>
+        <div id="progress-bar"><div id="progress-fill"></div></div>
+        <div id="countdown"></div>
+    </div>
+
+    <div id="controls-layer" class="ui-layer" style="justify-content: flex-end; padding-bottom: 40px; pointer-events: none;">
+        <button id="btn-manual-capture">TAKE PHOTO</button>
+    </div>
+
+    <div id="result-layer" class="ui-layer">
+        <img id="result-img" src="">
+        <button id="btn-retake">RETRY</button>
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('output_canvas');
+        const canvasCtx = canvasElement.getContext('2d');
+        
+        const statusEl = document.getElementById('status');
+        const progressFill = document.getElementById('progress-fill');
+        const progressBar = document.getElementById('progress-bar');
+        const countdownEl = document.getElementById('countdown');
+        const btnManual = document.getElementById('btn-manual-capture');
+        
+        const resultLayer = document.getElementById('result-layer');
+        const resultImg = document.getElementById('result-img');
+        const btnRetake = document.getElementById('btn-retake');
+
+        let gestureStartTime = 0;
+        let isCountingDown = false;
+        let currentResults = null;
+
+        function isOpenHand(landmarks) {
+            const fingersUp = [
+                landmarks[8].y < landmarks[6].y,   
+                landmarks[12].y < landmarks[10].y, 
+                landmarks[16].y < landmarks[14].y, 
+                landmarks[20].y < landmarks[18].y  
+            ];
+            return fingersUp.every(up => up === true);
+        }
+
+        function captureRealPhoto() {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = videoElement.videoWidth;
+            tempCanvas.height = videoElement.videoHeight;
+            const tempCtx = tempCanvas.getContext('2d');
+            
+            tempCtx.drawImage(videoElement, 0, 0, tempCanvas.width, tempCanvas.height);
+            
+            const photoData = tempCanvas.toDataURL("image/jpeg", 0.9);
+            
+            resultImg.src = photoData;
+            canvasElement.style.display = 'none';
+            document.getElementById('gesture-ui').style.display = 'none';
+            document.getElementById('controls-layer').style.display = 'none';
+            resultLayer.style.display = 'flex';
+        }
+
+        function startFinalCountdown() {
+            if (isCountingDown) return;
+            isCountingDown = true;
+            
+            progressBar.style.display = 'none';
+            statusEl.style.display = 'none';
+            btnManual.style.display = 'none';
+            countdownEl.style.display = 'block';
+            
+            let count = 3;
+            countdownEl.innerText = count;
+            
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownEl.innerText = count;
+                } else if (count === 0) {
+                    countdownEl.innerText = ""; 
+                    
+                    canvasCtx.fillStyle = "white";
+                    canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+                    
+                    setTimeout(() => {
+                        captureRealPhoto();
+                        clearInterval(interval);
+                    }, 50);
+                }
+            }, 1000);
+        }
+
+        function resetGesture() {
+            gestureStartTime = 0;
+            progressBar.style.display = 'none';
+            progressFill.style.width = "0%";
+            if (!isCountingDown) statusEl.innerText = "Raise your hand to start";
+        }
+
+        btnManual.addEventListener('click', () => {
+            startFinalCountdown();
+        });
+
+        btnRetake.addEventListener('click', () => {
+            resultLayer.style.display = 'none';
+            canvasElement.style.display = 'block';
+            document.getElementById('gesture-ui').style.display = 'flex';
+            document.getElementById('controls-layer').style.display = 'flex';
+            
+            isCountingDown = false;
+            btnManual.style.display = 'block';
+            countdownEl.style.display = 'none';
+            statusEl.style.display = 'block';
+            statusEl.innerText = "Raise your hand to start";
+        });
+
+        function onResults(results) {
+            currentResults = results;
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+            
+            canvasCtx.save();
+            canvasCtx.translate(canvasElement.width, 0);
+            canvasCtx.scale(-1, 1);
+            
+            canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+            
+            if (isCountingDown) {
+                canvasCtx.restore();
+                return;
+            }
+
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                const landmarks = results.multiHandLandmarks[0]; 
+
+                // Líneas de dibujo del esqueleto eliminadas aquí
+
+                if (isOpenHand(landmarks)) {
+                    if (gestureStartTime === 0) {
+                        gestureStartTime = Date.now();
+                        progressBar.style.display = 'block';
+                        statusEl.innerText = "Hold your hand there...";
+                    }
+                    
+                    let elapsed = Date.now() - gestureStartTime;
+                    // Ajustado a 1000ms (1 segundo)
+                    let percentage = Math.min((elapsed / 1000) * 100, 100);
+                    progressFill.style.width = percentage + "%";
+
+                    // Ajustado a 1000ms (1 segundo)
+                    if (elapsed >= 1000) {
+                        startFinalCountdown();
+                        gestureStartTime = 0;
+                    }
+                } else {
+                    resetGesture(); 
+                }
+            } else {
+                resetGesture(); 
+            }
+            canvasCtx.restore();
+        }
+
+        const hands = new Hands({locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+        }});
+        hands.setOptions({
+            maxNumHands: 1, 
+            modelComplexity: 1,
+            minDetectionConfidence: 0.7, 
+            minTrackingConfidence: 0.5
+        });
+        hands.onResults(onResults);
+
+        const camera = new Camera(videoElement, {
+            onFrame: async () => {
+                await hands.send({image: videoElement});
+            },
+            width: 1280,
+            height: 720
+        });
+        camera.start();
+    </script>
+</body>
+</html>
