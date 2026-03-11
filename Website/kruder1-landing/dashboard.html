@@ -15,12 +15,18 @@
     <canvas id="bgCanvas"></canvas>
     <div id="ch-bottom"></div>
 
-    <nav class="nav-sticky">
-        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
+    <div class="top-urgency-bar">
+        <span class="pulse-dot"></span> <span data-i18n="urgency_counter"></span>
+    </div>
+
+    <nav class="nav-main">
+        <a href="index.html" class="brand-logo">
+            <img src="img/logo.png" alt="Kruder 1">
+        </a>
         <div class="nav-actions">
             <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
             <button id="btn-lang" class="nav-action-btn">EN</button>
-            <a href="dashboard.html" class="btn-accent btn-sm" id="btn-access" data-i18n="nav_dashboard">DASHBOARD</a>
+            <a href="login.html" class="btn-accent btn-sm" id="btn-access" data-i18n="nav_access">CLIENT ACCESS</a>
         </div>
     </nav>
 
@@ -79,7 +85,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             KRUDER.init({
-                d_welcome: { en: 'Welcome', es: 'Bienvenido' },
+				nav_access: { en: 'CLIENT ACCESS', es: 'ACCESO CLIENTES' },
+				nav_logout: { en: 'LOGOUT', es: 'CERRAR SESIÓN' },
+				d_welcome: { en: 'Welcome', es: 'Bienvenido' },
                 d_credits_label: { en: 'Credits Remaining', es: 'Créditos Restantes' },
                 d_btn_download: { en: 'Download Software', es: 'Descargar Software' },
                 d_btn_buy: { en: 'Buy More Credits', es: 'Comprar Créditos' },

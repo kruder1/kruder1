@@ -4,5 +4,19 @@ compatibility_date = "2025-01-01"
 
 routes = [
   { pattern = "kruder1.com/photo/*", zone_name = "kruder1.com" },
-  { pattern = "www.kruder1.com/photo/*", zone_name = "kruder1.com" }
+  { pattern = "www.kruder1.com/photo/*", zone_name = "kruder1.com" },
+  { pattern = "kruder1.com/api/pricing", zone_name = "kruder1.com" },
+  { pattern = "www.kruder1.com/api/pricing", zone_name = "kruder1.com" }
 ]
+
+[vars]
+PRICE_ID_BASIC = "price_1T9jn7Fshc6WkXRCWMEuk4gq"
+PRICE_ID_PLUS = "price_1T9jpOFshc6WkXRCpQ7k297s"
+PRICE_ID_PRO = "price_1T9jrlFshc6WkXRCRBD37Rdi"
+
+PRICE_TXT_BASIC_EN = "$40 USD"
+PRICE_TXT_BASIC_ES = "$750 MXN"
+PRICE_TXT_PLUS_EN = "$75 USD"
+PRICE_TXT_PLUS_ES = "$1,350 MXN"
+PRICE_TXT_PRO_EN = "$120 USD"
+PRICE_TXT_PRO_ES = "$2,400 MXN"

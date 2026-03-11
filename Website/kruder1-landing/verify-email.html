@@ -15,8 +15,14 @@
     <canvas id="bgCanvas"></canvas>
     <div id="ch-bottom"></div>
 
-    <nav class="nav-sticky">
-        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
+    <div class="top-urgency-bar">
+        <span class="pulse-dot"></span> <span data-i18n="urgency_counter"></span>
+    </div>
+
+    <nav class="nav-main">
+        <a href="index.html" class="brand-logo">
+            <img src="img/logo.png" alt="Kruder 1">
+        </a>
         <div class="nav-actions">
             <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
             <button id="btn-lang" class="nav-action-btn">EN</button>
@@ -71,6 +77,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             KRUDER.init({
+                nav_access: { en: 'CLIENT ACCESS', es: 'ACCESO CLIENTES' },
+                nav_logout: { en: 'LOGOUT', es: 'CERRAR SESIÓN' },
                 v_load_title:   { en: 'Verifying Email...', es: 'Verificando Email...' },
                 v_load_msg:     { en: 'Please wait while we verify your email address.', es: 'Por favor espera mientras verificamos tu dirección de email.' },
                 v_success_title:{ en: 'Email Verified!', es: '¡Email Verificado!' },

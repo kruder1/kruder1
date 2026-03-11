@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- v1.1.0 -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kruder 1 — AI Photo Booth Software | No Monthly Fees</title>
-    <meta name="description" content="AI photo booth software for events. No subscriptions, no monthly fees. Pay only for what you use. 10 free credits to start. Download for Windows.">
+    <title>Kruder 1 — AI Photo Booth Software | Premium Experiences</title>
+    <meta name="description" content="AI photo booth software for events. Stop competing on price, charge for premium experiences. Limited to 200 active licenses.">
     <meta name="keywords" content="AI photo booth software, photo booth software, software cabina de fotos IA, AI photo booth, photo booth para eventos, ai portrait booth, software for photo booth business">
     <meta property="og:title" content="Kruder 1 — AI Photo Booth Software">
-    <meta property="og:description" content="Turn any Windows PC into an AI photo booth. No monthly fees. 10 free credits.">
+    <meta property="og:description" content="Turn any Windows PC into an AI photo booth. Stop competing on price.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://kruder1.com">
     <meta property="og:image" content="https://kruder1.com/img/og-image.png">
@@ -23,8 +22,11 @@
     <canvas id="bgCanvas"></canvas>
     <div id="ch-bottom"></div>
 
-    <!-- ── Sticky Nav ─────────────────────────────────── -->
-    <nav class="nav-sticky">
+    <div class="top-urgency-bar">
+        <span class="pulse-dot"></span> <span data-i18n="urgency_counter"></span>
+    </div>
+
+    <nav class="nav-main">
         <a href="index.html" class="brand-logo">
             <img src="img/logo.png" alt="Kruder 1">
         </a>
@@ -37,19 +39,30 @@
 
     <main>
 
-        <!-- ── HERO ───────────────────────────────────── -->
         <section id="hero" class="section">
             <div class="section-inner">
                 <h1 class="hero-title" data-i18n="hero_title"></h1>
                 <p class="hero-subtitle" data-i18n="hero_subtitle"></p>
                 <div class="hero-ctas">
-                    <a href="login.html#create" class="btn-accent" data-i18n="hero_cta_free"></a>
+                    <a href="#how" class="btn-accent" data-i18n="hero_cta_how"></a>
                     <a href="#pricing" class="btn-secondary" data-i18n="hero_cta_pricing"></a>
                 </div>
             </div>
         </section>
 
-        <!-- ── HOW IT WORKS ──────────────────────────── -->
+        <section id="demo-slider" class="section is-compact">
+            <div class="section-inner">
+                <h2 class="section-subtitle" style="font-weight: 700; color: var(--theme-ink); margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;" data-i18n="slider_title"></h2>
+                
+                <div class="image-slider-container">
+                    <img src="img/example.jpg" alt="Traditional Photo Booth" class="slider-img-before">
+                    <img src="img/example_ia.jpg" alt="Kruder 1 AI Photo Booth" class="slider-img-after">
+                    <div class="slider-handle"></div>
+                    <input type="range" min="0" max="100" value="50" class="slider-range" aria-label="Slider Antes y Despues">
+                </div>
+            </div>
+        </section>
+
         <section id="how" class="section is-compact">
             <div class="section-inner">
                 <h2 class="section-title" data-i18n="how_title"></h2>
@@ -73,7 +86,6 @@
             </div>
         </section>
 
-        <!-- ── WHY KRUDER 1 ──────────────────────────── -->
         <section id="why" class="section is-compact">
             <div class="section-inner">
                 <h2 class="section-title" data-i18n="why_title"></h2>
@@ -88,8 +100,8 @@
                         <h3 class="why-card-title" data-i18n="why2_title"></h3>
                         <p class="why-card-desc" data-i18n="why2_desc"></p>
                     </div>
-                    <div class="why-card">
-                        <div class="why-icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+                    <div class="why-card is-accent" style="border-color: var(--theme-ink);">
+                        <div class="why-icon" style="color: var(--theme-ink);"><i class="fa-solid fa-arrow-trend-up"></i></div>
                         <h3 class="why-card-title" data-i18n="why3_title"></h3>
                         <p class="why-card-desc" data-i18n="why3_desc"></p>
                     </div>
@@ -107,27 +119,63 @@
             </div>
         </section>
 
-        <!-- ── FREE DEMO CTA ─────────────────────────── -->
-        <section id="demo" class="section is-compact">
-            <div class="section-inner demo-cta">
-                <h2 class="section-title" data-i18n="demo_title"></h2>
-                <p class="section-subtitle" data-i18n="demo_desc"></p>
-                <a href="login.html#create" class="btn-accent" style="margin-top:var(--space-lg);" data-i18n="demo_cta"></a>
+        <section id="roi-calculator" class="section is-compact">
+            <div class="section-inner">
+                <h2 class="section-title" data-i18n="roi_title"></h2>
+                <p class="section-subtitle" data-i18n="roi_subtitle"></p>
+                
+                <div class="why-card" style="max-width: 700px; margin: 0 auto; text-align: left; cursor: default;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-lg);">
+                        
+                        <div>
+                            <label style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;" data-i18n="roi_label_hours"></label>
+                            <select id="calc-hours" style="width: 100%; padding: 12px; border-radius: 8px; background: transparent; border: 1px solid rgba(128,128,128,0.4); color: inherit; font-family: inherit; font-size: 1rem; outline: none;">
+                                <option value="2" style="color:#000;" data-i18n="roi_opt_2h"></option>
+                                <option value="3" style="color:#000;" data-i18n="roi_opt_3h"></option>
+                                <option value="4" selected style="color:#000;" data-i18n="roi_opt_4h"></option>
+                                <option value="5" style="color:#000;" data-i18n="roi_opt_5h"></option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;" data-i18n="roi_label_fee"></label>
+                            <input type="number" id="calc-fee" value="" placeholder="0" style="width: 100%; padding: 12px; border-radius: 8px; background: transparent; border: 1px solid rgba(128,128,128,0.4); color: inherit; font-family: inherit; font-size: 1rem; outline: none;">
+                        </div>
+
+                        <div>
+                            <label style="display:block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;" data-i18n="roi_label_upsell"></label>
+                            <select id="calc-upsell" style="width: 100%; padding: 12px; border-radius: 8px; background: transparent; border: 1px solid rgba(128,128,128,0.4); color: inherit; font-family: inherit; font-size: 1rem; outline: none;">
+                                <option value="0.25" style="color:#000;">+ 25%</option>
+                                <option value="0.30" selected style="color:#000;">+ 30%</option>
+                                <option value="0.40" style="color:#000;">+ 40%</option>
+                                <option value="0.50" style="color:#000;">+ 50%</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="padding: var(--space-md); border-radius: 8px; border-left: 4px solid var(--theme-ink); background: var(--theme-focus);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
+                            <h4 style="margin: 0; font-size: 1.2rem;"><span data-i18n="roi_result_ticket"></span> <strong id="out-ticket" style="font-size: 1.5rem;">$0</strong></h4>
+                            <span style="font-size: 0.9rem; font-weight: 600; opacity: 0.8;"><span data-i18n="roi_result_pkg"></span> <span id="out-pkg">Plus (300)</span></span>
+                        </div>
+                        <p style="margin: 0; font-size: 0.95rem; line-height: 1.5; opacity: 0.9;" data-i18n="roi_result_msg"></p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- ── PRICING ────────────────────────────────── -->
         <section id="pricing" class="section">
             <div class="section-inner">
                 <h2 class="section-title" data-i18n="pricing_title"></h2>
-                <p class="section-subtitle" data-i18n="pricing_subtitle"></p>
+                <p class="section-subtitle" style="font-weight: 500; color: var(--theme-ink); opacity: 0.8;" data-i18n="pricing_subtitle"></p>
+                
                 <div class="pricing-grid">
                     <div class="pricing-card">
                         <div class="card-title" data-i18n="p_basic_title"></div>
                         <div class="card-credits">150</div>
                         <div class="card-label" data-i18n="p_credits_label"></div>
-                        <div class="card-price">$40 USD</div>
-                        <button type="button" class="btn-accent is-full btn-buy" data-i18n="btn_buy" data-price-id="price_1T5mZSFshc6WkXRCERk4vp8O"></button>
+                        <div class="card-price" data-i18n="p_basic_price"></div>
+                        <button type="button" id="btn-buy-basic" class="btn-accent is-full btn-buy" data-i18n="btn_buy" data-price-id=""></button>
                     </div>
 
                     <div class="pricing-card">
@@ -135,20 +183,18 @@
                         <div class="card-title" data-i18n="p_plus_title"></div>
                         <div class="card-credits">300</div>
                         <div class="card-label" data-i18n="p_credits_label"></div>
-                        <div class="card-price">$60 USD</div>
-                        <button type="button" class="btn-accent is-full btn-buy" data-i18n="btn_buy" data-price-id="price_1T5mZmFshc6WkXRCKhi5bZ7B"></button>
+                        <div class="card-price" data-i18n="p_plus_price"></div>
+                        <button type="button" id="btn-buy-plus" class="btn-accent is-full btn-buy" data-i18n="btn_buy" data-price-id=""></button>
                     </div>
 
                     <div class="pricing-card">
                         <div class="card-title" data-i18n="p_pro_title"></div>
                         <div class="card-credits">600</div>
                         <div class="card-label" data-i18n="p_credits_label"></div>
-                        <div class="card-price">$90 USD</div>
-                        <button type="button" class="btn-accent is-full btn-buy" data-i18n="btn_buy" data-price-id="price_1T5ma4Fshc6WkXRCKWvVBoQL"></button>
+                        <div class="card-price" data-i18n="p_pro_price"></div>
+                        <button type="button" id="btn-buy-pro" class="btn-accent is-full btn-buy" data-i18n="btn_buy" data-price-id=""></button>
                     </div>
                 </div>
-
-                <p class="hardware-teaser" data-i18n="hardware_teaser"></p>
 
                 <div style="margin-top:var(--space-lg);" data-auth-guest>
                     <a href="login.html#create" class="btn-secondary" data-i18n="btn_start"></a>
@@ -156,7 +202,6 @@
             </div>
         </section>
 
-        <!-- ── FAQs ───────────────────────────────────── -->
         <section id="faqs" class="section">
             <div class="section-inner">
                 <h2 class="section-title" data-i18n="faq_title"></h2>
@@ -218,32 +263,10 @@
                         </button>
                         <div class="faq-answer"><p class="faq-a-text" data-i18n="a6"></p></div>
                     </div>
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span class="faq-q-text" data-i18n="q7"></span>
-                            <i class="fa-solid fa-plus faq-icon"></i>
-                        </button>
-                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a7"></p></div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span class="faq-q-text" data-i18n="q8"></span>
-                            <i class="fa-solid fa-plus faq-icon"></i>
-                        </button>
-                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a8"></p></div>
-                    </div>
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span class="faq-q-text" data-i18n="q9"></span>
-                            <i class="fa-solid fa-plus faq-icon"></i>
-                        </button>
-                        <div class="faq-answer"><p class="faq-a-text" data-i18n="a9"></p></div>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ── CONTACT ────────────────────────────────── -->
         <section id="contact" class="section">
             <div class="section-inner">
                 <h2 class="section-title is-accent" data-i18n="c_title"></h2>
@@ -271,11 +294,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             KRUDER.init({
-                /* ── Hero ── */
-                hero_title:      { en: 'AI photo booth software.<br>Zero monthly fees.', es: 'Software de cabina de fotos con IA.<br>Sin rentas mensuales.' },
-                hero_subtitle:   { en: 'Your clients pay for the experience — give them one worth remembering.', es: 'Tus clientes pagan por la experiencia — dales una que valga la pena recordar.' },
-                hero_cta_free:   { en: 'TRY FREE — 10 CREDITS', es: 'PRUEBA GRATIS — 10 CRÉDITOS' },
-                hero_cta_pricing:{ en: 'SEE PRICING', es: 'VER PRECIOS' },
+                /* ── Navegación ── */
+                nav_access:      { en: 'CLIENT ACCESS', es: 'ACCESO CLIENTES' },
+                nav_logout:      { en: 'LOGOUT', es: 'CERRAR SESIÓN' },
+
+                /* ── Hero & Slider ── */
+                hero_title:      { en: 'AI Photo Booth Software.<br>If your only advantage is price, you have a problem.', es: 'Software de Cabina de Fotos con IA.<br>Si tu única ventaja es el precio, tienes un problema.' },
+                hero_subtitle:   { en: 'Anyone can build a photo booth and lower their rates. Kruder 1 is the software that turns your traditional setup into an AI Premium experience. Stop selling printed photos and start charging for innovation.', es: 'Cualquiera puede armar un photo booth y bajar sus precios. Kruder 1 es el software que transforma tu equipo en una experiencia Premium con IA. Deja de vender fotos impresas y empieza a cobrar por innovación.' },
+                hero_cta_how:    { en: 'HOW IT WORKS', es: 'CÓMO FUNCIONA' },
+                hero_cta_pricing:{ en: 'PLANES Y UTILIDAD', es: 'PLANES Y UTILIDAD' },
+                slider_title:    { en: 'Your clients are bored of the same old strips. Give them a reason to pay you more.', es: 'Tus clientes ya están aburridos de lo mismo. Dales un motivo para pagarte más.' },
 
                 /* ── How it works ── */
                 how_title:       { en: 'How it works', es: 'Cómo funciona' },
@@ -292,72 +320,126 @@
                 why1_desc:       { en: 'Free software. Pay only for credits. No subscriptions, no surprises.', es: 'Software gratis. Solo pagas créditos. Sin suscripciones, sin sorpresas.' },
                 why2_title:      { en: 'Credits never expire', es: 'Los créditos no expiran' },
                 why2_desc:       { en: 'Buy once, use whenever. Slow month? No problem.', es: 'Compra una vez, usa cuando quieras. ¿Mes lento? No hay problema.' },
-                why3_title:      { en: 'Built for real events', es: 'Hecho para eventos reales' },
-                why3_desc:       { en: '14 years running photo booths. We built what we needed.', es: '14 años operando cabinas de fotos. Construimos lo que necesitábamos.' },
+                why3_title:      { en: 'Built to pay for itself', es: 'Diseñado para pagarse solo' },
+                why3_desc:       { en: 'Charge a 30% premium for the AI Venta Adicional. Your client covers the software cost, and you keep the pure profit.', es: 'Cobra un 30% extra por la Venta Adicional de IA. Tu cliente absorbe el costo del software y tú te quedas con la ganancia libre.' },
                 why4_title:      { en: 'Ridiculously simple', es: 'Ridículamente simple' },
                 why4_desc:       { en: 'If your staff can take a selfie, they can run Kruder 1.', es: 'Si tu staff puede tomar una selfie, puede operar Kruder 1.' },
                 why5_title:      { en: 'Always fresh content', es: 'Contenido siempre fresco' },
                 why5_desc:       { en: 'New prompt categories added every month. Your booth never gets old.', es: 'Nuevas categorías de prompts cada mes. Tu cabina nunca se vuelve obsoleta.' },
 
-                /* ── Demo CTA ── */
-                demo_title:      { en: 'Try it free. 10 credits on us.', es: 'Pruébalo gratis. 10 créditos de regalo.' },
-                demo_desc:       { en: 'Create an account, download the software, and generate your first 10 AI images — free. No credit card required.', es: 'Crea tu cuenta, descarga el software y genera tus primeras 10 imágenes con IA — gratis. Sin tarjeta de crédito.' },
-                demo_cta:        { en: 'CREATE FREE ACCOUNT', es: 'CREAR CUENTA GRATIS' },
+                /* ── Gain Calculator (ROI) ── */
+                roi_title:          { en: 'The numbers don\'t lie. How much are you leaving on the table?', es: 'Los números no mienten. ¿Cuánto dejas en la mesa?' },
+                roi_subtitle:       { en: 'Enter your current rate and discover how a simple professional sale funds the tool.', es: 'Ingresa tu tarifa actual y descubre cómo una venta adicional profesional financia la herramienta por completo.' },
+                roi_label_hours:    { en: 'Average event length:', es: 'Duración promedio del evento:' },
+                roi_opt_2h:         { en: '2 Hours', es: '2 Horas' },
+                roi_opt_3h:         { en: '3 Hours', es: '3 Horas' },
+                roi_opt_4h:         { en: '4 Hours', es: '4 Horas' },
+                roi_opt_5h:         { en: '5+ Hours', es: '5+ Horas' },
+                roi_label_fee:      { en: 'Your current fee:', es: 'Tu tarifa base actual:' },
+                roi_label_upsell:   { en: 'AI Venta Adicional:', es: 'Venta Adicional IA:' },
+                roi_result_ticket:  { en: 'New Average Ticket:', es: 'Nuevo Ticket Promedio:' },
+                roi_result_pkg:     { en: 'Suggested Package:', es: 'Paquete sugerido:' },
+                roi_result_msg:     { en: 'Your client absorbs 100% of the cost. You upgrade your service and increase your net utility without working extra hours.', es: 'Tu cliente absorbe el costo al 100%. Mejoras tu servicio y aumentas tu utilidad neta sin trabajar horas extra.' },
 
                 /* ── Pricing ── */
-                pricing_title:    { en: 'One credit. One image.<br>No fine print.', es: 'Un crédito. Una imagen.<br>Sin letra chiquita.' },
-                pricing_subtitle: { en: 'Others charge expensive monthly subscriptions on top of everything. We just charge credits.', es: 'Otros cobran costosas mensualidades además de todo. Nosotros solo cobramos créditos.' },
+                pricing_title:    { en: 'Capacity strictly limited to 200 active accounts.', es: 'Capacidad estrictamente limitada a 200 cuentas activas.' },
+                pricing_subtitle: { en: 'Access strictly capped. Your spot in the 200 club is guaranteed ONLY as long as you keep your account active.', es: 'Acceso estrictamente topado. Tu lugar en el club de los 200 está garantizado ÚNICAMENTE mientras mantengas tu cuenta activa.' },
                 p_basic_title:    { en: 'Basic', es: 'Basic' },
                 p_plus_title:     { en: 'Plus', es: 'Plus' },
                 p_pro_title:      { en: 'Pro', es: 'Pro' },
+                p_basic_price:    { en: '$40 USD', es: '$750 MXN' },
+                p_plus_price:     { en: '$75 USD', es: '$1,350 MXN' },
+                p_pro_price:      { en: '$120 USD', es: '$2,400 MXN' },
                 p_popular:        { en: 'Most Popular', es: 'Más Popular' },
                 p_credits_label:  { en: 'credits', es: 'créditos' },
                 btn_buy:          { en: 'Buy', es: 'Comprar' },
-                btn_start:        { en: 'Get Started', es: 'Comenzar' },
-                hardware_teaser:  { en: 'Hardware coming soon — the complete photo booth solution.', es: 'Hardware próximamente — la solución completa para tu cabina.' },
+                btn_start:        { en: 'Try 10 Credits Free', es: 'Probar 10 Créditos Gratis' },
 
                 /* ── FAQs ── */
-                faq_title: { en: 'Questions? Good.', es: '¿Preguntas? Bien.' },
-
+                faq_title: { en: 'Everything you need to know.', es: 'Todo lo que necesitas saber.' },
                 q0a: { en: 'What exactly is Kruder 1?', es: '¿Qué es exactamente Kruder 1?' },
                 a0a: { en: 'Software that turns any Windows PC and webcam into an AI photo booth for events. Free to download, pay only for credits.', es: 'Software que convierte cualquier PC con Windows y webcam en una cabina de fotos con IA para eventos. Descarga gratis, solo pagas créditos.' },
-
-                q0b: { en: 'Can I really try it for free?', es: '¿Realmente puedo probarlo gratis?' },
-                a0b: { en: 'Yes. Create an account and you get 10 free credits to generate your first AI images. No credit card needed.', es: 'Sí. Crea una cuenta y obtén 10 créditos gratis para generar tus primeras imágenes con IA. Sin tarjeta de crédito.' },
-
+                q0b: { en: 'How can I lose my spot if there are no monthly fees?', es: '¿Cómo puedo perder mi lugar si no hay mensualidades?' },
+                a0b: { en: 'Kruder 1 is for active operators. You only lose your spot for deep inactivity: 1) Your balance stays at zero for 30 days, or 2) You have credits but haven\'t generated a single photo in 60 days.', es: 'Kruder 1 es para operadores activos. Solo pierdes tu lugar por inactividad profunda: 1) Tu saldo se queda en ceros por 30 días, o 2) Tienes créditos pero no generas una sola foto en 60 días.' },
                 q1: { en: 'Do credits expire?', es: '¿Los créditos expiran?' },
-                a1: { en: 'No, never. Buy credits once and use them whenever you want. No expiration dates. No rush.', es: 'No, nunca. Compra créditos una vez y úsalos cuando quieras. Sin fecha de vencimiento. Sin prisa.' },
-
+                a1: { en: 'No, never. Buy credits once and use them whenever you want. No expiration dates.', es: 'No, nunca. Compra créditos una vez y úsalos cuando quieras. Sin fecha de vencimiento.' },
                 q2: { en: 'How many credits per image?', es: '¿Cuántos créditos por imagen?' },
                 a2: { en: 'One credit, one AI-generated image. That simple.', es: 'Un crédito, una imagen generada con IA. Así de simple.' },
-
                 q3: { en: 'Is there a monthly subscription?', es: '¿Hay suscripción mensual?' },
-                a3: { en: 'No. Pay once, use anytime. No monthly fees, no hidden costs, no surprises.', es: 'No. Paga una vez, usa cuando quieras. Sin cuotas mensuales, sin costos ocultos, sin sorpresas.' },
-
+                a3: { en: 'No. Pay once, use anytime. No monthly fees, no hidden costs.', es: 'No. Paga una vez, usa cuando quieras. Sin cuotas mensuales, sin costos ocultos.' },
                 q4: { en: 'What equipment do I need?', es: '¿Qué equipo necesito?' },
                 a4: { en: 'A Windows PC and a webcam. That\'s it. No special lighting or extra hardware needed.', es: 'Una PC con Windows y una webcam. Eso es todo. Sin iluminación especial ni equipo adicional.' },
-
                 q5: { en: 'Can I use this on multiple computers?', es: '¿Puedo usarlo en varias computadoras?' },
                 a5: { en: 'Yes. Credits are tied to your account, not your machine. Use them on any Windows PC.', es: 'Sí. Los créditos están ligados a tu cuenta, no a tu máquina. Úsalos en cualquier PC con Windows.' },
-
                 q6: { en: 'What happens if I run out of credits?', es: '¿Qué pasa si me quedo sin créditos?' },
-                a6: { en: 'Buy more anytime. Credits don\'t expire, so stock up whenever it makes sense for you.', es: 'Compra más cuando quieras. Los créditos no expiran, así que abastécete cuando te convenga.' },
-
-                q7: { en: 'How long does each image take?', es: '¿Cuánto tarda cada imagen?' },
-                a7: { en: 'Each image typically takes between 25 and 40 seconds. More complex prompts or photos with more people may take longer, up to 90 seconds in some cases. We use high-precision AI models to deliver the best possible results — however, like all AI, results may vary and no model can guarantee 100% accuracy every time.', es: 'Cada imagen normalmente tarda entre 25 y 40 segundos. Prompts más complejos o fotos con más personas pueden tardar más, hasta 90 segundos en algunos casos. Usamos modelos de IA de alta precisión para ofrecer los mejores resultados posibles — sin embargo, como toda IA, los resultados pueden variar y ningún modelo puede garantizar 100% de exactitud en cada imagen.' },
-
-                q8: { en: 'How many people can be in a photo?', es: '¿Cuántas personas pueden salir en una foto?' },
-                a8: { en: 'Kruder 1 delivers its best results with 1–2 people per photo — maximum detail and accuracy. It also supports groups of up to 4–5 people, though results are better with fewer faces and processing may take a bit longer. Great for couples, friends, and small groups at your events.', es: 'Kruder 1 entrega sus mejores resultados con 1–2 personas por foto — máximo detalle y precisión. También soporta grupos de hasta 4–5 personas, aunque los resultados son mejores con menos rostros y el procesamiento puede tardar un poco más. Ideal para parejas, amigos y grupos pequeños en tus eventos.' },
-
-                q9: { en: 'Do you add new styles and themes?', es: '¿Agregan nuevos estilos y temas?' },
-                a9: { en: 'Yes. We add new prompt categories every month so your booth always has fresh content for every type of event.', es: 'Sí. Agregamos nuevas categorías de prompts cada mes para que tu cabina siempre tenga contenido fresco para todo tipo de evento.' },
+                a6: { en: 'If your balance hits zero and you don\'t recharge within 30 days, your account is deactivated and your spot is given to the next operator on the waitlist.', es: 'Si tu saldo llega a cero y pasan 30 días sin recargar, tu cuenta se desactiva y le damos tu lugar al siguiente operador en la lista de espera.' },
 
                 /* ── Contact ── */
                 c_title:    { en: 'Get in touch.', es: 'Contáctanos.' },
-                c_location: { en: 'Based in Mexico. Available worldwide.', es: 'Desde México. Disponibles en todo el mundo.' }
+                c_location: { en: 'Based in Mexico. Available worldwide.', es: 'Desde México. Disponibles en todo el mundo.' },
+
+                /* ── Footer ── */
+                footer_privacy: { en: 'Privacy Policy', es: 'Aviso de Privacidad' },
+                footer_terms:   { en: 'Terms & Conditions', es: 'Términos y Condiciones' },
+                footer_contact: { en: 'Contact', es: 'Contacto' },
+                footer_status:  { en: 'System Status', es: 'Estado del Sistema' }
             });
 
+            /* ── Gain Calculator Logic ── */
+            const calcHours = document.getElementById('calc-hours');
+            const calcFee = document.getElementById('calc-fee');
+            const calcUpsell = document.getElementById('calc-upsell');
+            const outTicket = document.getElementById('out-ticket');
+            const outPkg = document.getElementById('out-pkg');
+
+            function updateCalculator() {
+                if(!calcHours || !calcFee || !calcUpsell) return;
+                const hours = parseInt(calcHours.value);
+                const fee = parseFloat(calcFee.value) || 0;
+                const upsell = parseFloat(calcUpsell.value);
+
+                if (fee === 0 || isNaN(fee)) {
+                    outTicket.innerText = '$0';
+                } else {
+                    const totalTicket = fee + (fee * upsell);
+                    outTicket.innerText = '$' + totalTicket.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+                }
+
+                const photosNeeded = hours * 60;
+                let pkgSuggested = '';
+                if (photosNeeded <= 150) pkgSuggested = 'Basic (150)';
+                else if (photosNeeded <= 300) pkgSuggested = 'Plus (300)';
+                else pkgSuggested = 'Pro (600)';
+                outPkg.innerText = pkgSuggested;
+            }
+
+            if(calcHours && calcFee && calcUpsell) {
+                calcHours.addEventListener('change', updateCalculator);
+                calcFee.addEventListener('input', updateCalculator);
+                calcUpsell.addEventListener('change', updateCalculator);
+                updateCalculator(); 
+            }
+
             /* ── Stripe Checkout ── */
+            const fetchPricing = async () => {
+                try {
+                    const res = await fetch('https://kruder1.com/api/pricing');
+                    if (!res.ok) throw new Error('API Error');
+                    const data = await res.json();
+
+                    KRUDER.STATE.dict.p_basic_price = { en: data.basic.price_en, es: data.basic.price_es };
+                    KRUDER.STATE.dict.p_plus_price  = { en: data.plus.price_en,  es: data.plus.price_es };
+                    KRUDER.STATE.dict.p_pro_price   = { en: data.pro.price_en,   es: data.pro.price_es };
+                    KRUDER.updateTexts();
+
+                    document.getElementById('btn-buy-basic').dataset.priceId = data.basic.id;
+                    document.getElementById('btn-buy-plus').dataset.priceId  = data.plus.id;
+                    document.getElementById('btn-buy-pro').dataset.priceId   = data.pro.id;
+                } catch (e) {
+                    console.error('Pricing fetch failed:', e);
+                }
+            };
+            fetchPricing();
 
             const startCheckout = async (priceId) => {
                 const token = localStorage.getItem(KRUDER.CONFIG.keyToken);
@@ -390,7 +472,6 @@
             });
 
             /* ── FAQ Accordion ── */
-
             document.querySelectorAll('.faq-question').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const item = e.currentTarget.parentElement;

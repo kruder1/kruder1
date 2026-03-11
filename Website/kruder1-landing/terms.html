@@ -15,8 +15,14 @@
     <canvas id="bgCanvas"></canvas>
     <div id="ch-bottom"></div>
 
-    <nav class="nav-sticky">
-        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="Kruder 1"></a>
+    <div class="top-urgency-bar">
+        <span class="pulse-dot"></span> <span data-i18n="urgency_counter"></span>
+    </div>
+
+    <nav class="nav-main">
+        <a href="index.html" class="brand-logo">
+            <img src="img/logo.png" alt="Kruder 1">
+        </a>
         <div class="nav-actions">
             <button id="btn-theme" class="nav-action-btn" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
             <button id="btn-lang" class="nav-action-btn">EN</button>
@@ -82,6 +88,8 @@
     <script src="main.js"></script>
     <script>
         KRUDER.init({
+            nav_access: { en: 'CLIENT ACCESS', es: 'ACCESO CLIENTES' },
+            nav_logout: { en: 'LOGOUT', es: 'CERRAR SESIÓN' },
             t_title: { en: 'Terms & Conditions', es: 'Términos y Condiciones' },
             t_date: { en: 'Last updated: January 2026', es: 'Última actualización: Enero 2026' },
             t_intro: {

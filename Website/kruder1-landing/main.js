@@ -14,9 +14,10 @@ const KRUDER = (() => {
         apiBase: 'https://kruder1-auth.kruder1-master.workers.dev',
     };
 
-    /* --- Shared i18n keys (nav + footer) --- */
+    /* --- Shared i18n keys (nav + header + footer) --- */
     const SHARED_DICT = {
-        nav_access:     { en: 'CLIENT ACCESS', es: 'ACCESO A CLIENTE' },
+        urgency_counter:{ en: '14 / 200 ACTIVE LICENSES', es: '14 / 200 LICENCIAS ACTIVAS' },
+        nav_access:     { en: 'CLIENT ACCESS', es: 'ACCESO CLIENTES' },
         nav_dashboard:  { en: 'DASHBOARD', es: 'DASHBOARD' },
         footer_privacy: { en: 'Privacy', es: 'Privacidad' },
         footer_terms:   { en: 'Terms', es: 'Términos' },
@@ -310,6 +311,19 @@ const KRUDER = (() => {
         setTheme(STATE.theme);
         updateAuthUI();
         initGrid();
+
+        // Global Image Slider Logic
+        const sliderRange = document.querySelector('.slider-range');
+        const imgAfter = document.querySelector('.slider-img-after');
+        const sliderHandle = document.querySelector('.slider-handle');
+
+        if(sliderRange && imgAfter && sliderHandle) {
+            sliderRange.addEventListener('input', (e) => {
+                const sliderPos = e.target.value;
+                imgAfter.style.clipPath = `inset(0 0 0 ${sliderPos}%)`;
+                sliderHandle.style.left = `${sliderPos}%`;
+            });
+        }
     };
 
     /* --- Public API --- */

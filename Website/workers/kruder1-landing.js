@@ -1,14 +1,7 @@
 /**
  * Kruder1 Landing Worker
- * Only handles /photo/* routes on kruder1.com.
+ * Handles /photo/* routes and /api/pricing on kruder1.com.
  * All other traffic goes directly to Pages (custom domain).
- *
- * Routes:
- *   GET /photo/:id         - Photo page with Share + Download
- *   GET /photo/:id/download - Proxy download (Content-Disposition: attachment)
- *
- * Required env:
- *   MEDIA_BASE_URL - e.g. https://media.kruder1.com
  */
 
 const PHOTO_ID_REGEX = /^[a-zA-Z0-9\-]+$/;
@@ -530,6 +523,35 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname.replace(/^\/+/, "").replace(/\/+$/, "") || "";
 
+    // ─── /api/pricing ───────────────────────────────────────────────────
+    if (path === "api/pricing") {
+      const pricingData = {
+        basic: {
+          id: env.PRICE_ID_BASIC,
+          price_en: env.PRICE_TXT_BASIC_EN,
+          price_es: env.PRICE_TXT_BASIC_ES
+        },
+        plus: {
+          id: env.PRICE_ID_PLUS,
+          price_en: env.PRICE_TXT_PLUS_EN,
+          price_es: env.PRICE_TXT_PLUS_ES
+        },
+        pro: {
+          id: env.PRICE_ID_PRO,
+          price_en: env.PRICE_TXT_PRO_EN,
+          price_es: env.PRICE_TXT_PRO_ES
+        }
+      };
+
+      return new Response(JSON.stringify(pricingData), {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Cache-Control": "max-age=60" // Cachea la respuesta 1 minuto para no saturar
+        }
+      });
+    }
+
     // ─── /photo/:id ─────────────────────────────────────────────────────
     const photoMatch = path.match(/^photo\/([^/]+)$/);
     if (photoMatch) {
@@ -579,7 +601,7 @@ export default {
       }
     }
 
-    // Worker only handles /photo/* routes — everything else is served by Pages directly
+    // Worker only handles /photo/* routes and /api/pricing — everything else is served by Pages directly
     return new Response("Not found", { status: 404 });
   },
 };
