@@ -283,6 +283,10 @@
                     return;
                 }
                 if (window.AppState.currentModule === 'eventmode') return;
+                
+                var lockedScreen = document.getElementById('view-dashboard-locked');
+                if (lockedScreen && !lockedScreen.classList.contains('hidden')) return;
+                
                 window.playButtonSound?.();
                 window.navigateTo('dashboard');
             });
