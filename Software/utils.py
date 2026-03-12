@@ -310,9 +310,12 @@ def decode_and_resize_image(base64_str, scale=None):
         img = img.convert("RGB")
     return img
 
-def process_and_save_image(base64_str, output_path, scale=None, quality=100):
+def process_and_save_image(base64_str, output_path, scale=None, quality=85):
+    from PIL import Image
     img = decode_and_resize_image(base64_str)
-    img.save(output_path, "JPEG", quality=100, subsampling=0)
+    new_size = (int(img.width * 0.5), int(img.height * 0.5))
+    img = img.resize(new_size, Image.Resampling.LANCZOS)
+    img.save(output_path, "JPEG", quality=quality)
     img.close()
 
 # init_environment() is called explicitly from main.py at startup

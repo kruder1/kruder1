@@ -1,23 +1,17 @@
 /**
- * Kruder1 Generation Worker
- * Routes: generate, generate-prompt (image generation with Segmind Seedream 4.5)
+ * Kruder1 Generation Worker (REPLICATE TEMPORAL VERSION)
+ * Routes: generate, generate-prompt (image generation with google/nano-banana-2)
  *
  * Required bindings:
  * - BUCKET: R2 bucket (kruder1-bucket)
  *
  * Required env variables:
- * - SEGMIND_API_KEY
+ * - REPLICATE_API_TOKEN
  * - SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
  * - BREVO_API_KEY, BREVO_FROM_EMAIL
  * - JWT_SECRET
  * - R2_PUBLIC_URL (e.g., https://media.kruder1.com)
  */
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Configuration
-// ─────────────────────────────────────────────────────────────────────────────
-
-const SEGMIND_ENDPOINT = "https://api.segmind.com/v1/seedream-4.5";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CORS & Response Helpers
@@ -169,14 +163,6 @@ async function deleteFromR2(env, key) {
   }
 }
 
-async function downloadImage(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to download image: ${res.status}`);
-  const buffer = await res.arrayBuffer();
-  const contentType = res.headers.get("content-type") || "image/png";
-  return { buffer, contentType };
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Email
 // ─────────────────────────────────────────────────────────────────────────────
@@ -201,7 +187,7 @@ const EMAIL_TEXTS = {
 function emailTemplate(base, { lang, imageUrl, photoPageUrl, texts }) {
   const t = texts[lang] || texts.en;
   const logoUrl = `${base}/img/logo.png`;
-  const ctaLink = photoPageUrl || imageUrl;  // Prefer photo page (Share+Download) over direct image
+  const ctaLink = photoPageUrl || imageUrl;
   return `
 <!DOCTYPE html>
 <html>
@@ -300,13 +286,8 @@ async function isRateLimited(kv, ip, endpoint, maxReqs, windowMs) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Segmind Generation (Seedream 4.5, synchronous, returns binary image)
+// REPLICATE GENERATION (Async with Polling)
 // ─────────────────────────────────────────────────────────────────────────────
-
-const RETRY_CONFIG = {
-  maxRetries: 5,
-  delays: [5000, 8000, 12000, 15000, 20000],
-};
 
 function arrayBufferToBase64(buffer) {
   const bytes = new Uint8Array(buffer);
@@ -318,83 +299,86 @@ function arrayBufferToBase64(buffer) {
 }
 
 /**
- * Call Segmind. Returns binary image buffer.
- * Response is synchronous (binary JPEG in body).
+ * Call Replicate, poll until complete, download result, return binary image buffer.
  */
-async function callSegmind(apiKey, imageUrl, promptText, aspectRatio = "2:3") {
-  const requestBody = {
-    prompt: promptText,
-    image_input: [imageUrl],
-    size: "2K",
-    aspect_ratio: aspectRatio,
-    max_images: 1,
-    sequential_image_generation: "disabled"
-  };
+async function callReplicateWithPolling(env, imageUrl, promptText, aspectRatio = "2:3") {
+  const apiKey = env.REPLICATE_API_TOKEN;
+  if (!apiKey) {
+    throw new Error("REPLICATE_API_TOKEN is not configured");
+  }
 
-  const res = await fetch(SEGMIND_ENDPOINT, {
+  const endpoint = "https://api.replicate.com/v1/models/bytedance/seedream-4.5/predictions";
+  
+  // 1. Iniciar la predicción (Payload exacto de tu script)
+  const body = {
+    input: {
+      prompt: promptText,
+      image_input: [imageUrl], // El modelo requiere un arreglo
+      aspect_ratio: aspectRatio,
+      size: "2K"
+    }
+  };
+
+  const res = await fetch(endpoint, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestBody),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`Segmind error (${res.status}): ${errorText}`);
+    throw new Error(`Replicate POST error (${res.status}): ${await res.text()}`);
   }
 
-  const buffer = await res.arrayBuffer();
-
-  // Validate response is not empty
-  if (buffer.byteLength < 1024) {
-    throw new Error("Segmind returned empty or too-small response");
-  }
-
-  return buffer;
-}
-
-async function callSegmindWithRetry(env, imageUrl, promptText, aspectRatio = "2:3") {
-  const apiKey = env.SEGMIND_API_KEY;
-  if (!apiKey) {
-    throw new Error("SEGMIND_API_KEY is not configured");
-  }
-
-  let lastError;
-  let retries500 = 0;
-  const max500Retries = 2;
-  const delays500 = [3000, 5000];
-
-  for (let attempt = 0; attempt <= RETRY_CONFIG.maxRetries; attempt++) {
-    try {
-      const buffer = await callSegmind(apiKey, imageUrl, promptText, aspectRatio);
-      return buffer;
-    } catch (error) {
-      lastError = error;
-      const errorMsg = error.message || "";
-      const is429 = errorMsg.includes("429") || errorMsg.includes("Too Many Requests");
-      const is500 = errorMsg.includes("(500)") || errorMsg.includes("(502)") || errorMsg.includes("(503)");
-
-      if (is429 && attempt < RETRY_CONFIG.maxRetries) {
-        const delay = RETRY_CONFIG.delays[attempt] || RETRY_CONFIG.delays[RETRY_CONFIG.delays.length - 1];
-        console.log(`Segmind rate limited, retrying in ${delay}ms (attempt ${attempt + 1}/${RETRY_CONFIG.maxRetries})`);
-        await new Promise((r) => setTimeout(r, delay));
-        continue;
+  let data = await res.json();
+  const getUrl = data.urls.get;
+  const cancelUrl = data.urls.cancel;
+  let status = data.status;
+  
+  const startTime = Date.now();
+  
+  // 2. Polling (Revisar cada 2 segundos)
+  while (status === "starting" || status === "processing") {
+    // Si tarda más de 90s, abortar para no quemar saldo (como tu stress test)
+    if (Date.now() - startTime > 90000) {
+      if (cancelUrl) {
+        fetch(cancelUrl, { method: "POST", headers: { "Authorization": `Bearer ${apiKey}` } }).catch(() => {});
       }
-
-      if (is500 && retries500 < max500Retries) {
-        const delay = delays500[retries500];
-        console.log(`Segmind server error, retrying in ${delay}ms (500-retry ${retries500 + 1}/${max500Retries})`);
-        retries500++;
-        await new Promise((r) => setTimeout(r, delay));
-        continue;
-      }
-
-      throw error;
+      throw new Error("Replicate timeout (abortado tras >90s en fila/proceso)");
+    }
+    
+    await new Promise((r) => setTimeout(r, 2000));
+    
+    const pollRes = await fetch(getUrl, {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${apiKey}` }
+    });
+    
+    if (pollRes.ok) {
+      data = await pollRes.json();
+      status = data.status;
     }
   }
-  throw lastError;
+
+  if (status !== "succeeded") {
+    throw new Error(`Replicate failed: ${data.error || status}`);
+  }
+
+  // Nano Banana suele regresar un arreglo con 1 URL
+  const outputUrl = Array.isArray(data.output) ? data.output[0] : data.output;
+  if (!outputUrl) {
+    throw new Error("Replicate succeeded but returned no output URL");
+  }
+
+  // 3. Descargar la imagen resultante y convertir a Buffer
+  const imgRes = await fetch(outputUrl);
+  if (!imgRes.ok) {
+    throw new Error(`Failed to download result image from Replicate: ${imgRes.status}`);
+  }
+  
+  return await imgRes.arrayBuffer();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -423,21 +407,18 @@ export default {
       // POST /generate - Generate an AI image
       // ─────────────────────────────────────────────────────────────────────
       if (path === "generate" && request.method === "POST") {
-        // Verify JWT
         const auth = request.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
         if (!auth) return err("Unauthorized", 401);
         
         const payload = await verifyJwt(auth, env.JWT_SECRET);
         if (!payload) return err("Invalid token", 401);
         
-        // Parse request body
         const body = await request.json();
         const { userPhotoBase64, promptText, userEmail, lang } = body;
         
         if (!userPhotoBase64) return err("User photo is required");
         if (!promptText) return err("Prompt text is required");
         
-        // Verify user has credits
         const [account] = await supabaseSelect(
           env,
           "accounts",
@@ -447,19 +428,16 @@ export default {
         if (!account) return err("Account not found", 404);
         if ((account.credits || 0) < 1) return err("Insufficient credits", 402);
 
-        // 1. Deduct credit BEFORE generation (atomic via RPC)
         const deductResult = await supabaseDeductCredit(env, account.id);
         if (!deductResult.ok) return err("Insufficient credits", 402);
         const newCredits = deductResult.credits;
 
-        // Generate unique IDs for this generation
         const generationId = generateUniqueId();
         const tempPhotoKey = `temp/${generationId}-input.jpg`;
 
         let tempPhotoUrl = null;
 
         try {
-          // 2. Upload user photo to R2 (temporary)
           let photoBuffer;
           if (userPhotoBase64.includes(",")) {
             const base64Data = userPhotoBase64.split(",")[1];
@@ -470,14 +448,12 @@ export default {
 
           tempPhotoUrl = await uploadToR2(env, tempPhotoKey, photoBuffer, "image/jpeg");
 
-          // 3. Call Segmind (returns binary image)
-          const imageBuffer = await callSegmindWithRetry(env, tempPhotoUrl, promptText, "2:3");
+          // LLAMADA A REPLICATE
+          const imageBuffer = await callReplicateWithPolling(env, tempPhotoUrl, promptText, "2:3");
           const imageBase64 = arrayBufferToBase64(imageBuffer);
 
-          // 4. Delete temporary user photo from R2
           await deleteFromR2(env, tempPhotoKey);
 
-          // 5. Send email if valid email provided
           const base = (env.AUTH_BASE_URL || "https://kruder1.com").replace(/\/$/, "");
           const photoPageUrl = `${base}/photo/${generationId}`;
           const emailLang = (lang === "es" || lang === "en") ? lang : "en";
@@ -494,7 +470,6 @@ export default {
             }
           }
 
-          // 6. Return success
           return json({
             ok: true,
             imageBase64,
@@ -504,7 +479,6 @@ export default {
           });
 
         } catch (genError) {
-          // Refund credit on failure
           await supabaseRefundCredit(env, account.id);
           if (tempPhotoUrl) {
             await deleteFromR2(env, tempPhotoKey);
@@ -517,21 +491,18 @@ export default {
       // POST /generate-prompt - Generate prompt image (2:3, no R2, no email)
       // ─────────────────────────────────────────────────────────────────────
       if (path === "generate-prompt" && request.method === "POST") {
-        // Verify JWT
         const auth = request.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
         if (!auth) return err("Unauthorized", 401);
         
         const payload = await verifyJwt(auth, env.JWT_SECRET);
         if (!payload) return err("Invalid token", 401);
         
-        // Parse request body
         const body = await request.json();
         const { referenceImageBase64, promptText } = body;
         
         if (!referenceImageBase64) return err("Reference image is required");
         if (!promptText) return err("Prompt text is required");
         
-        // Verify user has credits
         const [account] = await supabaseSelect(
           env,
           "accounts",
@@ -541,7 +512,6 @@ export default {
         if (!account) return err("Account not found", 404);
         if ((account.credits || 0) < 1) return err("Insufficient credits", 402);
 
-        // 1. Deduct credit BEFORE generation (atomic via RPC)
         const deductResult = await supabaseDeductCredit(env, account.id);
         if (!deductResult.ok) return err("Insufficient credits", 402);
         const newCredits = deductResult.credits;
@@ -552,7 +522,6 @@ export default {
         let tempPhotoUrl = null;
 
         try {
-          // 2. Upload reference image to R2 (temporary)
           let photoBuffer;
           if (referenceImageBase64.includes(",")) {
             const base64Data = referenceImageBase64.split(",")[1];
@@ -563,14 +532,12 @@ export default {
 
           tempPhotoUrl = await uploadToR2(env, tempPhotoKey, photoBuffer, "image/jpeg");
 
-          // 3. Call Segmind (returns binary image)
-          const imageBuffer = await callSegmindWithRetry(env, tempPhotoUrl, promptText, "2:3");
+          // LLAMADA A REPLICATE
+          const imageBuffer = await callReplicateWithPolling(env, tempPhotoUrl, promptText, "2:3");
           const imageBase64 = arrayBufferToBase64(imageBuffer);
 
-          // 4. Delete temporary reference image from R2
           await deleteFromR2(env, tempPhotoKey);
 
-          // 5. Return success
           return json({
             ok: true,
             imageBase64,
@@ -578,7 +545,6 @@ export default {
           });
 
         } catch (genError) {
-          // Refund credit on failure
           await supabaseRefundCredit(env, account.id);
           if (tempPhotoUrl) {
             await deleteFromR2(env, tempPhotoKey);
@@ -591,21 +557,18 @@ export default {
       // POST /send-email - Send email notification with image link
       // ─────────────────────────────────────────────────────────────────────
       if (path === "send-email" && request.method === "POST") {
-        // Verify JWT
         const auth = request.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
         if (!auth) return err("Unauthorized", 401);
         
         const payload = await verifyJwt(auth, env.JWT_SECRET);
         if (!payload) return err("Invalid token", 401);
         
-        // Parse request body
         const body = await request.json();
         const { email, imageUrl, photoPageUrl: bodyPhotoPageUrl, lang } = body;
         
         if (!email || !isValidEmail(email)) {
           return err("Valid email is required");
         }
-        // Necesitamos photoPageUrl o imageUrl para el enlace del email
         const photoPageUrl = bodyPhotoPageUrl || (() => {
           if (!imageUrl) return null;
           const base = (env.AUTH_BASE_URL || "https://kruder1.com").replace(/\/$/, "");
@@ -770,7 +733,6 @@ export default {
       if (path === "system-status" && request.method === "GET") {
         const services = { gen: { ok: true } };
 
-        // Check auth worker
         try {
           const r = await fetch("https://kruder1-auth.kruder1-master.workers.dev/health", { signal: AbortSignal.timeout(5000) });
           services.auth = { ok: r.status < 500 };
@@ -778,9 +740,8 @@ export default {
           services.auth = { ok: false };
         }
 
-        // Check AI provider reachability (GET request to base API to avoid 500 errors on Nano Banana)
         try {
-          const r = await fetch("https://api.segmind.com", {
+          const r = await fetch("https://api.replicate.com", {
             method: "GET",
             signal: AbortSignal.timeout(8000),
           });
@@ -789,7 +750,6 @@ export default {
           services.ai = { ok: false };
         }
 
-        // Check database reachability (any non-5xx = server is alive)
         try {
           const r = await fetch(`${env.SUPABASE_URL}/rest/v1/`, {
             headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY },

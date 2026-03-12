@@ -37,7 +37,7 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       --space-lg: 2rem;
 
       /* Layout */
-      --nav-height: 130px;
+      --nav-height: 70px;
       --logo-width: 80px;
       --border-width: 2px;
       --radius-main: 0.5rem;
@@ -112,11 +112,10 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
     
     /* Header/Nav - exactly like website */
     .nav-container {
-      position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
+      position: relative; width: 100%; height: var(--nav-height);
       display: flex; justify-content: space-between; align-items: center;
       padding: 0 var(--space-lg);
-      background: var(--color-bg);
-      border-bottom: 1px solid var(--bg-overlay-light);
+      background: transparent;
       z-index: var(--z-header);
     }
     
@@ -124,7 +123,6 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
       display: block; 
       width: var(--logo-width); 
       height: auto;
-      padding: var(--space-md) 0;
     }
     
     .nav-actions { 
@@ -134,20 +132,33 @@ function photoPageHtml(photoId, imageUrl, downloadUrl) {
     }
     
     .nav-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
       font-family: var(--font-base);
-      font-weight: 700; 
-      font-size: 1.1rem; 
-      text-transform: uppercase; 
-      padding: 0; 
-      transition: opacity 0.2s;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-text);
+      background: transparent;
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--radius-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
-    .nav-action-btn:hover { opacity: 0.6; }
+    .nav-action-btn:hover { 
+      background: var(--color-text);
+      color: var(--color-bg);
+    }
+    .nav-action-btn:active { 
+      transform: scale(0.95);
+    }
     
     /* Main content */
     main {
       flex: 1; 
       width: 100%; 
-      padding-top: var(--nav-height);
       display: flex; 
       flex-direction: column; 
       align-items: center;

@@ -599,126 +599,16 @@
 
         // ========================================
         // IMAGE ZOOM / PAN
-        // Shared zoom logic — modules call:
-        //   window.enableZoom(imgElement)
-        // Supports mouse wheel, mouse drag, touch pinch & pan.
-        // Safe to call multiple times on the same image.
         // ========================================
         window.enableZoom = function(img) {
             if (!img) return;
 
-            // Clean up previous listeners (if re-initializing same node)
-            if (img._zoomCleanup) img._zoomCleanup();
-
-            let scale = 1;
-            let panning = false;
-            let pointX = 0, pointY = 0;
-            let startX = 0, startY = 0;
-            let lastTouchDist = 0;
+            if (img._zoomCleanup) {
+                img._zoomCleanup();
+                img._zoomCleanup = null;
+            }
 
             img.style.transform = 'translate(0px, 0px) scale(1)';
-
-            const updateTransform = () => {
-                if (scale < 1) scale = 1;
-                if (scale > 2.5) scale = 2.5;
-                const limitX = (img.offsetWidth * (scale - 1)) / 2;
-                const limitY = (img.offsetHeight * (scale - 1)) / 2;
-                if (pointX > limitX) pointX = limitX;
-                if (pointX < -limitX) pointX = -limitX;
-                if (pointY > limitY) pointY = limitY;
-                if (pointY < -limitY) pointY = -limitY;
-                img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
-            };
-
-            // Mouse wheel zoom
-            const onWheel = (e) => {
-                e.preventDefault();
-                scale += e.deltaY * -0.002;
-                updateTransform();
-            };
-
-            // Mouse drag
-            const onMouseDown = (e) => {
-                if (scale > 1) {
-                    e.preventDefault();
-                    panning = true;
-                    startX = e.clientX - pointX;
-                    startY = e.clientY - pointY;
-                    img.style.transition = 'none';
-                }
-            };
-            const onMouseMove = (e) => {
-                if (!panning) return;
-                e.preventDefault();
-                pointX = e.clientX - startX;
-                pointY = e.clientY - startY;
-                updateTransform();
-            };
-            const onMouseUp = () => {
-                if (panning) {
-                    panning = false;
-                    img.style.transition = 'transform 0.1s linear';
-                }
-            };
-
-            // Touch pinch zoom & pan
-            const onTouchStart = (e) => {
-                if (e.touches.length === 2) {
-                    e.preventDefault();
-                    const t1 = e.touches[0], t2 = e.touches[1];
-                    lastTouchDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-                } else if (e.touches.length === 1 && scale > 1) {
-                    e.preventDefault();
-                    const t = e.touches[0];
-                    panning = true;
-                    startX = t.clientX - pointX;
-                    startY = t.clientY - pointY;
-                    img.style.transition = 'none';
-                }
-            };
-            const onTouchMove = (e) => {
-                if (e.touches.length === 2) {
-                    e.preventDefault();
-                    const t1 = e.touches[0], t2 = e.touches[1];
-                    const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-                    scale += (dist - lastTouchDist) * 0.005;
-                    lastTouchDist = dist;
-                    updateTransform();
-                } else if (e.touches.length === 1 && panning) {
-                    e.preventDefault();
-                    const t = e.touches[0];
-                    pointX = t.clientX - startX;
-                    pointY = t.clientY - startY;
-                    updateTransform();
-                }
-            };
-            const onTouchEnd = (e) => {
-                if (e.touches.length === 0) {
-                    panning = false;
-                    img.style.transition = 'transform 0.1s linear';
-                }
-            };
-
-            // Attach
-            img.addEventListener('wheel', onWheel, { passive: false });
-            img.addEventListener('mousedown', onMouseDown);
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
-            img.addEventListener('touchstart', onTouchStart, { passive: false });
-            img.addEventListener('touchmove', onTouchMove, { passive: false });
-            img.addEventListener('touchend', onTouchEnd);
-
-            // Store cleanup so we can remove on re-init
-            img._zoomCleanup = () => {
-                img.removeEventListener('wheel', onWheel);
-                img.removeEventListener('mousedown', onMouseDown);
-                window.removeEventListener('mousemove', onMouseMove);
-                window.removeEventListener('mouseup', onMouseUp);
-                img.removeEventListener('touchstart', onTouchStart);
-                img.removeEventListener('touchmove', onTouchMove);
-                img.removeEventListener('touchend', onTouchEnd);
-                img._zoomCleanup = null;
-            };
         };
 
         // ========================================
