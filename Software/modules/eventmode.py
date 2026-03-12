@@ -136,6 +136,12 @@ class EventModeModule:
                     qr = qrcode.make(page_url)
                     qr.save(qr_path)
 
+                    # RELOAD JSON TO PREVENT OVERWRITING USER EMAIL
+                    fresh_data = DataService.load_json(json_path)
+                    if fresh_data:
+                        current_data["email"] = fresh_data.get("email")
+                        current_data["sendEmailOnComplete"] = fresh_data.get("sendEmailOnComplete")
+
                     # Update Gen JSON
                     current_data["status"] = "completed"
                     current_data["resultImage"] = result_filename
