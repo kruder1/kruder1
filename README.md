@@ -10,7 +10,7 @@ Kruder 1 captures a photo of your guest, sends it to an AI model, and returns a 
 
 - **AI Model**: Seedream 4.5 via Segmind API
 - **Credit System**: 1 credit = 1 AI image (no expiration)
-- **Packages**: Basic 150/$40 | Plus 300/$60 | Pro 600/$90
+- **Packages**: Basic 150/$40USD - $750MXN | Plus 300/$75USD - $1,350MXN | Pro 600/$120USD - $2,400MXN
 - **Free Demo**: 10 credits per verified account
 - **New prompt categories added monthly**
 

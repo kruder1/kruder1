@@ -81,11 +81,11 @@ Aldo understands the photo booth business deeply. The software is built from rea
 
 ### Credit Packages
 
-| Plan | Credits | Price (USD) | Per Credit |
+| Plan | Credits | Price (USD) | Price (MXN)|
 |------|---------|-------------|------------|
-| Basic | 150 | $40 | $0.27 |
-| Plus | 300 | $60 | $0.20 |
-| Pro | 600 | $90 | $0.15 |
+| Basic | 150 | $40 | $750 |
+| Plus | 300 | $75 | $1350 |
+| Pro | 600 | $120 | $2400 |
 
 ### Demo Credits
 - 10 free credits per verified account

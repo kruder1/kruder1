@@ -7,7 +7,7 @@ Solo vibe-coder, not a professional developer. 14+ years running photo booths at
 AI-powered photo booth software for Windows. Credit-based model (1 credit = 1 AI image). Free software, paid credits. No subscriptions, no expiration.
 
 - **AI Model**: Nano Banana 2 / Gemini 3.1 Flash Image (Google) via Segmind API
-- **Credit Packages**: Basic 150/$40 | Plus 300/$60 | Pro 600/$90
+- **Credit Packages**: Basic 150/$40USD - $750MXN | Plus 300/$75USD - $1,350MXN | Pro 600/$120USD - $2,400MXN
 - **Demo**: 10 free credits per verified account (one per HWID)
 
 ## Architecture
