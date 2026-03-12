@@ -7,7 +7,7 @@ import os
 import json
 import logging
 import mimetypes
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 from config import APP_DATA
 from utils import (
@@ -23,13 +23,17 @@ log = logging.getLogger("kruder1")
 
 class KruderRouter(BaseHTTPRequestHandler):
     
-    def _set_headers(self, status=200, content_type="application/json"):
+    def _set_headers(self, status=200, content_type="application/json", cache=False):
         """Set response headers with CORS."""
         self.send_response(status)
         self.send_header("Content-Type", content_type)
         self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1")
         self.send_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        if cache:
+            self.send_header("Cache-Control", "public, max-age=31536000, immutable")
+        else:
+            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         self.end_headers()
 
     def do_OPTIONS(self):
@@ -141,7 +145,8 @@ class KruderRouter(BaseHTTPRequestHandler):
         # Serve file
         if fpath and os.path.isfile(fpath):
             mime, _ = mimetypes.guess_type(fpath)
-            self._set_headers(200, mime or "application/octet-stream")
+            is_media = mime and (mime.startswith('image/') or mime.startswith('audio/') or mime.startswith('font/'))
+            self._set_headers(200, mime or "application/octet-stream", cache=bool(is_media))
             with open(fpath, "rb") as f:
                 self.wfile.write(f.read())
         else:
@@ -157,6 +162,6 @@ class KruderRouter(BaseHTTPRequestHandler):
 
 def run_server():
     """Start the HTTP server."""
-    server = HTTPServer(("127.0.0.1", PORT), KruderRouter)
+    server = ThreadingHTTPServer(("127.0.0.1", PORT), KruderRouter)
     print(f"[KRUDER] Server running on http://127.0.0.1:{PORT}")
     server.serve_forever()

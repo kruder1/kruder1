@@ -2,15 +2,15 @@
      DASHBOARD MODULE - HTML
      ======================================== -->
 <section id="view-home" class="view-section">
+    <button class="btn-control dashboard-account-btn" data-action="open-account-modal" aria-label="Account" data-i18n="dashboard.btn_account" data-i18n-attr="aria-label">
+        <i class="fa-solid fa-circle-user"></i>
+    </button>
     <button class="btn-control dashboard-lock-btn" data-action="lock-dashboard" aria-label="Lock booth" data-i18n="dashboard.aria_lock" data-i18n-attr="aria-label">
         <i class="fa-solid fa-lock"></i>
     </button>
     <div class="content-wrapper">
         <h1 data-i18n="dashboard.title">DASHBOARD</h1>
         <div class="home-grid">
-            <button class="btn-main" data-action="open-account-modal">
-                <i class="fa-solid fa-circle-user"></i> <span data-i18n="dashboard.btn_account">ACCOUNT</span>
-            </button>
             <button class="btn-main" data-action="goto-events">
                 <i class="fa-solid fa-bolt"></i> <span data-i18n="dashboard.btn_event_manager">EVENT MANAGER</span>
             </button>

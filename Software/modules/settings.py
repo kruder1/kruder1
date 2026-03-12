@@ -285,6 +285,11 @@ class SettingsModule:
                 img = Image.open(path)
                 if img.mode not in ("1", "L", "P", "RGB"):
                     img = img.convert("RGB")
+                
+                img_w, img_h = img.size
+                if (img_h > img_w) != (printer_h > printer_w):
+                    img = img.rotate(90, expand=True)
+                
                 dib = ImageWin.Dib(img)
                 dib.draw(hdc.GetHandleOutput(), rect)
                 hdc.EndPage()
@@ -319,6 +324,11 @@ class SettingsModule:
                 img = Image.open(path)
                 if img.mode not in ("1", "L", "P", "RGB"):
                     img = img.convert("RGB")
+                
+                img_w, img_h = img.size
+                if (img_h > img_w) != (printer_h > printer_w):
+                    img = img.rotate(90, expand=True)
+                
                 dib = ImageWin.Dib(img)
                 dib.draw(hdc.GetHandleOutput(), rect)
                 hdc.EndPage()

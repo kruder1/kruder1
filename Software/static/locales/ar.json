@@ -93,6 +93,7 @@
     "aria_printer": "الطابعة",
     "btn_printer_settings": "إعدادات الطابعة",
     "btn_test_print": "اختبار الطباعة",
+    "confirm_test_print": "هل أنت متأكد أنك تريد طباعة اختبار؟",
     "title_language": "إعدادات اللغة",
     "coming_soon": "قريباً...",
     "select_language": "اختر اللغة",

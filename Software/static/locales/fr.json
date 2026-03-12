@@ -93,6 +93,7 @@
     "aria_printer": "Imprimante",
     "btn_printer_settings": "PARAMÈTRES DE L'IMPRIMANTE",
     "btn_test_print": "IMPRESSION TEST",
+    "confirm_test_print": "Voulez-vous vraiment imprimer un test ?",
     "title_language": "PARAMÈTRES DE LANGUE",
     "coming_soon": "Bientôt disponible...",
     "select_language": "SÉLECTIONNER LA LANGUE",

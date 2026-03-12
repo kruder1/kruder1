@@ -458,6 +458,16 @@
     </div>
 </section>
 
+<div id="test-print-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <div class="modal-text" data-i18n="settings.confirm_test_print">Are you sure you want to print a test?</div>
+        <div class="modal-actions mt-15">
+            <button data-action="test-print-cancel" class="btn-main" data-i18n="common.cancel">CANCEL</button>
+            <button data-action="test-print-confirm" class="btn-main btn-primary" data-i18n="common.confirm">CONFIRM</button>
+        </div>
+    </div>
+</div>
+
 <!-- ========================================
      SETTINGS MODULE - JAVASCRIPT
      ======================================== -->
@@ -567,7 +577,9 @@ window.SettingsModule = {
             case 'printing-copies-minus': this.printingCopiesChange(-1); break;
             case 'printing-copies-plus': this.printingCopiesChange(1); break;
             case 'printing-settings': this.openPrinterSettings(); break;
-            case 'printing-test': this.testPrint(); break;
+            case 'printing-test': this.confirmTestPrint(); break;
+            case 'test-print-cancel': this.hideModal('test-print-modal'); break;
+            case 'test-print-confirm': this.hideModal('test-print-modal'); this.testPrint(); break;
         }
     },
 
@@ -918,6 +930,16 @@ window.SettingsModule = {
         } catch (e) {
             this.showAlert((window.t ? window.t('settings.error_settings') : 'Error: Could not open settings'));
         }
+    },
+
+    confirmTestPrint() {
+        const select = document.getElementById('printing-printer-select');
+        const name = select?.value?.trim();
+        if (!name) {
+            this.showAlert(window.t ? window.t('settings.error_select_printer') : 'SELECT A PRINTER FIRST');
+            return;
+        }
+        this.showModal('test-print-modal');
     },
 
     async testPrint() {

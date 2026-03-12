@@ -93,6 +93,7 @@
     "aria_printer": "Printer",
     "btn_printer_settings": "PRINTER SETTINGS",
     "btn_test_print": "TEST PRINTING",
+    "confirm_test_print": "Are you sure you want to print a test?",
     "title_language": "LANGUAGE SETTINGS",
     "coming_soon": "Coming soon...",
     "select_language": "SELECT LANGUAGE",

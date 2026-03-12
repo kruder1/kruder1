@@ -994,7 +994,7 @@ input::placeholder, textarea::placeholder { color: var(--theme-ink); text-transf
 /* Home Grid Layout */
 .home-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, var(--dim-card-width)));
+    grid-template-columns: repeat(3, minmax(0, var(--dim-card-width)));
     justify-content: center;
     gap: 20px;
     width: 100%;
@@ -1019,10 +1019,10 @@ input::placeholder, textarea::placeholder { color: var(--theme-ink); text-transf
     color: inherit;
 }
 
-.dashboard-lock-btn {
+.dashboard-lock-btn,
+.dashboard-account-btn {
     position: absolute;
     top: var(--spacing-lg);
-    right: var(--spacing-lg);
     z-index: var(--z-header);
     width: 75px;
     height: 75px;
@@ -1030,6 +1030,14 @@ input::placeholder, textarea::placeholder { color: var(--theme-ink); text-transf
     background: var(--theme-ink);
     color: var(--theme-white);
     border-color: var(--theme-ink);
+}
+
+.dashboard-lock-btn {
+    right: var(--spacing-lg);
+}
+
+.dashboard-account-btn {
+    left: var(--spacing-lg);
 }
 #view-dashboard-locked {
     padding: 0;

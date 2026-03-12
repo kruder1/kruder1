@@ -93,6 +93,7 @@
     "aria_printer": "Принтер",
     "btn_printer_settings": "НАСТРОЙКИ ПРИНТЕРА",
     "btn_test_print": "ТЕСТОВАЯ ПЕЧАТЬ",
+    "confirm_test_print": "Вы уверены, что хотите распечатать тест?",
     "title_language": "НАСТРОЙКИ ЯЗЫКА",
     "coming_soon": "Скоро...",
     "select_language": "ВЫБЕРИТЕ ЯЗЫК",

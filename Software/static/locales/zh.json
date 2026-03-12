@@ -93,6 +93,7 @@
     "aria_printer": "打印机",
     "btn_printer_settings": "打印机设置",
     "btn_test_print": "测试打印",
+    "confirm_test_print": "确定要打印测试吗？",
     "title_language": "语言设置",
     "coming_soon": "敬请期待...",
     "select_language": "选择语言",

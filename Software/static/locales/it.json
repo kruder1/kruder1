@@ -93,6 +93,7 @@
     "aria_printer": "Stampante",
     "btn_printer_settings": "IMPOSTAZIONI STAMPANTE",
     "btn_test_print": "STAMPA DI PROVA",
+    "confirm_test_print": "Sei sicuro di voler stampare una prova?",
     "title_language": "IMPOSTAZIONI LINGUA",
     "coming_soon": "Prossimamente...",
     "select_language": "SELEZIONA LINGUA",

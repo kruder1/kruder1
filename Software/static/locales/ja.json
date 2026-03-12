@@ -93,6 +93,7 @@
     "aria_printer": "プリンター",
     "btn_printer_settings": "プリンター設定",
     "btn_test_print": "テスト印刷",
+    "confirm_test_print": "テスト印刷してもよろしいですか？",
     "title_language": "言語設定",
     "coming_soon": "近日公開...",
     "select_language": "言語を選択",

@@ -61,6 +61,7 @@ exe = EXE(
     upx=True,
     console=False,              # windowed mode — no terminal
     icon='static/img/icon.ico',
+    uac_admin=True,             # Request Administrator privileges
 )
 
 coll = COLLECT(
