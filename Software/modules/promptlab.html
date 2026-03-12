@@ -739,6 +739,9 @@ window.PromptLabModule = {
         if (fileInput) fileInput.value = '';
         const nameInput = document.getElementById('gp-name');
         if (nameInput) nameInput.value = '';
+		
+		this.loadCategories('gp-category');
+		
         const catInput = document.getElementById('gp-category');
         if (catInput) catInput.selectedIndex = 0;
         const newCatInput = document.getElementById('gp-new-cat');
