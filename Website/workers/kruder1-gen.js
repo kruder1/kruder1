@@ -17,7 +17,7 @@
 // Configuration
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SEGMIND_ENDPOINT = "https://api.segmind.com/v1/seedream-4.5";
+const SEGMIND_ENDPOINT = "https://api.segmind.com/v1/nano-banana-2";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CORS & Response Helpers
@@ -324,11 +324,11 @@ function arrayBufferToBase64(buffer) {
 async function callSegmind(apiKey, imageUrl, promptText, aspectRatio = "2:3") {
   const requestBody = {
     prompt: promptText,
-    image_input: [imageUrl],
-    size: "2K",
+    image_urls: [imageUrl],
+    output_resolution: "1K",
     aspect_ratio: aspectRatio,
-    max_images: 1,
-    sequential_image_generation: "disabled"
+    num_images: 1,
+    output_format: "jpeg"
   };
 
   const res = await fetch(SEGMIND_ENDPOINT, {
@@ -347,9 +347,13 @@ async function callSegmind(apiKey, imageUrl, promptText, aspectRatio = "2:3") {
 
   const buffer = await res.arrayBuffer();
 
-  // Validate response is not empty
+  // Validate response is a real JPEG (must be >1KB and start with FF D8 FF)
   if (buffer.byteLength < 1024) {
     throw new Error("Segmind returned empty or too-small response");
+  }
+  const header = new Uint8Array(buffer.slice(0, 3));
+  if (header[0] !== 0xFF || header[1] !== 0xD8 || header[2] !== 0xFF) {
+    throw new Error("Segmind returned invalid image data (not JPEG)");
   }
 
   return buffer;

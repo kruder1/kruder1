@@ -107,10 +107,7 @@ class EventModeModule:
                         frame_img.close()
                     # --- END FRAME ---
 
-                    new_size = (int(img.width * 0.5), int(img.height * 0.5))
-                    img = img.resize(new_size, Image.Resampling.LANCZOS)
-
-                    img.save(result_path, "JPEG", quality=85)
+                    img.save(result_path, "JPEG", quality=100)
                     img.close()
 
                     # Upload final JPG to R2 (with or without frame) so QR and email serve the same image.
